@@ -1,0 +1,43 @@
+.Window {
+    flex-grow: 1;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+}
+
+.ChildContainer {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: auto;
+    height: auto;
+}
+
+.StandardFont {
+    width: 95%;
+    height: auto;
+    -unity-font-definition: url('/Assets/Fonts/Roboto-Regular SDF.asset');
+    font-size: 14px;
+    color: white;
+    bottom: 0;
+    right: 0;
+    color: rgb(255, 255, 255);
+    background-color: rgb(48, 50, 50);
+    padding: 1.25%;
+}
+
+.Translate {
+    width: 95%;
+    height: auto;
+    -unity-font-definition: url('/Assets/Fonts/Roboto-Regular SDF.asset');
+    font-size: 14px;
+    color: white;
+    bottom: 0;
+    right: 0;
+    background-color: rgb(48, 50, 50);
+    padding: 1.25%;
+}
+
+.Translate > .unity-text-field__input {
+    -unity-font-definition: url('/Assets/Fonts/Aileron-Regular SDF.asset');
+}
