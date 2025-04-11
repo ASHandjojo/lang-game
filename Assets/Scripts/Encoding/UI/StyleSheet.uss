@@ -39,5 +39,5 @@
 }
 
 .Translate > .unity-text-field__input {
-    -unity-font-definition: url('/Assets/Fonts/Aileron-Regular SDF.asset');
+    -unity-font-definition: url('/Assets/Fonts/Melody SDF.asset');
 }
