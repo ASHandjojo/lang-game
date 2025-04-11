@@ -1,0 +1,7 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/UI/StyleSheet.uss?fileID=7433441132597879392&amp;guid=f8d5336c5247ec444a5799a7f5b6469b&amp;type=3#StyleSheet" />
+    <engine:GroupBox name="GroupBox" class="Window" style="height: auto; justify-content: center; flex-direction: column; flex-wrap: nowrap; min-width: 100%; min-height: 100%; width: auto; max-width: initial; max-height: initial; align-self: center; align-content: flex-end; flex-shrink: 2; flex-grow: 2; align-items: auto;">
+        <engine:TextField label="Phonetics" hide-placeholder-on-focus="true" password="false" name="Phonetics" class="StandardFont" style="-unity-font-style: bold; color: rgb(255, 255, 255); background-position-x: center 0; white-space: nowrap; font-size: 14px; min-width: auto; flex-direction: row; -unity-text-align: middle-left; background-position-y: center 0; align-items: stretch;" />
+        <engine:TextField label="Translate" name="Result" readonly="true" class="Translate" style="-unity-font-style: bold;" />
+    </engine:GroupBox>
+</engine:UXML>
