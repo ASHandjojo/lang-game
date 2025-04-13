@@ -12,10 +12,14 @@ public class Interactor : MonoBehaviour
     So every object the mc needs to interact with needs to start with something like:
     public class (object name here) : MonoBehavior, IInteractable
     and then it needs to define Interact() somewhere in the class. I think Interact might need to be public as well.
+    If you want to add other functions to a specific interactable i believe you can do that
+    If we need *all* interactables to have additional functions then add them to the IInteractable interface
 
     The object needs to have a BoxCollider2D with the IsTrigger option checked. I don't think it needs to have a RigidBody2D? But I'm stupid so who knows.
 
     Uh I think thats the basics
+
+    Am I spelling interactable wrong? (pls pls pls let me be spelling it right)
 
     */
 
@@ -36,6 +40,7 @@ public class Interactor : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         currentInteractable = other.GetComponent<IInteractable>();
+        Debug.Log("here");
     }
 
     void OnTriggerExit2D(Collider2D other) {
