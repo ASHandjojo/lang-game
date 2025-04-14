@@ -7,6 +7,8 @@ public class NewItem : Interactable
     [Header("Sprites")]
     public Sprite open;
     public Sprite closed;
+
+    [Header("Audio")]
     [SerializeField] public AudioClip clip;
 
     private SpriteRenderer sr;
