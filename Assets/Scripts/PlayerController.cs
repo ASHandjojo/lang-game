@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
 
     [SerializeField] private float movementSpeed = 2f;
 
@@ -17,16 +16,23 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
-        movementDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        // Trigger for interact input
+        if(Input.GetKeyDown(KeyCode.E))
+            {
+
+                // Prompts any listeners to execute their Interact method
+                Actions.OnInteract?.Invoke(this);
+            }
+        movementDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
     }
 
 
     void FixedUpdate()
     {
-        rb.linearVelocity = movementDirection * movementSpeed * Time.deltaTime;
+        rb.linearVelocity = movementDirection * movementSpeed;
     }
 
 }
