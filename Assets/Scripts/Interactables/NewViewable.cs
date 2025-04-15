@@ -37,7 +37,7 @@ public class NewViewable : Interactable
 
     IEnumerator CamTransition(Camera mainCamera, PlayerController player)
     {
-        // Disable box collider to prevent further interaction & position to prevent movement
+        // Disable box collider to prevent further interaction & freeze position to prevent movement
         player.GetComponent<BoxCollider2D>().enabled = false;
 
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
@@ -89,6 +89,7 @@ public class NewViewable : Interactable
 
         mainCamera.GetComponent<Camera_Movement>().enabled = true;
 
+        // Restore movement
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
         rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
 

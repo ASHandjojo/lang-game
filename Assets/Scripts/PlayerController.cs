@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
+    public static PlayerController Instance { get; private set; } // Allows access to PlayerController everywhere else
     [SerializeField] private float movementSpeed = 2f;
 
     private Rigidbody2D rb;
 
     private Vector2 movementDirection;
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
