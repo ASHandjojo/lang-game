@@ -26,7 +26,7 @@ public static class StringExts
 {
     public static Range[] RangeSplit(this string str, char delimiter)
     {
-        int count = 1;
+        int count = 0;
         for (int i = 0; i < str.Length; i++)
         {
             if (str[i] == delimiter)
@@ -84,7 +84,7 @@ public struct Processor : IDisposable
         compoundData = new NativeArray<SignData>(compoundSigns.Length, Allocator.Persistent);
 
         Span<char> standardSpan = standardSignData.AsSpan();
-        Span<Char> compoundSpan = compoundSignData.AsSpan();
+        Span<char> compoundSpan = compoundSignData.AsSpan();
 
         int standardOffset = 0, compoundOffset = 0;
         for (int i = 0; i < standardSigns.Length; i++)
@@ -93,7 +93,7 @@ public struct Processor : IDisposable
             ReadOnlySpan<char> phoneticStr = sign.phonetics;
 
             Range range = standardOffset..(standardOffset + phoneticStr.Length);
-            phoneticStr.CopyTo(standardSpan[standardOffset..]);
+            phoneticStr.CopyTo(standardSpan[range]);
             standardData[i] = new SignData(range, sign.unicodeChar);
 
             standardOffset += phoneticStr.Length;
@@ -112,23 +112,37 @@ public struct Processor : IDisposable
         }
     }
 
+    private readonly bool TryFind(in ReadOnlySpan<char> signChars, out SignData sign)
+    {
+        Span<char> standardSpan = standardSignData.AsSpan();
+
+        for (int i = 0; i < standardData.Length; i++)
+        {
+            ReadOnlySpan<char> compareStr = standardSpan[standardData[i].range];
+            if (compareStr.SequenceEqual(signChars))
+            {
+                sign = standardData[i];
+                return true;
+            }
+        }
+
+        sign = default;
+        return false;
+    }
+
     public readonly string Translate(string input)
     {
         ReadOnlySpan<char> span = input;
         Range[] ranges    = input.RangeSplit(';'); // Maybe?
+        Debug.Log($"Range Length: {ranges.Length}");
         //Span<char> output = stackalloc char[span.Length];
         UnsafeList<char> temp = new(0, Allocator.Temp);
         for (int i = 0; i < ranges.Length; i++)
         {
             //output[i] = span[i];
-            unsafe
-            {
-                var subspan = span[ranges[i]];
-                fixed (char* ptr = subspan)
-                {
-                    temp.AddRange(ptr, subspan.Length);
-                }
-            }
+            var subspan = span[ranges[i]];
+            Debug.Assert(TryFind(subspan, out SignData signData));
+            temp.Add((char) signData.unicodeChar);
         }
 
         //return new string(output);
