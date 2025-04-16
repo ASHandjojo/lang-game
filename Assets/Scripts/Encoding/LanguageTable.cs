@@ -14,7 +14,7 @@ using UnityEditor.UIElements;
 public struct StandardSign : IEquatable<StandardSign>
 {
     public string phonetics;
-    public int unicodeChar, mappedChar;
+    public int mappedChar;
 
     public readonly bool Equals(StandardSign other) => phonetics.Equals(other.phonetics);
 }
@@ -23,7 +23,7 @@ public struct StandardSign : IEquatable<StandardSign>
 public struct CompoundSign
 {
     public string phonetics, rawCharInput, combinedString;
-    public int unicodeChar, combinationType, mappedChar;
+    public int combinationType, mappedChar;
 }
 
 [DisallowMultipleComponent]
@@ -37,19 +37,6 @@ public sealed class LanguageTable : MonoBehaviour
 
     public StandardSign[] standardSigns;
     public CompoundSign[] compoundSigns;
-
-    public Processor processor;
-
-    void Awake()
-    {
-        processor = new Processor(standardSigns, compoundSigns);
-        Debug.Log(processor.Translate("an;na;"));
-    }
-
-    void OnDestroy()
-    {
-        processor.Dispose();
-    }
 }
 
 #if UNITY_EDITOR
@@ -88,7 +75,6 @@ public sealed class StandardSignDrawer : PropertyDrawer
 
         var phoneticsProp = property.FindPropertyRelative(nameof(StandardSign.phonetics));
         var mappedProp    = property.FindPropertyRelative(nameof(StandardSign.mappedChar));
-        var charProp      = property.FindPropertyRelative(nameof(StandardSign.unicodeChar));
 
         LanguageTable table       = property.serializedObject.targetObject as LanguageTable;
         VisualTreeAsset treeAsset = table.standardUI;
@@ -134,7 +120,6 @@ public sealed class CompoundSignDrawer : PropertyDrawer
         var rawCharProp   = property.FindPropertyRelative(nameof(CompoundSign.rawCharInput));
 
         var mappedProp    = property.FindPropertyRelative(nameof(CompoundSign.mappedChar));
-        var charProp      = property.FindPropertyRelative(nameof(CompoundSign.unicodeChar));
 
         var combiningProp = property.FindPropertyRelative(nameof(CompoundSign.combinationType));
 

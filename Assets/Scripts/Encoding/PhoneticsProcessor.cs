@@ -94,7 +94,8 @@ public struct Processor : IDisposable
 
             Range range = standardOffset..(standardOffset + phoneticStr.Length);
             phoneticStr.CopyTo(standardSpan[range]);
-            standardData[i] = new SignData(range, sign.unicodeChar);
+            standardData[i] = new SignData(range, sign.mappedChar);
+            Debug.Log($"Unicode In: {sign.mappedChar}");
 
             standardOffset += phoneticStr.Length;
         }
@@ -106,7 +107,7 @@ public struct Processor : IDisposable
 
             Range range = compoundOffset..(compoundOffset + phoneticStr.Length);
             phoneticStr.CopyTo(compoundSpan[range]);
-            compoundData[i] = new SignData(range, sign.unicodeChar);
+            compoundData[i] = new SignData(range, sign.mappedChar);
 
             compoundOffset += phoneticStr.Length;
         }
@@ -139,10 +140,10 @@ public struct Processor : IDisposable
         UnsafeList<char> temp = new(0, Allocator.Temp);
         for (int i = 0; i < ranges.Length; i++)
         {
-            //output[i] = span[i];
             var subspan = span[ranges[i]];
             Debug.Assert(TryFind(subspan, out SignData signData));
             temp.Add((char) signData.unicodeChar);
+            Debug.Log($"Unicode Char: {signData.unicodeChar}");
         }
 
         //return new string(output);

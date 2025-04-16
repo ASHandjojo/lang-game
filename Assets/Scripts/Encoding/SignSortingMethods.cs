@@ -14,7 +14,7 @@ namespace Impl
             int[] unicodeChars = new int[standardSigns.Length];
             for (int i = 0; i < standardSigns.Length; i++)
             {
-                unicodeChars[i] = standardSigns[i].unicodeChar;
+                unicodeChars[i] = standardSigns[i].mappedChar;
             }
 
             int min = unicodeChars.Min();
@@ -50,7 +50,7 @@ namespace Impl
             int[] unicodeChars = new int[compoundSigns.Length];
             for (int i = 0; i < compoundSigns.Length; i++)
             {
-                unicodeChars[i] = compoundSigns[i].unicodeChar;
+                unicodeChars[i] = compoundSigns[i].mappedChar;
             }
 
             int min = unicodeChars.Min();
