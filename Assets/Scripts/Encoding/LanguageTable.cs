@@ -4,7 +4,6 @@ using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.Rendering;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -23,7 +22,7 @@ public struct StandardSign : IEquatable<StandardSign>
 [Serializable]
 public struct CompoundSign
 {
-    public string phonetics, rawCharInput;
+    public string phonetics, rawCharInput, combinedString;
     public int unicodeChar, combinationType, mappedChar;
 }
 
@@ -36,8 +35,8 @@ public sealed class LanguageTable : MonoBehaviour
     public VisualTreeAsset compoundChildUI;
 #endif
 
-    public List<StandardSign> standardSigns;
-    public List<CompoundSign> compoundSigns;
+    public StandardSign[] standardSigns;
+    public CompoundSign[] compoundSigns;
 }
 
 #if UNITY_EDITOR
@@ -126,6 +125,9 @@ public sealed class CompoundSignDrawer : PropertyDrawer
 
         var combiningProp = property.FindPropertyRelative(nameof(CompoundSign.combinationType));
 
+        // Specifically not for the editor but rather as a way to easily access this information for later
+        var combinedProp = property.FindPropertyRelative(nameof(CompoundSign.combinedString));
+
         LanguageTable table       = property.serializedObject.targetObject as LanguageTable;
         VisualTreeAsset treeAsset = table.compoundUI;
 
@@ -195,7 +197,7 @@ public sealed class CompoundSignDrawer : PropertyDrawer
                     .ToArray();
 
                 StandardSign[] standardSigns = chars
-                    .Select(phonetic => table.standardSigns.FindIndex(sign => sign.phonetics.Equals(phonetic)))
+                    .Select(phonetic => Array.FindIndex(table.standardSigns, 0, sign => sign.phonetics.Equals(phonetic)))
                     .Where(index => index != -1)
                     .Select(index => table.standardSigns[index])
                     .ToArray();
@@ -205,13 +207,18 @@ public sealed class CompoundSignDrawer : PropertyDrawer
 
                 children.Clear();
 
+                string combinedString = "";
                 foreach (StandardSign sign in signs)
                 {
                     children.Add(new StandardSignElement(table.compoundChildUI));
                     children[^1].SetValue(sign);
-                }
-                characterList.RefreshItems();
 
+                    combinedString += sign.phonetics;
+                }
+
+                combinedProp.stringValue = combinedString;
+
+                characterList.RefreshItems();
                 // Reset
                 if (compoundOpts.value == (int) CombiningOptions.Automatic)
                 {
