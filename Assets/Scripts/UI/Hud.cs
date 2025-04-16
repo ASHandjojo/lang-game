@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
  
 public class Hud : MonoBehaviour
 {
@@ -17,13 +18,31 @@ public class Hud : MonoBehaviour
     [SerializeField] public AudioClip openClip;
     [SerializeField] public AudioClip closeClip;
     private InteractableSoundHandler sh;
-    
+
+    [Header("Sprites")]
+    private Image dictionaryImage;
+    [SerializeField] public Sprite closedImage;
+    [SerializeField] public Sprite openImage;
+
+    private AnimatorStateInfo stateInfo;
 
     private void Awake()
     {
         player = PlayerController.Instance;
         sh = GetComponent<InteractableSoundHandler>();
+        dictionaryImage = GetComponent<Image>();
+        
     }
+
+    void Update()
+    {
+        stateInfo = dictionaryAnimator.GetCurrentAnimatorStateInfo(0);
+
+        if(stateInfo.IsName("Base Layer.DictionarySlideIn") && stateInfo.normalizedTime >= 1.0f)
+        {
+            dictionaryAnimator.SetTrigger("OpenDictionary");
+        }
+     }
 
     public void OnDictionaryButtonClicked()
     {
@@ -45,6 +64,9 @@ public class Hud : MonoBehaviour
     {
         // Play transition animations
         sh.PlaySoundUI(closeClip);
+        dictionaryAnimator.SetTrigger("CloseDictionary");
+        yield return new WaitForSeconds(2.3f);
+
         dictionaryAnimator.SetTrigger("ExitDictionary");
         backgroundAnimator.SetTrigger("ExitDictionary");
 
@@ -62,5 +84,5 @@ public class Hud : MonoBehaviour
         hudCanvas.SetActive(true);
         dictionaryCanvas.SetActive(false);
     }
-
+    
 }

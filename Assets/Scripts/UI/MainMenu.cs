@@ -8,7 +8,7 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
-        sl = FindObjectOfType<SceneLoader>();
+        sl = FindFirstObjectByType<SceneLoader>();
     }
     public void PlayGame()
     {
