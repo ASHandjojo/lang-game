@@ -1,9 +1,10 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Scripts/UI/StyleSheet.uss?fileID=7433441132597879392&amp;guid=f8d5336c5247ec444a5799a7f5b6469b&amp;type=3#StyleSheet" />
+    <Style src="project://database/Assets/Scripts/Encoding/UI/StyleSheet.uss?fileID=7433441132597879392&amp;guid=f8d5336c5247ec444a5799a7f5b6469b&amp;type=3#StyleSheet" />
     <engine:GroupBox name="GroupBox" class="Window" style="justify-content: flex-start;">
         <engine:TextField label="Phonetics" name="Phonetics" readonly="false" class="StandardFont" style="-unity-font-style: normal;" />
         <engine:TextField label="Characters" name="Characters" readonly="false" class="StandardFont" style="-unity-font-style: normal;" />
         <engine:ListView name="CharacterList" class="StandardFont ChildContainer" style="align-items: stretch; align-content: auto; flex-grow: 2; justify-content: flex-start; min-height: initial; -unity-text-outline-width: 1px; max-height: none; min-width: initial; -unity-text-align: upper-left; background-position-x: center 0; padding-top: 1.25%; padding-right: 1.25%; padding-bottom: 1.25%; padding-left: 1.25%; align-self: auto; left: 0; top: 0; scale: 1 1; translate: 0 0; -unity-font-style: normal; flex-shrink: 2; height: auto; flex-direction: column-reverse;" />
+        <engine:RadioButtonGroup label="Combination Method" name="CombinationOpts" class="StandardFont" />
         <engine:IntegerField label="Unicode Input" value="0" name="UnicodeChar" class="StandardFont" style="-unity-font-style: normal;" />
         <engine:TextField label="Translate" name="Result" readonly="true" class="Translate" style="-unity-font-style: normal;" />
     </engine:GroupBox>

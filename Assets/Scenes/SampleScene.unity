@@ -389,8 +389,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
+      propertyPath: compoundSigns.Array.data[0].mappedChar
+      value: 67
+      objectReference: {fileID: 0}
+    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
+      propertyPath: standardSigns.Array.data[0].mappedChar
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
+      propertyPath: standardSigns.Array.data[1].mappedChar
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
       propertyPath: compoundSigns.Array.data[0].rawCharInput
       value: an, na
+      objectReference: {fileID: 0}
+    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
+      propertyPath: compoundSigns.Array.data[0].combinationType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5491012611103807408, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
       propertyPath: m_Name

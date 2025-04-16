@@ -24,7 +24,7 @@ public struct StandardSign : IEquatable<StandardSign>
 public struct CompoundSign
 {
     public string phonetics, rawCharInput;
-    public int unicodeChar, mappedChar;
+    public int unicodeChar, combinationType, mappedChar;
 }
 
 [DisallowMultipleComponent]
@@ -102,6 +102,12 @@ public sealed class StandardSignDrawer : PropertyDrawer
     }
 }
 
+public enum CombiningOptions
+{
+    Automatic,
+    Manual
+}
+
 [CustomPropertyDrawer(typeof(CompoundSign))]
 public sealed class CompoundSignDrawer : PropertyDrawer
 {
@@ -118,6 +124,8 @@ public sealed class CompoundSignDrawer : PropertyDrawer
         var mappedProp    = property.FindPropertyRelative(nameof(CompoundSign.mappedChar));
         var charProp      = property.FindPropertyRelative(nameof(CompoundSign.unicodeChar));
 
+        var combiningProp = property.FindPropertyRelative(nameof(CompoundSign.combinationType));
+
         LanguageTable table       = property.serializedObject.targetObject as LanguageTable;
         VisualTreeAsset treeAsset = table.compoundUI;
 
@@ -126,20 +134,23 @@ public sealed class CompoundSignDrawer : PropertyDrawer
         // Phonetic pronounciation
         var phoneticsField = visualElement.Q<TextField>("Phonetics");
         // The actual character input
-        var inputField     = visualElement.Q<TextField>("Characters");
+        var charListField  = visualElement.Q<TextField>("Characters");
         // The listed conversion of character input
         var characterList  = visualElement.Q<ListView>("CharacterList");
-        // The mapping between the raw phonetics and the representative unicode character
+        // Options for character mapping
+        var compoundOpts   = visualElement.Q<RadioButtonGroup>("CombinationOpts");
+        // The mapping between the raw phonetics and the representative unicode character (for Manual)
         var rawMapping     = visualElement.Q<IntegerField>("UnicodeChar");
         // The visual preview of the unicode character (custom alphabet)
         var resultField    = visualElement.Q<TextField>("Result");
 
-        //phoneticsProp.stringValue = phoneticsField.text;
+        // Initializing Character List
         characterList.itemsSource = children;
         characterList.makeItem    = ()     => new StandardSignElement(table.compoundChildUI);
         characterList.bindItem    = (e, i) => (e as StandardSignElement).SetValue(signs[i]);
-
         characterList.fixedItemHeight = 82.5f;
+
+        compoundOpts.choices = new string[] { nameof(CombiningOptions.Automatic), nameof(CombiningOptions.Manual) };
 
         rawMapping.RegisterCallback<ChangeEvent<int>>(
             (e) =>
@@ -150,11 +161,35 @@ public sealed class CompoundSignDrawer : PropertyDrawer
 
         phoneticsField.BindProperty(phoneticsProp);
         rawMapping.BindProperty(mappedProp);
-        inputField.BindProperty(rawCharProp);
+        charListField.BindProperty(rawCharProp);
+        compoundOpts.BindProperty(combiningProp);
 
-        inputField.RegisterCallback<ChangeEvent<string>>(
+        compoundOpts.RegisterCallback<ChangeEvent<int>>(
             (e) =>
             {
+                if (e.newValue == (int) CombiningOptions.Automatic)
+                {
+                    rawMapping.isReadOnly = true;
+                    int combination = 0;
+                    for (int i = 0; i < signs.Count; i++)
+                    {
+                        combination += signs[i].mappedChar;
+                    }
+
+                    rawMapping.value  = combination;
+                    resultField.value = $"{(char) combination}";
+                }
+                else
+                {
+                    rawMapping.isReadOnly = false;
+                }
+            }
+        );
+
+        charListField.RegisterCallback<ChangeEvent<string>>(
+            (e) =>
+            {
+                // Parses comma separated list
                 string[] chars = e.newValue.Split(',', StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => x.Trim())
                     .ToArray();
@@ -176,6 +211,20 @@ public sealed class CompoundSignDrawer : PropertyDrawer
                     children[^1].SetValue(sign);
                 }
                 characterList.RefreshItems();
+
+                // Reset
+                if (compoundOpts.value == (int) CombiningOptions.Automatic)
+                {
+                    int combination = 0;
+                    for (int i = 0; i < signs.Count; i++)
+                    {
+                        combination += signs[i].mappedChar;
+                    }
+
+                    rawMapping.value  = combination;
+                    resultField.value = $"{(char) combination}";
+                }
+
             }
         );
 
