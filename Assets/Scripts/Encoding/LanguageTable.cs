@@ -37,6 +37,18 @@ public sealed class LanguageTable : MonoBehaviour
 
     public StandardSign[] standardSigns;
     public CompoundSign[] compoundSigns;
+
+    public Processor processor;
+
+    void Awake()
+    {
+        processor = new Processor(standardSigns, compoundSigns);
+    }
+
+    void OnDestroy()
+    {
+        processor.Dispose();
+    }
 }
 
 #if UNITY_EDITOR
