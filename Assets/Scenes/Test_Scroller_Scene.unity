@@ -895,7 +895,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &529235724
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1307,6 +1307,7 @@ GameObject:
   - component: {fileID: 852182854}
   - component: {fileID: 852182853}
   - component: {fileID: 852182855}
+  - component: {fileID: 852182856}
   m_Layer: 5
   m_Name: Dictionary
   m_TagString: Untagged
@@ -1397,6 +1398,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &852182856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852182851}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 862da5aacd8adcc4ba1470d369910f9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  childObjects:
+  - {fileID: 529235723}
+  - {fileID: 1486794351}
+  - {fileID: 589184400}
+  - {fileID: 19532494}
 --- !u!1 &1108873246 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3922667833013045048, guid: 17bb6d27e5ae7174bb123b3470138864, type: 3}
@@ -1923,7 +1941,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1486794352
 RectTransform:
   m_ObjectHideFlags: 0
