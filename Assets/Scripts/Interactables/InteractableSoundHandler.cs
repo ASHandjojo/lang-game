@@ -21,5 +21,13 @@ public class InteractableSoundHandler : MonoBehaviour
     }
    }
 
+   public void PlaySoundUI(AudioClip clip)
+   {
+    if(clip != null)
+    {
+        audioSource.PlayOneShot(clip);
+    }
+   }
+
    
 }
