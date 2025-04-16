@@ -17,7 +17,7 @@ public struct SignData
 
     public SignData(in Range range, int unicodeChar)
     {
-        this.range = range;
+        this.range       = range;
         this.unicodeChar = unicodeChar;
     }
 }
@@ -57,8 +57,34 @@ public struct Processor : IDisposable
     private NativeArray<char> compoundSignData; // Under Combined String
 
     // Ranges into contiguous memory (basically, using pooled strings
-    public NativeArray<SignData> standardData;
-    public NativeArray<SignData> compoundData;
+    private NativeArray<SignData> standardData;
+    private NativeArray<SignData> compoundData; // Strategy/usage is subject to change!
+
+    private struct CompoundTable
+    {
+        public FixedList32Bytes<char> signData;
+
+        public int compoundIndex; // Index to compoundData array
+
+        public CompoundTable(in CompoundSign sign, int index) : this(sign.mappedChars, index) {}
+
+        public CompoundTable(int[] mappedChars, int compoundIndex)
+        {
+            Debug.Assert(mappedChars.Length > 1);
+            signData = new();
+            for (int i = 0; i < mappedChars.Length; i++)
+            {
+                signData.Add((char) mappedChars[i]);
+            }
+
+            this.compoundIndex = compoundIndex;
+        }
+    }
+
+    // Maps first unicode (char) value to all possible prefixes
+    // Could make linear later (as a NativeArray) with prefix offsets (similar to counting sorts), eh tho
+    [NativeDisableContainerSafetyRestriction]
+    private NativeHashMap<char, NativeList<CompoundTable>> prefixMap;
 
     public Processor(in ReadOnlySpan<StandardSign> standardSigns, in ReadOnlySpan<CompoundSign> compoundSigns)
     {
@@ -83,6 +109,8 @@ public struct Processor : IDisposable
         standardData = new NativeArray<SignData>(standardSigns.Length, Allocator.Persistent);
         compoundData = new NativeArray<SignData>(compoundSigns.Length, Allocator.Persistent);
 
+        prefixMap = new NativeHashMap<char, NativeList<CompoundTable>>(compoundSigns.Length, Allocator.Persistent);
+
         Span<char> standardSpan = standardSignData.AsSpan();
         Span<char> compoundSpan = compoundSignData.AsSpan();
 
@@ -95,7 +123,6 @@ public struct Processor : IDisposable
             Range range = standardOffset..(standardOffset + phoneticStr.Length);
             phoneticStr.CopyTo(standardSpan[range]);
             standardData[i] = new SignData(range, sign.mappedChar);
-            Debug.Log($"Unicode In: {sign.mappedChar}");
 
             standardOffset += phoneticStr.Length;
         }
@@ -108,6 +135,19 @@ public struct Processor : IDisposable
             Range range = compoundOffset..(compoundOffset + phoneticStr.Length);
             phoneticStr.CopyTo(compoundSpan[range]);
             compoundData[i] = new SignData(range, sign.mappedChar);
+
+            if (prefixMap.ContainsKey((char) sign.mappedChars[0]))
+            {
+                prefixMap[(char) sign.mappedChars[0]].Add(new CompoundTable(sign, i));
+            }
+            else
+            {
+                NativeList<CompoundTable> tableList = new(1, Allocator.Persistent);
+                tableList.AddNoResize(new CompoundTable(sign, i));
+
+                prefixMap.Add((char) sign.mappedChars[0], tableList);
+            }
+            Debug.Log($"Adding {sign.mappedChar}");
 
             compoundOffset += phoneticStr.Length;
         }
@@ -131,22 +171,71 @@ public struct Processor : IDisposable
         return false;
     }
 
+    private readonly bool TryGetCompound(in SignData rootSign, in ReadOnlySpan<char> input, Range[] ranges, int rangeIndex, out CompoundTable compoundSign)
+    {
+        // Gets compound data
+        NativeList<CompoundTable> compoundTables = prefixMap[(char) rootSign.unicodeChar];
+        // Iterate through prefixes
+        for (int compoundIdx = 0; compoundIdx < compoundTables.Length; compoundIdx++)
+        {
+            // Iterate through compound sign
+            ref readonly CompoundTable compoundTable = ref compoundTables.ElementAt(compoundIdx);
+            bool isEqual = true;
+
+            for (int elementIdx = 1; elementIdx < compoundTable.signData.Length && isEqual; elementIdx++)
+            {
+                ReadOnlySpan<char> currentSpan = input[ranges[rangeIndex + elementIdx]];
+                bool isCurrentValid = TryFind(currentSpan, out SignData currentSign);
+
+                isEqual = isEqual && isCurrentValid && currentSign.unicodeChar == compoundTable.signData[elementIdx];
+            }
+
+            if (isEqual)
+            {
+                compoundSign = compoundTables[compoundIdx];
+                return true;
+            }
+        }
+
+        compoundSign = default;
+        return false;
+    }
+
     public readonly string Translate(string input)
     {
         ReadOnlySpan<char> span = input;
-        Range[] ranges    = input.RangeSplit(';'); // Maybe?
-        Debug.Log($"Range Length: {ranges.Length}");
-        //Span<char> output = stackalloc char[span.Length];
-        UnsafeList<char> temp = new(0, Allocator.Temp);
-        for (int i = 0; i < ranges.Length; i++)
+        Range[] ranges          = input.RangeSplit(';'); // Maybe?
+        UnsafeList<char> temp   = new(0, Allocator.Temp);
+
+        for (int rangeIdx = 0; rangeIdx < ranges.Length; rangeIdx++)
         {
-            var subspan = span[ranges[i]];
-            Debug.Assert(TryFind(subspan, out SignData signData));
-            temp.Add((char) signData.unicodeChar);
-            Debug.Log($"Unicode Char: {signData.unicodeChar}");
+            ReadOnlySpan<char> currentSpan = span[ranges[rangeIdx]];
+            if (!TryFind(currentSpan, out SignData signData))
+            {
+                continue;
+            }
+
+            // Checks whether the current key *could* be compound.
+            bool hasCompound = prefixMap.ContainsKey((char) signData.unicodeChar);
+            if (hasCompound)
+            {
+                bool isCompound = TryGetCompound(signData, span, ranges, rangeIdx, out CompoundTable compoundTable);
+                if (isCompound)
+                {
+                    temp.Add((char) compoundData[compoundTable.compoundIndex].unicodeChar);
+                    rangeIdx += compoundTable.signData.Length - 1;
+                }
+                else
+                {
+                    temp.Add((char) signData.unicodeChar);
+                }
+            }
+            else
+            {
+                temp.Add((char) signData.unicodeChar);
+            }
         }
 
-        //return new string(output);
         unsafe
         {
             return new string(temp.Ptr, 0, temp.Length);
@@ -160,5 +249,12 @@ public struct Processor : IDisposable
 
         standardData.Dispose();
         compoundData.Dispose();
+
+        foreach (var arr in prefixMap.GetValueArray(Allocator.Temp))
+        {
+            arr.Dispose();
+        }
+
+        prefixMap.Dispose();
     }
 }

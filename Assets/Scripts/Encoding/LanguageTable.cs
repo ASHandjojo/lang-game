@@ -24,6 +24,9 @@ public struct CompoundSign
 {
     public string phonetics, rawCharInput, combinedString;
     public int combinationType, mappedChar;
+
+    // Standard Characters
+    public int[] mappedChars;
 }
 
 [DisallowMultipleComponent]
@@ -126,6 +129,8 @@ public sealed class CompoundSignDrawer : PropertyDrawer
         // Specifically not for the editor but rather as a way to easily access this information for later
         var combinedProp = property.FindPropertyRelative(nameof(CompoundSign.combinedString));
 
+        var mappedCharsProp = property.FindPropertyRelative(nameof(CompoundSign.mappedChars));
+
         LanguageTable table       = property.serializedObject.targetObject as LanguageTable;
         VisualTreeAsset treeAsset = table.compoundUI;
 
@@ -205,16 +210,22 @@ public sealed class CompoundSignDrawer : PropertyDrawer
 
                 children.Clear();
 
-                string combinedString = "";
-                foreach (StandardSign sign in signs)
+                string combinedString     = "";
+                mappedCharsProp.arraySize = signs.Count;
+                for (int i = 0; i < signs.Count; i++)
                 {
+                    StandardSign sign = signs[i];
                     children.Add(new StandardSignElement(table.compoundChildUI));
                     children[^1].SetValue(sign);
+
+                    SerializedProperty property = mappedCharsProp.GetArrayElementAtIndex(i);
+                    property.intValue = sign.mappedChar;
 
                     combinedString += sign.phonetics;
                 }
 
-                combinedProp.stringValue = combinedString;
+                combinedProp.stringValue  = combinedString;
+
 
                 characterList.RefreshItems();
                 // Reset
