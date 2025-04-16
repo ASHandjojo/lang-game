@@ -1,4 +1,4 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Scripts/Encoding/UI/StyleSheet.uss?fileID=7433441132597879392&amp;guid=f8d5336c5247ec444a5799a7f5b6469b&amp;type=3#StyleSheet" />
-    <engine:Label text="Label" name="Input" class="TranslatedLabel" />
+    <engine:Label text=":)" name="Input" class="TranslatedLabel" />
 </engine:UXML>

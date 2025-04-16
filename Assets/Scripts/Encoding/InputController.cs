@@ -30,7 +30,7 @@ public sealed class InputController : MonoBehaviour
         processor = new Processor(languageTable.standardSigns, languageTable.compoundSigns);
 
         inputField = document.rootVisualElement.Q<Label>("Input");
-        InputStr   = processor.Translate("an;na;");
+        InputStr   = processor.Translate("an;na;an;");
     }
 
     void OnDestroy()
