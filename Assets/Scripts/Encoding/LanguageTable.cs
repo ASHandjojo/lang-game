@@ -43,6 +43,7 @@ public sealed class LanguageTable : MonoBehaviour
     void Awake()
     {
         processor = new Processor(standardSigns, compoundSigns);
+        Debug.Log(processor.Translate("an;na;"));
     }
 
     void OnDestroy()

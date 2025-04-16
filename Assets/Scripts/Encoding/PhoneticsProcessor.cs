@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 
 using UnityEngine;
 
@@ -18,6 +19,34 @@ public struct SignData
     {
         this.range = range;
         this.unicodeChar = unicodeChar;
+    }
+}
+
+public static class StringExts
+{
+    public static Range[] RangeSplit(this string str, char delimiter)
+    {
+        int count = 1;
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (str[i] == delimiter)
+            {
+                count++;
+            }
+        }
+
+        Range[] output = new Range[count];
+        int index = 0, prevOffset = 0;
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (str[i] == delimiter)
+            {
+                output[index++] = prevOffset..i;
+                prevOffset = i + 1;
+            }
+        }
+
+        return output;
     }
 }
 
@@ -80,6 +109,32 @@ public struct Processor : IDisposable
             compoundData[i] = new SignData(range, sign.unicodeChar);
 
             compoundOffset += phoneticStr.Length;
+        }
+    }
+
+    public readonly string Translate(string input)
+    {
+        ReadOnlySpan<char> span = input;
+        Range[] ranges    = input.RangeSplit(';'); // Maybe?
+        //Span<char> output = stackalloc char[span.Length];
+        UnsafeList<char> temp = new(0, Allocator.Temp);
+        for (int i = 0; i < ranges.Length; i++)
+        {
+            //output[i] = span[i];
+            unsafe
+            {
+                var subspan = span[ranges[i]];
+                fixed (char* ptr = subspan)
+                {
+                    temp.AddRange(ptr, subspan.Length);
+                }
+            }
+        }
+
+        //return new string(output);
+        unsafe
+        {
+            return new string(temp.Ptr, 0, temp.Length);
         }
     }
 
