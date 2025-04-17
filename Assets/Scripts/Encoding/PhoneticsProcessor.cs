@@ -64,7 +64,7 @@ public struct Processor : IDisposable
 
             Range range = standardOffset..(standardOffset + phoneticStr.Length);
             phoneticStr.CopyTo(standardSpan[range]);
-            standardData[i] = new SignData(range, sign.mappedChar);
+            standardData[i] = new SignData(range, (char) sign.mappedChar);
 
             standardOffset += phoneticStr.Length;
         }
@@ -77,18 +77,19 @@ public struct Processor : IDisposable
 
             Range range = compoundOffset..(compoundOffset + phoneticStr.Length);
             phoneticStr.CopyTo(compoundSpan[range]);
-            compoundData[i] = new SignData(range, sign.mappedChar);
+            compoundData[i] = new SignData(range, (char) sign.mappedChar);
 
             char firstMappedChar = (char) sign.mappedChars[0];
+            CompoundTable table  = new(sign, i);
 
             if (prefixMap.ContainsKey(firstMappedChar)) // If already has entry, add to list @ prefix map location
             {
-                prefixMap[firstMappedChar].Add(new CompoundTable(sign, i));
+                prefixMap[firstMappedChar].Add(table);
             }
             else // Otherwise, create list, add compound table to list, add list to table
             {
                 NativeList<CompoundTable> tableList = new(1, Allocator.Persistent);
-                tableList.AddNoResize(new CompoundTable(sign, i));
+                tableList.AddNoResize(table);
 
                 prefixMap.Add(firstMappedChar, tableList);
             }
@@ -118,7 +119,7 @@ public struct Processor : IDisposable
     private readonly bool TryGetCompound(in SignData rootSign, in ReadOnlySpan<char> input, Range[] ranges, int rangeIndex, out CompoundTable compoundTableOut)
     {
         // Gets compound data
-        NativeList<CompoundTable> compoundTables = prefixMap[(char) rootSign.unicodeChar];
+        NativeList<CompoundTable> compoundTables = prefixMap[rootSign.unicodeChar];
         // Iterate through prefixes
         for (int compoundIdx = 0; compoundIdx < compoundTables.Length; compoundIdx++)
         {
@@ -166,7 +167,7 @@ public struct Processor : IDisposable
                 continue;
             }
 
-            char mappedChar  = (char) signData.unicodeChar; // Default value
+            char mappedChar  = signData.unicodeChar; // Default value
             bool hasCompound = prefixMap.ContainsKey(mappedChar);
             // Checks whether the current key *could* be compound.
             if (hasCompound)
@@ -175,7 +176,7 @@ public struct Processor : IDisposable
                 if (isCompound)
                 {
                     // Changes the character to compound character if there is a valid compound representation
-                    mappedChar = (char) compoundData[compoundTable.compoundIndex].unicodeChar;
+                    mappedChar = compoundData[compoundTable.compoundIndex].unicodeChar;
                     // Offsets by the number of characters a compound sign consumes
                     rangeIdx += compoundTable.signData.Length - 1;
                 }

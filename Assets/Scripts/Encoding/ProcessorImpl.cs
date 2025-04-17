@@ -37,9 +37,9 @@ namespace Impl
     public struct SignData
     {
         public Range range;
-        public int unicodeChar;
+        public char unicodeChar;
 
-        public SignData(in Range range, int unicodeChar)
+        public SignData(in Range range, char unicodeChar)
         {
             this.range = range;
             this.unicodeChar = unicodeChar;
