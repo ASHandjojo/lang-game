@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Interactor : MonoBehaviour
 {
-    /* How to use the interaction system
+    /* How to use the interaction system (For my eyes only!)
 
     (I'm sorry if this is a terrible way to do it)
 
@@ -16,6 +16,7 @@ public class Interactor : MonoBehaviour
     If we need *all* interactables to have additional functions then add them to the IInteractable interface
 
     The object needs to have a BoxCollider2D with the IsTrigger option checked. I don't think it needs to have a RigidBody2D? But I'm stupid so who knows.
+    Also it needs to have the Interactable tag.
 
     Uh I think thats the basics
 
@@ -27,7 +28,7 @@ public class Interactor : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -39,12 +40,13 @@ public class Interactor : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        currentInteractable = other.GetComponent<IInteractable>();
-        Debug.Log("here");
+        if (other.gameObject.CompareTag("Interactable")) {
+            currentInteractable = other.GetComponent<IInteractable>();
+        }
     }
 
     void OnTriggerExit2D(Collider2D other) {
-        if (other.GetComponent<IInteractable>() == currentInteractable) {
+        if (other.gameObject.CompareTag("Interactable") && other.GetComponent<IInteractable>() == currentInteractable) {
             currentInteractable = null;
         }
     }
