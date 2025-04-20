@@ -30,6 +30,31 @@ public static class StringExts
 
         return output;
     }
+
+    public static NativeArray<Range> RangeSplit(this string str, char delimiter, Allocator allocator)
+    {
+        int count = 0;
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (str[i] == delimiter)
+            {
+                count++;
+            }
+        }
+
+        NativeArray<Range> output = new(0, allocator);
+        int index = 0, prevOffset = 0;
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (str[i] == delimiter)
+            {
+                output[index++] = prevOffset..i;
+                prevOffset = i + 1;
+            }
+        }
+
+        return output;
+    }
 }
 
 namespace Impl
