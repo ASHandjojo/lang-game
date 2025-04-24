@@ -8,12 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TitleMenuScene.unity
     guid: 3efe1e2f33a2f2d4aab98809910ca816
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Test_Scroller_Scene.unity
     guid: 0a9d35173ad143446b254bd7e054f01b
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/LevelOne.unity
+    guid: 16dc2b1a6a0851743842f5ed8f86e74a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

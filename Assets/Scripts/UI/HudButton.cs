@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class HudButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-      public void OnPointerEnter(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
         Debug.Log("Mouse is over UI element");
     }
