@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Dictionary : MonoBehaviour
 {
     public List<GameObject> childObjects;
+    
 
     void Start()
     {
