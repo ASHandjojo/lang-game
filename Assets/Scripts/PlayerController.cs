@@ -20,7 +20,16 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        movementDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if (Input.GetKey(Keybinds.instance.getRightKey()) && Input.GetKey(Keybinds.instance.getLeftKey())) {
+            movementDirection = new Vector2(0f, 0f);
+        } else if (Input.GetKey(Keybinds.instance.getRightKey())) {
+            movementDirection = new Vector2(1f, 0f);
+        } else if (Input.GetKey(Keybinds.instance.getLeftKey())) {
+            movementDirection = new Vector2(-1f, 0f);
+        } else {
+            movementDirection = new Vector2(0f, 0f);
+        }
+        //movementDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
 
 
