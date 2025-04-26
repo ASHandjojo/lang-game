@@ -119,17 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &313382543 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-  m_PrefabInstance: {fileID: 7290516110370842754}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 764b72cbbffdff94f87c0caec41959eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,7 +340,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &379386918204763118
+--- !u!1001 &1507988423
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -406,7 +395,7 @@ PrefabInstance:
     - target: {fileID: 9217194247108019352, guid: 2f5f920b25f590b43839bf6106cdf1a8, type: 3}
       propertyPath: languageTable
       value: 
-      objectReference: {fileID: 313382543}
+      objectReference: {fileID: 7290516110370842755}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -460,78 +449,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.data[0].phonetics
-      value: anna
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.data[1].phonetics
-      value: naan
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.data[0].mappedChar
-      value: 67
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.data[1].mappedChar
-      value: 67
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: standardSigns.Array.data[0].mappedChar
-      value: 34
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: standardSigns.Array.data[1].mappedChar
-      value: 33
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.data[0].rawCharInput
-      value: an, na
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.data[1].rawCharInput
-      value: na, an
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.data[0].combinedString
-      value: anna
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.data[1].combinedString
-      value: naan
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.data[0].combinationType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.data[0].mappedChars.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: compoundSigns.Array.data[1].mappedChars.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: 'compoundSigns.Array.data[0].mappedChars.Array.data[0]'
-      value: 34
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: 'compoundSigns.Array.data[0].mappedChars.Array.data[1]'
-      value: 33
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: 'compoundSigns.Array.data[1].mappedChars.Array.data[0]'
-      value: 33
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
-      propertyPath: 'compoundSigns.Array.data[1].mappedChars.Array.data[1]'
-      value: 34
-      objectReference: {fileID: 0}
     - target: {fileID: 5491012611103807408, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
       propertyPath: m_Name
       value: Character Table
@@ -541,6 +458,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
+--- !u!114 &7290516110370842755 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1054299092288072899, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
+  m_PrefabInstance: {fileID: 7290516110370842754}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 764b72cbbffdff94f87c0caec41959eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -548,4 +476,4 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 7290516110370842754}
-  - {fileID: 379386918204763118}
+  - {fileID: 1507988423}

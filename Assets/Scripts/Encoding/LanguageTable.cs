@@ -195,7 +195,7 @@ public sealed class CompoundSignDrawer : PropertyDrawer
             (e) =>
             {
                 // Parses comma separated list
-                string[] chars = e.newValue.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                string[] chars = e.newValue.Split('_', StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => x.Trim())
                     .ToArray();
 

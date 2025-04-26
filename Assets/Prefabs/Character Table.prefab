@@ -48,14 +48,176 @@ MonoBehaviour:
   compoundUI: {fileID: 9197481963319205126, guid: dc18ecb36ea5bbd4aad03435ac673caa, type: 3}
   compoundChildUI: {fileID: 9197481963319205126, guid: b128922581293a949bd2e71855cd6f99, type: 3}
   standardSigns:
-  - phonetics: an
-    unicodeChar: 0
-    mappedChar: 3332
-  - phonetics: na
-    unicodeChar: 0
-    mappedChar: 444
+  - phonetics: a
+    mappedChar: 97
+  - phonetics: b
+    mappedChar: 98
+  - phonetics: c
+    mappedChar: 99
+  - phonetics: d
+    mappedChar: 100
+  - phonetics: e
+    mappedChar: 101
+  - phonetics: f
+    mappedChar: 102
+  - phonetics: g
+    mappedChar: 103
+  - phonetics: h
+    mappedChar: 104
+  - phonetics: i
+    mappedChar: 105
+  - phonetics: j
+    mappedChar: 106
+  - phonetics: l
+    mappedChar: 108
+  - phonetics: m
+    mappedChar: 109
+  - phonetics: n
+    mappedChar: 110
+  - phonetics: o
+    mappedChar: 111
+  - phonetics: p
+    mappedChar: 112
+  - phonetics: ng
+    mappedChar: 113
+  - phonetics: r
+    mappedChar: 114
+  - phonetics: s
+    mappedChar: 115
+  - phonetics: t
+    mappedChar: 116
+  - phonetics: u
+    mappedChar: 117
+  - phonetics: v
+    mappedChar: 118
+  - phonetics: sh
+    mappedChar: 119
+  - phonetics: hg
+    mappedChar: 120
+  - phonetics: th
+    mappedChar: 121
+  - phonetics: z
+    mappedChar: 122
+  - phonetics: '*'
+    mappedChar: 42
   compoundSigns:
+  - phonetics: 
+    rawCharInput: a_e
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 161
+    mappedChars: 6100000065000000
   - phonetics: anna
-    rawCharInput: an, na
-    unicodeChar: 0
-    mappedChar: 3335
+    rawCharInput: a_i
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 162
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: a_o
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 163
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: a_u
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 164
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: e_a
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 165
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: e_i
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 166
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: e_o
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 167
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: e_u
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 168
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: i_a
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 169
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: i_e
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 170
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: i_o
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 171
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: i_u
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 172
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: o_a
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 173
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: o_e
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 174
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: o_i
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 175
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: o_u
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 176
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: u_a
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 177
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: u_e
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 178
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: u_i
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 179
+    mappedChars: 6100000065000000
+  - phonetics: anna
+    rawCharInput: u_o
+    combinedString: ae
+    combinationType: 1
+    mappedChar: 180
+    mappedChars: 6100000065000000
