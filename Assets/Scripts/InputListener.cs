@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 public class InputListener : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     [SerializeField] private Button this_button;
 
@@ -47,7 +46,7 @@ public class InputListener : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+ 
     void Update()
     {
         if (shouldListen) {

@@ -185,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3088c2c838d075b4a9410cd8aa1bd33e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _otherDocument: {fileID: 1181049599}
   hoverClip: {fileID: 8300000, guid: 83167905238c1f540b72936c019e6809, type: 3}
   selectionClip: {fileID: 8300000, guid: 6eef3ad492586934990852bc54efdcb8, type: 3}
 --- !u!114 &629883311
@@ -374,9 +375,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1181049600}
   - component: {fileID: 1181049599}
-  - component: {fileID: 1181049598}
   - component: {fileID: 1181049597}
   - component: {fileID: 1181049596}
+  - component: {fileID: 1181049601}
   m_Layer: 5
   m_Name: SettingsMenu
   m_TagString: Untagged
@@ -493,20 +494,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1181049598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1181049595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3088c2c838d075b4a9410cd8aa1bd33e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hoverClip: {fileID: 8300000, guid: 83167905238c1f540b72936c019e6809, type: 3}
-  selectionClip: {fileID: 8300000, guid: 6eef3ad492586934990852bc54efdcb8, type: 3}
 --- !u!114 &1181049599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,7 +508,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 5c1a0d1d8d70f3b4a978d3b7a982f136, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 4f03c93b416562049a47b54b0fb94606, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 8eacbf0aad3943f4a84e5bf7409713c4, type: 3}
   m_SortingOrder: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -541,6 +528,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1181049601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181049595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f78e05aba10ed534a8b5f9497069243d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _otherDocument: {fileID: 629883308}
+  hoverClip: {fileID: 8300000, guid: 83167905238c1f540b72936c019e6809, type: 3}
+  selectionClip: {fileID: 8300000, guid: 6eef3ad492586934990852bc54efdcb8, type: 3}
 --- !u!1001 &1401406551
 PrefabInstance:
   m_ObjectHideFlags: 0

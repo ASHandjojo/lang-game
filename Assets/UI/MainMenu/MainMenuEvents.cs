@@ -5,7 +5,8 @@ using UnityEngine.UIElements;
 
 public class MainMenuEvents : MonoBehaviour
 {
-    private UIDocument _document;
+    private UIDocument _selfDocument;
+    [SerializeField] private UIDocument _otherDocument;
     private Button _startButton;
     private Button _settingsButton;
     private Button _exitButton;
@@ -14,25 +15,25 @@ public class MainMenuEvents : MonoBehaviour
 
     private SceneLoader sl;
     private SoundHandler sh;
-    [SerializeField] public AudioClip hoverClip;
-    [SerializeField] public AudioClip selectionClip;
+    [SerializeField] private AudioClip hoverClip;
+    [SerializeField] private AudioClip selectionClip;
 
     void Awake()
     {
         sl = FindFirstObjectByType<SceneLoader>();
-        _document = GetComponent<UIDocument>();
+        _selfDocument = GetComponent<UIDocument>();
         sh = GetComponent<SoundHandler>();
 
         // Add click events to all buttons
-        _startButton = _document.rootVisualElement.Q("StartButton") as Button;
+        _startButton = _selfDocument.rootVisualElement.Q("StartButton") as Button;
         _startButton.RegisterCallback<ClickEvent>(StartGame);
-        _settingsButton = _document.rootVisualElement.Q("SettingsButton") as Button;
-        _settingsButton.RegisterCallback<ClickEvent>(OpenSettings);
-        _exitButton = _document.rootVisualElement.Q("ExitButton") as Button;
+        _settingsButton = _selfDocument.rootVisualElement.Q("SettingsButton") as Button;
+        _settingsButton.RegisterCallback<ClickEvent>(ToggleSettings);
+        _exitButton = _selfDocument.rootVisualElement.Q("ExitButton") as Button;
         _exitButton.RegisterCallback<ClickEvent>(ExitGame);
 
         // Add sounds to all buttons
-        _buttonList = _document.rootVisualElement.Query<Button>().ToList();
+        _buttonList = _selfDocument.rootVisualElement.Query<Button>().ToList();
         for(int i = 0; i < _buttonList.Count; i++)
         {
             _buttonList[i].RegisterCallback<ClickEvent>(OnButtonClick);
@@ -40,10 +41,11 @@ public class MainMenuEvents : MonoBehaviour
         }
     }
 
+    // Get rid of button events
     void OnDisable()
     {
         _startButton.UnregisterCallback<ClickEvent>(StartGame);
-        _settingsButton.UnregisterCallback<ClickEvent>(OpenSettings);
+        _settingsButton.UnregisterCallback<ClickEvent>(ToggleSettings);
         _exitButton.UnregisterCallback<ClickEvent>(ExitGame);
         
         for(int i = 0; i < _buttonList.Count; i++)
@@ -55,32 +57,37 @@ public class MainMenuEvents : MonoBehaviour
 
     private void StartGame(ClickEvent e)
     {
+        _startButton.SetEnabled(false);
+        _settingsButton.SetEnabled(false);
+        _exitButton.SetEnabled(false);
+
         sl.LoadNextLevel();
     }
 
-     private void OpenSettings(ClickEvent e)
+    // Switch between menus
+     private void ToggleSettings(ClickEvent e)
     {
-        Debug.Log("Open Settings.");
+        _otherDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+        _selfDocument.rootVisualElement.style.display = DisplayStyle.None;
     }
 
-
+    // Exit to desktop
     private void ExitGame(ClickEvent e)
     {
         Debug.Log("Exit game.");
         Application.Quit();
     }
 
+    // Play sound when a button is clicked
     private void OnButtonClick(ClickEvent e)
     {
         sh.PlaySoundUI(selectionClip);
     }
 
+    // Play sound when cursor is over a button
     private void OnButtonHover(MouseEnterEvent e)
     {
         sh.PlaySoundUI(hoverClip);
     }
-
-    
-
     
 }

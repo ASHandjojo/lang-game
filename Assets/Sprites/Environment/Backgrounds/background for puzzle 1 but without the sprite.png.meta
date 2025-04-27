@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      background for puzzle 1 but without the sprite_0: 2096709908634226722
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

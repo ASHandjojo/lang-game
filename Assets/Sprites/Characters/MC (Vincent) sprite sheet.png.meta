@@ -359,7 +359,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      MC (Vincent) sprite sheet_0: -4773621113803141525
+      MC (Vincent) sprite sheet_1: 4480848805386870149
+      MC (Vincent) sprite sheet_2: 3623482906044742813
+      MC (Vincent) sprite sheet_3: 8960848957784296289
+      MC (Vincent) sprite sheet_4: 7301435216335592686
+      MC (Vincent) sprite sheet_5: 4397413842333647916
+      MC (Vincent) sprite sheet_6: 4977225721546176495
+      MC (Vincent) sprite sheet_7: 464749273079454026
+      MC (Vincent) sprite sheet_8: -2733261565883468373
+      MC (Vincent) sprite sheet_9: -6321415602932457770
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

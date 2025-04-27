@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      NPC - Florence (guide)_0: 8459097191445464495
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
