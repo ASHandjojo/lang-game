@@ -1,0 +1,392 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a96bf49a31208c41b2a864931bca1e8, type: 3}
+  m_Name: Ligature Table
+  m_EditorClassIdentifier: 
+  fileDir: Assets/Scripts/Encoding/Loader/Converted.json
+  entries:
+  - entries:
+    - Glyph: 164
+      Components: 7500
+    - Glyph: 163
+      Components: 6f00
+    - Glyph: 162
+      Components: 6900
+    - Glyph: 161
+      Components: 6500
+  - entries:
+    - Glyph: 190
+      Components: 7500
+    - Glyph: 189
+      Components: 6f00
+    - Glyph: 188
+      Components: 6900
+    - Glyph: 187
+      Components: 6500
+    - Glyph: 186
+      Components: 6100
+  - entries:
+    - Glyph: 195
+      Components: 7500
+    - Glyph: 194
+      Components: 6f00
+    - Glyph: 193
+      Components: 6900
+    - Glyph: 192
+      Components: 6500
+    - Glyph: 191
+      Components: 6100
+  - entries:
+    - Glyph: 210
+      Components: 7500
+    - Glyph: 209
+      Components: 6f00
+    - Glyph: 208
+      Components: 6900
+    - Glyph: 207
+      Components: 6500
+    - Glyph: 206
+      Components: 6100
+  - entries:
+    - Glyph: 168
+      Components: 7500
+    - Glyph: 167
+      Components: 6f00
+    - Glyph: 166
+      Components: 6900
+    - Glyph: 165
+      Components: 6100
+  - entries:
+    - Glyph: 230
+      Components: 7500
+    - Glyph: 229
+      Components: 6f00
+    - Glyph: 228
+      Components: 6900
+    - Glyph: 227
+      Components: 6500
+    - Glyph: 226
+      Components: 6100
+  - entries:
+    - Glyph: 200
+      Components: 7500
+    - Glyph: 199
+      Components: 6f00
+    - Glyph: 198
+      Components: 6900
+    - Glyph: 197
+      Components: 6500
+    - Glyph: 196
+      Components: 6100
+  - entries:
+    - Glyph: 225
+      Components: 67007500
+    - Glyph: 224
+      Components: 67006f00
+    - Glyph: 223
+      Components: 67006900
+    - Glyph: 222
+      Components: 67006500
+    - Glyph: 221
+      Components: 67006100
+    - Glyph: 220
+      Components: 7500
+    - Glyph: 219
+      Components: 6f00
+    - Glyph: 218
+      Components: 6900
+    - Glyph: 217
+      Components: 6500
+    - Glyph: 216
+      Components: 6100
+  - entries:
+    - Glyph: 172
+      Components: 7500
+    - Glyph: 171
+      Components: 6f00
+    - Glyph: 170
+      Components: 6500
+    - Glyph: 169
+      Components: 6100
+  - entries:
+    - Glyph: 255
+      Components: 7500
+    - Glyph: 254
+      Components: 6f00
+    - Glyph: 253
+      Components: 6900
+    - Glyph: 252
+      Components: 6500
+    - Glyph: 251
+      Components: 6100
+  - entries:
+    - Glyph: 270
+      Components: 7500
+    - Glyph: 269
+      Components: 6f00
+    - Glyph: 268
+      Components: 6900
+    - Glyph: 267
+      Components: 6500
+    - Glyph: 266
+      Components: 6100
+  - entries:
+    - Glyph: 260
+      Components: 7500
+    - Glyph: 259
+      Components: 6f00
+    - Glyph: 258
+      Components: 6900
+    - Glyph: 257
+      Components: 6500
+    - Glyph: 256
+      Components: 6100
+  - entries:
+    - Glyph: 280
+      Components: 67007500
+    - Glyph: 279
+      Components: 67006f00
+    - Glyph: 278
+      Components: 67006900
+    - Glyph: 277
+      Components: 67006500
+    - Glyph: 276
+      Components: 67006100
+    - Glyph: 265
+      Components: 7500
+    - Glyph: 264
+      Components: 6f00
+    - Glyph: 263
+      Components: 6900
+    - Glyph: 262
+      Components: 6500
+    - Glyph: 261
+      Components: 6100
+  - entries:
+    - Glyph: 176
+      Components: 7500
+    - Glyph: 175
+      Components: 6900
+    - Glyph: 174
+      Components: 6500
+    - Glyph: 173
+      Components: 6100
+  - entries:
+    - Glyph: 185
+      Components: 7500
+    - Glyph: 184
+      Components: 6f00
+    - Glyph: 183
+      Components: 6900
+    - Glyph: 182
+      Components: 6500
+    - Glyph: 181
+      Components: 6100
+  - entries:
+    - Glyph: 275
+      Components: 7500
+    - Glyph: 274
+      Components: 6f00
+    - Glyph: 273
+      Components: 6900
+    - Glyph: 272
+      Components: 6500
+    - Glyph: 271
+      Components: 6100
+  - entries:
+    - Glyph: 250
+      Components: 68007500
+    - Glyph: 249
+      Components: 68006f00
+    - Glyph: 248
+      Components: 68006900
+    - Glyph: 247
+      Components: 68006500
+    - Glyph: 246
+      Components: 68006100
+    - Glyph: 240
+      Components: 7500
+    - Glyph: 239
+      Components: 6f00
+    - Glyph: 238
+      Components: 6900
+    - Glyph: 237
+      Components: 6500
+    - Glyph: 236
+      Components: 6100
+  - entries:
+    - Glyph: 215
+      Components: 68007500
+    - Glyph: 214
+      Components: 68006f00
+    - Glyph: 213
+      Components: 68006900
+    - Glyph: 212
+      Components: 68006500
+    - Glyph: 211
+      Components: 68006100
+    - Glyph: 205
+      Components: 7500
+    - Glyph: 204
+      Components: 6f00
+    - Glyph: 203
+      Components: 6900
+    - Glyph: 202
+      Components: 6500
+    - Glyph: 201
+      Components: 6100
+  - entries:
+    - Glyph: 180
+      Components: 6f00
+    - Glyph: 179
+      Components: 6900
+    - Glyph: 178
+      Components: 6500
+    - Glyph: 177
+      Components: 6100
+  - entries:
+    - Glyph: 235
+      Components: 7500
+    - Glyph: 234
+      Components: 6f00
+    - Glyph: 233
+      Components: 6900
+    - Glyph: 232
+      Components: 6500
+    - Glyph: 231
+      Components: 6100
+  - entries:
+    - Glyph: 245
+      Components: 7500
+    - Glyph: 244
+      Components: 6f00
+    - Glyph: 243
+      Components: 6900
+    - Glyph: 242
+      Components: 6500
+    - Glyph: 241
+      Components: 6100
+  - entries:
+    - Glyph: 186
+      Components: 0000
+  - entries:
+    - Glyph: 187
+      Components: 0000
+  - entries:
+    - Glyph: 188
+      Components: 0000
+  - entries:
+    - Glyph: 189
+      Components: 0000
+  - entries:
+    - Glyph: 190
+      Components: 0000
+  - entries:
+    - Glyph: 196
+      Components: 0000
+  - entries:
+    - Glyph: 197
+      Components: 0000
+  - entries:
+    - Glyph: 198
+      Components: 0000
+  - entries:
+    - Glyph: 199
+      Components: 0000
+  - entries:
+    - Glyph: 200
+      Components: 0000
+  - entries:
+    - Glyph: 211
+      Components: 00000000
+    - Glyph: 206
+      Components: 0000
+  - entries:
+    - Glyph: 212
+      Components: 00000000
+    - Glyph: 207
+      Components: 0000
+  - entries:
+    - Glyph: 213
+      Components: 00000000
+    - Glyph: 208
+      Components: 0000
+  - entries:
+    - Glyph: 214
+      Components: 00000000
+    - Glyph: 209
+      Components: 0000
+  - entries:
+    - Glyph: 215
+      Components: 00000000
+    - Glyph: 210
+      Components: 0000
+  - entries:
+    - Glyph: 221
+      Components: 0000
+  - entries:
+    - Glyph: 222
+      Components: 0000
+  - entries:
+    - Glyph: 223
+      Components: 0000
+  - entries:
+    - Glyph: 224
+      Components: 0000
+  - entries:
+    - Glyph: 225
+      Components: 0000
+  - entries:
+    - Glyph: 231
+      Components: 0000
+  - entries:
+    - Glyph: 232
+      Components: 0000
+  - entries:
+    - Glyph: 233
+      Components: 0000
+  - entries:
+    - Glyph: 234
+      Components: 0000
+  - entries:
+    - Glyph: 235
+      Components: 0000
+  - entries:
+    - Glyph: 241
+      Components: 0000
+  - entries:
+    - Glyph: 242
+      Components: 0000
+  - entries:
+    - Glyph: 243
+      Components: 0000
+  - entries:
+    - Glyph: 244
+      Components: 0000
+  - entries:
+    - Glyph: 245
+      Components: 0000
+  - entries:
+    - Glyph: 251
+      Components: 0000
+  - entries:
+    - Glyph: 252
+      Components: 0000
+  - entries:
+    - Glyph: 253
+      Components: 0000
+  - entries:
+    - Glyph: 254
+      Components: 0000
+  - entries:
+    - Glyph: 255
+      Components: 0000
