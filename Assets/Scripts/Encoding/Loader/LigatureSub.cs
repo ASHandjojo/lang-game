@@ -62,10 +62,12 @@ public sealed class LigatureSubData
 [CreateAssetMenu(menuName = "Linguistics/Ligature Table")]
 public sealed class LigatureSub : ScriptableObject
 {
+#if UNITY_EDITOR
     [SerializeField] private string fileDir;
-    [SerializeField, HideInInspector] public LigatureSubData[] entries;
-
     public string FileDir => fileDir;
+#endif
+
+    [SerializeField, HideInInspector] public LigatureSubData[] entries;
 }
 
 #if UNITY_EDITOR
