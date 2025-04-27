@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractableSoundHandler : MonoBehaviour
+public class SoundHandler : MonoBehaviour
 {
 
     private AudioSource audioSource;

@@ -12,7 +12,7 @@ public class NewItem : Interactable
     [SerializeField] public AudioClip clip;
 
     private SpriteRenderer sr;
-    private InteractableSoundHandler sh;
+    private SoundHandler sh;
     private bool isOpen = false;
 
     
@@ -40,7 +40,7 @@ public class NewItem : Interactable
     {
         // Initialize components added in Inspector
         sr = GetComponent<SpriteRenderer>();
-        sh = GetComponent<InteractableSoundHandler>();
+        sh = GetComponent<SoundHandler>();
 
         if(sr == null)
         {

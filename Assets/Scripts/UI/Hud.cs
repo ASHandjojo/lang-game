@@ -17,7 +17,7 @@ public class Hud : MonoBehaviour
     [Header("Audio")]
     [SerializeField] public AudioClip openClip;
     [SerializeField] public AudioClip closeClip;
-    private InteractableSoundHandler sh;
+    private SoundHandler sh;
 
     [Header("Sprites")]
     private Image dictionaryImage;
@@ -29,7 +29,7 @@ public class Hud : MonoBehaviour
     private void Awake()
     {
         player = PlayerController.Instance;
-        sh = GetComponent<InteractableSoundHandler>();
+        sh = GetComponent<SoundHandler>();
         dictionaryImage = GetComponent<Image>();
         
     }
