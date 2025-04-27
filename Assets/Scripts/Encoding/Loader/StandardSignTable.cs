@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,16 +20,24 @@ public struct StandardSign : IEquatable<StandardSign>
     public readonly bool Equals(StandardSign other) => phonetics.Equals(other.phonetics);
 }
 
-[CreateAssetMenu(menuName = "Linguistics/Standard Sign Table")]
+[Serializable]
+public sealed class SignJSON
+{
+    public ushort Unicode { get; set; }
+    public string Characters { get; set; }
+}
+
+[CreateAssetMenu(menuName = "Linguistics/Sign Importer")]
 public sealed class StandardSignTable : ScriptableObject
 {
-    public Vector2Int[] ranges;
-
 #if UNITY_EDITOR
+    [SerializeField] private string fileDir;
+    public string FileDir => fileDir;
+
     public VisualTreeAsset standardUI;
-    [SerializeField, HideInInspector]
-    public StandardSign[] standardSigns;
 #endif
+
+    [SerializeField, HideInInspector] public StandardSign[] entries;
 }
 
 #if UNITY_EDITOR
@@ -58,85 +68,57 @@ public sealed class StandardSignElement : VisualElement
     }
 }
 
-[CustomPropertyDrawer(typeof(StandardSign))]
-public sealed class StandardSignDrawer : PropertyDrawer
-{
-    public override VisualElement CreatePropertyGUI(SerializedProperty property)
-    {
-        VisualElement visualElement = new();
-
-        var phoneticsProp = property.FindPropertyRelative(nameof(StandardSign.phonetics));
-        var mappedProp    = property.FindPropertyRelative(nameof(StandardSign.mappedChar));
-
-        var table     = property.serializedObject.targetObject as StandardSignTable;
-        var treeAsset = table.standardUI;
-        property.serializedObject.Update();
-
-        treeAsset.CloneTree(visualElement);
-
-        var phoneticsField = visualElement.Q<TextField>("Phonetics");
-        var rawMapping     = visualElement.Q<IntegerField>("UnicodeChar");
-        var resultField    = visualElement.Q<TextField>("Result");
-
-        rawMapping.RegisterCallback<ChangeEvent<int>>(
-            (e) =>
-            {
-                resultField.value = $"{(char) mappedProp.intValue}";
-            }
-        );
-
-        phoneticsField.BindProperty(phoneticsProp);
-        rawMapping.BindProperty(mappedProp);
-
-        return visualElement;
-    }
-}
-
 [CustomEditor(typeof(StandardSignTable))]
-public sealed class StandardTableEditor : Editor
+public sealed class SignImporterEditor : Editor
 {
     public override VisualElement CreateInspectorGUI()
     {
         VisualElement element = new();
-        InspectorElement.FillDefaultInspector(element, serializedObject, this);
-
         StandardSignTable table = target as StandardSignTable;
+
+        InspectorElement.FillDefaultInspector(element, serializedObject, this);
+        serializedObject.Update();
 
         Button submitButton = new(
             () =>
             {
-                int totalChars = table.ranges.Select(range => (range.y - range.x) + 1).Sum();
-                table.standardSigns = new StandardSign[totalChars];
-                int index = 0;
-                foreach (var range in table.ranges)
-                {
-                    for (int i = range.x; i <= range.y; i++, index++)
+                using FileStream stream = new(table.FileDir, FileMode.Open);
+
+                SignJSON[]? signs = JsonSerializer.Deserialize<SignJSON[]>(stream);
+                Debug.Assert(signs != null);
+
+                StandardSign[] standardSigns = signs.Select(
+                    sign => new StandardSign()
                     {
-                        table.standardSigns[index] = new StandardSign()
-                        {
-                            phonetics  = $"{(char) i}",
-                            mappedChar = (char) i,
-                        };
+                        mappedChar = sign.Unicode,
+                        phonetics = sign.Characters
                     }
-                }
+                ).ToArray();
 
-                // Create Visual Elements
-                for (int i = 0; i < table.standardSigns.Length; i++)
-                {
-                    StandardSignElement child = new(table.standardUI);
-                    child.SetValue(table.standardSigns[i]);
+                table.entries = standardSigns;
 
-                    element.Add(child);
-                }
+                EditorUtility.SetDirty(table);
+                serializedObject.ApplyModifiedProperties();
             }
         );
 
         submitButton.AddToClassList("StandardFont");
-        submitButton.text = "Update Ranges";
+        submitButton.text = "Update";
         element.Add(submitButton);
+
+        Label label = new($"Length: {table.entries.Length}");
+        label.AddToClassList("StandardFont");
+        element.Add(label);
+
+        for (int i = 0; i < table.entries.Length; i++)
+        {
+            StandardSignElement child = new(table.standardUI);
+            child.SetValue(table.entries[i]);
+
+            element.Add(child);
+        }
 
         return element;
     }
 }
-
 #endif

@@ -46,6 +46,7 @@ public enum CombiningOptions
 [CustomPropertyDrawer(typeof(CompoundSign))]
 public sealed class CompoundSignDrawer : PropertyDrawer
 {
+    /**
     private List<StandardSignElement> children = new();
     private List<StandardSign> signs = new();
 
@@ -180,5 +181,6 @@ public sealed class CompoundSignDrawer : PropertyDrawer
 
         return visualElement;
     }
+    */
 }
 #endif
