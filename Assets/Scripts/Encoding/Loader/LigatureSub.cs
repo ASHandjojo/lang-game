@@ -4,10 +4,6 @@ using System.Linq;
 using System.Text.Json;
 
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.TextCore;
-
-
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -63,7 +59,7 @@ public sealed class LigatureSubData
     }
 }
 
-[CreateAssetMenu(fileName = "Ligature Table")]
+[CreateAssetMenu(menuName = "Linguistics/Ligature Table")]
 public sealed class LigatureSub : ScriptableObject
 {
     [SerializeField] private string fileDir;
@@ -94,11 +90,6 @@ public sealed class LigatureSubEditor : Editor
 
             var ligatures = ligatureNested.Select(x => new LigatureSubData(x)).ToArray();
             table.entries = ligatures;
-
-            foreach (var ligature in ligatures)
-            {
-                Debug.Log(ligature);
-            }
 
             EditorUtility.SetDirty(table);
             serializedObject.ApplyModifiedProperties();

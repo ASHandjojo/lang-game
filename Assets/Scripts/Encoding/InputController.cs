@@ -12,7 +12,6 @@ public sealed class InputController : MonoBehaviour
 
     private Label inputField;
 
-    //private string inputStr;
     private string InputStr
     {
         set => inputField.text = value;

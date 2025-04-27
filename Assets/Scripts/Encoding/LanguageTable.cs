@@ -11,15 +11,6 @@ using UnityEditor.UIElements;
 #endif
 
 [Serializable]
-public struct StandardSign : IEquatable<StandardSign>
-{
-    public string phonetics;
-    public int mappedChar;
-
-    public readonly bool Equals(StandardSign other) => phonetics.Equals(other.phonetics);
-}
-
-[Serializable]
 public struct CompoundSign
 {
     public string phonetics, rawCharInput, combinedString;
@@ -40,68 +31,11 @@ public sealed class LanguageTable : MonoBehaviour
 
     public StandardSign[] standardSigns;
     public CompoundSign[] compoundSigns;
+
+    public LigatureSub ligatureSub;
 }
 
 #if UNITY_EDITOR
-
-public sealed class StandardSignElement : VisualElement
-{
-    public StandardSignElement(VisualTreeAsset standardUI)
-    {
-        Debug.Assert(standardUI != null);
-
-        standardUI.CloneTree(this);
-
-        var phoneticsField = this.Q<TextField>("Phonetics");
-        var resultField    = this.Q<TextField>("Result");
-
-        phoneticsField.isReadOnly = true;
-        resultField.isReadOnly    = true;
-    }
-
-    public void SetValue(in StandardSign standardSign)
-    {
-        var phoneticsField = this.Q<TextField>("Phonetics");
-        var resultField    = this.Q<TextField>("Result");
-
-        phoneticsField.value = standardSign.phonetics;
-        resultField.value    = $"{(char) standardSign.mappedChar}";
-    }
-}
-
-[CustomPropertyDrawer(typeof(StandardSign))]
-public sealed class StandardSignDrawer : PropertyDrawer
-{
-    public override VisualElement CreatePropertyGUI(SerializedProperty property)
-    {
-        VisualElement visualElement = new();
-
-        var phoneticsProp = property.FindPropertyRelative(nameof(StandardSign.phonetics));
-        var mappedProp    = property.FindPropertyRelative(nameof(StandardSign.mappedChar));
-
-        LanguageTable table       = property.serializedObject.targetObject as LanguageTable;
-        VisualTreeAsset treeAsset = table.standardUI;
-        property.serializedObject.Update(); 
-
-        treeAsset.CloneTree(visualElement);
-
-        var phoneticsField = visualElement.Q<TextField>("Phonetics");
-        var rawMapping     = visualElement.Q<IntegerField>("UnicodeChar");
-        var resultField    = visualElement.Q<TextField>("Result");
-
-        rawMapping.RegisterCallback<ChangeEvent<int>>(
-            (e) =>
-            {
-                resultField.value = $"{(char) mappedProp.intValue}";
-            }
-        );
-
-        phoneticsField.BindProperty(phoneticsProp);
-        rawMapping.BindProperty(mappedProp);
-
-        return visualElement;
-    }
-}
 
 public enum CombiningOptions
 {
