@@ -10,16 +10,6 @@ using UnityEditor;
 using UnityEditor.UIElements;
 #endif
 
-[Serializable]
-public struct CompoundSign
-{
-    public string phonetics, rawCharInput, combinedString;
-    public int combinationType, mappedChar;
-
-    // Standard Characters
-    public int[] mappedChars;
-}
-
 [DisallowMultipleComponent]
 public sealed class LanguageTable : MonoBehaviour
 {

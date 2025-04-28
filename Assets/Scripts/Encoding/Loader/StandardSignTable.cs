@@ -49,11 +49,13 @@ public sealed class StandardSignElement : VisualElement
 
         standardUI.CloneTree(this);
 
-        var phoneticsField = this.Q<TextField>("Phonetics");
-        var resultField    = this.Q<TextField>("Result");
+        var phoneticsField   = this.Q<TextField>("Phonetics");
+        var unicodeCharField = this.Q<IntegerField>("UnicodeChar");
+        var resultField      = this.Q<TextField>("Result");
 
-        phoneticsField.isReadOnly = true;
-        resultField.isReadOnly    = true;
+        phoneticsField.isReadOnly   = true;
+        unicodeCharField.isReadOnly = true;
+        resultField.isReadOnly      = true;
     }
 
     public void SetValue(in StandardSign standardSign)
@@ -91,7 +93,7 @@ public sealed class SignImporterEditor : Editor
                     sign => new StandardSign()
                     {
                         mappedChar = sign.Unicode,
-                        phonetics = sign.Characters
+                        phonetics  = sign.Characters
                     }
                 ).ToArray();
 

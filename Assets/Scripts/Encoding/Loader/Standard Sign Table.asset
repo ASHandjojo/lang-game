@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29a7df8141386845a15ef1033ee35e6, type: 3}
   m_Name: Standard Sign Table
   m_EditorClassIdentifier: 
-  fileDir: Assets/Scripts/Encoding/Loader/StandardNames.json
+  fileDir: Assets/Scripts/Encoding/Loader/StandardNames 1.json
   standardUI: {fileID: 9197481963319205126, guid: faae68990d5741b469a71cd2b5ce9633, type: 3}
   entries:
   - phonetics: exclam

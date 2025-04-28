@@ -12,381 +12,488 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a96bf49a31208c41b2a864931bca1e8, type: 3}
   m_Name: Ligature Table
   m_EditorClassIdentifier: 
-  fileDir: Assets/Scripts/Encoding/Loader/Converted.json
+  fileDir: Assets/Scripts/Encoding/Loader/Converted 1.json
+  compoundUI: {fileID: 9197481963319205126, guid: dc18ecb36ea5bbd4aad03435ac673caa, type: 3}
+  compoundChildUI: {fileID: 9197481963319205126, guid: faae68990d5741b469a71cd2b5ce9633, type: 3}
+  standardSignTable: {fileID: 11400000, guid: 98165f17bdca7944ab0a9394d0e5bafd, type: 2}
   entries:
-  - entries:
-    - Glyph: 164
-      Components: 7500
-    - Glyph: 163
-      Components: 6f00
-    - Glyph: 162
-      Components: 6900
-    - Glyph: 161
-      Components: 6500
-  - entries:
-    - Glyph: 190
-      Components: 7500
-    - Glyph: 189
-      Components: 6f00
-    - Glyph: 188
-      Components: 6900
-    - Glyph: 187
-      Components: 6500
-    - Glyph: 186
-      Components: 6100
-  - entries:
-    - Glyph: 195
-      Components: 7500
-    - Glyph: 194
-      Components: 6f00
-    - Glyph: 193
-      Components: 6900
-    - Glyph: 192
-      Components: 6500
-    - Glyph: 191
-      Components: 6100
-  - entries:
-    - Glyph: 210
-      Components: 7500
-    - Glyph: 209
-      Components: 6f00
-    - Glyph: 208
-      Components: 6900
-    - Glyph: 207
-      Components: 6500
-    - Glyph: 206
-      Components: 6100
-  - entries:
-    - Glyph: 168
-      Components: 7500
-    - Glyph: 167
-      Components: 6f00
-    - Glyph: 166
-      Components: 6900
-    - Glyph: 165
-      Components: 6100
-  - entries:
-    - Glyph: 230
-      Components: 7500
-    - Glyph: 229
-      Components: 6f00
-    - Glyph: 228
-      Components: 6900
-    - Glyph: 227
-      Components: 6500
-    - Glyph: 226
-      Components: 6100
-  - entries:
-    - Glyph: 200
-      Components: 7500
-    - Glyph: 199
-      Components: 6f00
-    - Glyph: 198
-      Components: 6900
-    - Glyph: 197
-      Components: 6500
-    - Glyph: 196
-      Components: 6100
-  - entries:
-    - Glyph: 225
-      Components: 67007500
-    - Glyph: 224
-      Components: 67006f00
-    - Glyph: 223
-      Components: 67006900
-    - Glyph: 222
-      Components: 67006500
-    - Glyph: 221
-      Components: 67006100
-    - Glyph: 220
-      Components: 7500
-    - Glyph: 219
-      Components: 6f00
-    - Glyph: 218
-      Components: 6900
-    - Glyph: 217
-      Components: 6500
-    - Glyph: 216
-      Components: 6100
-  - entries:
-    - Glyph: 172
-      Components: 7500
-    - Glyph: 171
-      Components: 6f00
-    - Glyph: 170
-      Components: 6500
-    - Glyph: 169
-      Components: 6100
-  - entries:
-    - Glyph: 255
-      Components: 7500
-    - Glyph: 254
-      Components: 6f00
-    - Glyph: 253
-      Components: 6900
-    - Glyph: 252
-      Components: 6500
-    - Glyph: 251
-      Components: 6100
-  - entries:
-    - Glyph: 270
-      Components: 7500
-    - Glyph: 269
-      Components: 6f00
-    - Glyph: 268
-      Components: 6900
-    - Glyph: 267
-      Components: 6500
-    - Glyph: 266
-      Components: 6100
-  - entries:
-    - Glyph: 260
-      Components: 7500
-    - Glyph: 259
-      Components: 6f00
-    - Glyph: 258
-      Components: 6900
-    - Glyph: 257
-      Components: 6500
-    - Glyph: 256
-      Components: 6100
-  - entries:
-    - Glyph: 280
-      Components: 67007500
-    - Glyph: 279
-      Components: 67006f00
-    - Glyph: 278
-      Components: 67006900
-    - Glyph: 277
-      Components: 67006500
-    - Glyph: 276
-      Components: 67006100
-    - Glyph: 265
-      Components: 7500
-    - Glyph: 264
-      Components: 6f00
-    - Glyph: 263
-      Components: 6900
-    - Glyph: 262
-      Components: 6500
-    - Glyph: 261
-      Components: 6100
-  - entries:
-    - Glyph: 176
-      Components: 7500
-    - Glyph: 175
-      Components: 6900
-    - Glyph: 174
-      Components: 6500
-    - Glyph: 173
-      Components: 6100
-  - entries:
-    - Glyph: 185
-      Components: 7500
-    - Glyph: 184
-      Components: 6f00
-    - Glyph: 183
-      Components: 6900
-    - Glyph: 182
-      Components: 6500
-    - Glyph: 181
-      Components: 6100
-  - entries:
-    - Glyph: 275
-      Components: 7500
-    - Glyph: 274
-      Components: 6f00
-    - Glyph: 273
-      Components: 6900
-    - Glyph: 272
-      Components: 6500
-    - Glyph: 271
-      Components: 6100
-  - entries:
-    - Glyph: 250
-      Components: 68007500
-    - Glyph: 249
-      Components: 68006f00
-    - Glyph: 248
-      Components: 68006900
-    - Glyph: 247
-      Components: 68006500
-    - Glyph: 246
-      Components: 68006100
-    - Glyph: 240
-      Components: 7500
-    - Glyph: 239
-      Components: 6f00
-    - Glyph: 238
-      Components: 6900
-    - Glyph: 237
-      Components: 6500
-    - Glyph: 236
-      Components: 6100
-  - entries:
-    - Glyph: 215
-      Components: 68007500
-    - Glyph: 214
-      Components: 68006f00
-    - Glyph: 213
-      Components: 68006900
-    - Glyph: 212
-      Components: 68006500
-    - Glyph: 211
-      Components: 68006100
-    - Glyph: 205
-      Components: 7500
-    - Glyph: 204
-      Components: 6f00
-    - Glyph: 203
-      Components: 6900
-    - Glyph: 202
-      Components: 6500
-    - Glyph: 201
-      Components: 6100
-  - entries:
-    - Glyph: 180
-      Components: 6f00
-    - Glyph: 179
-      Components: 6900
-    - Glyph: 178
-      Components: 6500
-    - Glyph: 177
-      Components: 6100
-  - entries:
-    - Glyph: 235
-      Components: 7500
-    - Glyph: 234
-      Components: 6f00
-    - Glyph: 233
-      Components: 6900
-    - Glyph: 232
-      Components: 6500
-    - Glyph: 231
-      Components: 6100
-  - entries:
-    - Glyph: 245
-      Components: 7500
-    - Glyph: 244
-      Components: 6f00
-    - Glyph: 243
-      Components: 6900
-    - Glyph: 242
-      Components: 6500
-    - Glyph: 241
-      Components: 6100
-  - entries:
-    - Glyph: 186
-      Components: 0000
-  - entries:
-    - Glyph: 187
-      Components: 0000
-  - entries:
-    - Glyph: 188
-      Components: 0000
-  - entries:
-    - Glyph: 189
-      Components: 0000
-  - entries:
-    - Glyph: 190
-      Components: 0000
-  - entries:
-    - Glyph: 196
-      Components: 0000
-  - entries:
-    - Glyph: 197
-      Components: 0000
-  - entries:
-    - Glyph: 198
-      Components: 0000
-  - entries:
-    - Glyph: 199
-      Components: 0000
-  - entries:
-    - Glyph: 200
-      Components: 0000
-  - entries:
-    - Glyph: 211
-      Components: 00000000
-    - Glyph: 206
-      Components: 0000
-  - entries:
-    - Glyph: 212
-      Components: 00000000
-    - Glyph: 207
-      Components: 0000
-  - entries:
-    - Glyph: 213
-      Components: 00000000
-    - Glyph: 208
-      Components: 0000
-  - entries:
-    - Glyph: 214
-      Components: 00000000
-    - Glyph: 209
-      Components: 0000
-  - entries:
-    - Glyph: 215
-      Components: 00000000
-    - Glyph: 210
-      Components: 0000
-  - entries:
-    - Glyph: 221
-      Components: 0000
-  - entries:
-    - Glyph: 222
-      Components: 0000
-  - entries:
-    - Glyph: 223
-      Components: 0000
-  - entries:
-    - Glyph: 224
-      Components: 0000
-  - entries:
-    - Glyph: 225
-      Components: 0000
-  - entries:
-    - Glyph: 231
-      Components: 0000
-  - entries:
-    - Glyph: 232
-      Components: 0000
-  - entries:
-    - Glyph: 233
-      Components: 0000
-  - entries:
-    - Glyph: 234
-      Components: 0000
-  - entries:
-    - Glyph: 235
-      Components: 0000
-  - entries:
-    - Glyph: 241
-      Components: 0000
-  - entries:
-    - Glyph: 242
-      Components: 0000
-  - entries:
-    - Glyph: 243
-      Components: 0000
-  - entries:
-    - Glyph: 244
-      Components: 0000
-  - entries:
-    - Glyph: 245
-      Components: 0000
-  - entries:
-    - Glyph: 251
-      Components: 0000
-  - entries:
-    - Glyph: 252
-      Components: 0000
-  - entries:
-    - Glyph: 253
-      Components: 0000
-  - entries:
-    - Glyph: 254
-      Components: 0000
-  - entries:
-    - Glyph: 255
-      Components: 0000
+  - combinedString: u
+    mappedChar: 164
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 163
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 162
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 161
+    mappedChars: 65000000
+  - combinedString: u
+    mappedChar: 190
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 189
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 188
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 187
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 186
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 200
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 199
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 198
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 197
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 196
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 195
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 194
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 193
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 192
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 191
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 210
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 209
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 208
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 207
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 206
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 168
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 167
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 166
+    mappedChars: 69000000
+  - combinedString: a
+    mappedChar: 165
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 235
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 234
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 233
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 232
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 231
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 230
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 229
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 228
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 227
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 226
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 200
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 199
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 198
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 197
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 196
+    mappedChars: 61000000
+  - combinedString: gu
+    mappedChar: 225
+    mappedChars: 6700000075000000
+  - combinedString: u
+    mappedChar: 225
+    mappedChars: 75000000
+  - combinedString: go
+    mappedChar: 224
+    mappedChars: 670000006f000000
+  - combinedString: o
+    mappedChar: 224
+    mappedChars: 6f000000
+  - combinedString: gi
+    mappedChar: 223
+    mappedChars: 6700000069000000
+  - combinedString: i
+    mappedChar: 223
+    mappedChars: 69000000
+  - combinedString: ge
+    mappedChar: 222
+    mappedChars: 6700000065000000
+  - combinedString: e
+    mappedChar: 222
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 221
+    mappedChars: 61000000
+  - combinedString: ga
+    mappedChar: 221
+    mappedChars: 6700000061000000
+  - combinedString: u
+    mappedChar: 220
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 219
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 218
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 217
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 216
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 172
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 171
+    mappedChars: 6f000000
+  - combinedString: e
+    mappedChar: 170
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 169
+    mappedChars: 61000000
+  - combinedString: o
+    mappedChar: 254
+    mappedChars: 6f000000
+  - combinedString: u
+    mappedChar: 255
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 254
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 253
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 252
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 251
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 270
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 269
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 268
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 267
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 266
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 260
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 259
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 258
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 257
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 256
+    mappedChars: 61000000
+  - combinedString: gu
+    mappedChar: 280
+    mappedChars: 6700000075000000
+  - combinedString: go
+    mappedChar: 279
+    mappedChars: 670000006f000000
+  - combinedString: gi
+    mappedChar: 278
+    mappedChars: 6700000069000000
+  - combinedString: ge
+    mappedChar: 277
+    mappedChars: 6700000065000000
+  - combinedString: ga
+    mappedChar: 276
+    mappedChars: 6700000061000000
+  - combinedString: u
+    mappedChar: 265
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 264
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 263
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 262
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 261
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 176
+    mappedChars: 75000000
+  - combinedString: i
+    mappedChar: 175
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 174
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 173
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 190
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 189
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 188
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 187
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 186
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 185
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 184
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 183
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 182
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 181
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 275
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 274
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 273
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 272
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 271
+    mappedChars: 61000000
+  - combinedString: hu
+    mappedChar: 255
+    mappedChars: 6800000075000000
+  - combinedString: hi
+    mappedChar: 253
+    mappedChars: 6800000069000000
+  - combinedString: he
+    mappedChar: 252
+    mappedChars: 6800000065000000
+  - combinedString: ha
+    mappedChar: 251
+    mappedChars: 6800000061000000
+  - combinedString: hu
+    mappedChar: 250
+    mappedChars: 6800000075000000
+  - combinedString: ho
+    mappedChar: 249
+    mappedChars: 680000006f000000
+  - combinedString: hi
+    mappedChar: 248
+    mappedChars: 6800000069000000
+  - combinedString: he
+    mappedChar: 247
+    mappedChars: 6800000065000000
+  - combinedString: ha
+    mappedChar: 246
+    mappedChars: 6800000061000000
+  - combinedString: u
+    mappedChar: 245
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 244
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 243
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 242
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 241
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 240
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 239
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 238
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 237
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 236
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 215
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 214
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 213
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 212
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 211
+    mappedChars: 61000000
+  - combinedString: ho
+    mappedChar: 214
+    mappedChars: 680000006f000000
+  - combinedString: he
+    mappedChar: 212
+    mappedChars: 6800000065000000
+  - combinedString: hu
+    mappedChar: 215
+    mappedChars: 6800000075000000
+  - combinedString: hi
+    mappedChar: 213
+    mappedChars: 6800000069000000
+  - combinedString: ha
+    mappedChar: 211
+    mappedChars: 6800000061000000
+  - combinedString: u
+    mappedChar: 210
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 209
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 208
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 207
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 206
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 205
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 204
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 203
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 202
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 201
+    mappedChars: 61000000
+  - combinedString: o
+    mappedChar: 180
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 179
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 178
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 177
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 235
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 234
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 233
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 232
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 231
+    mappedChars: 61000000
+  - combinedString: u
+    mappedChar: 245
+    mappedChars: 75000000
+  - combinedString: o
+    mappedChar: 244
+    mappedChars: 6f000000
+  - combinedString: i
+    mappedChar: 243
+    mappedChars: 69000000
+  - combinedString: e
+    mappedChar: 242
+    mappedChars: 65000000
+  - combinedString: a
+    mappedChar: 241
+    mappedChars: 61000000
