@@ -3,15 +3,9 @@
     "First": 97,
     "Ligatures": [
       {
-        "Glyph": 164,
+        "Glyph": 161,
         "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 163,
-        "Components": [
-          111
+          101
         ]
       },
       {
@@ -21,9 +15,201 @@
         ]
       },
       {
-        "Glyph": 161,
+        "Glyph": 163,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 164,
+        "Components": [
+          117
+        ]
+      }
+    ]
+  },
+  {
+    "First": 101,
+    "Ligatures": [
+      {
+        "Glyph": 165,
+        "Components": [
+          97
+        ]
+      },
+      {
+        "Glyph": 166,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 167,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 168,
+        "Components": [
+          117
+        ]
+      }
+    ]
+  },
+  {
+    "First": 120,
+    "Ligatures": [
+      {
+        "Glyph": 169,
+        "Components": [
+          97
+        ]
+      },
+      {
+        "Glyph": 170,
         "Components": [
           101
+        ]
+      },
+      {
+        "Glyph": 171,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 172,
+        "Components": [
+          117
+        ]
+      }
+    ]
+  },
+  {
+    "First": 110,
+    "Ligatures": [
+      {
+        "Glyph": 173,
+        "Components": [
+          97
+        ]
+      },
+      {
+        "Glyph": 174,
+        "Components": [
+          101
+        ]
+      },
+      {
+        "Glyph": 175,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 176,
+        "Components": [
+          117
+        ]
+      }
+    ]
+  },
+  {
+    "First": 115,
+    "Ligatures": [
+      {
+        "Glyph": 177,
+        "Components": [
+          97
+        ]
+      },
+      {
+        "Glyph": 178,
+        "Components": [
+          101
+        ]
+      },
+      {
+        "Glyph": 179,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 180,
+        "Components": [
+          111
+        ]
+      }
+    ]
+  },
+  {
+    "First": 113,
+    "Ligatures": [
+      {
+        "Glyph": 181,
+        "Components": [
+          97
+        ]
+      },
+      {
+        "Glyph": 182,
+        "Components": [
+          101
+        ]
+      },
+      {
+        "Glyph": 183,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 184,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 185,
+        "Components": [
+          117
+        ]
+      },
+      {
+        "Glyph": 186,
+        "Components": [
+          97,
+          0
+        ]
+      },
+      {
+        "Glyph": 187,
+        "Components": [
+          101,
+          0
+        ]
+      },
+      {
+        "Glyph": 188,
+        "Components": [
+          105,
+          0
+        ]
+      },
+      {
+        "Glyph": 189,
+        "Components": [
+          111,
+          0
+        ]
+      },
+      {
+        "Glyph": 190,
+        "Components": [
+          117,
+          0
         ]
       }
     ]
@@ -32,21 +218,9 @@
     "First": 98,
     "Ligatures": [
       {
-        "Glyph": 190,
+        "Glyph": 186,
         "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 189,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 188,
-        "Components": [
-          105
+          97
         ]
       },
       {
@@ -56,9 +230,21 @@
         ]
       },
       {
-        "Glyph": 186,
+        "Glyph": 188,
         "Components": [
-          97
+          105
+        ]
+      },
+      {
+        "Glyph": 189,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 190,
+        "Components": [
+          117
         ]
       }
     ]
@@ -67,23 +253,39 @@
     "First": 99,
     "Ligatures": [
       {
-        "Glyph": 200,
+        "Glyph": 191,
         "Components": [
-          117,
-          0
+          97
         ]
       },
       {
-        "Glyph": 199,
+        "Glyph": 192,
         "Components": [
-          111,
-          0
+          101
         ]
       },
       {
-        "Glyph": 198,
+        "Glyph": 193,
         "Components": [
-          105,
+          105
+        ]
+      },
+      {
+        "Glyph": 194,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 195,
+        "Components": [
+          117
+        ]
+      },
+      {
+        "Glyph": 196,
+        "Components": [
+          97,
           0
         ]
       },
@@ -95,40 +297,204 @@
         ]
       },
       {
+        "Glyph": 198,
+        "Components": [
+          105,
+          0
+        ]
+      },
+      {
+        "Glyph": 199,
+        "Components": [
+          111,
+          0
+        ]
+      },
+      {
+        "Glyph": 200,
+        "Components": [
+          117,
+          0
+        ]
+      }
+    ]
+  },
+  {
+    "First": 103,
+    "Ligatures": [
+      {
         "Glyph": 196,
+        "Components": [
+          97
+        ]
+      },
+      {
+        "Glyph": 197,
+        "Components": [
+          101
+        ]
+      },
+      {
+        "Glyph": 198,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 199,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 200,
+        "Components": [
+          117
+        ]
+      }
+    ]
+  },
+  {
+    "First": 114,
+    "Ligatures": [
+      {
+        "Glyph": 201,
+        "Components": [
+          97
+        ]
+      },
+      {
+        "Glyph": 202,
+        "Components": [
+          101
+        ]
+      },
+      {
+        "Glyph": 203,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 204,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 205,
+        "Components": [
+          117
+        ]
+      },
+      {
+        "Glyph": 206,
         "Components": [
           97,
           0
         ]
       },
       {
-        "Glyph": 195,
+        "Glyph": 207,
         "Components": [
-          117
+          101,
+          0
         ]
       },
       {
-        "Glyph": 194,
+        "Glyph": 208,
         "Components": [
-          111
+          105,
+          0
         ]
       },
       {
-        "Glyph": 193,
+        "Glyph": 209,
         "Components": [
-          105
+          111,
+          0
         ]
       },
       {
-        "Glyph": 192,
+        "Glyph": 210,
         "Components": [
+          117,
+          0
+        ]
+      },
+      {
+        "Glyph": 211,
+        "Components": [
+          97,
+          0,
+          0
+        ]
+      },
+      {
+        "Glyph": 211,
+        "Components": [
+          104,
+          97
+        ]
+      },
+      {
+        "Glyph": 212,
+        "Components": [
+          101,
+          0,
+          0
+        ]
+      },
+      {
+        "Glyph": 212,
+        "Components": [
+          104,
           101
         ]
       },
       {
-        "Glyph": 191,
+        "Glyph": 213,
         "Components": [
-          97
+          105,
+          0,
+          0
+        ]
+      },
+      {
+        "Glyph": 213,
+        "Components": [
+          104,
+          105
+        ]
+      },
+      {
+        "Glyph": 214,
+        "Components": [
+          111,
+          0,
+          0
+        ]
+      },
+      {
+        "Glyph": 214,
+        "Components": [
+          104,
+          111
+        ]
+      },
+      {
+        "Glyph": 215,
+        "Components": [
+          117,
+          0,
+          0
+        ]
+      },
+      {
+        "Glyph": 215,
+        "Components": [
+          104,
+          117
         ]
       }
     ]
@@ -137,21 +503,9 @@
     "First": 100,
     "Ligatures": [
       {
-        "Glyph": 210,
+        "Glyph": 206,
         "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 209,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 208,
-        "Components": [
-          105
+          97
         ]
       },
       {
@@ -161,38 +515,126 @@
         ]
       },
       {
-        "Glyph": 206,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 101,
-    "Ligatures": [
-      {
-        "Glyph": 168,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 167,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 166,
+        "Glyph": 208,
         "Components": [
           105
         ]
       },
       {
-        "Glyph": 165,
+        "Glyph": 209,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 210,
+        "Components": [
+          117
+        ]
+      }
+    ]
+  },
+  {
+    "First": 104,
+    "Ligatures": [
+      {
+        "Glyph": 216,
         "Components": [
           97
+        ]
+      },
+      {
+        "Glyph": 217,
+        "Components": [
+          101
+        ]
+      },
+      {
+        "Glyph": 218,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 219,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 220,
+        "Components": [
+          117
+        ]
+      },
+      {
+        "Glyph": 221,
+        "Components": [
+          97,
+          0
+        ]
+      },
+      {
+        "Glyph": 221,
+        "Components": [
+          103,
+          97
+        ]
+      },
+      {
+        "Glyph": 222,
+        "Components": [
+          103,
+          101
+        ]
+      },
+      {
+        "Glyph": 222,
+        "Components": [
+          101,
+          0
+        ]
+      },
+      {
+        "Glyph": 223,
+        "Components": [
+          103,
+          105
+        ]
+      },
+      {
+        "Glyph": 223,
+        "Components": [
+          105,
+          0
+        ]
+      },
+      {
+        "Glyph": 224,
+        "Components": [
+          103,
+          111
+        ]
+      },
+      {
+        "Glyph": 224,
+        "Components": [
+          111,
+          0
+        ]
+      },
+      {
+        "Glyph": 225,
+        "Components": [
+          103,
+          117
+        ]
+      },
+      {
+        "Glyph": 225,
+        "Components": [
+          117,
+          0
         ]
       }
     ]
@@ -201,23 +643,39 @@
     "First": 102,
     "Ligatures": [
       {
-        "Glyph": 235,
+        "Glyph": 226,
         "Components": [
-          117,
-          0
+          97
         ]
       },
       {
-        "Glyph": 234,
+        "Glyph": 227,
         "Components": [
-          111,
-          0
+          101
         ]
       },
       {
-        "Glyph": 233,
+        "Glyph": 228,
         "Components": [
-          105,
+          105
+        ]
+      },
+      {
+        "Glyph": 229,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 230,
+        "Components": [
+          117
+        ]
+      },
+      {
+        "Glyph": 231,
+        "Components": [
+          97,
           0
         ]
       },
@@ -229,525 +687,59 @@
         ]
       },
       {
+        "Glyph": 233,
+        "Components": [
+          105,
+          0
+        ]
+      },
+      {
+        "Glyph": 234,
+        "Components": [
+          111,
+          0
+        ]
+      },
+      {
+        "Glyph": 235,
+        "Components": [
+          117,
+          0
+        ]
+      }
+    ]
+  },
+  {
+    "First": 119,
+    "Ligatures": [
+      {
         "Glyph": 231,
         "Components": [
-          97,
-          0
+          97
         ]
       },
       {
-        "Glyph": 230,
+        "Glyph": 232,
         "Components": [
-          117
+          101
         ]
       },
       {
-        "Glyph": 229,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 228,
+        "Glyph": 233,
         "Components": [
           105
         ]
       },
       {
-        "Glyph": 227,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 226,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 103,
-    "Ligatures": [
-      {
-        "Glyph": 200,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 199,
+        "Glyph": 234,
         "Components": [
           111
         ]
       },
       {
-        "Glyph": 198,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 197,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 196,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 104,
-    "Ligatures": [
-      {
-        "Glyph": 225,
-        "Components": [
-          103,
-          117
-        ]
-      },
-      {
-        "Glyph": 225,
-        "Components": [
-          117,
-          0
-        ]
-      },
-      {
-        "Glyph": 224,
-        "Components": [
-          103,
-          111
-        ]
-      },
-      {
-        "Glyph": 224,
-        "Components": [
-          111,
-          0
-        ]
-      },
-      {
-        "Glyph": 223,
-        "Components": [
-          103,
-          105
-        ]
-      },
-      {
-        "Glyph": 223,
-        "Components": [
-          105,
-          0
-        ]
-      },
-      {
-        "Glyph": 222,
-        "Components": [
-          103,
-          101
-        ]
-      },
-      {
-        "Glyph": 222,
-        "Components": [
-          101,
-          0
-        ]
-      },
-      {
-        "Glyph": 221,
-        "Components": [
-          97,
-          0
-        ]
-      },
-      {
-        "Glyph": 221,
-        "Components": [
-          103,
-          97
-        ]
-      },
-      {
-        "Glyph": 220,
+        "Glyph": 235,
         "Components": [
           117
-        ]
-      },
-      {
-        "Glyph": 219,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 218,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 217,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 216,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 120,
-    "Ligatures": [
-      {
-        "Glyph": 172,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 171,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 170,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 169,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 105,
-    "Ligatures": [
-      {
-        "Glyph": 254,
-        "Components": [
-          111,
-          0
-        ]
-      },
-      {
-        "Glyph": 255,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 254,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 253,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 252,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 251,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 106,
-    "Ligatures": [
-      {
-        "Glyph": 270,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 269,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 268,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 267,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 266,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 108,
-    "Ligatures": [
-      {
-        "Glyph": 260,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 259,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 258,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 257,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 256,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 109,
-    "Ligatures": [
-      {
-        "Glyph": 280,
-        "Components": [
-          103,
-          117
-        ]
-      },
-      {
-        "Glyph": 279,
-        "Components": [
-          103,
-          111
-        ]
-      },
-      {
-        "Glyph": 278,
-        "Components": [
-          103,
-          105
-        ]
-      },
-      {
-        "Glyph": 277,
-        "Components": [
-          103,
-          101
-        ]
-      },
-      {
-        "Glyph": 276,
-        "Components": [
-          103,
-          97
-        ]
-      },
-      {
-        "Glyph": 265,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 264,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 263,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 262,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 261,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 110,
-    "Ligatures": [
-      {
-        "Glyph": 176,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 175,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 174,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 173,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 113,
-    "Ligatures": [
-      {
-        "Glyph": 190,
-        "Components": [
-          117,
-          0
-        ]
-      },
-      {
-        "Glyph": 189,
-        "Components": [
-          111,
-          0
-        ]
-      },
-      {
-        "Glyph": 188,
-        "Components": [
-          105,
-          0
-        ]
-      },
-      {
-        "Glyph": 187,
-        "Components": [
-          101,
-          0
-        ]
-      },
-      {
-        "Glyph": 186,
-        "Components": [
-          97,
-          0
-        ]
-      },
-      {
-        "Glyph": 185,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 184,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 183,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 182,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 181,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 111,
-    "Ligatures": [
-      {
-        "Glyph": 275,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 274,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 273,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 272,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 271,
-        "Components": [
-          97
         ]
       }
     ]
@@ -756,63 +748,68 @@
     "First": 112,
     "Ligatures": [
       {
-        "Glyph": 255,
+        "Glyph": 236,
         "Components": [
-          104,
-          117,
-          0
+          97
         ]
       },
       {
-        "Glyph": 253,
+        "Glyph": 237,
         "Components": [
-          104,
-          105,
-          0
+          101
         ]
       },
       {
-        "Glyph": 252,
+        "Glyph": 238,
         "Components": [
-          104,
-          101,
-          0
+          105
         ]
       },
       {
-        "Glyph": 251,
+        "Glyph": 239,
         "Components": [
-          104,
+          111
+        ]
+      },
+      {
+        "Glyph": 240,
+        "Components": [
+          117
+        ]
+      },
+      {
+        "Glyph": 241,
+        "Components": [
           97,
           0
         ]
       },
       {
-        "Glyph": 250,
+        "Glyph": 242,
         "Components": [
-          104,
-          117
+          101,
+          0
         ]
       },
       {
-        "Glyph": 249,
+        "Glyph": 243,
         "Components": [
-          104,
-          111
+          105,
+          0
         ]
       },
       {
-        "Glyph": 248,
+        "Glyph": 244,
         "Components": [
-          104,
-          105
+          111,
+          0
         ]
       },
       {
-        "Glyph": 247,
+        "Glyph": 245,
         "Components": [
-          104,
-          101
+          117,
+          0
         ]
       },
       {
@@ -823,277 +820,63 @@
         ]
       },
       {
-        "Glyph": 245,
+        "Glyph": 247,
         "Components": [
-          117,
-          0
+          104,
+          101
         ]
       },
       {
-        "Glyph": 244,
+        "Glyph": 248,
         "Components": [
-          111,
-          0
+          104,
+          105
         ]
       },
       {
-        "Glyph": 243,
+        "Glyph": 249,
         "Components": [
-          105,
-          0
+          104,
+          111
         ]
       },
       {
-        "Glyph": 242,
+        "Glyph": 250,
         "Components": [
-          101,
-          0
+          104,
+          117
         ]
       },
       {
-        "Glyph": 241,
+        "Glyph": 251,
         "Components": [
+          104,
           97,
           0
         ]
       },
       {
-        "Glyph": 240,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 239,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 238,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 237,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 236,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 114,
-    "Ligatures": [
-      {
-        "Glyph": 215,
-        "Components": [
-          117,
-          0,
-          0
-        ]
-      },
-      {
-        "Glyph": 214,
-        "Components": [
-          111,
-          0,
-          0
-        ]
-      },
-      {
-        "Glyph": 213,
-        "Components": [
-          105,
-          0,
-          0
-        ]
-      },
-      {
-        "Glyph": 212,
-        "Components": [
-          101,
-          0,
-          0
-        ]
-      },
-      {
-        "Glyph": 211,
-        "Components": [
-          97,
-          0,
-          0
-        ]
-      },
-      {
-        "Glyph": 214,
+        "Glyph": 252,
         "Components": [
           104,
-          111
-        ]
-      },
-      {
-        "Glyph": 212,
-        "Components": [
-          104,
-          101
-        ]
-      },
-      {
-        "Glyph": 215,
-        "Components": [
-          104,
-          117
-        ]
-      },
-      {
-        "Glyph": 213,
-        "Components": [
-          104,
-          105
-        ]
-      },
-      {
-        "Glyph": 211,
-        "Components": [
-          104,
-          97
-        ]
-      },
-      {
-        "Glyph": 210,
-        "Components": [
-          117,
-          0
-        ]
-      },
-      {
-        "Glyph": 209,
-        "Components": [
-          111,
-          0
-        ]
-      },
-      {
-        "Glyph": 208,
-        "Components": [
-          105,
-          0
-        ]
-      },
-      {
-        "Glyph": 207,
-        "Components": [
           101,
           0
         ]
       },
       {
-        "Glyph": 206,
+        "Glyph": 253,
         "Components": [
-          97,
+          104,
+          105,
           0
         ]
       },
       {
-        "Glyph": 205,
+        "Glyph": 255,
         "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 204,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 203,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 202,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 201,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 115,
-    "Ligatures": [
-      {
-        "Glyph": 180,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 179,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 178,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 177,
-        "Components": [
-          97
-        ]
-      }
-    ]
-  },
-  {
-    "First": 119,
-    "Ligatures": [
-      {
-        "Glyph": 235,
-        "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 234,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 233,
-        "Components": [
-          105
-        ]
-      },
-      {
-        "Glyph": 232,
-        "Components": [
-          101
-        ]
-      },
-      {
-        "Glyph": 231,
-        "Components": [
-          97
+          104,
+          117,
+          0
         ]
       }
     ]
@@ -1102,21 +885,9 @@
     "First": 116,
     "Ligatures": [
       {
-        "Glyph": 245,
+        "Glyph": 241,
         "Components": [
-          117
-        ]
-      },
-      {
-        "Glyph": 244,
-        "Components": [
-          111
-        ]
-      },
-      {
-        "Glyph": 243,
-        "Components": [
-          105
+          97
         ]
       },
       {
@@ -1126,9 +897,238 @@
         ]
       },
       {
-        "Glyph": 241,
+        "Glyph": 243,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 244,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 245,
+        "Components": [
+          117
+        ]
+      }
+    ]
+  },
+  {
+    "First": 105,
+    "Ligatures": [
+      {
+        "Glyph": 251,
         "Components": [
           97
+        ]
+      },
+      {
+        "Glyph": 252,
+        "Components": [
+          101
+        ]
+      },
+      {
+        "Glyph": 253,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 254,
+        "Components": [
+          111,
+          0
+        ]
+      },
+      {
+        "Glyph": 254,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 255,
+        "Components": [
+          117
+        ]
+      }
+    ]
+  },
+  {
+    "First": 108,
+    "Ligatures": [
+      {
+        "Glyph": 256,
+        "Components": [
+          97
+        ]
+      },
+      {
+        "Glyph": 257,
+        "Components": [
+          101
+        ]
+      },
+      {
+        "Glyph": 258,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 259,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 260,
+        "Components": [
+          117
+        ]
+      }
+    ]
+  },
+  {
+    "First": 109,
+    "Ligatures": [
+      {
+        "Glyph": 261,
+        "Components": [
+          97
+        ]
+      },
+      {
+        "Glyph": 262,
+        "Components": [
+          101
+        ]
+      },
+      {
+        "Glyph": 263,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 264,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 265,
+        "Components": [
+          117
+        ]
+      },
+      {
+        "Glyph": 276,
+        "Components": [
+          103,
+          97
+        ]
+      },
+      {
+        "Glyph": 277,
+        "Components": [
+          103,
+          101
+        ]
+      },
+      {
+        "Glyph": 278,
+        "Components": [
+          103,
+          105
+        ]
+      },
+      {
+        "Glyph": 279,
+        "Components": [
+          103,
+          111
+        ]
+      },
+      {
+        "Glyph": 280,
+        "Components": [
+          103,
+          117
+        ]
+      }
+    ]
+  },
+  {
+    "First": 106,
+    "Ligatures": [
+      {
+        "Glyph": 266,
+        "Components": [
+          97
+        ]
+      },
+      {
+        "Glyph": 267,
+        "Components": [
+          101
+        ]
+      },
+      {
+        "Glyph": 268,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 269,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 270,
+        "Components": [
+          117
+        ]
+      }
+    ]
+  },
+  {
+    "First": 111,
+    "Ligatures": [
+      {
+        "Glyph": 271,
+        "Components": [
+          97
+        ]
+      },
+      {
+        "Glyph": 272,
+        "Components": [
+          101
+        ]
+      },
+      {
+        "Glyph": 273,
+        "Components": [
+          105
+        ]
+      },
+      {
+        "Glyph": 274,
+        "Components": [
+          111
+        ]
+      },
+      {
+        "Glyph": 275,
+        "Components": [
+          117
         ]
       }
     ]
