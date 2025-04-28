@@ -12,6 +12,8 @@ using UnityEditor;
 using UnityEditor.UIElements;
 #endif
 
+using Serialization;
+
 [Serializable]
 public struct CompoundSign
 {
@@ -22,53 +24,20 @@ public struct CompoundSign
     public int[] mappedChars;
 }
 
-[Serializable]
-public sealed class LigatureSubJSON
+namespace Serialization
 {
-    public ushort Glyph { get; set; }
-    public ushort[] Components { get; set; }
-}
-
-[Serializable]
-public sealed class LigatureSubEntry
-{
-    public ushort Glyph;
-    public ushort[] Components;
-
-    public LigatureSubEntry(LigatureSubJSON json)
+    [Serializable]
+    public sealed class LigatureSubEntry
     {
-        Glyph      = json.Glyph;
-        Components = json.Components;
-    }
-    public override string ToString()
-    {
-        string output = $"Glyph: {Glyph} ";
-        foreach (ushort component in Components)
-        {
-            output += $"{component},";
-        }
-        return output;
-    }
-}
-
-[Serializable]
-public sealed class LigatureSubData
-{
-    public LigatureSubEntry[] entries;
-
-    public LigatureSubData(LigatureSubJSON[] json)
-    {
-        entries = json.Select(y => new LigatureSubEntry(y)).ToArray();
+        public ushort Glyph { get; set; }
+        public ushort[] Components { get; set; }
     }
 
-    public override string ToString()
+    [Serializable]
+    public sealed class LigatureSubGroup
     {
-        string output = "";
-        foreach (LigatureSubEntry entry in entries)
-        {
-            output += $"{entry}\n";
-        }
-        return output;
+        public ushort First { get; set; }
+        public LigatureSubEntry[] Ligatures { get; set; }
     }
 }
 
@@ -155,31 +124,33 @@ public sealed class LigatureSubEditor : Editor
             {
                 using FileStream stream = new(table.FileDir, FileMode.Open);
 
-                LigatureSubJSON[][]? ligatureNested = JsonSerializer.Deserialize<LigatureSubJSON[][]>(stream);
-                Debug.Assert(ligatureNested != null);
+                LigatureSubGroup[]? ligatures = JsonSerializer.Deserialize<LigatureSubGroup[]>(stream);
+                Debug.Assert(ligatures != null);
 
-                int flatLength = ligatureNested.Select(arr => arr.Length).Sum();
-                var ligatures  = ligatureNested.Select(x => new LigatureSubData(x)).ToArray();
+                int flatLength = ligatures.Select(arr => arr.Ligatures.Length).Sum();
                 CompoundSign[] compoundSigns = new CompoundSign[flatLength];
                 int flatIdx = 0;
 
-                foreach (LigatureSubData ligatureCategory in ligatures)
+                foreach (LigatureSubGroup ligatureCategory in ligatures)
                 {
-                    foreach (LigatureSubEntry ligature in ligatureCategory.entries)
+                    ushort first = ligatureCategory.First;
+                    foreach (LigatureSubEntry ligature in ligatureCategory.Ligatures)
                     {
                         // Compute Compound Sign
                         CompoundSign compoundSign = new();
                         compoundSign.mappedChar   = ligature.Glyph;
 
-                        StandardSign[] standardSigns = ligature.Components
+                        List<StandardSign> standardSigns = ligature.Components
                             .Select(unicode => Array.FindIndex(standardTable.entries, 0, sign => sign.mappedChar == unicode))
                             .Where(index    => index != -1)
                             .Select(index   => standardTable.entries[index])
-                            .ToArray();
+                        .ToList();
+
+                        standardSigns.Insert(0, Array.Find(standardTable.entries, sign => sign.mappedChar == first));
 
                         compoundSign.combinedString = standardSigns.Select(sign => sign.phonetics).Aggregate(string.Empty, (x, y) => x + y);
                         compoundSign.mappedChars    = standardSigns.Select(sign => sign.mappedChar).ToArray();
-                        compoundSigns[flatIdx++] = compoundSign;
+                        compoundSigns[flatIdx++]    = compoundSign;
                     }
                 }
 

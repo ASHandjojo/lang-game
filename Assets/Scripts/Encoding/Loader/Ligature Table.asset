@@ -12,488 +12,488 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a96bf49a31208c41b2a864931bca1e8, type: 3}
   m_Name: Ligature Table
   m_EditorClassIdentifier: 
-  fileDir: Assets/Scripts/Encoding/Loader/Converted 1.json
+  fileDir: Assets/Scripts/Encoding/Loader/Converted 2.json
   compoundUI: {fileID: 9197481963319205126, guid: dc18ecb36ea5bbd4aad03435ac673caa, type: 3}
   compoundChildUI: {fileID: 9197481963319205126, guid: faae68990d5741b469a71cd2b5ce9633, type: 3}
   standardSignTable: {fileID: 11400000, guid: 98165f17bdca7944ab0a9394d0e5bafd, type: 2}
   entries:
-  - combinedString: u
+  - combinedString: au
     mappedChar: 164
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 6100000075000000
+  - combinedString: ao
     mappedChar: 163
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 610000006f000000
+  - combinedString: ai
     mappedChar: 162
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 6100000069000000
+  - combinedString: ae
     mappedChar: 161
-    mappedChars: 65000000
-  - combinedString: u
+    mappedChars: 6100000065000000
+  - combinedString: eu
     mappedChar: 190
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 6500000075000000
+  - combinedString: eo
     mappedChar: 189
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 650000006f000000
+  - combinedString: ei
     mappedChar: 188
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 6500000069000000
+  - combinedString: ee
     mappedChar: 187
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 6500000065000000
+  - combinedString: ea
     mappedChar: 186
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 6500000061000000
+  - combinedString: iu
     mappedChar: 200
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 6900000075000000
+  - combinedString: io
     mappedChar: 199
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 690000006f000000
+  - combinedString: ii
     mappedChar: 198
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 6900000069000000
+  - combinedString: ie
     mappedChar: 197
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 6900000065000000
+  - combinedString: ia
     mappedChar: 196
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 6900000061000000
+  - combinedString: iu
     mappedChar: 195
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 6900000075000000
+  - combinedString: io
     mappedChar: 194
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 690000006f000000
+  - combinedString: ii
     mappedChar: 193
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 6900000069000000
+  - combinedString: ie
     mappedChar: 192
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 6900000065000000
+  - combinedString: ia
     mappedChar: 191
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 6900000061000000
+  - combinedString: ou
     mappedChar: 210
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 6f00000075000000
+  - combinedString: oo
     mappedChar: 209
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 6f0000006f000000
+  - combinedString: oi
     mappedChar: 208
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 6f00000069000000
+  - combinedString: oe
     mappedChar: 207
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 6f00000065000000
+  - combinedString: oa
     mappedChar: 206
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 6f00000061000000
+  - combinedString: uu
     mappedChar: 168
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 7500000075000000
+  - combinedString: uo
     mappedChar: 167
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 750000006f000000
+  - combinedString: ui
     mappedChar: 166
-    mappedChars: 69000000
-  - combinedString: a
+    mappedChars: 7500000069000000
+  - combinedString: ua
     mappedChar: 165
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 7500000061000000
+  - combinedString: pu
     mappedChar: 235
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 7000000075000000
+  - combinedString: po
     mappedChar: 234
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 700000006f000000
+  - combinedString: pi
     mappedChar: 233
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 7000000069000000
+  - combinedString: pe
     mappedChar: 232
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 7000000065000000
+  - combinedString: pa
     mappedChar: 231
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 7000000061000000
+  - combinedString: pu
     mappedChar: 230
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 7000000075000000
+  - combinedString: po
     mappedChar: 229
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 700000006f000000
+  - combinedString: pi
     mappedChar: 228
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 7000000069000000
+  - combinedString: pe
     mappedChar: 227
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 7000000065000000
+  - combinedString: pa
     mappedChar: 226
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 7000000061000000
+  - combinedString: bu
     mappedChar: 200
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 6200000075000000
+  - combinedString: bo
     mappedChar: 199
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 620000006f000000
+  - combinedString: bi
     mappedChar: 198
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 6200000069000000
+  - combinedString: be
     mappedChar: 197
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 6200000065000000
+  - combinedString: ba
     mappedChar: 196
-    mappedChars: 61000000
-  - combinedString: gu
+    mappedChars: 6200000061000000
+  - combinedString: cgu
     mappedChar: 225
-    mappedChars: 6700000075000000
-  - combinedString: u
+    mappedChars: 630000006700000075000000
+  - combinedString: cu
     mappedChar: 225
-    mappedChars: 75000000
-  - combinedString: go
+    mappedChars: 6300000075000000
+  - combinedString: cgo
     mappedChar: 224
-    mappedChars: 670000006f000000
-  - combinedString: o
+    mappedChars: 63000000670000006f000000
+  - combinedString: co
     mappedChar: 224
-    mappedChars: 6f000000
-  - combinedString: gi
+    mappedChars: 630000006f000000
+  - combinedString: cgi
     mappedChar: 223
-    mappedChars: 6700000069000000
-  - combinedString: i
+    mappedChars: 630000006700000069000000
+  - combinedString: ci
     mappedChar: 223
-    mappedChars: 69000000
-  - combinedString: ge
+    mappedChars: 6300000069000000
+  - combinedString: cge
     mappedChar: 222
-    mappedChars: 6700000065000000
-  - combinedString: e
+    mappedChars: 630000006700000065000000
+  - combinedString: ce
     mappedChar: 222
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 6300000065000000
+  - combinedString: ca
     mappedChar: 221
-    mappedChars: 61000000
-  - combinedString: ga
+    mappedChars: 6300000061000000
+  - combinedString: cga
     mappedChar: 221
-    mappedChars: 6700000061000000
-  - combinedString: u
+    mappedChars: 630000006700000061000000
+  - combinedString: cu
     mappedChar: 220
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 6300000075000000
+  - combinedString: co
     mappedChar: 219
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 630000006f000000
+  - combinedString: ci
     mappedChar: 218
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 6300000069000000
+  - combinedString: ce
     mappedChar: 217
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 6300000065000000
+  - combinedString: ca
     mappedChar: 216
-    mappedChars: 61000000
-  - combinedString: u
-    mappedChar: 172
-    mappedChars: 75000000
-  - combinedString: o
-    mappedChar: 171
-    mappedChars: 6f000000
-  - combinedString: e
-    mappedChar: 170
-    mappedChars: 65000000
-  - combinedString: a
-    mappedChar: 169
-    mappedChars: 61000000
-  - combinedString: o
-    mappedChar: 254
-    mappedChars: 6f000000
-  - combinedString: u
-    mappedChar: 255
-    mappedChars: 75000000
-  - combinedString: o
-    mappedChar: 254
-    mappedChars: 6f000000
-  - combinedString: i
-    mappedChar: 253
-    mappedChars: 69000000
-  - combinedString: e
-    mappedChar: 252
-    mappedChars: 65000000
-  - combinedString: a
-    mappedChar: 251
-    mappedChars: 61000000
-  - combinedString: u
-    mappedChar: 270
-    mappedChars: 75000000
-  - combinedString: o
-    mappedChar: 269
-    mappedChars: 6f000000
-  - combinedString: i
-    mappedChar: 268
-    mappedChars: 69000000
-  - combinedString: e
-    mappedChar: 267
-    mappedChars: 65000000
-  - combinedString: a
-    mappedChar: 266
-    mappedChars: 61000000
-  - combinedString: u
-    mappedChar: 260
-    mappedChars: 75000000
-  - combinedString: o
-    mappedChar: 259
-    mappedChars: 6f000000
-  - combinedString: i
-    mappedChar: 258
-    mappedChars: 69000000
-  - combinedString: e
-    mappedChar: 257
-    mappedChars: 65000000
-  - combinedString: a
-    mappedChar: 256
-    mappedChars: 61000000
+    mappedChars: 6300000061000000
   - combinedString: gu
-    mappedChar: 280
+    mappedChar: 172
     mappedChars: 6700000075000000
   - combinedString: go
-    mappedChar: 279
+    mappedChar: 171
     mappedChars: 670000006f000000
-  - combinedString: gi
-    mappedChar: 278
-    mappedChars: 6700000069000000
   - combinedString: ge
-    mappedChar: 277
+    mappedChar: 170
     mappedChars: 6700000065000000
   - combinedString: ga
-    mappedChar: 276
+    mappedChar: 169
     mappedChars: 6700000061000000
-  - combinedString: u
-    mappedChar: 265
-    mappedChars: 75000000
-  - combinedString: o
-    mappedChar: 264
-    mappedChars: 6f000000
-  - combinedString: i
-    mappedChar: 263
-    mappedChars: 69000000
-  - combinedString: e
-    mappedChar: 262
-    mappedChars: 65000000
-  - combinedString: a
-    mappedChar: 261
-    mappedChars: 61000000
-  - combinedString: u
-    mappedChar: 176
-    mappedChars: 75000000
-  - combinedString: i
-    mappedChar: 175
-    mappedChars: 69000000
-  - combinedString: e
-    mappedChar: 174
-    mappedChars: 65000000
-  - combinedString: a
-    mappedChar: 173
-    mappedChars: 61000000
-  - combinedString: u
-    mappedChar: 190
-    mappedChars: 75000000
-  - combinedString: o
-    mappedChar: 189
-    mappedChars: 6f000000
-  - combinedString: i
-    mappedChar: 188
-    mappedChars: 69000000
-  - combinedString: e
-    mappedChar: 187
-    mappedChars: 65000000
-  - combinedString: a
-    mappedChar: 186
-    mappedChars: 61000000
-  - combinedString: u
-    mappedChar: 185
-    mappedChars: 75000000
-  - combinedString: o
-    mappedChar: 184
-    mappedChars: 6f000000
-  - combinedString: i
-    mappedChar: 183
-    mappedChars: 69000000
-  - combinedString: e
-    mappedChar: 182
-    mappedChars: 65000000
-  - combinedString: a
-    mappedChar: 181
-    mappedChars: 61000000
-  - combinedString: u
-    mappedChar: 275
-    mappedChars: 75000000
-  - combinedString: o
-    mappedChar: 274
-    mappedChars: 6f000000
-  - combinedString: i
-    mappedChar: 273
-    mappedChars: 69000000
-  - combinedString: e
-    mappedChar: 272
-    mappedChars: 65000000
-  - combinedString: a
-    mappedChar: 271
-    mappedChars: 61000000
-  - combinedString: hu
+  - combinedString: to
+    mappedChar: 254
+    mappedChars: 740000006f000000
+  - combinedString: tu
     mappedChar: 255
-    mappedChars: 6800000075000000
-  - combinedString: hi
+    mappedChars: 7400000075000000
+  - combinedString: to
+    mappedChar: 254
+    mappedChars: 740000006f000000
+  - combinedString: ti
     mappedChar: 253
-    mappedChars: 6800000069000000
-  - combinedString: he
+    mappedChars: 7400000069000000
+  - combinedString: te
     mappedChar: 252
-    mappedChars: 6800000065000000
-  - combinedString: ha
+    mappedChars: 7400000065000000
+  - combinedString: ta
     mappedChar: 251
-    mappedChars: 6800000061000000
+    mappedChars: 7400000061000000
+  - combinedString: du
+    mappedChar: 270
+    mappedChars: 6400000075000000
+  - combinedString: do
+    mappedChar: 269
+    mappedChars: 640000006f000000
+  - combinedString: di
+    mappedChar: 268
+    mappedChars: 6400000069000000
+  - combinedString: de
+    mappedChar: 267
+    mappedChars: 6400000065000000
+  - combinedString: da
+    mappedChar: 266
+    mappedChars: 6400000061000000
+  - combinedString: thu
+    mappedChar: 260
+    mappedChars: 7900000075000000
+  - combinedString: tho
+    mappedChar: 259
+    mappedChars: 790000006f000000
+  - combinedString: thi
+    mappedChar: 258
+    mappedChars: 7900000069000000
+  - combinedString: the
+    mappedChar: 257
+    mappedChars: 7900000065000000
+  - combinedString: tha
+    mappedChar: 256
+    mappedChars: 7900000061000000
+  - combinedString: hgu
+    mappedChar: 280
+    mappedChars: 680000006700000075000000
+  - combinedString: hgo
+    mappedChar: 279
+    mappedChars: 68000000670000006f000000
+  - combinedString: hgi
+    mappedChar: 278
+    mappedChars: 680000006700000069000000
+  - combinedString: hge
+    mappedChar: 277
+    mappedChars: 680000006700000065000000
+  - combinedString: hga
+    mappedChar: 276
+    mappedChars: 680000006700000061000000
   - combinedString: hu
+    mappedChar: 265
+    mappedChars: 6800000075000000
+  - combinedString: ho
+    mappedChar: 264
+    mappedChars: 680000006f000000
+  - combinedString: hi
+    mappedChar: 263
+    mappedChars: 6800000069000000
+  - combinedString: he
+    mappedChar: 262
+    mappedChars: 6800000065000000
+  - combinedString: ha
+    mappedChar: 261
+    mappedChars: 6800000061000000
+  - combinedString: hgu
+    mappedChar: 176
+    mappedChars: 7800000075000000
+  - combinedString: hgi
+    mappedChar: 175
+    mappedChars: 7800000069000000
+  - combinedString: hge
+    mappedChar: 174
+    mappedChars: 7800000065000000
+  - combinedString: hga
+    mappedChar: 173
+    mappedChars: 7800000061000000
+  - combinedString: fu
+    mappedChar: 190
+    mappedChars: 6600000075000000
+  - combinedString: fo
+    mappedChar: 189
+    mappedChars: 660000006f000000
+  - combinedString: fi
+    mappedChar: 188
+    mappedChars: 6600000069000000
+  - combinedString: fe
+    mappedChar: 187
+    mappedChars: 6600000065000000
+  - combinedString: fa
+    mappedChar: 186
+    mappedChars: 6600000061000000
+  - combinedString: fu
+    mappedChar: 185
+    mappedChars: 6600000075000000
+  - combinedString: fo
+    mappedChar: 184
+    mappedChars: 660000006f000000
+  - combinedString: fi
+    mappedChar: 183
+    mappedChars: 6600000069000000
+  - combinedString: fe
+    mappedChar: 182
+    mappedChars: 6600000065000000
+  - combinedString: fa
+    mappedChar: 181
+    mappedChars: 6600000061000000
+  - combinedString: vu
+    mappedChar: 275
+    mappedChars: 7600000075000000
+  - combinedString: vo
+    mappedChar: 274
+    mappedChars: 760000006f000000
+  - combinedString: vi
+    mappedChar: 273
+    mappedChars: 7600000069000000
+  - combinedString: ve
+    mappedChar: 272
+    mappedChars: 7600000065000000
+  - combinedString: va
+    mappedChar: 271
+    mappedChars: 7600000061000000
+  - combinedString: shu
+    mappedChar: 255
+    mappedChars: 730000006800000075000000
+  - combinedString: shi
+    mappedChar: 253
+    mappedChars: 730000006800000069000000
+  - combinedString: she
+    mappedChar: 252
+    mappedChars: 730000006800000065000000
+  - combinedString: sha
+    mappedChar: 251
+    mappedChars: 730000006800000061000000
+  - combinedString: shu
     mappedChar: 250
-    mappedChars: 6800000075000000
-  - combinedString: ho
+    mappedChars: 730000006800000075000000
+  - combinedString: sho
     mappedChar: 249
-    mappedChars: 680000006f000000
-  - combinedString: hi
+    mappedChars: 73000000680000006f000000
+  - combinedString: shi
     mappedChar: 248
-    mappedChars: 6800000069000000
-  - combinedString: he
+    mappedChars: 730000006800000069000000
+  - combinedString: she
     mappedChar: 247
-    mappedChars: 6800000065000000
-  - combinedString: ha
+    mappedChars: 730000006800000065000000
+  - combinedString: sha
     mappedChar: 246
-    mappedChars: 6800000061000000
-  - combinedString: u
+    mappedChars: 730000006800000061000000
+  - combinedString: su
     mappedChar: 245
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 7300000075000000
+  - combinedString: so
     mappedChar: 244
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 730000006f000000
+  - combinedString: si
     mappedChar: 243
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 7300000069000000
+  - combinedString: se
     mappedChar: 242
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 7300000065000000
+  - combinedString: sa
     mappedChar: 241
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 7300000061000000
+  - combinedString: su
     mappedChar: 240
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 7300000075000000
+  - combinedString: so
     mappedChar: 239
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 730000006f000000
+  - combinedString: si
     mappedChar: 238
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 7300000069000000
+  - combinedString: se
     mappedChar: 237
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 7300000065000000
+  - combinedString: sa
     mappedChar: 236
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 7300000061000000
+  - combinedString: zu
     mappedChar: 215
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 7a00000075000000
+  - combinedString: zo
     mappedChar: 214
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 7a0000006f000000
+  - combinedString: zi
     mappedChar: 213
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 7a00000069000000
+  - combinedString: ze
     mappedChar: 212
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 7a00000065000000
+  - combinedString: za
     mappedChar: 211
-    mappedChars: 61000000
-  - combinedString: ho
+    mappedChars: 7a00000061000000
+  - combinedString: zho
     mappedChar: 214
-    mappedChars: 680000006f000000
-  - combinedString: he
+    mappedChars: 7a000000680000006f000000
+  - combinedString: zhe
     mappedChar: 212
-    mappedChars: 6800000065000000
-  - combinedString: hu
+    mappedChars: 7a0000006800000065000000
+  - combinedString: zhu
     mappedChar: 215
-    mappedChars: 6800000075000000
-  - combinedString: hi
+    mappedChars: 7a0000006800000075000000
+  - combinedString: zhi
     mappedChar: 213
-    mappedChars: 6800000069000000
-  - combinedString: ha
+    mappedChars: 7a0000006800000069000000
+  - combinedString: zha
     mappedChar: 211
-    mappedChars: 6800000061000000
-  - combinedString: u
+    mappedChars: 7a0000006800000061000000
+  - combinedString: zu
     mappedChar: 210
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 7a00000075000000
+  - combinedString: zo
     mappedChar: 209
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 7a0000006f000000
+  - combinedString: zi
     mappedChar: 208
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 7a00000069000000
+  - combinedString: ze
     mappedChar: 207
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 7a00000065000000
+  - combinedString: za
     mappedChar: 206
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 7a00000061000000
+  - combinedString: zu
     mappedChar: 205
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 7a00000075000000
+  - combinedString: zo
     mappedChar: 204
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 7a0000006f000000
+  - combinedString: zi
     mappedChar: 203
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 7a00000069000000
+  - combinedString: ze
     mappedChar: 202
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 7a00000065000000
+  - combinedString: za
     mappedChar: 201
-    mappedChars: 61000000
-  - combinedString: o
+    mappedChars: 7a00000061000000
+  - combinedString: sho
     mappedChar: 180
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 770000006f000000
+  - combinedString: shi
     mappedChar: 179
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 7700000069000000
+  - combinedString: she
     mappedChar: 178
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 7700000065000000
+  - combinedString: sha
     mappedChar: 177
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 7700000061000000
+  - combinedString: ju
     mappedChar: 235
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 6a00000075000000
+  - combinedString: jo
     mappedChar: 234
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 6a0000006f000000
+  - combinedString: ji
     mappedChar: 233
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 6a00000069000000
+  - combinedString: je
     mappedChar: 232
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 6a00000065000000
+  - combinedString: ja
     mappedChar: 231
-    mappedChars: 61000000
-  - combinedString: u
+    mappedChars: 6a00000061000000
+  - combinedString: mu
     mappedChar: 245
-    mappedChars: 75000000
-  - combinedString: o
+    mappedChars: 6d00000075000000
+  - combinedString: mo
     mappedChar: 244
-    mappedChars: 6f000000
-  - combinedString: i
+    mappedChars: 6d0000006f000000
+  - combinedString: mi
     mappedChar: 243
-    mappedChars: 69000000
-  - combinedString: e
+    mappedChars: 6d00000069000000
+  - combinedString: me
     mappedChar: 242
-    mappedChars: 65000000
-  - combinedString: a
+    mappedChars: 6d00000065000000
+  - combinedString: ma
     mappedChar: 241
-    mappedChars: 61000000
+    mappedChars: 6d00000061000000
