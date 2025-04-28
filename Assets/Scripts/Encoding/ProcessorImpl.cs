@@ -42,14 +42,14 @@ public static class StringExts
             }
         }
 
-        NativeArray<Range> output = new(0, allocator);
+        NativeArray<Range> output = new(count, allocator);
         int index = 0, prevOffset = 0;
         for (int i = 0; i < str.Length; i++)
         {
             if (str[i] == delimiter)
             {
                 output[index++] = prevOffset..i;
-                prevOffset = i + 1;
+                prevOffset      = i + 1;
             }
         }
 
@@ -88,6 +88,17 @@ namespace Impl
             }
 
             this.compoundIndex = compoundIndex;
+        }
+
+        public override string ToString()
+        {
+            string output = $"Compound Index: {compoundIndex}\n";
+            foreach (char sign in signData)
+            {
+                output += $"{sign} ";
+            }
+
+            return output;
         }
     }
 }

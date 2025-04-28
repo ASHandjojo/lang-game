@@ -143,7 +143,7 @@ public struct Processor : IDisposable
             int signCount = compoundTable.signData.Length;
 
             // If the current sign position + the sign data count of the compound sign @ compoundIdx is out of bounds, skip
-            if (signCount >= ranges.Length)
+            if (signCount > ranges.Length)
             {
                 continue;
             }

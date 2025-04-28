@@ -21,10 +21,10 @@ public sealed class InputController : MonoBehaviour
     {
         Debug.Assert(languageTable != null);
         document  = GetComponent<UIDocument>();
-        processor = new Processor(languageTable.standardSigns, languageTable.compoundSigns);
+        processor = new Processor(languageTable.StandardSigns, languageTable.CompoundSigns);
 
         inputField = document.rootVisualElement.Q<Label>("Input");
-        InputStr   = processor.Translate("a;e;");
+        InputStr   = processor.Translate("a;e;e;i;");
     }
 
     void OnDestroy()
