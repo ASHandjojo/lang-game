@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a96bf49a31208c41b2a864931bca1e8, type: 3}
   m_Name: Ligature Table
   m_EditorClassIdentifier: 
-  fileDir: Assets/Scripts/Encoding/Loader/Converted 2.json
+  fileDir: Assets/Scripts/Encoding/Loader/Converted.json
   compoundUI: {fileID: 9197481963319205126, guid: dc18ecb36ea5bbd4aad03435ac673caa, type: 3}
   compoundChildUI: {fileID: 9197481963319205126, guid: faae68990d5741b469a71cd2b5ce9633, type: 3}
   standardSignTable: {fileID: 11400000, guid: 98165f17bdca7944ab0a9394d0e5bafd, type: 2}

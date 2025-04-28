@@ -4,8 +4,6 @@ using UnityEngine.UIElements;
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
 public sealed class InputController : MonoBehaviour
 {
-    [SerializeField]
-    private LanguageTable languageTable;
     [HideInInspector] public UIDocument document;
 
     public Processor processor;
@@ -17,11 +15,10 @@ public sealed class InputController : MonoBehaviour
         set => inputField.text = value;
     }
 
-    void Awake()
+    void Start()
     {
-        Debug.Assert(languageTable != null);
         document  = GetComponent<UIDocument>();
-        processor = new Processor(languageTable.StandardSigns, languageTable.CompoundSigns);
+        processor = new Processor(LanguageTable.StandardSigns, LanguageTable.CompoundSigns);
 
         inputField = document.rootVisualElement.Q<Label>("Input");
         InputStr   = processor.Translate("a;e;e;i;");

@@ -13,9 +13,25 @@ using UnityEditor.UIElements;
 [DisallowMultipleComponent]
 public sealed class LanguageTable : MonoBehaviour
 {
-    public StandardSignTable signTable;
-    public LigatureSub ligatureSub;
+    [SerializeField] private StandardSignTable signTable;
+    [SerializeField] private LigatureSub ligatureSub;
 
-    public StandardSign[] StandardSigns => signTable.entries;
-    public CompoundSign[] CompoundSigns => ligatureSub.entries;
+    private static LanguageTable Instance { get; set; }
+
+    public static StandardSign[] StandardSigns => Instance.signTable.entries;
+    public static CompoundSign[] CompoundSigns => Instance.ligatureSub.entries;
+
+    void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.LogWarning($"Duplicate instance has been created of {nameof(LanguageTable)}! Destroying duplicate instance.");
+            Destroy(this);
+            return;
+        }
+
+        DontDestroyOnLoad(this);
+        Instance = this;
+    }
+
 }
