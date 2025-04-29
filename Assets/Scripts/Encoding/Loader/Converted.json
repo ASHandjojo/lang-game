@@ -306,6 +306,12 @@
     "First": 104,
     "Ligatures": [
       {
+        "Glyph": 120,
+        "Components": [
+          103
+        ]
+      },
+      {
         "Glyph": 216,
         "Components": [
           97
@@ -366,15 +372,15 @@
       {
         "Glyph": 223,
         "Components": [
-          103,
-          105
+          105,
+          0
         ]
       },
       {
         "Glyph": 223,
         "Components": [
-          105,
-          0
+          103,
+          105
         ]
       },
       {
@@ -551,6 +557,12 @@
   {
     "First": 109,
     "Ligatures": [
+      {
+        "Glyph": 113,
+        "Components": [
+          103
+        ]
+      },
       {
         "Glyph": 261,
         "Components": [
@@ -756,6 +768,12 @@
     "First": 112,
     "Ligatures": [
       {
+        "Glyph": 119,
+        "Components": [
+          104
+        ]
+      },
+      {
         "Glyph": 236,
         "Components": [
           97
@@ -892,6 +910,12 @@
   {
     "First": 114,
     "Ligatures": [
+      {
+        "Glyph": 121,
+        "Components": [
+          104
+        ]
+      },
       {
         "Glyph": 201,
         "Components": [

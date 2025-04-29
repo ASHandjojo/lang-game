@@ -146,6 +146,9 @@ MonoBehaviour:
   - combinedString: gu
     mappedChar: 200
     mappedChars: 6700000075000000
+  - combinedString: hg
+    mappedChar: 120
+    mappedChars: 6800000067000000
   - combinedString: ha
     mappedChar: 216
     mappedChars: 6800000061000000
@@ -173,12 +176,12 @@ MonoBehaviour:
   - combinedString: he
     mappedChar: 222
     mappedChars: 6800000065000000
-  - combinedString: hgi
-    mappedChar: 223
-    mappedChars: 680000006700000069000000
   - combinedString: hi
     mappedChar: 223
     mappedChars: 6800000069000000
+  - combinedString: hgi
+    mappedChar: 223
+    mappedChars: 680000006700000069000000
   - combinedString: hgo
     mappedChar: 224
     mappedChars: 68000000670000006f000000
@@ -251,6 +254,9 @@ MonoBehaviour:
   - combinedString: lu
     mappedChar: 260
     mappedChars: 6c00000075000000
+  - combinedString: mg
+    mappedChar: 113
+    mappedChars: 6d00000067000000
   - combinedString: ma
     mappedChar: 261
     mappedChars: 6d00000061000000
@@ -338,6 +344,9 @@ MonoBehaviour:
   - combinedString: ou
     mappedChar: 275
     mappedChars: 6f00000075000000
+  - combinedString: ph
+    mappedChar: 119
+    mappedChars: 7000000068000000
   - combinedString: pa
     mappedChar: 236
     mappedChars: 7000000061000000
@@ -395,6 +404,9 @@ MonoBehaviour:
   - combinedString: phu
     mappedChar: 255
     mappedChars: 700000006800000075000000
+  - combinedString: rh
+    mappedChar: 121
+    mappedChars: 7200000068000000
   - combinedString: ra
     mappedChar: 201
     mappedChars: 7200000061000000
