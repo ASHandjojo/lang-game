@@ -1,10 +1,10 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/SettingsMenu/SettingsStyles.uss?fileID=7433441132597879392&amp;guid=183042a5c782ff6498ee751526cafc95&amp;type=3#SettingsStyles" />
     <Style src="project://database/Assets/UI/MainMenu/MainMenuStyles.uss?fileID=7433441132597879392&amp;guid=d59d620128eeb9849ac753915a8fa2d4&amp;type=3#MainMenuStyles" />
-    <engine:VisualElement name="ScreenContainer" style="flex-grow: 1; flex-direction: column; justify-content: center; align-items: stretch; background-image: url(&quot;project://database/Assets/UI/Images/Settings%20Menu/SMBackground.png?fileID=2800000&amp;guid=8749116799529d9479363a7a06282b30&amp;type=3#SMBackground&quot;); padding-right: 100px; padding-left: 100px; padding-bottom: 50px; padding-top: 200px;">
-        <engine:VisualElement name="Menus" style="flex-grow: 1; height: 750px; width: 1700px; flex-direction: row; justify-content: space-between; align-items: center; align-content: center; margin-bottom: 20px;">
-            <engine:VisualElement name="Hotkeys" style="width: 200px; height: 700px; flex-grow: 1; align-items: flex-start; flex-direction: column; justify-content: space-between;">
-                <engine:Label text="Hotkeys" name="Title" emoji-fallback-support="false" enable-rich-text="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="headers" />
+    <engine:VisualElement name="ScreenContainer" style="flex-grow: 1; flex-direction: column; justify-content: center; align-items: stretch; background-image: url(&quot;project://database/Assets/UI/Images/Settings%20Menu/SMBackground.png?fileID=2800000&amp;guid=8749116799529d9479363a7a06282b30&amp;type=3#SMBackground&quot;); padding-right: 100px; padding-left: 100px; padding-bottom: 50px; padding-top: 200px; align-self: center;">
+        <engine:VisualElement name="Menus" style="flex-grow: 1; height: 750px; width: 1700px; flex-direction: row; justify-content: space-between; align-items: center; align-content: center; margin-bottom: 30px;">
+            <engine:VisualElement name="Hotkeys" style="width: 120px; height: 700px; flex-grow: 1; align-items: flex-start; flex-direction: column; justify-content: space-between; margin-right: 15px;">
+                <engine:Label text="Hotkeys" name="Title" emoji-fallback-support="false" enable-rich-text="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="headers" style="font-size: 78px;" />
                 <engine:VisualElement name="MoveRightKey" class="hotkey" style="flex-grow: 1; flex-direction: row;">
                     <engine:Label text="Move Right" name="MoveRight" enable-rich-text="false" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="hotkey-text" style="flex-grow: 1; width: 220px; flex-shrink: 1;" />
                     <engine:VisualElement name="MoveRightImage" class="hotkey-image" style="flex-grow: 1; background-color: rgba(81, 81, 81, 0); background-image: url(&quot;project://database/Assets/Sprites/UI/Keys/d_light.png?fileID=-7300403447439526092&amp;guid=b0fd7597a3ede28419311978dd2e8db2&amp;type=3#d_light_0&quot;); width: auto;" />
@@ -30,11 +30,12 @@
                     <engine:VisualElement name="SettingsImage" class="hotkey-image" style="flex-grow: 1; background-color: rgba(81, 81, 81, 0); background-image: url(&quot;project://database/Assets/Sprites/UI/Keys/q_light.png?fileID=-3660701786168699543&amp;guid=0766bfc93c720ec4884a367e011662b0&amp;type=3#q_light_0&quot;); width: auto;" />
                 </engine:VisualElement>
             </engine:VisualElement>
-            <engine:VisualElement name="TextSpeed" style="flex-grow: 1; width: 200px; height: 700px;">
-                <engine:Label text="Text Speed" name="Title" enable-rich-text="false" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="headers" style="align-self: flex-end;" />
+            <engine:VisualElement name="TextSpeed" style="flex-grow: 1; width: 200px; height: 700px; margin-left: 15px;">
+                <engine:Label text="Text Speed" name="Title" enable-rich-text="false" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="headers" style="align-self: flex-end; -unity-font-style: bold; font-size: 78px;" />
                 <engine:Slider label="Slider" value="42" high-value="2" name="SpeedSlider" low-value="0.5" />
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:Button text="Main Menu" name="BackButton" enable-rich-text="false" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="button" style="align-self: center; width: 400px; height: 120px; overflow: visible; margin-bottom: 0; margin-top: 16px; padding-left: 0; padding-bottom: 0; padding-right: 0; padding-top: 0; white-space: normal;" />
     </engine:VisualElement>
+    <engine:Scroller high-value="100" direction="Horizontal" value="42" />
 </engine:UXML>

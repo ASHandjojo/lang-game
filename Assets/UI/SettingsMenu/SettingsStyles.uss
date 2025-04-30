@@ -17,6 +17,6 @@
 }
 
 .hotkey-image {
-    background-size: 30% 80%;
+    background-size: 25% 65%;
     background-position-x: right 0;
 }

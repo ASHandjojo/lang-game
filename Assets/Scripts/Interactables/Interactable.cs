@@ -27,7 +27,7 @@ public abstract class Interactable : MonoBehaviour
         }
     }
 
-    // Get rid of E pop-up and stop listening for interaction when Player is not close
+    // Get rid of Interact key pop-up and stop listening for interaction when Player is not close
     private void OnTriggerExit2D(Collider2D collider)
     {
         if(collider.CompareTag("Player"))
@@ -37,13 +37,13 @@ public abstract class Interactable : MonoBehaviour
         }
     }
 
-    // E prompt shows up
+    // Interact key prompt shows up
     protected virtual void NotifyInteractable()
     {
         interactionPrompt.SetActive(true);
     }
 
-    // E prompt disappears
+    // Interact key prompt disappears
     protected virtual void DenotifyInteractable()
     {
         interactionPrompt.SetActive(false);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewItem : Interactable
+public class Item : Interactable
 {
     [Header("Sprites")]
     public Sprite open;

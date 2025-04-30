@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public static PlayerController Instance { get; private set; } // Allows access to PlayerController everywhere else
+    public static PlayerController Instance { get; private set; }
     [SerializeField] private float movementSpeed = 2f;
 
     private Rigidbody2D rb;
 
     private Vector2 movementDirection;
-
-    private Keybinds kb;
 
     void Awake()
     {

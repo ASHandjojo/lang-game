@@ -3,48 +3,51 @@ using UnityEngine.UIElements;
 
 public class SettingsMenuEvents : MonoBehaviour
 {
-    private UIDocument _selfDocument;
-    [SerializeField] private UIDocument _otherDocument;
-    private Button _backButton;
+    private UIDocument selfDocument;
+    [SerializeField] private UIDocument otherDocument;
+    private Button backButton;
     private SoundHandler sh;
     [SerializeField] private AudioClip hoverClip;
     [SerializeField] private AudioClip selectionClip;
 
     void Awake()
     {
-        _selfDocument = GetComponent<UIDocument>();
+        selfDocument = GetComponent<UIDocument>();
         sh = GetComponent<SoundHandler>();
 
         // Add events to back button
-        _backButton = _selfDocument.rootVisualElement.Q("BackButton") as Button;
-        _backButton.RegisterCallback<ClickEvent>(ToggleMainMenu);
+        backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
+        backButton.RegisterCallback<ClickEvent>(ToggleMenu);
         
         // Add sounds
-        _backButton.RegisterCallback<ClickEvent>(OnButtonClick);
-        _backButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
+        backButton.RegisterCallback<ClickEvent>(OnButtonClick);
+        backButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
 
         // Begin with settings menu not displayed
-        _selfDocument.rootVisualElement.style.display = DisplayStyle.None;
+        selfDocument.rootVisualElement.style.display = DisplayStyle.None;
     }    
 
     // Get rid of button events
     void OnDisable()
     {
-        _backButton.UnregisterCallback<ClickEvent>(ToggleMainMenu);
+        backButton.UnregisterCallback<ClickEvent>(ToggleMenu);
 
-        _backButton.UnregisterCallback<ClickEvent>(OnButtonClick);
-        _backButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
+        backButton.UnregisterCallback<ClickEvent>(OnButtonClick);
+        backButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
         
     }
 
-    // Return to main menu
-     private void ToggleMainMenu(ClickEvent e)
+    // Return to main menu or gameHud
+     private void ToggleMenu(ClickEvent e)
     {
-        _backButton.SetEnabled(false);
+        backButton.SetEnabled(false);
 
-        _otherDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-        _selfDocument.rootVisualElement.style.display = DisplayStyle.None;
+        otherDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+        selfDocument.rootVisualElement.style.display = DisplayStyle.None;
+
+        backButton.SetEnabled(true);
     }
+
 
     // Play sound when a button is clicked
     private void OnButtonClick(ClickEvent e)
@@ -58,4 +61,9 @@ public class SettingsMenuEvents : MonoBehaviour
         sh.PlaySoundUI(hoverClip);
     }
 
+
+    // Change .hotkey-image based on assigned Keybind
+
+
+    // Change dialogue text speed based on slider position 
 }
