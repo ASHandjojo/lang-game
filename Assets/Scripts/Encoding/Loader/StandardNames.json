@@ -8,6 +8,10 @@
     "Characters": "quotedbl"
   },
   {
+    "Unicode": 39,
+    "Characters": "quotesingle"
+  },
+  {
     "Unicode": 40,
     "Characters": "parenleft"
   },
@@ -18,6 +22,10 @@
   {
     "Unicode": 42,
     "Characters": "asterisk"
+  },
+  {
+    "Unicode": 43,
+    "Characters": "plus"
   },
   {
     "Unicode": 45,
@@ -270,5 +278,485 @@
   {
     "Unicode": 122,
     "Characters": "z"
+  },
+  {
+    "Unicode": 161,
+    "Characters": "a_e"
+  },
+  {
+    "Unicode": 162,
+    "Characters": "a_i"
+  },
+  {
+    "Unicode": 163,
+    "Characters": "a_o"
+  },
+  {
+    "Unicode": 164,
+    "Characters": "a_u"
+  },
+  {
+    "Unicode": 165,
+    "Characters": "e_a"
+  },
+  {
+    "Unicode": 166,
+    "Characters": "e_i"
+  },
+  {
+    "Unicode": 167,
+    "Characters": "e_o"
+  },
+  {
+    "Unicode": 168,
+    "Characters": "e_u"
+  },
+  {
+    "Unicode": 169,
+    "Characters": "i_a"
+  },
+  {
+    "Unicode": 170,
+    "Characters": "i_e"
+  },
+  {
+    "Unicode": 171,
+    "Characters": "i_o"
+  },
+  {
+    "Unicode": 172,
+    "Characters": "i_u"
+  },
+  {
+    "Unicode": 173,
+    "Characters": "o_a"
+  },
+  {
+    "Unicode": 174,
+    "Characters": "o_e"
+  },
+  {
+    "Unicode": 175,
+    "Characters": "o_i"
+  },
+  {
+    "Unicode": 176,
+    "Characters": "o_u"
+  },
+  {
+    "Unicode": 177,
+    "Characters": "u_a"
+  },
+  {
+    "Unicode": 178,
+    "Characters": "u_e"
+  },
+  {
+    "Unicode": 179,
+    "Characters": "u_i"
+  },
+  {
+    "Unicode": 180,
+    "Characters": "u_o"
+  },
+  {
+    "Unicode": 181,
+    "Characters": "p_a"
+  },
+  {
+    "Unicode": 182,
+    "Characters": "p_e"
+  },
+  {
+    "Unicode": 183,
+    "Characters": "p_i"
+  },
+  {
+    "Unicode": 184,
+    "Characters": "p_o"
+  },
+  {
+    "Unicode": 185,
+    "Characters": "p_u"
+  },
+  {
+    "Unicode": 186,
+    "Characters": "b_a"
+  },
+  {
+    "Unicode": 187,
+    "Characters": "b_e"
+  },
+  {
+    "Unicode": 188,
+    "Characters": "b_i"
+  },
+  {
+    "Unicode": 189,
+    "Characters": "b_o"
+  },
+  {
+    "Unicode": 190,
+    "Characters": "b_u"
+  },
+  {
+    "Unicode": 191,
+    "Characters": "c_a"
+  },
+  {
+    "Unicode": 192,
+    "Characters": "c_e"
+  },
+  {
+    "Unicode": 193,
+    "Characters": "c_i"
+  },
+  {
+    "Unicode": 194,
+    "Characters": "c_o"
+  },
+  {
+    "Unicode": 195,
+    "Characters": "c_u"
+  },
+  {
+    "Unicode": 196,
+    "Characters": "g_a"
+  },
+  {
+    "Unicode": 197,
+    "Characters": "g_e"
+  },
+  {
+    "Unicode": 198,
+    "Characters": "g_i"
+  },
+  {
+    "Unicode": 199,
+    "Characters": "g_o"
+  },
+  {
+    "Unicode": 200,
+    "Characters": "g_u"
+  },
+  {
+    "Unicode": 201,
+    "Characters": "t_a"
+  },
+  {
+    "Unicode": 202,
+    "Characters": "t_e"
+  },
+  {
+    "Unicode": 203,
+    "Characters": "t_i"
+  },
+  {
+    "Unicode": 204,
+    "Characters": "t_o"
+  },
+  {
+    "Unicode": 205,
+    "Characters": "t_u"
+  },
+  {
+    "Unicode": 206,
+    "Characters": "d_a"
+  },
+  {
+    "Unicode": 207,
+    "Characters": "d_e"
+  },
+  {
+    "Unicode": 208,
+    "Characters": "d_i"
+  },
+  {
+    "Unicode": 209,
+    "Characters": "d_o"
+  },
+  {
+    "Unicode": 210,
+    "Characters": "d_u"
+  },
+  {
+    "Unicode": 211,
+    "Characters": "th_a"
+  },
+  {
+    "Unicode": 212,
+    "Characters": "th_e"
+  },
+  {
+    "Unicode": 213,
+    "Characters": "th_i"
+  },
+  {
+    "Unicode": 214,
+    "Characters": "th_o"
+  },
+  {
+    "Unicode": 215,
+    "Characters": "th_u"
+  },
+  {
+    "Unicode": 216,
+    "Characters": "h_a"
+  },
+  {
+    "Unicode": 217,
+    "Characters": "h_e"
+  },
+  {
+    "Unicode": 218,
+    "Characters": "h_i"
+  },
+  {
+    "Unicode": 219,
+    "Characters": "h_o"
+  },
+  {
+    "Unicode": 220,
+    "Characters": "h_u"
+  },
+  {
+    "Unicode": 221,
+    "Characters": "hg_a"
+  },
+  {
+    "Unicode": 222,
+    "Characters": "hg_e"
+  },
+  {
+    "Unicode": 223,
+    "Characters": "hg_i"
+  },
+  {
+    "Unicode": 224,
+    "Characters": "hg_o"
+  },
+  {
+    "Unicode": 225,
+    "Characters": "hg_u"
+  },
+  {
+    "Unicode": 226,
+    "Characters": "f_a"
+  },
+  {
+    "Unicode": 227,
+    "Characters": "f_e"
+  },
+  {
+    "Unicode": 228,
+    "Characters": "f_i"
+  },
+  {
+    "Unicode": 229,
+    "Characters": "f_o"
+  },
+  {
+    "Unicode": 230,
+    "Characters": "f_u"
+  },
+  {
+    "Unicode": 231,
+    "Characters": "v_a"
+  },
+  {
+    "Unicode": 232,
+    "Characters": "v_e"
+  },
+  {
+    "Unicode": 233,
+    "Characters": "v_i"
+  },
+  {
+    "Unicode": 234,
+    "Characters": "v_o"
+  },
+  {
+    "Unicode": 235,
+    "Characters": "v_u"
+  },
+  {
+    "Unicode": 236,
+    "Characters": "s_a"
+  },
+  {
+    "Unicode": 237,
+    "Characters": "s_e"
+  },
+  {
+    "Unicode": 238,
+    "Characters": "s_i"
+  },
+  {
+    "Unicode": 239,
+    "Characters": "s_o"
+  },
+  {
+    "Unicode": 240,
+    "Characters": "s_u"
+  },
+  {
+    "Unicode": 241,
+    "Characters": "z_a"
+  },
+  {
+    "Unicode": 242,
+    "Characters": "z_e"
+  },
+  {
+    "Unicode": 243,
+    "Characters": "z_i"
+  },
+  {
+    "Unicode": 244,
+    "Characters": "z_o"
+  },
+  {
+    "Unicode": 245,
+    "Characters": "z_u"
+  },
+  {
+    "Unicode": 246,
+    "Characters": "sh_a"
+  },
+  {
+    "Unicode": 247,
+    "Characters": "sh_e"
+  },
+  {
+    "Unicode": 248,
+    "Characters": "sh_i"
+  },
+  {
+    "Unicode": 249,
+    "Characters": "sh_o"
+  },
+  {
+    "Unicode": 250,
+    "Characters": "sh_u"
+  },
+  {
+    "Unicode": 251,
+    "Characters": "j_a"
+  },
+  {
+    "Unicode": 252,
+    "Characters": "j_e"
+  },
+  {
+    "Unicode": 253,
+    "Characters": "j_i"
+  },
+  {
+    "Unicode": 254,
+    "Characters": "j_o"
+  },
+  {
+    "Unicode": 255,
+    "Characters": "j_u"
+  },
+  {
+    "Unicode": 256,
+    "Characters": "m_a"
+  },
+  {
+    "Unicode": 257,
+    "Characters": "m_e"
+  },
+  {
+    "Unicode": 258,
+    "Characters": "m_i"
+  },
+  {
+    "Unicode": 259,
+    "Characters": "m_o"
+  },
+  {
+    "Unicode": 260,
+    "Characters": "m_u"
+  },
+  {
+    "Unicode": 261,
+    "Characters": "n_a"
+  },
+  {
+    "Unicode": 262,
+    "Characters": "n_e"
+  },
+  {
+    "Unicode": 263,
+    "Characters": "n_i"
+  },
+  {
+    "Unicode": 264,
+    "Characters": "n_o"
+  },
+  {
+    "Unicode": 265,
+    "Characters": "n_u"
+  },
+  {
+    "Unicode": 266,
+    "Characters": "l_a"
+  },
+  {
+    "Unicode": 267,
+    "Characters": "l_e"
+  },
+  {
+    "Unicode": 268,
+    "Characters": "l_i"
+  },
+  {
+    "Unicode": 269,
+    "Characters": "l_o"
+  },
+  {
+    "Unicode": 270,
+    "Characters": "l_u"
+  },
+  {
+    "Unicode": 271,
+    "Characters": "r_a"
+  },
+  {
+    "Unicode": 272,
+    "Characters": "r_e"
+  },
+  {
+    "Unicode": 273,
+    "Characters": "r_i"
+  },
+  {
+    "Unicode": 274,
+    "Characters": "r_o"
+  },
+  {
+    "Unicode": 275,
+    "Characters": "r_u"
+  },
+  {
+    "Unicode": 276,
+    "Characters": "ng_a"
+  },
+  {
+    "Unicode": 277,
+    "Characters": "ng_e"
+  },
+  {
+    "Unicode": 278,
+    "Characters": "ng_i"
+  },
+  {
+    "Unicode": 279,
+    "Characters": "ng_o"
+  },
+  {
+    "Unicode": 280,
+    "Characters": "ng_u"
   }
 ]
