@@ -16,7 +16,7 @@ public struct Processor : IDisposable
     private NativeArray<char> standardSignData;
     private NativeArray<char> compoundSignData; // Under Combined String
 
-    // Ranges into contiguous memory (basically, using pooled strings
+    // Ranges into contiguous memory (basically, using pooled strings)
     private NativeArray<SignData> standardData;
     private NativeArray<SignData> compoundData; // Strategy/usage is subject to change! Could add other part for 
 
@@ -143,7 +143,7 @@ public struct Processor : IDisposable
             int signCount = compoundTable.signData.Length;
 
             // If the current sign position + the sign data count of the compound sign @ compoundIdx is out of bounds, skip
-            if (signCount >= ranges.Length)
+            if (signCount > ranges.Length)
             {
                 continue;
             }

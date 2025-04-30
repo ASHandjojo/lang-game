@@ -4,28 +4,24 @@ using UnityEngine.UIElements;
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
 public sealed class InputController : MonoBehaviour
 {
-    [SerializeField]
-    private LanguageTable languageTable;
     [HideInInspector] public UIDocument document;
 
     public Processor processor;
 
     private Label inputField;
 
-    //private string inputStr;
     private string InputStr
     {
         set => inputField.text = value;
     }
 
-    void Awake()
+    void Start()
     {
-        Debug.Assert(languageTable != null);
         document  = GetComponent<UIDocument>();
-        processor = new Processor(languageTable.standardSigns, languageTable.compoundSigns);
+        processor = new Processor(LanguageTable.StandardSigns, LanguageTable.CompoundSigns);
 
         inputField = document.rootVisualElement.Q<Label>("Input");
-        InputStr   = processor.Translate("a;e;");
+        InputStr   = processor.Translate("a;e;e;i;");
     }
 
     void OnDestroy()
