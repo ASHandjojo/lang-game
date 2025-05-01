@@ -19,12 +19,16 @@ MonoBehaviour:
     mappedChar: 33
   - phonetics: quotedbl
     mappedChar: 34
+  - phonetics: quotesingle
+    mappedChar: 39
   - phonetics: parenleft
     mappedChar: 40
   - phonetics: parenright
     mappedChar: 41
   - phonetics: asterisk
     mappedChar: 42
+  - phonetics: plus
+    mappedChar: 43
   - phonetics: hyphen
     mappedChar: 45
   - phonetics: period
@@ -151,3 +155,11 @@ MonoBehaviour:
     mappedChar: 121
   - phonetics: z
     mappedChar: 122
+  - phonetics: quoteleft
+    mappedChar: 8216
+  - phonetics: quoteright
+    mappedChar: 8217
+  - phonetics: quotedblleft
+    mappedChar: 8220
+  - phonetics: quotedblright
+    mappedChar: 8221
