@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameHUDEvents : MonoBehaviour
+public class GameHUDEvents : UIBase
 {
     [Header("Audio")]
     [SerializeField] private AudioClip openClip;
@@ -71,6 +71,7 @@ public class GameHUDEvents : MonoBehaviour
     private void OpenSettings(ClickEvent e)
     {
         // Disable Player movement/Interactions
+        DisableWorldActions();
 
         // Change the Display
         settingsDocument.rootVisualElement.style.display = DisplayStyle.Flex;
@@ -85,10 +86,9 @@ public class GameHUDEvents : MonoBehaviour
 
     IEnumerator EnterDictionary(VisualElement dictionary, Texture2D closedImage)
     {
-        dictionaryContainer.style.backgroundColor = new StyleColor(new Color(165,0,0, 0.85f));
+        dictionaryContainer.style.backgroundColor = new StyleColor(new Color(.08f,.08f,.08f, 0.8f));
         // Disable box collider to prevent interactions & freeze position to prevent movement
-        PlayerController.Instance.GetComponent<BoxCollider2D>().enabled = false;
-        PlayerController.Instance.GetComponent<Rigidbody2D>().constraints |= RigidbodyConstraints2D.FreezePositionX;
+        DisableWorldActions();
         
         // Enable Dictionary elements, Disable HUD
         dictionaryContainer.visible = true;
@@ -96,7 +96,7 @@ public class GameHUDEvents : MonoBehaviour
 
         // Enter the screen
         sh.PlaySoundUI(openClip);
-        yield return Translate(dictionary, backButton, -1500f, 0f, 1f);
+        yield return Translate(dictionary, backButton, -1500f, -350f, 1f);
 
         // Play transition animations
         yield return Fade(dictionary, 1f, 0f, 0.45f);
@@ -118,16 +118,15 @@ public class GameHUDEvents : MonoBehaviour
 
 
         // Leave the screen
-        yield return Translate(dictionary, backButton, 0f, -1500f, 1f);
+        yield return Translate(dictionary, backButton, -350f, -1500f, 1f);
 
         // Disable Dictionary elements, Re-enable HUD
-        dictionaryContainer.style.backgroundColor = new StyleColor(new Color(165,0,0, 0f));
+        dictionaryContainer.style.backgroundColor = new StyleColor(new Color(0.8f, 0.8f, 0.8f, 0f));
         dictionaryContainer.visible = false;
         hudContainer.visible = true;
         
         // Restore movement & Re-enable box collider
-        PlayerController.Instance.GetComponent<Rigidbody2D>().constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-        PlayerController.Instance.GetComponent<BoxCollider2D>().enabled = true;
+        EnableWorldActions();
     }
 
 
@@ -153,8 +152,19 @@ public class GameHUDEvents : MonoBehaviour
     // Translate the left style property of a visual element and button
     IEnumerator Translate(VisualElement dict, Button btn, float start, float end, float duration)
     {
-        float buttonStart = -start;
-        float buttonEnd = -end;
+        float buttonStart;
+        float buttonEnd;
+
+        if(start == -1500)
+        {
+            buttonStart = -start;
+            buttonEnd = 0;
+        }
+        else
+        {
+            buttonStart = 0;
+            buttonEnd = -end;
+        }
         
 
         float timeElapsed = 0;

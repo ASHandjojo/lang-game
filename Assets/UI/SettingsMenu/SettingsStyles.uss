@@ -2,6 +2,7 @@
     font-size: 500%;
     color: rgb(165, 0, 0);
     -unity-font-definition: url("project://database/Assets/Fonts/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
+    white-space: normal;
 }
 
 .hotkey {

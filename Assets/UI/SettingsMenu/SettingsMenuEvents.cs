@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class SettingsMenuEvents : MonoBehaviour
+public class SettingsMenuEvents : UIBase
 {
     private UIDocument selfDocument;
     [SerializeField] private UIDocument otherDocument;
     private Button backButton;
     private SoundHandler sh;
+    [Header("Audio")]
     [SerializeField] private AudioClip hoverClip;
     [SerializeField] private AudioClip selectionClip;
 
@@ -48,6 +49,10 @@ public class SettingsMenuEvents : MonoBehaviour
         backButton.SetEnabled(true);
 
         // If a Player Instance is available (not in main menu), return movement and interactions
+        if(PlayerController.Instance != null)
+        {
+            EnableWorldActions();
+        }
     }
 
 

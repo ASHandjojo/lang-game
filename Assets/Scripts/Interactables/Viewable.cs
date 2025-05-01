@@ -15,7 +15,7 @@ public class Viewable : Interactable
     private Vector3 cameraPos;
 
     private SpriteRenderer worldPromptIcon;
-    private Texture2D documentPromptIcon;
+    private Texture2D keybindIcon;
 
 
 
@@ -23,6 +23,7 @@ public class Viewable : Interactable
     {
         document = GetComponent<UIDocument>();
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
+        keybindIcon = Keybinds.instance.getKeyImage(Keybinds.instance.getIntersKey());
         sh = GetComponent<SoundHandler>();
     }
 
@@ -30,7 +31,8 @@ public class Viewable : Interactable
     {
         // Initialize UI images, while hiding UI screen until interacted with
         document.rootVisualElement.Q("ViewImage").style.backgroundImage = new StyleBackground(zoomImage);
-        document.rootVisualElement.Q("PromptImage").style.backgroundImage = new StyleBackground(Keybinds.instance.getKeyImage(Keybinds.instance.getIntersKey()));
+        document.rootVisualElement.Q("PromptImage").style.backgroundImage = new StyleBackground(keybindIcon);
+        worldPromptIcon.sprite = ConvertToSprite(keybindIcon);
         document.rootVisualElement.style.display = DisplayStyle.None;
         isZoomed = false;
     }
@@ -64,10 +66,10 @@ public class Viewable : Interactable
     IEnumerator CamTransition(Camera mainCamera, PlayerController player)
     {
         hudDocument.rootVisualElement.style.display = DisplayStyle.None;
-        // Disable box collider to prevent further interaction & freeze position to prevent movement
-        player.GetComponent<BoxCollider2D>().enabled = false;
         worldPromptIcon.enabled = false;
-
+        // Disable box collider to prevent further interaction & freeze position to prevent movement
+        
+        player.GetComponent<BoxCollider2D>().enabled = false;
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
         rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
         mainCamera.GetComponent<Camera_Movement>().enabled = false;
@@ -132,5 +134,10 @@ public class Viewable : Interactable
         worldPromptIcon.enabled = true;
 
         hudDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+    }
+
+    Sprite ConvertToSprite(Texture2D image)
+    {
+        return Sprite.Create(image, new Rect(0, 0, image.width, image.height), new Vector2(0.5f, 0.5f));
     }
 }
