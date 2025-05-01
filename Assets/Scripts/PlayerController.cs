@@ -24,38 +24,24 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        if(Keybinds.instance != null)
-        {
-            // Trigger for interact input
-            if(Input.GetKeyDown(Keybinds.instance.getIntersKey()))
-                {
-                    // Prompts any listeners to execute their Interact method
-                    Actions.OnInteract?.Invoke(this);
-                }
-                
-            if (Input.GetKey(Keybinds.instance.getRightKey()) && Input.GetKey(Keybinds.instance.getLeftKey())) {
-                movementDirection = new Vector2(0f, 0f);
-            } else if (Input.GetKey(Keybinds.instance.getRightKey())) {
-                movementDirection = new Vector2(1f, 0f);
-            } else if (Input.GetKey(Keybinds.instance.getLeftKey())) {
-                movementDirection = new Vector2(-1f, 0f);
-            } else {
-                movementDirection = new Vector2(0f, 0f);
+        // Trigger for interact input
+        if(Input.GetKeyDown(Keybinds.instance.getIntersKey()))
+            {
+                // Prompts any listeners to execute their Interact method
+                Actions.OnInteract?.Invoke(this);
             }
-        }
-
-        else
-        {
-            // Trigger for interact input
-            if(Input.GetKeyDown(KeyCode.E))
-                {
-                    // Prompts any listeners to execute their Interact method
-                    Actions.OnInteract?.Invoke(this);
-                }
-
-            movementDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+                
+        if (Input.GetKey(Keybinds.instance.getRightKey()) && Input.GetKey(Keybinds.instance.getLeftKey())) {
+            movementDirection = new Vector2(0f, 0f);
+        } else if (Input.GetKey(Keybinds.instance.getRightKey())) {
+            movementDirection = new Vector2(1f, 0f);
+        } else if (Input.GetKey(Keybinds.instance.getLeftKey())) {
+            movementDirection = new Vector2(-1f, 0f);
+        } else {
+            movementDirection = new Vector2(0f, 0f);
         }
     }
+
 
 
     void FixedUpdate()

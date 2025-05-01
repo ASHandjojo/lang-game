@@ -8,6 +8,7 @@ public class GameHUDEvents : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioClip openClip;
     [SerializeField] private AudioClip closeClip;
+    [SerializeField] private AudioClip hoverClip;
     private SoundHandler sh;
 
     [Header("Sprites")]
@@ -25,7 +26,6 @@ public class GameHUDEvents : MonoBehaviour
 
     private Button backButton;
 
-
     
     void Awake()
     {
@@ -35,12 +35,15 @@ public class GameHUDEvents : MonoBehaviour
         dictionaryContainer = selfDocument.rootVisualElement.Q("DictionaryContainer");
         dictionary = selfDocument.rootVisualElement.Q("Dictionary");
 
-        // Add click events to all buttons
+        // Add events to all buttons
         dictionaryButton = selfDocument.rootVisualElement.Q("DictionaryButton") as Button;
         dictionaryButton.RegisterCallback<ClickEvent>(OpenDictionary);
+        dictionaryButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
 
         settingsButton = selfDocument.rootVisualElement.Q("SettingsButton") as Button;
         settingsButton.RegisterCallback<ClickEvent>(OpenSettings);
+        settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
+
 
         backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
         backButton.RegisterCallback<ClickEvent>(CloseDictionary);
@@ -54,7 +57,9 @@ public class GameHUDEvents : MonoBehaviour
     {
         // Remove click events from all buttons
         dictionaryButton.UnregisterCallback<ClickEvent>(OpenDictionary);
+        dictionaryButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
         settingsButton.UnregisterCallback<ClickEvent>(OpenSettings);
+        settingsButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
         backButton.UnregisterCallback<ClickEvent>(CloseDictionary);
     }
 
@@ -65,13 +70,18 @@ public class GameHUDEvents : MonoBehaviour
 
     private void OpenSettings(ClickEvent e)
     {
-        
+        // Disable Player movement/Interactions
+
+        // Change the Display
+        settingsDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+        selfDocument.rootVisualElement.style.display = DisplayStyle.None;
     }
 
     private void CloseDictionary(ClickEvent e)
     {
         StartCoroutine(ExitDictionary(dictionary, closedImage));
     }
+
 
     IEnumerator EnterDictionary(VisualElement dictionary, Texture2D closedImage)
     {
@@ -165,5 +175,10 @@ public class GameHUDEvents : MonoBehaviour
 
             dict.style.left = end;
             btn.style.left = buttonEnd;
+    }
+
+    private void OnButtonHover(MouseEnterEvent e)
+    {
+        sh.PlaySoundUI(hoverClip);
     }
 }

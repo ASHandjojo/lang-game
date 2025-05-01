@@ -46,6 +46,8 @@ public class SettingsMenuEvents : MonoBehaviour
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
 
         backButton.SetEnabled(true);
+
+        // If a Player Instance is available (not in main menu), return movement and interactions
     }
 
 

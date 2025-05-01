@@ -8,11 +8,7 @@ public class Item : Interactable
     public Sprite open;
     public Sprite closed;
 
-    [Header("Audio")]
-    [SerializeField] public AudioClip clip;
-
     private SpriteRenderer sr;
-    private SoundHandler sh;
     private bool isOpen = false;
 
     
@@ -25,7 +21,7 @@ public class Item : Interactable
             return;
         }
 
-        sh.PlaySound(clip);
+        sh.PlaySound(interactClip);
 
         sr.sprite = isOpen ? closed : open;
 

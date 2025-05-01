@@ -7,9 +7,12 @@ using UnityEngine;
 public abstract class Interactable : MonoBehaviour
 {
     [SerializeField] protected GameObject interactionPrompt;
+    protected SoundHandler sh;
+    [SerializeField] protected AudioClip interactClip;
 
     // All will have their own behavior
     public abstract void Interact(PlayerController player);
+
     
     private void Reset()
     {
