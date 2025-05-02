@@ -123,6 +123,31 @@ public struct Processor : IDisposable
     }
 
     /// <summary>
+    /// Finds based off of input Unicode character. Can present issues when use 
+    /// </summary>
+    /// <param name="signChar"></param>
+    /// <returns></returns>
+    public readonly bool TryGetString(char signChar, out ReadOnlySpan<char> signChars)
+    {
+        for (int i = 0; i < standardData.Length; i++)
+        {
+            if (signChar == standardData[i].unicodeChar)
+            {
+                signChars = standardSignData.AsReadOnlySpan()[standardData[i].range];
+                return true;
+            }
+        }
+
+        signChars = default;
+        return false;
+    }
+
+    public readonly bool TryGetString(char signChar, out string signChars)
+    {
+        return TryGetString(signChar, out signChars);
+    }
+
+    /// <summary>
     /// A safe method of determining, if any; the corresponding compound sign.
     /// </summary>
     /// <param name="rootSign"></param>
