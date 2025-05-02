@@ -4,59 +4,6 @@ using Unity.Collections;
 
 using UnityEngine;
 
-public static class StringExts
-{
-    public static Range[] RangeSplit(this string str, char delimiter)
-    {
-        int count = 0;
-        for (int i = 0; i < str.Length; i++)
-        {
-            if (str[i] == delimiter)
-            {
-                count++;
-            }
-        }
-
-        Range[] output = new Range[count];
-        int index = 0, prevOffset = 0;
-        for (int i = 0; i < str.Length; i++)
-        {
-            if (str[i] == delimiter)
-            {
-                output[index++] = prevOffset..i;
-                prevOffset = i + 1;
-            }
-        }
-
-        return output;
-    }
-
-    public static NativeArray<Range> RangeSplit(this string str, char delimiter, Allocator allocator)
-    {
-        int count = 0;
-        for (int i = 0; i < str.Length; i++)
-        {
-            if (str[i] == delimiter)
-            {
-                count++;
-            }
-        }
-
-        NativeArray<Range> output = new(count, allocator);
-        int index = 0, prevOffset = 0;
-        for (int i = 0; i < str.Length; i++)
-        {
-            if (str[i] == delimiter)
-            {
-                output[index++] = prevOffset..i;
-                prevOffset      = i + 1;
-            }
-        }
-
-        return output;
-    }
-}
-
 namespace Impl
 {
     public struct SignData

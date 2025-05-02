@@ -21,7 +21,7 @@ public sealed class InputController : MonoBehaviour
         processor = new Processor(LanguageTable.StandardSigns, LanguageTable.CompoundSigns);
 
         inputField = document.rootVisualElement.Q<Label>("Input");
-        InputStr   = processor.Translate("a;e;e;i;");
+        InputStr   = processor.Translate("aeeiio+hgo");
     }
 
     void OnDestroy()
