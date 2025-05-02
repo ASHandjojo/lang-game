@@ -123,11 +123,11 @@ public struct Processor : IDisposable
     }
 
     /// <summary>
-    /// Finds based off of input Unicode character. Can present issues when use 
+    /// Finds based off of input Unicode character.
     /// </summary>
     /// <param name="signChar"></param>
     /// <returns></returns>
-    public readonly bool TryGetString(char signChar, out ReadOnlySpan<char> signChars)
+    public readonly bool TryGetStringStandard(char signChar, out ReadOnlySpan<char> signChars)
     {
         for (int i = 0; i < standardData.Length; i++)
         {
@@ -142,9 +142,9 @@ public struct Processor : IDisposable
         return false;
     }
 
-    public readonly bool TryGetString(char signChar, out string signChars)
+    public readonly bool TryGetStringStandard(char signChar, out string signChars)
     {
-        return TryGetString(signChar, out signChars);
+        return TryGetStringStandard(signChar, out signChars);
     }
 
     /// <summary>

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a96bf49a31208c41b2a864931bca1e8, type: 3}
-  m_Name: Ligature Table
+  m_Name: Ligature Sub Table
   m_EditorClassIdentifier: 
   fileDir: Assets/Scripts/Encoding/Loader/Converted.json
   compoundUI: {fileID: 9197481963319205126, guid: dc18ecb36ea5bbd4aad03435ac673caa, type: 3}
