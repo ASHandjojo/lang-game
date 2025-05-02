@@ -142,10 +142,7 @@ public struct Processor : IDisposable
         return false;
     }
 
-    public readonly bool TryGetStringStandard(char signChar, out string signChars)
-    {
-        return TryGetStringStandard(signChar, out signChars);
-    }
+    public readonly bool TryGetStringStandard(char signChar, out string signChars) => TryGetStringStandard(signChar, out signChars);
 
     /// <summary>
     /// A safe method of determining, if any; the corresponding compound sign.
@@ -198,7 +195,7 @@ public struct Processor : IDisposable
     /// <returns>A string with all valid phonetics converted to the specified mapped Unicode characters..</returns>
     public readonly string Translate(string input)
     {
-        ReadOnlySpan<char> span = input;
+        ReadOnlySpan<char> span = input; // Converts to span (much faster)
         // NOTE: This may be in fact subject to change, but that is okay for now
         NativeArray<Range> rangeArr = input.RangeSplit(';', Allocator.Temp);
         ReadOnlySpan<Range> ranges  = rangeArr.AsReadOnlySpan();
