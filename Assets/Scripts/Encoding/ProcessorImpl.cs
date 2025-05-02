@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using Unity.Collections;
 
@@ -18,12 +19,12 @@ namespace Impl
         }
     }
 
-    public struct CompoundTable
+    public struct CompoundTable : IEquatable<CompoundTable>
     {
         /// <summary>
         /// A packed structure for storing compound phonetics.
         /// </summary>
-        public struct Phonetics
+        public struct Phonetics : IEquatable<Phonetics>
         {
             private const int MaxCompoundSize = 4;
             private unsafe fixed char Data[MaxCompoundSize];
@@ -62,6 +63,8 @@ namespace Impl
             {
                 get => ref Data[index];
             }
+
+            public readonly bool Equals(Phonetics other) => length == other.length && CompoundSpan.SequenceEqual(other.CompoundSpan);
         }
 
         public Phonetics signData;
@@ -77,6 +80,8 @@ namespace Impl
             this.compoundIndex = (ushort) compoundIndex;
         }
 
+        public readonly bool Equals(CompoundTable other) => compoundIndex == other.compoundIndex && signData.Equals(other.signData);
+
         public override readonly string ToString()
         {
             string output = $"Compound Index: {compoundIndex}\n";
@@ -86,6 +91,50 @@ namespace Impl
             }
 
             return output;
+        }
+    }
+
+    public static class PhoneticsSortingMethods
+    {
+        /// <summary>
+        /// Sorts based on length (highest to lowest order).
+        /// </summary>
+        /// <param name="span"></param>
+        /// <param name="length"></param>
+        public static void Sort(in Span<CompoundTable> span)
+        {
+            Span<CompoundTable> result = stackalloc CompoundTable[span.Length];
+
+            int min = span[0].signData.Length, max = span[0].signData.Length;
+            for (int i = 0; i < span.Length; i++)
+            {
+                min = Math.Min(min, span[i].signData.Length);
+                max = Math.Max(max, span[i].signData.Length);
+            }
+
+            int extent = max - min;
+            Span<int> histogram = stackalloc int[extent + 2];
+            for (int i = 0; i < span.Length; i++)
+            {
+                histogram[(span[i].signData.Length - min) + 1]++;
+            }
+
+            // Exclusive Prefix Sum
+            for (int i = 1; i < histogram.Length; i++)
+            {
+                histogram[i] += histogram[i - 1];
+            }
+
+            for (int i = 0; i < span.Length; i++)
+            {
+                int histPos   = span[i].signData.Length - min;
+                int index     = histogram[histPos]++;
+                result[index] = span[i];
+            }
+
+            // Copies Back
+            result.Reverse();
+            result.CopyTo(span);
         }
     }
 }

@@ -114,6 +114,16 @@ public struct Processor : IDisposable
 
             compoundOffset += phoneticStr.Length;
         }
+
+        foreach (var pair in prefixMap)
+        {
+            ref NativeList<CompoundTable> tableList = ref pair.Value;
+            unsafe
+            {
+                Span<CompoundTable> tableSpan = new(tableList.GetUnsafePtr(), tableList.Length);
+                PhoneticsSortingMethods.Sort(tableSpan);
+            }
+        }
     }
 
     /// <summary>
