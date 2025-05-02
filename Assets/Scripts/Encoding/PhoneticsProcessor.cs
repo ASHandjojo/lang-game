@@ -98,7 +98,7 @@ public struct Processor : IDisposable
             compoundData[i] = new SignData(range, (char) sign.mappedChar);
 
             char firstMappedChar = (char) sign.mappedChars[0];
-            CompoundTable table = new(sign, i);
+            CompoundTable table  = new(sign, i);
 
             if (prefixMap.ContainsKey(firstMappedChar)) // If already has entry, add to list @ prefix map location
             {
@@ -185,10 +185,10 @@ public struct Processor : IDisposable
     /// <param name="ranges"></param>
     /// <param name="compoundTableOut"></param>
     /// <returns>Whether there is a compound present.</returns>
-    private readonly bool TryGetCompound(in SignData rootSign, in ReadOnlySpan<char> input, out CompoundTable compoundTableOut)
+    private readonly bool TryGetCompound(char unicodeChar, in ReadOnlySpan<char> input, out CompoundTable compoundTableOut)
     {
         // Gets compound data
-        NativeList<CompoundTable> compoundTables = prefixMap[rootSign.unicodeChar];
+        NativeList<CompoundTable> compoundTables = prefixMap[unicodeChar];
         // Iterate through prefixes
         for (int compoundIdx = 0; compoundIdx < compoundTables.Length; compoundIdx++)
         {
@@ -196,7 +196,6 @@ public struct Processor : IDisposable
             ref readonly CompoundTable compoundTable = ref compoundTables.ElementAt(compoundIdx);
             bool isEqual  = true;
             int signCount = compoundTable.signData.Length;
-            Debug.Log($"Sign Count: {signCount}");
 
             // If the current sign position + the sign data count of the compound sign @ compoundIdx is out of bounds, skip
             if (signCount > input.Length)
@@ -228,28 +227,32 @@ public struct Processor : IDisposable
     /// <returns>A string with all valid phonetics converted to the specified mapped Unicode characters..</returns>
     public readonly string Translate(string input)
     {
-        ReadOnlySpan<char> span     = input; // Converts to span (much faster)
+        ReadOnlySpan<char> span = input; // Converts to span (much faster)
+
+        unsafe
+        {
+            UnsafeList<char> firstPass  = TranslatePass(span);
+            UnsafeList<char> secondPass = TranslatePass(new(firstPass.Ptr, firstPass.Length));
+            return new string(secondPass.Ptr, 0, secondPass.Length);
+        }
+    }
+
+    private readonly UnsafeList<char> TranslatePass(in ReadOnlySpan<char> span)
+    {
         // Deliberate probable overestimate of size, fine lol
         UnsafeList<char> addedChars = new(initialCapacity: span.Length, Allocator.Temp);
-
-        Debug.Log($"Span Length: {span.Length}");
-
         for (int i = 0; i < span.Length; i++)
         {
             char mappedChar = span[i];
             // Continues (skips current iter) if it is an invalid character
             // (This shouldn't happen with the on-screen keyboard)
-            if (!TryFind(mappedChar, out SignData signData))
-            {
-                continue;
-            }
 
             bool hasCompound = prefixMap.ContainsKey(mappedChar);
             // Checks whether the current key *could* be compound.
             if (hasCompound)
             {
                 // Checks with respect to the current delimited string to the end of the array.
-                bool isCompound = TryGetCompound(signData, span[i..], out CompoundTable compoundTable);
+                bool isCompound = TryGetCompound(mappedChar, span[i..], out CompoundTable compoundTable);
                 if (isCompound)
                 {
                     // Changes the character to compound character if there is a valid compound representation
@@ -262,10 +265,7 @@ public struct Processor : IDisposable
             addedChars.AddNoResize(mappedChar);
         }
 
-        unsafe
-        {
-            return new string(addedChars.Ptr, 0, addedChars.Length);
-        }
+        return addedChars;
     }
 
     public void Dispose()
