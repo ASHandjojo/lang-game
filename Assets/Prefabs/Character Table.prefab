@@ -44,18 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 764b72cbbffdff94f87c0caec41959eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  standardUI: {fileID: 9197481963319205126, guid: faae68990d5741b469a71cd2b5ce9633, type: 3}
-  compoundUI: {fileID: 9197481963319205126, guid: dc18ecb36ea5bbd4aad03435ac673caa, type: 3}
-  compoundChildUI: {fileID: 9197481963319205126, guid: b128922581293a949bd2e71855cd6f99, type: 3}
-  standardSigns:
-  - phonetics: an
-    unicodeChar: 0
-    mappedChar: 3332
-  - phonetics: na
-    unicodeChar: 0
-    mappedChar: 444
-  compoundSigns:
-  - phonetics: anna
-    rawCharInput: an, na
-    unicodeChar: 0
-    mappedChar: 3335
+  signTable: {fileID: 11400000, guid: 98165f17bdca7944ab0a9394d0e5bafd, type: 2}
+  ligatureSub: {fileID: 11400000, guid: 77015b68c3111de409d5641b8c8d11d3, type: 2}

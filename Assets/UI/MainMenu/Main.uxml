@@ -1,0 +1,8 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/MainMenuStyles.uss?fileID=7433441132597879392&amp;guid=d59d620128eeb9849ac753915a8fa2d4&amp;type=3#MainMenuStyles" />
+    <engine:VisualElement name="ScreenContainer" style="flex-grow: 1; align-items: center; justify-content: flex-end; background-image: url(&quot;project://database/Assets/UI/Images/Main%20Menu/MMBackground.png?fileID=2800000&amp;guid=8d7b7bd79234d14498663e6c454f85ef&amp;type=3#MMBackground&quot;);">
+        <engine:Button text="Start" enable-rich-text="false" emoji-fallback-support="false" selectable="true" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" name="StartButton" class="button" style="overflow: visible;" />
+        <engine:Button text="Settings" name="SettingsButton" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="button" style="overflow: visible;" />
+        <engine:Button text="Exit" name="ExitButton" enable-rich-text="false" emoji-fallback-support="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="button" />
+    </engine:VisualElement>
+</engine:UXML>
