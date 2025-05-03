@@ -5,21 +5,6 @@ using UnityEngine;
 public class Collision_Stopper : MonoBehaviour
 {
 
-    public PlayerController playerController;
-    public Camera_Movement camera_movement;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag.Contains("Player")) {

@@ -1,0 +1,70 @@
+.button:hover {
+    background-image: url("project://database/Assets/UI/Images/Main%20Menu/MMButtonBg.png?fileID=2800000&guid=db4b4ba7f4e456441a766a153444defe&type=3#MMButtonBg");
+    -unity-font-definition: url("project://database/Assets/Fonts/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
+    font-size: 300%;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    text-shadow: 5px 10px 0 rgb(0, 0, 0);
+    background-color: rgba(255, 255, 255, 0);
+    -unity-background-image-tint-color: rgb(165, 0, 0);
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-top-width: 7px;
+    border-right-width: 7px;
+    border-bottom-width: 7px;
+    border-left-width: 7px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    scale: 1.2 1.1;
+    transition-property: scale, translate;
+    transition-duration: 0.1s, 0.1s;
+    transition-timing-function: ease, ease;
+    translate: 0 -10px;
+    width: 440px;
+    height: 120px;
+}
+
+.button:active {
+    width: 440px;
+    height: 120px;
+    background-image: url("project://database/Assets/UI/Images/Main%20Menu/MMButtonBg.png?fileID=2800000&guid=db4b4ba7f4e456441a766a153444defe&type=3#MMButtonBg");
+    -unity-font-definition: url("project://database/Assets/Fonts/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
+    font-size: 250%;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    text-shadow: 5px 10px 0 rgb(0, 0, 0);
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.button {
+    width: 440px;
+    height: 120px;
+    background-image: url("project://database/Assets/UI/Images/Main%20Menu/MMButtonBg.png?fileID=2800000&guid=db4b4ba7f4e456441a766a153444defe&type=3#MMButtonBg");
+    -unity-font-definition: url("project://database/Assets/Fonts/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
+    font-size: 300%;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    text-shadow: 5px 10px 0 rgb(0, 0, 0);
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    max-width: none;
+    max-height: none;
+    min-width: auto;
+    min-height: auto;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 40px;
+    margin-left: 0;
+    bottom: 15px;
+}

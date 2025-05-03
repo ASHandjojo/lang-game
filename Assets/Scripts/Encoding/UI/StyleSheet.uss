@@ -39,5 +39,16 @@
 }
 
 .Translate > .unity-text-field__input {
+    font-size: 28px;
+    -unity-font-definition: url('/Assets/Fonts/Melody SDF.asset');
+}
+
+.TranslatedLabel {
+    width: auto;
+    height: auto;
+    font-size: 28px;
+    color: white;
+    padding: 1.25%;
+    background-color: rgb(48, 50, 50);
     -unity-font-definition: url('/Assets/Fonts/Melody SDF.asset');
 }

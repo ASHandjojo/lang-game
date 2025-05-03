@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -19,6 +21,9 @@ public class Keybinds : MonoBehaviour
 
   private bool just_changed_back = false;
 
+  [SerializeField] private Texture2D[] keyImages = new Texture2D[26];
+  private Dictionary<KeyCode, Texture2D> keyImageMap;
+
     private void Awake()
     {
         if (instance != null && instance != this) 
@@ -29,6 +34,16 @@ public class Keybinds : MonoBehaviour
         {
           instance = this;
           Object.DontDestroyOnLoad(this);
+        }
+
+        // Holds A-Z keys
+        keyImageMap = new Dictionary<KeyCode, Texture2D>(26);
+
+        for (int i = 0; i < 26; i++)
+        {
+            KeyCode currentKey = (KeyCode)((int) KeyCode.A + i);
+            Texture2D img = keyImages[i];
+            keyImageMap[currentKey] = img;
         }
     }
 
@@ -88,7 +103,11 @@ public class Keybinds : MonoBehaviour
     return settings_key;
   }
 
-
-  
+  public Texture2D getKeyImage(KeyCode desiredKey)
+  {
+    Texture2D keyImage;
+    keyImageMap.TryGetValue(desiredKey, out keyImage);
+    return keyImage;
+  }
     
 }

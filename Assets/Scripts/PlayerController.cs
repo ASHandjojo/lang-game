@@ -4,22 +4,33 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
-
+    public static PlayerController Instance { get; private set; }
     [SerializeField] private float movementSpeed = 2f;
 
     private Rigidbody2D rb;
 
     private Vector2 movementDirection;
 
+    void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
+        // Trigger for interact input
+        if(Input.GetKeyDown(Keybinds.instance.getIntersKey()))
+            {
+                // Prompts any listeners to execute their Interact method
+                Actions.OnInteract?.Invoke(this);
+            }
+                
         if (Input.GetKey(Keybinds.instance.getRightKey()) && Input.GetKey(Keybinds.instance.getLeftKey())) {
             movementDirection = new Vector2(0f, 0f);
         } else if (Input.GetKey(Keybinds.instance.getRightKey())) {
@@ -29,13 +40,12 @@ public class PlayerController : MonoBehaviour
         } else {
             movementDirection = new Vector2(0f, 0f);
         }
-        //movementDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
-
 
     void FixedUpdate()
     {
-        rb.linearVelocity = movementDirection * movementSpeed * Time.deltaTime;
+        rb.linearVelocity = movementDirection * movementSpeed;
     }
+
 
 }

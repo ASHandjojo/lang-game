@@ -1,0 +1,377 @@
+fileFormatVersion: 2
+guid: bbdf5a585cf53ab4bbcbe442145c869c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4773621113803141525
+    second: MC (Vincent) sprite sheet_0
+  - first:
+      213: 4480848805386870149
+    second: MC (Vincent) sprite sheet_1
+  - first:
+      213: 3623482906044742813
+    second: MC (Vincent) sprite sheet_2
+  - first:
+      213: 8960848957784296289
+    second: MC (Vincent) sprite sheet_3
+  - first:
+      213: 7301435216335592686
+    second: MC (Vincent) sprite sheet_4
+  - first:
+      213: 4397413842333647916
+    second: MC (Vincent) sprite sheet_5
+  - first:
+      213: 4977225721546176495
+    second: MC (Vincent) sprite sheet_6
+  - first:
+      213: 464749273079454026
+    second: MC (Vincent) sprite sheet_7
+  - first:
+      213: -2733261565883468373
+    second: MC (Vincent) sprite sheet_8
+  - first:
+      213: -6321415602932457770
+    second: MC (Vincent) sprite sheet_9
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MC (Vincent) sprite sheet_0
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 0
+        width: 247
+        height: 955
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6e857383e0b0cdb0800000000000000
+      internalID: -4773621113803141525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MC (Vincent) sprite sheet_1
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 0
+        width: 248
+        height: 954
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58d51597f3c2f2e30800000000000000
+      internalID: 4480848805386870149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MC (Vincent) sprite sheet_2
+      rect:
+        serializedVersion: 2
+        x: 1088
+        y: 0
+        width: 357
+        height: 951
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9c3f784182394230800000000000000
+      internalID: 3623482906044742813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MC (Vincent) sprite sheet_3
+      rect:
+        serializedVersion: 2
+        x: 1590
+        y: 0
+        width: 323
+        height: 951
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16b89a686a45b5c70800000000000000
+      internalID: 8960848957784296289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MC (Vincent) sprite sheet_4
+      rect:
+        serializedVersion: 2
+        x: 2113
+        y: 0
+        width: 281
+        height: 952
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eecd53405a8e35560800000000000000
+      internalID: 7301435216335592686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MC (Vincent) sprite sheet_5
+      rect:
+        serializedVersion: 2
+        x: 2613
+        y: 0
+        width: 250
+        height: 952
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c24cea25790c60d30800000000000000
+      internalID: 4397413842333647916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MC (Vincent) sprite sheet_6
+      rect:
+        serializedVersion: 2
+        x: 3080
+        y: 0
+        width: 287
+        height: 952
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe772bb5c68a21540800000000000000
+      internalID: 4977225721546176495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MC (Vincent) sprite sheet_7
+      rect:
+        serializedVersion: 2
+        x: 3540
+        y: 0
+        width: 461
+        height: 951
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a499583600f137600800000000000000
+      internalID: 464749273079454026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MC (Vincent) sprite sheet_8
+      rect:
+        serializedVersion: 2
+        x: 4072
+        y: 0
+        width: 322
+        height: 951
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba5b9475611811ad0800000000000000
+      internalID: -2733261565883468373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MC (Vincent) sprite sheet_9
+      rect:
+        serializedVersion: 2
+        x: 4607
+        y: 0
+        width: 248
+        height: 951
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6de599d5002d548a0800000000000000
+      internalID: -6321415602932457770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      MC (Vincent) sprite sheet_0: -4773621113803141525
+      MC (Vincent) sprite sheet_1: 4480848805386870149
+      MC (Vincent) sprite sheet_2: 3623482906044742813
+      MC (Vincent) sprite sheet_3: 8960848957784296289
+      MC (Vincent) sprite sheet_4: 7301435216335592686
+      MC (Vincent) sprite sheet_5: 4397413842333647916
+      MC (Vincent) sprite sheet_6: 4977225721546176495
+      MC (Vincent) sprite sheet_7: 464749273079454026
+      MC (Vincent) sprite sheet_8: -2733261565883468373
+      MC (Vincent) sprite sheet_9: -6321415602932457770
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
