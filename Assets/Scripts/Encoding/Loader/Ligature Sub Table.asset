@@ -503,6 +503,9 @@ MonoBehaviour:
   - combinedString: zo
     mappedChar: 244
     mappedChars: 7a0000006f000000
+  - combinedString: zuplus
+    mappedChar: 245
+    mappedChars: 7a000000750000002b000000
   - combinedString: zu
     mappedChar: 245
     mappedChars: 7a00000075000000

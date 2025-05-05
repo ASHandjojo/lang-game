@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592528a49409446b3b6554aed752ff5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyValue: A
+  keyValue: 
 --- !u!114 &285738399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -637,7 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ee4b32f6cc0048ed891404afbe75647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardPanel: {fileID: 1801049159}
+  keyboardPanel: {fileID: 0}
   activeInputField: {fileID: 0}
 --- !u!4 &905521316
 Transform:
@@ -943,7 +943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e78ea1182b4142448646060f1a9b61c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputField: {fileID: 1146955801}
+  inputField: {fileID: 0}
 --- !u!114 &1146955801
 MonoBehaviour:
   m_ObjectHideFlags: 0

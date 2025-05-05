@@ -1165,6 +1165,13 @@
       {
         "Glyph": 245,
         "Components": [
+          117,
+          43
+        ]
+      },
+      {
+        "Glyph": 245,
+        "Components": [
           117
         ]
       }
