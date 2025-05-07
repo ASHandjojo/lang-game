@@ -9,11 +9,12 @@ public abstract class Interactable : MonoBehaviour
     [SerializeField] protected GameObject interactionPrompt;
     protected SoundHandler sh;
     [SerializeField] protected AudioClip interactClip;
+    protected SpriteRenderer worldPromptIcon;
+    protected Texture2D keybindIcon;
 
     // All will have their own behavior
     public abstract void Interact(PlayerController player);
 
-    
     private void Reset()
     {
         // Make sure all Interactables have a trigger type collider
@@ -52,4 +53,8 @@ public abstract class Interactable : MonoBehaviour
         interactionPrompt.SetActive(false);
     }
 
+    protected Sprite ConvertToSprite(Texture2D image)
+    {
+        return Sprite.Create(image, new Rect(0, 0, image.width, image.height), new Vector2(0.5f, 0.5f));
+    }
 }

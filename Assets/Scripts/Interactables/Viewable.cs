@@ -14,9 +14,6 @@ public class Viewable : Interactable
 
     private Vector3 cameraPos;
 
-    private SpriteRenderer worldPromptIcon;
-    private Texture2D keybindIcon;
-
 
 
     void Awake()
@@ -134,10 +131,5 @@ public class Viewable : Interactable
         worldPromptIcon.enabled = true;
 
         hudDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-    }
-
-    Sprite ConvertToSprite(Texture2D image)
-    {
-        return Sprite.Create(image, new Rect(0, 0, image.width, image.height), new Vector2(0.5f, 0.5f));
     }
 }

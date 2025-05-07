@@ -2,6 +2,9 @@ using UnityEngine;
 using System;
 public static class Actions
 {
-    // Handles Player triggering interaction to listeners 
+    // Contextual actions 
     public static Action<PlayerController> OnInteract;
+    public static Action OnSettingsMenuCalled;
+    public static Action OnDictionaryMenuCalled;
+    public static Action<PlayerController> OnClick;
 }

@@ -48,10 +48,12 @@ public class SettingsMenuEvents : UIBase
 
         backButton.SetEnabled(true);
 
-        // If a Player Instance is available (not in main menu), return movement and interactions
+        // If a Player Instance is available (not in main menu), return movement and listening for interactions/menu keys
         if(PlayerController.Instance != null)
         {
             EnableWorldActions();
+            Actions.OnSettingsMenuCalled += otherDocument.GetComponent<GameHUDEvents>().OpenSettings;
+            Actions.OnDictionaryMenuCalled += otherDocument.GetComponent<GameHUDEvents>().OpenDictionary;
         }
     }
 
