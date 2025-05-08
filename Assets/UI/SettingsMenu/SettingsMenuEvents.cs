@@ -1,3 +1,4 @@
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,6 +23,9 @@ public class SettingsMenuEvents : UIBase
     private bool shouldListen;
     private int current_keybind = -1;
 
+    private Sprite[] azSprites = {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null};
+
+
 
 
     void Awake()
@@ -29,9 +33,28 @@ public class SettingsMenuEvents : UIBase
         selfDocument = GetComponent<UIDocument>();
         sh = GetComponent<SoundHandler>();
 
+        char start = (char)97;
+        for (int i = 0; i < 26; i++) {
+            //Debug.Log(start);
+            if (i % 23 == 0 || i % 23 == 1) {
+                azSprites[i] = Resources.Load<Sprite>("Keys/" + start + "_key_light");
+            } else {
+                azSprites[i] = Resources.Load<Sprite>("Keys/" + start + "_light");
+            }
+            
+            start = (char) (start + 1);
+        }
+
+        //vSprite.push(Resources.Load<Sprite>("Keys/v_light"));
+
+        //if (vSprite != null) {
+        //    Debug.Log("Sprite Loaded correctly");
+        //}
+
         // Add events to back button
         backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
         backButton.RegisterCallback<ClickEvent>(ToggleMenu);
+
 
         // Add input listeners for Keybinds
         right_listener =  selfDocument.rootVisualElement.Q("MoveRightButton") as Button;
@@ -48,6 +71,16 @@ public class SettingsMenuEvents : UIBase
         settings_listener.RegisterCallback<ClickEvent>(ListenForInputSettings);
 
         shouldListen = false;
+
+
+
+        //Initialize Keybinds on Settings Menu
+        SetRightImage(Keybinds.instance.getRightKey());
+        SetLeftImage(Keybinds.instance.getLeftKey());
+        SetIntersImage(Keybinds.instance.getIntersKey());
+        SetRetImage(Keybinds.instance.getBackKey());
+        SetDictImage(Keybinds.instance.getDictKey());
+        SetSettingsImage(Keybinds.instance.getSettingsKey());
         
         // Add sounds
         backButton.RegisterCallback<ClickEvent>(OnButtonClick);
@@ -96,7 +129,7 @@ public class SettingsMenuEvents : UIBase
     // Play sound when a button is clicked
     private void OnButtonClick(ClickEvent e)
     {
-        Debug.Log("Click");
+        //Debug.Log("Click");
         sh.PlaySoundUI(selectionClip);
     }
 
@@ -112,17 +145,24 @@ public class SettingsMenuEvents : UIBase
             if (Input.anyKeyDown) {
                 foreach (KeyCode keyCode in System.Enum.GetValues(typeof(KeyCode))) {
                     if (Input.GetKeyDown(keyCode)) {
-
+                        if ((int) keyCode > 96 && (int) keyCode < 123)
                         switch(current_keybind) {
-                            case 0: Keybinds.instance.setRightKey(keyCode); break;
-                            case 1: Keybinds.instance.setLeftKey(keyCode); break;
-                            case 2: Keybinds.instance.setDictKey(keyCode); break;
-                            case 3: Keybinds.instance.setBackKey(keyCode); break;
-                            case 4: Keybinds.instance.setIntersKey(keyCode); break;
-                            case 5: Keybinds.instance.setSettingsKey(keyCode); break;
-                            default: break;
+                            case 0: if (KeyCodeNotThis(0, keyCode)) {Keybinds.instance.setRightKey(keyCode); SetRightImage(keyCode); }
+                            break;
+                            case 1: if (KeyCodeNotThis(1, keyCode)) {Keybinds.instance.setLeftKey(keyCode); SetLeftImage(keyCode); }
+                            break;
+                            case 2: if (KeyCodeNotThis(2, keyCode)) {Keybinds.instance.setDictKey(keyCode); SetDictImage(keyCode); }
+                            break;
+                            case 3: if (KeyCodeNotThis(3, keyCode)) {Keybinds.instance.setBackKey(keyCode); SetRetImage(keyCode); }
+                            break;
+                            case 4: if (KeyCodeNotThis(4, keyCode)) {Keybinds.instance.setIntersKey(keyCode); SetIntersImage(keyCode); }
+                            break;
+                            case 5: if (KeyCodeNotThis(5, keyCode)) {Keybinds.instance.setSettingsKey(keyCode); SetSettingsImage(keyCode); }
+                            break;
+                            default: 
+                            break;
                         }
-                        Debug.Log("Rebinded");
+                        //Debug.Log("Rebinded");
                         break;
                     }
                 }
@@ -133,44 +173,81 @@ public class SettingsMenuEvents : UIBase
     }
 
     void ListenForInputRight(ClickEvent e) {
-        Debug.Log("Right Click");
+        //Debug.Log("Right Click");
         shouldListen = true;
         current_keybind = 0;
     }
 
     void ListenForInputLeft(ClickEvent e) {
-        Debug.Log("Left Click");
+        //Debug.Log("Left Click");
         shouldListen = true;
         current_keybind = 1;
     }
 
     void ListenForInputDict(ClickEvent e) {
-        Debug.Log("Dict Click");
+        //Debug.Log("Dict Click");
         shouldListen = true;
         current_keybind = 2;
     }
 
     void ListenForInputBack(ClickEvent e) {
-        Debug.Log("Back Click");
+        //Debug.Log("Back Click");
         shouldListen = true;
         current_keybind = 3;
     }
 
     void ListenForInputInters(ClickEvent e) {
-        Debug.Log("Inters Click");
+        //Debug.Log("Inters Click");
         shouldListen = true;
         current_keybind = 4;
     }
 
     void ListenForInputSettings(ClickEvent e) {
-        Debug.Log("Settings Click");
+        //Debug.Log("Settings Click");
         shouldListen = true;
         current_keybind = 5;
     }
 
 
+
+    bool KeyCodeNotThis(int num, KeyCode key) {
+        switch(num) {
+            case 0: return (key != Keybinds.instance.getLeftKey() && key != Keybinds.instance.getDictKey() && key != Keybinds.instance.getBackKey() && key != Keybinds.instance.getIntersKey() && key != Keybinds.instance.getSettingsKey());
+            case 1: return (key != Keybinds.instance.getRightKey() && key != Keybinds.instance.getDictKey() && key != Keybinds.instance.getBackKey() && key != Keybinds.instance.getIntersKey() && key != Keybinds.instance.getSettingsKey());
+            case 2: return (key != Keybinds.instance.getRightKey() && key != Keybinds.instance.getLeftKey() && key != Keybinds.instance.getBackKey() && key != Keybinds.instance.getIntersKey() && key != Keybinds.instance.getSettingsKey());
+            case 3: return (key != Keybinds.instance.getRightKey() && key != Keybinds.instance.getLeftKey() && key != Keybinds.instance.getDictKey() && key != Keybinds.instance.getIntersKey() && key != Keybinds.instance.getSettingsKey());
+            case 4: return (key != Keybinds.instance.getRightKey() && key != Keybinds.instance.getLeftKey() && key != Keybinds.instance.getDictKey() && key != Keybinds.instance.getBackKey() && key != Keybinds.instance.getSettingsKey());
+            case 5: return (key != Keybinds.instance.getRightKey() && key != Keybinds.instance.getLeftKey() && key != Keybinds.instance.getDictKey() && key != Keybinds.instance.getBackKey() && key != Keybinds.instance.getIntersKey());
+            default: return false;
+        }
+    }
+
+
     // Change .hotkey-image based on assigned Keybind
 
+    void SetRightImage(KeyCode num) {
+      selfDocument.rootVisualElement.Q("MoveRightImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
+    }
+
+    void SetLeftImage(KeyCode num) {
+        selfDocument.rootVisualElement.Q("MoveLeftImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
+    }
+
+    void SetIntersImage(KeyCode num) {
+        selfDocument.rootVisualElement.Q("InteractImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
+    }
+
+    void SetDictImage(KeyCode num) {
+        selfDocument.rootVisualElement.Q("DictionaryImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
+    }
+
+    void SetRetImage(KeyCode num) {
+        selfDocument.rootVisualElement.Q("ReturnImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
+    }
+
+    void SetSettingsImage(KeyCode num) {
+        selfDocument.rootVisualElement.Q("SettingsImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
+    }
 
 
     // Change dialogue text speed based on slider position 

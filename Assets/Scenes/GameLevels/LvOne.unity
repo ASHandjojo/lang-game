@@ -231,8 +231,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5911d152dfa5d144992bbbf403ef078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  right_key: 275
-  left_key: 276
+  right_key: 100
+  left_key: 97
   dict_key: 119
   back_key: 101
   inters_key: 107
