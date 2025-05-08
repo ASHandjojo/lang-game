@@ -53,6 +53,13 @@ public class GameHUDEvents : UIBase
         dictionaryContainer.visible = false;
     }
 
+    // Listen for Dictionary/Settings menu button keys
+    void OnEnable()
+    {
+        Actions.OnSettingsMenuCalled += OpenSettings;
+        Actions.OnDictionaryMenuCalled += OpenDictionary;
+    }
+
     void OnDisable()
     {
         // Remove click events from all buttons
@@ -61,14 +68,22 @@ public class GameHUDEvents : UIBase
         settingsButton.UnregisterCallback<ClickEvent>(OpenSettings);
         settingsButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
         backButton.UnregisterCallback<ClickEvent>(CloseDictionary);
+
+        Actions.OnSettingsMenuCalled -= OpenSettings;
+        Actions.OnDictionaryMenuCalled -= OpenDictionary;
     }
 
-    private void OpenDictionary(ClickEvent e)
+    public void OpenDictionary(ClickEvent e)
     {
         StartCoroutine(EnterDictionary(dictionary, openImage));
     }
 
-    private void OpenSettings(ClickEvent e)
+    public void OpenDictionary()
+    {
+        StartCoroutine(EnterDictionary(dictionary, openImage));
+    }
+
+    public void OpenSettings(ClickEvent e)
     {
         // Disable Player movement/Interactions
         DisableWorldActions();
@@ -76,6 +91,20 @@ public class GameHUDEvents : UIBase
         // Change the Display
         settingsDocument.rootVisualElement.style.display = DisplayStyle.Flex;
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
+
+        Actions.OnSettingsMenuCalled -= OpenSettings;
+        Actions.OnDictionaryMenuCalled -= OpenDictionary;
+    }
+
+    public void OpenSettings()
+    {
+        DisableWorldActions();
+
+        settingsDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+        selfDocument.rootVisualElement.style.display = DisplayStyle.None;
+
+        Actions.OnSettingsMenuCalled -= OpenSettings;
+        Actions.OnDictionaryMenuCalled -= OpenDictionary;
     }
 
     private void CloseDictionary(ClickEvent e)
@@ -86,6 +115,9 @@ public class GameHUDEvents : UIBase
 
     IEnumerator EnterDictionary(VisualElement dictionary, Texture2D closedImage)
     {
+        Actions.OnSettingsMenuCalled -= OpenSettings;
+        Actions.OnDictionaryMenuCalled -= OpenDictionary;
+
         dictionaryContainer.style.backgroundColor = new StyleColor(new Color(.08f,.08f,.08f, 0.8f));
         // Disable box collider to prevent interactions & freeze position to prevent movement
         DisableWorldActions();
@@ -125,8 +157,10 @@ public class GameHUDEvents : UIBase
         dictionaryContainer.visible = false;
         hudContainer.visible = true;
         
-        // Restore movement & Re-enable box collider
+        // Restore movement, Re-enable box collider, listen for menu keys
         EnableWorldActions();
+        Actions.OnSettingsMenuCalled += OpenSettings;
+        Actions.OnDictionaryMenuCalled += OpenDictionary;
     }
 
 

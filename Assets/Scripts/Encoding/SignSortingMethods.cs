@@ -6,7 +6,7 @@ namespace Impl
 {
     public static class ProcessorExtMethods
     {
-        // fuck it, counting sort time :)
+        // fuck it, counting sort time ;)
         public static StandardSign[] Sort(in ReadOnlySpan<StandardSign> standardSigns)
         {
             StandardSign[] output = new StandardSign[standardSigns.Length];

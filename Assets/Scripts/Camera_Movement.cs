@@ -26,7 +26,7 @@ public class Camera_Movement : MonoBehaviour
     void Update()
     {
         if (player_position.position.x < terrain_image_right && player_position.position.x > terrain_image_left) {
-          transform.position = new Vector3(player_position.position.x, player_position.position.y, -10);
+          transform.position = new Vector3(player_position.position.x, Camera.main.transform.position.y, -10);
         }
 
         Vector2 resolution = new Vector2(Screen.width, Screen.height);
