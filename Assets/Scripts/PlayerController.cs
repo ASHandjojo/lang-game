@@ -52,14 +52,6 @@ public class PlayerController : MonoBehaviour
             Actions.OnClick?.Invoke(this);
         }
             
-        // Trigger movement
-        if (Input.GetKey(Keybinds.instance.getRightKey()) && Input.GetKey(Keybinds.instance.getLeftKey())) {
-            movementDirection = new Vector2(0f, 0f);
-        } else if (Input.GetKey(Keybinds.instance.getRightKey())) {
-                
-        // if (Input.GetKey(Keybinds.instance.getRightKey()) && Input.GetKey(Keybinds.instance.getLeftKey())) {
-        //     movementDirection = new Vector2(0f, 0f);
-        // } 
 
         // Right movement
         if (Input.GetKey(Keybinds.instance.getRightKey()) && 
