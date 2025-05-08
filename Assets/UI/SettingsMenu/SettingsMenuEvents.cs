@@ -11,6 +11,19 @@ public class SettingsMenuEvents : UIBase
     [SerializeField] private AudioClip hoverClip;
     [SerializeField] private AudioClip selectionClip;
 
+    private Button right_listener;
+    private Button left_listener;
+
+    private Button inter_listener;
+    private Button dict_listener;
+    private Button ret_listener;
+    private Button settings_listener;
+
+    private bool shouldListen;
+    private int current_keybind = -1;
+
+
+
     void Awake()
     {
         selfDocument = GetComponent<UIDocument>();
@@ -19,6 +32,22 @@ public class SettingsMenuEvents : UIBase
         // Add events to back button
         backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
         backButton.RegisterCallback<ClickEvent>(ToggleMenu);
+
+        // Add input listeners for Keybinds
+        right_listener =  selfDocument.rootVisualElement.Q("MoveRightButton") as Button;
+        right_listener.RegisterCallback<ClickEvent>(ListenForInputRight);
+        left_listener = selfDocument.rootVisualElement.Q("MoveLeftButton") as Button;
+        left_listener.RegisterCallback<ClickEvent>(ListenForInputLeft);
+        inter_listener = selfDocument.rootVisualElement.Q("InteractButton") as Button;
+        inter_listener.RegisterCallback<ClickEvent>(ListenForInputInters);
+        dict_listener = selfDocument.rootVisualElement.Q("DictionaryButton") as Button;
+        dict_listener.RegisterCallback<ClickEvent>(ListenForInputDict);
+        ret_listener = selfDocument.rootVisualElement.Q("ReturnButton") as Button;
+        ret_listener.RegisterCallback<ClickEvent>(ListenForInputBack);
+        settings_listener = selfDocument.rootVisualElement.Q("SettingMenuButton") as Button;
+        settings_listener.RegisterCallback<ClickEvent>(ListenForInputSettings);
+
+        shouldListen = false;
         
         // Add sounds
         backButton.RegisterCallback<ClickEvent>(OnButtonClick);
@@ -26,6 +55,7 @@ public class SettingsMenuEvents : UIBase
 
         // Begin with settings menu not displayed
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
+
     }    
 
     // Get rid of button events
@@ -35,6 +65,13 @@ public class SettingsMenuEvents : UIBase
 
         backButton.UnregisterCallback<ClickEvent>(OnButtonClick);
         backButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
+
+        right_listener.UnregisterCallback<ClickEvent>(ListenForInputRight);
+        left_listener.UnregisterCallback<ClickEvent>(ListenForInputLeft);
+        inter_listener.UnregisterCallback<ClickEvent>(ListenForInputInters);
+        dict_listener.UnregisterCallback<ClickEvent>(ListenForInputDict);
+        ret_listener.UnregisterCallback<ClickEvent>(ListenForInputBack);
+        settings_listener.UnregisterCallback<ClickEvent>(ListenForInputSettings);
         
     }
 
@@ -59,6 +96,7 @@ public class SettingsMenuEvents : UIBase
     // Play sound when a button is clicked
     private void OnButtonClick(ClickEvent e)
     {
+        Debug.Log("Click");
         sh.PlaySoundUI(selectionClip);
     }
 
@@ -68,8 +106,71 @@ public class SettingsMenuEvents : UIBase
         sh.PlaySoundUI(hoverClip);
     }
 
+    void Update()
+    {
+        if (shouldListen) {
+            if (Input.anyKeyDown) {
+                foreach (KeyCode keyCode in System.Enum.GetValues(typeof(KeyCode))) {
+                    if (Input.GetKeyDown(keyCode)) {
+
+                        switch(current_keybind) {
+                            case 0: Keybinds.instance.setRightKey(keyCode); break;
+                            case 1: Keybinds.instance.setLeftKey(keyCode); break;
+                            case 2: Keybinds.instance.setDictKey(keyCode); break;
+                            case 3: Keybinds.instance.setBackKey(keyCode); break;
+                            case 4: Keybinds.instance.setIntersKey(keyCode); break;
+                            case 5: Keybinds.instance.setSettingsKey(keyCode); break;
+                            default: break;
+                        }
+                        Debug.Log("Rebinded");
+                        break;
+                    }
+                }
+                shouldListen = false;
+                current_keybind = -1;
+            }
+        }
+    }
+
+    void ListenForInputRight(ClickEvent e) {
+        Debug.Log("Right Click");
+        shouldListen = true;
+        current_keybind = 0;
+    }
+
+    void ListenForInputLeft(ClickEvent e) {
+        Debug.Log("Left Click");
+        shouldListen = true;
+        current_keybind = 1;
+    }
+
+    void ListenForInputDict(ClickEvent e) {
+        Debug.Log("Dict Click");
+        shouldListen = true;
+        current_keybind = 2;
+    }
+
+    void ListenForInputBack(ClickEvent e) {
+        Debug.Log("Back Click");
+        shouldListen = true;
+        current_keybind = 3;
+    }
+
+    void ListenForInputInters(ClickEvent e) {
+        Debug.Log("Inters Click");
+        shouldListen = true;
+        current_keybind = 4;
+    }
+
+    void ListenForInputSettings(ClickEvent e) {
+        Debug.Log("Settings Click");
+        shouldListen = true;
+        current_keybind = 5;
+    }
+
 
     // Change .hotkey-image based on assigned Keybind
+
 
 
     // Change dialogue text speed based on slider position 
