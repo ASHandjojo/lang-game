@@ -1,0 +1,11 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/Interactables/Dialogue.uss?fileID=7433441132597879392&amp;guid=f4e736cebfcfb384991c061bd77bd7c1&amp;type=3#Dialogue" />
+    <engine:VisualElement name="ScreenContainer" class="dialogue-container">
+        <engine:Label text="NPC NAME" name="NpcName" class="nametag" />
+        <engine:VisualElement name="DialogueBox" class="dialogue-box">
+            <engine:VisualElement name="NpcImage" class="dialogue-image" />
+            <engine:Label name="DialogueText" enable-rich-text="false" emoji-fallback-support="true" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="dialogue-text" />
+            <engine:VisualElement name="NextLinePrompt" class="prompt" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

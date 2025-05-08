@@ -1,0 +1,69 @@
+.nametag {
+    align-self: flex-end;
+    width: 250px;
+    font-size: 34px;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    -unity-font-definition: url("project://database/Assets/Fonts/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
+    color: rgb(255, 255, 255);
+    -unity-text-outline-width: 0;
+    -unity-text-outline-color: rgba(0, 0, 0, 0);
+    background-color: rgba(133, 47, 53, 0.82);
+}
+
+.dialogue-container {
+    flex-grow: 1;
+    justify-content: flex-end;
+    padding-bottom: 70px;
+    padding-left: 160px;
+    padding-right: 160px;
+}
+
+.dialogue-box {
+    flex-grow: 0;
+    width: 1600px;
+    height: 200px;
+    background-color: rgb(245, 215, 157);
+    flex-direction: row-reverse;
+    display: flex;
+    border-top-left-radius: 35px;
+    border-top-right-radius: 35px;
+    border-bottom-right-radius: 35px;
+    border-bottom-left-radius: 35px;
+}
+
+.dialogue-image {
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 205px;
+    width: 205px;
+    align-self: center;
+    background-image: url("project://database/Assets/Sprites/Characters/portrait%20-%20henrietta.png?fileID=2800000&guid=f3cb738d53c3a644ba4818b955f202b6&type=3#portrait - henrietta");
+}
+
+.dialogue-text {
+    white-space: normal;
+    font-size: 48px;
+    -unity-font-style: bold;
+    -unity-font-definition: url("project://database/Assets/Fonts/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
+    flex-shrink: 1;
+    -unity-text-align: middle-center;
+    margin-right: 65px;
+    flex-grow: 1;
+    margin-top: 14px;
+    margin-bottom: 14px;
+    margin-left: 14px;
+}
+
+.prompt {
+    flex-grow: 0;
+    left: 1345px;
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    top: 130px;
+    background-image: url("project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-1304905567622442630&guid=3e65c66aea790864a86ceb1a2e3d5ef5&type=3#arrow-down@2x");
+    background-color: rgba(0, 0, 0, 0);
+    position: absolute;
+    -unity-background-image-tint-color: rgb(132, 61, 66);
+}
