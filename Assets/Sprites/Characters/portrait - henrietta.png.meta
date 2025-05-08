@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      portrait - henrietta_0: 6227849911016182754
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

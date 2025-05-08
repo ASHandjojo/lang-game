@@ -74,13 +74,7 @@ public class SettingsMenuEvents : UIBase
 
 
 
-        //Initialize Keybinds on Settings Menu
-        SetRightImage(Keybinds.instance.getRightKey());
-        SetLeftImage(Keybinds.instance.getLeftKey());
-        SetIntersImage(Keybinds.instance.getIntersKey());
-        SetRetImage(Keybinds.instance.getBackKey());
-        SetDictImage(Keybinds.instance.getDictKey());
-        SetSettingsImage(Keybinds.instance.getSettingsKey());
+        
         
         // Add sounds
         backButton.RegisterCallback<ClickEvent>(OnButtonClick);
@@ -89,7 +83,19 @@ public class SettingsMenuEvents : UIBase
         // Begin with settings menu not displayed
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
 
-    }    
+    }
+
+    void Start()
+    {
+        //Initialize Keybinds on Settings Menu
+        SetRightImage(Keybinds.instance.getRightKey());
+        SetLeftImage(Keybinds.instance.getLeftKey());
+        SetIntersImage(Keybinds.instance.getIntersKey());
+        SetRetImage(Keybinds.instance.getBackKey());
+        SetDictImage(Keybinds.instance.getDictKey());
+        SetSettingsImage(Keybinds.instance.getSettingsKey());
+        
+    } 
 
     // Get rid of button events
     void OnDisable()
