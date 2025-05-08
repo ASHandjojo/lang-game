@@ -19,19 +19,19 @@ public class CustomKeyboardManager : MonoBehaviour
 
     public void InsertCharacter(string character)
     {
-        if (activeInputField != null)
-            activeInputField.text += character;
+        if (activeInputField != null) activeInputField.text += character;
     }
 
     public void Backspace()
     {
-        if (activeInputField != null && activeInputField.text.Length > 0)
+        if (activeInputField != null && activeInputField.text.Length > 0) {
             activeInputField.text = activeInputField.text.Substring(0, activeInputField.text.Length - 1);
+        }
     }
 
     public void SubmitInput()
     {
-        FindObjectOfType<AnswerChecker>().CheckAnswer(activeInputField.text);
+        FindFirstObjectByType<AnswerChecker>().CheckAnswer(activeInputField.text);
         CloseKeyboard();
     }
 }
