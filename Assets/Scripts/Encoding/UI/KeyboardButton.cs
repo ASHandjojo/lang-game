@@ -16,9 +16,13 @@ public class KeyboardButton : MonoBehaviour
     {
         CustomKeyboardManager keyboardManager = FindFirstObjectByType<CustomKeyboardManager>();
 
-        if (keyValue == "delete") {
+        if (keyValue == "delete")
+        {
             keyboardManager.Backspace();
-        } else {
+        }
+        else
+        {
+            Debug.Log($"Inputted {keyValue}");
             keyboardManager.InsertCharacter(keyValue);
         }
     }

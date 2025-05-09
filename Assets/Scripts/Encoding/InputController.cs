@@ -10,10 +10,14 @@ public sealed class InputController : MonoBehaviour
 
     private Label inputField;
 
-    private string InputStr
+    public Label InputField => inputField;
+
+    public string InputStr
     {
         set => inputField.text = value;
     }
+
+    public string TranslatedStr => processor.Translate(inputField.text);
 
     void Start()
     {
@@ -21,7 +25,7 @@ public sealed class InputController : MonoBehaviour
         processor = new Processor(LanguageTable.StandardSigns, LanguageTable.CompoundSigns);
 
         inputField = document.rootVisualElement.Q<Label>("Input");
-        InputStr   = processor.Translate("aeeiio");
+        InputField.text = "";
     }
 
     void OnDestroy()

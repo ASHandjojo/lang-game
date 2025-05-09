@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      portrait - florence_0: -4924386286439616279
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
