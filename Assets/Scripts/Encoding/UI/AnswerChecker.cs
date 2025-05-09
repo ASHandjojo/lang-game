@@ -13,7 +13,7 @@ public class AnswerChecker : MonoBehaviour
         }
         else
         {
-            Debug.Log("Incorrect!");
+            Debug.Log($"Incorrect! Input Answer: {input}");
         }
     }
 }
