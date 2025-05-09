@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 public class NpcDialogue : Interactable
 {
+    [SerializeField] private CustomKeyboardManager keyboardManager;
+
     private UIDocument document;
     [SerializeField] private UIDocument hudDocument;
     private bool inDialogue;

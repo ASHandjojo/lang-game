@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,12 +15,21 @@ public class CustomKeyboardManager : MonoBehaviour
 
     public void OpenKeyboard()
     {
-        keyboardPanel.SetActive(true);
+        // Dirty as fuck
+        activeInputField = controller.InputField;
+        activeInputField.text = "";
+
+        activeInputField.SetEnabled(true);
+        activeInputField.style.visibility = Visibility.Visible;
     }
 
     public void CloseKeyboard()
     {
+        // Dirty as fuck
+        activeInputField = controller.InputField;
+
         keyboardPanel.SetActive(false);
+        activeInputField.style.visibility = Visibility.Hidden;
     }
 
     public void InsertCharacter(string character)
@@ -25,6 +37,8 @@ public class CustomKeyboardManager : MonoBehaviour
         // Dirty as fuck
         activeInputField = controller.InputField;
         if (activeInputField != null) activeInputField.text += character;
+
+        Debug.Log(":)");
     }
 
     public void Backspace()
