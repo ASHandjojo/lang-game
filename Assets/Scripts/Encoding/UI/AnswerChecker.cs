@@ -6,7 +6,7 @@ public class AnswerChecker : MonoBehaviour
 
     public void CheckAnswer(string input)
     {
-        if (input.ToUpper().Trim() == correctAnswer)
+        if (input.ToLower().Trim() == correctAnswer)
         {
             Debug.Log("Correct!");
             // trigger correct animation or next step

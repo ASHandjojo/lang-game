@@ -2878,6 +2878,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPrompt: {fileID: 1969015810}
   interactClip: {fileID: 0}
+  keyboardManager: {fileID: 0}
   hudDocument: {fileID: 1605222084}
   npcName: Florence
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}

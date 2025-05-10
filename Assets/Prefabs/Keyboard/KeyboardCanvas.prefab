@@ -686,7 +686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29de1a138e97b42d59c132af04669cff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  correctAnswer: A
+  correctAnswer: agu matemei ralidenge ma
 --- !u!1 &1074192673445320506
 GameObject:
   m_ObjectHideFlags: 0
