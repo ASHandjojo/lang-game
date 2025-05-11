@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-
 public abstract class Interactable : MonoBehaviour
 {
     [SerializeField] protected GameObject interactionPrompt;
@@ -24,7 +23,7 @@ public abstract class Interactable : MonoBehaviour
     // Know when Player has entered trigger area => Show prompt & listen for interact key
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if(collider.CompareTag("Player"))
+        if (collider.CompareTag("Player"))
         {
             NotifyInteractable();
             Actions.OnInteract += Interact;
@@ -34,7 +33,7 @@ public abstract class Interactable : MonoBehaviour
     // Get rid of Interact key pop-up and stop listening for interaction when Player is not close
     private void OnTriggerExit2D(Collider2D collider)
     {
-        if(collider.CompareTag("Player"))
+        if (collider.CompareTag("Player"))
         {
             DenotifyInteractable();
             Actions.OnInteract -= Interact;

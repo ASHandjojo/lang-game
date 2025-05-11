@@ -17,9 +17,9 @@ public sealed class InputController : MonoBehaviour
         set => inputField.text = value;
     }
 
+    private static InputController Instance { get; set; }
     // Just shorter to get references lol
     private static ref readonly Processor Processor => ref LanguageTable.Processor;
-
     public string TranslatedStr => Processor.Translate(inputField.text);
 
     void Awake()
@@ -31,6 +31,15 @@ public sealed class InputController : MonoBehaviour
 
         inputField = document.rootVisualElement.Q<Label>("Input");
         InputField.text = "";
+
+        if (Instance != null)
+        {
+            Debug.LogWarning($"Duplicate instance has been created of {nameof(LanguageTable)}! Destroying duplicate instance.");
+            Destroy(this);
+            return;
+        }
+
+        Instance = this;
     }
 
     void Start()
@@ -51,8 +60,8 @@ public sealed class InputController : MonoBehaviour
     public void OpenKeyboard()
     {
         inputField.text = ""; // Clears contents
-
         inputField.SetEnabled(true);
+
         inputField.style.visibility = Visibility.Visible;
     }
 

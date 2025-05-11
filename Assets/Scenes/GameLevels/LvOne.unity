@@ -1023,6 +1023,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: KeyboardCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1538479508428400441, guid: db3ebe8acff0a6f44aaf297c475c2da9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1538479508428400441, guid: db3ebe8acff0a6f44aaf297c475c2da9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1538479508428400441, guid: db3ebe8acff0a6f44aaf297c475c2da9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1538479508428400441, guid: db3ebe8acff0a6f44aaf297c475c2da9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1619996692334125164, guid: db3ebe8acff0a6f44aaf297c475c2da9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2790,15 +2806,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPrompt: {fileID: 1969015810}
   interactClip: {fileID: 0}
-  keyboardManager: {fileID: 0}
   hudDocument: {fileID: 1605222084}
   npcName: Florence
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
-  dialogueLines:
-  - Hi.
-  - Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien
-    vitae pellentesque sem placerat. In id cursus mi pretium tellus duis.
-  dialogueSounds: []
+  entries:
+  - line: Hi.
+    sound: {fileID: 0}
+  - line: Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
+      ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis.
+    sound: {fileID: 0}
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0

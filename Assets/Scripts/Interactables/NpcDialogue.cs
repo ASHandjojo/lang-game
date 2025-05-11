@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,6 +7,13 @@ using UnityEngine.UIElements;
 
 public class NpcDialogue : Interactable
 {
+    [Serializable]
+    private struct DialogueEntry
+    {
+        public string line;
+        public AudioClip sound;
+    }
+
     private UIDocument document;
     [SerializeField] private UIDocument hudDocument;
     private bool inDialogue;
@@ -13,14 +21,14 @@ public class NpcDialogue : Interactable
     [SerializeField] private Texture2D npcImage;
     private int index;
     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
-    [SerializeField] private string[] dialogueLines;
-    [SerializeField] private AudioClip[] dialogueSounds;
+    [SerializeField] private DialogueEntry[] entries;
     private Label dialogueLabel;
     private float textSpeed;
     private VisualElement nextLinePrompt;
+
     private IVisualElementScheduledItem bounceSchedule;
-    private float bounceHeight = 30f;
-    private float bounceSpeed = 30f;
+    private float bounceHeight = 30.0f;
+    private float bounceSpeed  = 30.0f;
     private float bounceStartTime;
 
     private PlayerController player;
@@ -39,7 +47,7 @@ public class NpcDialogue : Interactable
 
         // Set name and portrait
         document.rootVisualElement.Q<Label>("NpcName").text = npcName;
-        document.rootVisualElement.Q("NpcImage").style.backgroundImage = npcImage ;
+        document.rootVisualElement.Q("NpcImage").style.backgroundImage = npcImage;
 
         // Mkae sure text box begins empty
         dialogueLabel = document.rootVisualElement.Q<Label>("DialogueText");
@@ -61,10 +69,10 @@ public class NpcDialogue : Interactable
 
     public override void Interact(PlayerController player)
     {
-        if(inDialogue)
+        if (inDialogue)
         {
             // Interact key pressed when dialogue line is finished -> to next line/end dialogue
-            if(dialogueLabel.text == dialogueLines[index])
+            if (dialogueLabel.text == entries[index].line)
             {
                 StopBounce();
                 NextLine();
@@ -72,19 +80,18 @@ public class NpcDialogue : Interactable
             else
             {
                 StopAllCoroutines();
-                dialogueLabel.text = dialogueLines[index];
+                dialogueLabel.text = entries[index].line;
                 StartBounce();
             }
         }
-
         else
         {
-            document.rootVisualElement.style.display = DisplayStyle.Flex;
+            document.rootVisualElement.style.display    = DisplayStyle.Flex;
             hudDocument.rootVisualElement.style.display = DisplayStyle.None;
             worldPromptIcon.enabled = false;
             
             // Freeze position to prevent movement
-            Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+            Rigidbody2D rb  = player.GetComponent<Rigidbody2D>();
             rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
 
             inDialogue = true;
@@ -95,7 +102,7 @@ public class NpcDialogue : Interactable
 
     IEnumerator TypeLine()
     {
-        foreach(char c in dialogueLines[index].ToCharArray())
+        foreach (char c in entries[index].line)
         {
             dialogueLabel.text += c;
             yield return new WaitForSeconds(textSpeed);
@@ -106,13 +113,12 @@ public class NpcDialogue : Interactable
 
     private void NextLine()
     {
-        if(index < dialogueLines.Length -1)
+        if(index < entries.Length - 1)
         {
             index++;
             dialogueLabel.text = "";
             StartCoroutine(TypeLine());
         }
-
         else
         {
             StopBounce();
@@ -147,14 +153,14 @@ public class NpcDialogue : Interactable
             float t = Time.time - bounceStartTime;
 
             float yOffset = Mathf.PingPong(t * bounceSpeed,  bounceHeight);
-            nextLinePrompt.style.translate = new Translate(0, yOffset);
+            nextLinePrompt.style.translate = new Translate(0.0f, yOffset);
 
             // Animate size increase-decrease
             float normalizedT = yOffset / bounceHeight;
             
-            float scaleFactor = Mathf.Lerp(1.3f, 1f, normalizedT);
+            float scaleFactor = Mathf.Lerp(1.3f, 1.0f, normalizedT);
             // float scaleFactor = Mathf.Lerp(0.7f, 1.3f, normalizedT);
-            nextLinePrompt.transform.scale = new Vector3(scaleFactor, scaleFactor, 1f);
+            nextLinePrompt.transform.scale = new Vector3(scaleFactor, scaleFactor, 1.0f);
         }).Every(16);
     }
 
@@ -167,6 +173,4 @@ public class NpcDialogue : Interactable
         nextLinePrompt.style.translate = new Translate(0, 0);
         nextLinePrompt.transform.scale = Vector3.one;
     }
-
-    
 }
