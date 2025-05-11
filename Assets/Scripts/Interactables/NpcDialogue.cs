@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UIElements;
+
 public class NpcDialogue : Interactable
 {
-    [SerializeField] private CustomKeyboardManager keyboardManager;
-
     private UIDocument document;
     [SerializeField] private UIDocument hudDocument;
     private bool inDialogue;
     [SerializeField] private string npcName;
     [SerializeField] private Texture2D npcImage;
     private int index;
-     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
+    [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
     [SerializeField] private string[] dialogueLines;
     [SerializeField] private AudioClip[] dialogueSounds;
     private Label dialogueLabel;

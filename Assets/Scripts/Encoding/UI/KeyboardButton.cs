@@ -14,7 +14,7 @@ public class KeyboardButton : MonoBehaviour
 
     void OnKeyPressed()
     {
-        CustomKeyboardManager keyboardManager = FindFirstObjectByType<CustomKeyboardManager>();
+        InputController keyboardManager = FindFirstObjectByType<InputController>();
 
         if (keyValue == "delete")
         {
