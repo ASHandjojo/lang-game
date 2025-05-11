@@ -2420,10 +2420,6 @@ PrefabInstance:
       propertyPath: anim
       value: 
       objectReference: {fileID: 696604252}
-    - target: {fileID: 3748387681933907150, guid: b3cd47b1b7952ff43a303a8f547b423f, type: 3}
-      propertyPath: movementSpeed
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 6008388264503053142, guid: b3cd47b1b7952ff43a303a8f547b423f, type: 3}
       propertyPath: m_Name
       value: Basic_Player_for_Testing

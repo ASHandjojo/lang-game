@@ -34,7 +34,7 @@ public sealed class InputController : MonoBehaviour
 
         if (Instance != null)
         {
-            Debug.LogWarning($"Duplicate instance has been created of {nameof(LanguageTable)}! Destroying duplicate instance.");
+            Debug.LogWarning($"Duplicate instance has been created of {nameof(InputController)}! Destroying duplicate instance.");
             Destroy(this);
             return;
         }

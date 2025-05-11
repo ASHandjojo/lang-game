@@ -14,8 +14,6 @@ public class Viewable : Interactable
 
     private Vector3 cameraPos;
 
-
-
     void Awake()
     {
         document = GetComponent<UIDocument>();
@@ -24,13 +22,14 @@ public class Viewable : Interactable
         sh = GetComponent<SoundHandler>();
     }
 
-    private void Start()
+    void Start()
     {
         // Initialize UI images, while hiding UI screen until interacted with
-        document.rootVisualElement.Q("ViewImage").style.backgroundImage = new StyleBackground(zoomImage);
+        document.rootVisualElement.Q("ViewImage").style.backgroundImage   = new StyleBackground(zoomImage);
         document.rootVisualElement.Q("PromptImage").style.backgroundImage = new StyleBackground(keybindIcon);
+
         worldPromptIcon.sprite = ConvertToSprite(keybindIcon);
-        document.rootVisualElement.style.display = DisplayStyle.None;
+        document.rootVisualElement.style.visibility = Visibility.Hidden;
         isZoomed = false;
     }
 
@@ -39,7 +38,8 @@ public class Viewable : Interactable
     {
         Camera mainCamera = Camera.main;
 
-        if (mainCamera == null) {
+        if (mainCamera == null)
+        {
             Debug.LogWarning("Main camera not found.");
             return;
         }
@@ -62,13 +62,11 @@ public class Viewable : Interactable
     // Zoom in
     IEnumerator CamTransition(Camera mainCamera, PlayerController player)
     {
-        hudDocument.rootVisualElement.style.display = DisplayStyle.None;
+        hudDocument.rootVisualElement.style.visibility = Visibility.Hidden;
         worldPromptIcon.enabled = false;
-        // Disable box collider to prevent further interaction & freeze position to prevent movement
-        
-        player.GetComponent<BoxCollider2D>().enabled = false;
-        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
-        rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
+
+        // Freeze Movement
+        player.CanMove = false;
         mainCamera.GetComponent<Camera_Movement>().enabled = false;
 
         Vector3 startPos = mainCamera.transform.position;
@@ -90,10 +88,10 @@ public class Viewable : Interactable
         mainCamera.orthographicSize = 1;
         mainCamera.transform.position = endPos;
 
-        document.rootVisualElement.style.display = DisplayStyle.Flex;
+        document.rootVisualElement.style.visibility = Visibility.Visible;
 
-        // Re-enable box collider to restore interaction
-        player.GetComponent<BoxCollider2D>().enabled = true;
+        // Restore Movement
+        player.CanMove = true;
     }
 
     // Zoom out

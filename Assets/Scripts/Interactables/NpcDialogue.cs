@@ -55,8 +55,8 @@ public class NpcDialogue : Interactable
 
         textSpeed = 0.02f;
         nextLinePrompt = document.rootVisualElement.Q("NextLinePrompt");
+        document.rootVisualElement.style.visibility = Visibility.Hidden;
         nextLinePrompt.visible = false;
-        document.rootVisualElement.style.display = DisplayStyle.None;
         inDialogue = false;
     }
 
@@ -86,13 +86,12 @@ public class NpcDialogue : Interactable
         }
         else
         {
-            document.rootVisualElement.style.display    = DisplayStyle.Flex;
-            hudDocument.rootVisualElement.style.display = DisplayStyle.None;
+            document.rootVisualElement.style.visibility    = Visibility.Visible;
+            hudDocument.rootVisualElement.style.visibility = Visibility.Hidden;
             worldPromptIcon.enabled = false;
             
-            // Freeze position to prevent movement
-            Rigidbody2D rb  = player.GetComponent<Rigidbody2D>();
-            rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
+            // Prevent Movement
+            PlayerController.Instance.CanMove = false;
 
             inDialogue = true;
             StartCoroutine(TypeLine());
@@ -130,13 +129,13 @@ public class NpcDialogue : Interactable
             // Stop listening for clicks
             Actions.OnClick -= Interact;
 
-            // Restore movement
-            PlayerController.Instance.GetComponent<Rigidbody2D>().constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+            // Restore Movement
+            PlayerController.Instance.CanMove = true;
 
             // Restore in-game UI
-            document.rootVisualElement.style.display = DisplayStyle.None;
+            document.rootVisualElement.style.visibility    = Visibility.Hidden;
             worldPromptIcon.enabled = true;
-            hudDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+            hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
         }
     }
 
