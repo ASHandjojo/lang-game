@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="101.89741"
+   height="107.44141"
+   viewBox="0 0 101.89741 107.44141"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   sodipodi:docname="gen_keybacking.svg"
+   xml:space="preserve"
+   inkscape:export-filename="backspace_key.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showguides="true"
+     inkscape:zoom="0.40220291"
+     inkscape:cx="856.53284"
+     inkscape:cy="473.64153"
+     inkscape:window-width="2560"
+     inkscape:window-height="1494"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer5"><inkscape:page
+       x="0"
+       y="0"
+       width="101.89741"
+       height="107.44141"
+       id="page2"
+       margin="0"
+       bleed="0" /></sodipodi:namedview><defs
+     id="defs1"><style
+       id="style1">
+      .st0 {
+        display: none;
+      }
+    </style><style
+       id="style1-2">
+      .cls-1 {
+        fill: none;
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style></defs><g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="keyboard"
+     transform="matrix(0.5069417,0,0,0.5069417,-30.585657,-267.69991)"><g
+       id="g73"
+       inkscape:label="tdth"><rect
+         style="fill:#ffe098;fill-opacity:1;stroke:#a30000;stroke-width:9.6821;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect36-1-4"
+         width="191.3221"
+         height="202.25826"
+         x="65.174728"
+         y="532.90948"
+         rx="19.364193"
+         ry="19.364193" /></g></g></svg>

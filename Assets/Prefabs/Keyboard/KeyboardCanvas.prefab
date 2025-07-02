@@ -3239,6 +3239,7 @@ GameObject:
   - component: {fileID: 6994847783138808773}
   - component: {fileID: 4105433421618512388}
   - component: {fileID: 8968741231497502225}
+  - component: {fileID: 744509056532771416}
   m_Layer: 5
   m_Name: KeyboardPanel
   m_TagString: Untagged
@@ -3334,6 +3335,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &744509056532771416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4397994374834542053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d512fd57429b0314ab92e9c595892407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputPrefab: {fileID: 3984495524075711225}
 --- !u!1 &4753438394461207931
 GameObject:
   m_ObjectHideFlags: 0
@@ -6220,5 +6234,10 @@ PrefabInstance:
 --- !u!224 &1538479508428400441 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4979431758502771744, guid: 2f5f920b25f590b43839bf6106cdf1a8, type: 3}
+  m_PrefabInstance: {fileID: 5783668911875332889}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3984495524075711225 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7424322158834627040, guid: 2f5f920b25f590b43839bf6106cdf1a8, type: 3}
   m_PrefabInstance: {fileID: 5783668911875332889}
   m_PrefabAsset: {fileID: 0}
