@@ -1,36 +1,80 @@
+using System.Linq;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[DisallowMultipleComponent, RequireComponent(typeof(RectTransform))]
+public sealed class KeyboardUI : VisualElement
+{
+    public struct KeyboardRow
+    {
+        public VisualElement container;
+        public Button[] buttons;
+
+        public KeyboardRow(VisualElement container)
+        {
+            Debug.Assert(container != null);
+
+            VisualElement[] children = container.Children().ToArray();
+            Debug.Assert(children.Length > 0);
+
+            Button[] buttons = children.Select((x) => x as Button)
+                .Where(x => x != null)
+                .ToArray();
+            Debug.Assert(buttons.Length > 0);
+
+            this.container = container;
+            this.buttons   = buttons;
+        }
+    }
+
+    public Label inputField;
+    public KeyboardRow[] rows;
+
+    public KeyboardUI(VisualTreeAsset layout)
+    {
+        Debug.Assert(layout != null);
+        layout.CloneTree(this);
+
+        VisualElement parent     = this.Q<VisualElement>("KeyboardParent");
+        VisualElement[] children = parent.Children().ToArray(); // First one is input bar
+        Debug.Assert(children.Length > 0);
+
+        inputField = this.Q<Label>("Input");
+        rows = new KeyboardRow[children.Length - 1];
+        for (int i = 1; i < children.Length; i++) {
+            rows[i - 1] = new KeyboardRow(children[i]);
+        }
+
+        inputField.text = "";
+    }
+}
+
+[DisallowMultipleComponent, RequireComponent(typeof(Transform), typeof(UIDocument))]
 public sealed class InputController : MonoBehaviour
 {
-    public GameObject inputPrefab;
+    [SerializeField] private VisualTreeAsset keyboardAsset;
+    private KeyboardUI keyboardUI;
     private UIDocument document;
-    private Label inputField;
 
-    private RectTransform transCast;
-
-    public Label InputField => inputField;
+    public Label InputField => keyboardUI.inputField;
 
     public string InputStr
     {
-        set => inputField.text = value;
+        set => InputField.text = value;
     }
 
     private static InputController Instance { get; set; }
     // Just shorter to get references lol
     private static ref readonly Processor Processor => ref LanguageTable.Processor;
-    public string TranslatedStr => Processor.Translate(inputField.text);
+    public string TranslatedStr => Processor.Translate(InputField.text);
 
     void Awake()
     {
-        transCast = transform as RectTransform;
-        Debug.Assert(transCast != null);
+        Debug.Assert(keyboardAsset != null);
+        keyboardUI = new KeyboardUI(keyboardAsset);
 
-        document = inputPrefab.GetComponent<UIDocument>();
-
-        inputField = document.rootVisualElement.Q<Label>("Input");
-        InputField.text = "";
+        document = GetComponent<UIDocument>();
+        document.rootVisualElement.Add(keyboardUI);
 
         if (Instance != null)
         {
@@ -49,35 +93,30 @@ public sealed class InputController : MonoBehaviour
 
     void Update()
     {
-        Resolution screenDims  = Screen.currentResolution;
-        Vector3 parentPosition = transCast.position;
 
-        inputField.style.left  = parentPosition.x / 2.0f;
-        inputField.style.top   = (screenDims.height - parentPosition.y) / 2.0f;
-        inputField.style.width = new StyleLength(transCast.rect.width);
     }
 
     public void OpenKeyboard()
     {
-        inputField.text = ""; // Clears contents
-        inputField.SetEnabled(true);
+        InputField.text = ""; // Clears contents
+        InputField.SetEnabled(true);
 
-        inputField.style.visibility = Visibility.Visible;
+        InputField.style.visibility = Visibility.Visible;
     }
 
     public void CloseKeyboard()
     {
         gameObject.SetActive(false);
-        inputField.style.visibility = Visibility.Hidden;
+        InputField.style.visibility = Visibility.Hidden;
     }
 
-    public void InsertCharacter(string character) => inputField.text += character;
+    public void InsertCharacter(string character) => InputField.text += character;
 
     public void Backspace()
     {
-        if (inputField.text.Length > 0)
+        if (InputField.text.Length > 0)
         {
-            inputField.text = inputField.text[..^1];
+            InputField.text = InputField.text[..^1];
         }
     }
 
