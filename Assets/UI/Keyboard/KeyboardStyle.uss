@@ -21,8 +21,8 @@
     -unity-font-definition: url("project://database/Assets/Fonts/Melody%20SDF.asset?fileID=11400000&guid=57f5131e1acbe4483910fe98b9bcb4a1&type=2#Melody SDF");
     padding: 0px;
     background-image: url("project://database/Assets/UI/Keyboard/gen_keybacking.png?fileID=5923312527082899337&guid=0f735af0ba7751942aefcb4e992e5abf&type=3#gen_keybacking_0");
-    height: 64px;
-    width: 64px;
+    height: 80px;
+    width: 80px;
     font-size: 48px;
     align-items: center;
     border-top-width: 0;

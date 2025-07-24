@@ -65,3 +65,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyboardAsset: {fileID: 9197481963319205126, guid: 8c720aec0bcf2d3408a3a1ee0b9b598c, type: 3}
+  topPadding: 50

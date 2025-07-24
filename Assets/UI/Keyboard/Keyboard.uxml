@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/Scripts/Encoding/UI/StyleSheet.uss?fileID=7433441132597879392&amp;guid=f8d5336c5247ec444a5799a7f5b6469b&amp;type=3#StyleSheet" />
     <Style src="project://database/Assets/UI/Keyboard/KeyboardStyle.uss?fileID=7433441132597879392&amp;guid=c3d085e53990e2846874e5a05249de71&amp;type=3#KeyboardStyle" />
     <engine:VisualElement name="KeyboardParent" class="KeyboardParent" style="flex-shrink: 0; flex-grow: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-        <engine:Label text=":)" name="Input" class="TranslatedLabel" style="align-self: auto; justify-content: flex-start; flex-wrap: wrap;" />
+        <engine:Label text=":)" name="Input" class="TranslatedLabel" style="flex-wrap: nowrap; height: 50px; width: 460px; -unity-font-style: bold; align-self: center;" />
         <engine:VisualElement name="Row1" class="KeyboardRow">
             <engine:Button text="+" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="Plus" class="KeyboardButton" />
             <engine:Button text="A&#10;" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="A" class="KeyboardButton" />
