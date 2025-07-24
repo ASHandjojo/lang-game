@@ -65,7 +65,7 @@ public class MainMenuEvents : MonoBehaviour
     }
 
     // Switch between menus
-     private void ToggleSettings(ClickEvent e)
+    private void ToggleSettings(ClickEvent e)
     {
         otherDocument.rootVisualElement.style.display = DisplayStyle.Flex;
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;

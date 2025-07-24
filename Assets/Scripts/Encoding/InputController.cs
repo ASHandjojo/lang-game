@@ -17,13 +17,46 @@ public sealed class KeyboardUI : VisualElement
             VisualElement[] children = container.Children().ToArray();
             Debug.Assert(children.Length > 0);
 
-            Button[] buttons = children.Select((x) => x as Button)
+            Button[] buttons = children.Select(x => x as Button)
                 .Where(x => x != null)
                 .ToArray();
             Debug.Assert(buttons.Length > 0);
 
             this.container = container;
             this.buttons   = buttons;
+        }
+
+        public void InitAlphaNumeric(Label inputField)
+        {
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                string text = buttons[i].text; // Using text to infer the output
+                buttons[i].RegisterCallback((ClickEvent e) => inputField.text += text); // WATCH
+            }
+        }
+
+        /// <summary>
+        /// For the last row (a row that has submission
+        /// </summary>
+        public void InitSpecial(Label inputField)
+        {
+            Button spacebar  = buttons.Where(x => x.name == "Spacebar").First();
+            Button backspace = buttons.Where(x => x.name == "Backspace").First();
+            Button enter     = buttons.Where(x => x.name == "Enter").First();
+
+            Debug.Assert(spacebar != null && backspace != null && enter != null);
+
+            spacebar.RegisterCallback((ClickEvent e) => inputField.text += ' ');
+            backspace.RegisterCallback(
+                (ClickEvent e) =>
+                {
+                    if (inputField.text.Length > 0)
+                    {
+                        inputField.text = inputField.text[..^1];
+                    }
+                }
+            );
+            enter.RegisterCallback((ClickEvent e) => InputController.Instance.SubmitInput());
         }
     }
 
@@ -37,7 +70,7 @@ public sealed class KeyboardUI : VisualElement
 
         VisualElement parent     = this.Q<VisualElement>("KeyboardParent");
         VisualElement[] children = parent.Children().ToArray(); // First one is input bar
-        Debug.Assert(children.Length > 0);
+        Debug.Assert(children.Length > 1);
 
         inputField = this.Q<Label>("Input");
         rows = new KeyboardRow[children.Length - 1];
@@ -45,7 +78,11 @@ public sealed class KeyboardUI : VisualElement
             rows[i - 1] = new KeyboardRow(children[i]);
         }
 
-        inputField.text = "";
+        for (int i = 0; i < rows.Length - 1; i++)
+        {
+            rows[i].InitAlphaNumeric(inputField);
+        }
+        rows[^1].InitSpecial(inputField);
     }
 }
 
@@ -56,6 +93,8 @@ public sealed class InputController : MonoBehaviour
     private KeyboardUI keyboardUI;
     private UIDocument document;
 
+    [SerializeField] private float topPadding = 0.0f;
+
     public Label InputField => keyboardUI.inputField;
 
     public string InputStr
@@ -63,7 +102,7 @@ public sealed class InputController : MonoBehaviour
         set => InputField.text = value;
     }
 
-    private static InputController Instance { get; set; }
+    public static InputController Instance { get; private set; }
     // Just shorter to get references lol
     private static ref readonly Processor Processor => ref LanguageTable.Processor;
     public string TranslatedStr => Processor.Translate(InputField.text);
@@ -75,6 +114,9 @@ public sealed class InputController : MonoBehaviour
 
         document = GetComponent<UIDocument>();
         document.rootVisualElement.Add(keyboardUI);
+        document.rootVisualElement.style.top   = new StyleLength(new Length(topPadding, LengthUnit.Percent));
+        document.rootVisualElement.style.left  = new StyleLength(new Length(50.0f, LengthUnit.Percent));
+        document.rootVisualElement.style.right = new StyleLength(new Length(50.0f, LengthUnit.Percent));
 
         if (Instance != null)
         {
@@ -88,7 +130,7 @@ public sealed class InputController : MonoBehaviour
 
     void Start()
     {
-        CloseKeyboard();
+        OpenKeyboard(); // NOTE: For testing, should be 
     }
 
     void Update()
@@ -99,26 +141,15 @@ public sealed class InputController : MonoBehaviour
     public void OpenKeyboard()
     {
         InputField.text = ""; // Clears contents
-        InputField.SetEnabled(true);
-
-        InputField.style.visibility = Visibility.Visible;
+        keyboardUI.style.visibility = Visibility.Visible;
     }
 
     public void CloseKeyboard()
     {
-        gameObject.SetActive(false);
-        InputField.style.visibility = Visibility.Hidden;
+        keyboardUI.style.visibility = Visibility.Hidden;
     }
 
     public void InsertCharacter(string character) => InputField.text += character;
-
-    public void Backspace()
-    {
-        if (InputField.text.Length > 0)
-        {
-            InputField.text = InputField.text[..^1];
-        }
-    }
 
     public void SubmitInput()
     {

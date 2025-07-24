@@ -966,6 +966,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 225151122683014393, guid: db3ebe8acff0a6f44aaf297c475c2da9, type: 3}
+      propertyPath: topPadding
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 744509056532771416, guid: db3ebe8acff0a6f44aaf297c475c2da9, type: 3}
       propertyPath: m_Enabled
       value: 1
