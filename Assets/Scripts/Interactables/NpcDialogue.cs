@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class NpcDialogue : Interactable
+[DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
+public sealed class NpcDialogue : Interactable
 {
     private UIDocument document;
     [SerializeField] private UIDocument hudDocument;
@@ -13,7 +14,7 @@ public class NpcDialogue : Interactable
 
     [SerializeField] private string npcName;
     [SerializeField] private Texture2D npcImage;
-    private int index;
+    private int index = 0;
 
     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
     [SerializeField] private DialogueEntry[] entries;
@@ -29,8 +30,7 @@ public class NpcDialogue : Interactable
 
     void Awake()
     {
-        document = GetComponent<UIDocument>();
-        index = 0;
+        document        = GetComponent<UIDocument>();
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
     }
 
@@ -43,7 +43,7 @@ public class NpcDialogue : Interactable
         document.rootVisualElement.Q<Label>("NpcName").text = npcName;
         document.rootVisualElement.Q("NpcImage").style.backgroundImage = npcImage;
 
-        // Mkae sure text box begins empty
+        // Make sure text box begins empty
         dialogueLabel      = document.rootVisualElement.Q<Label>("DialogueText");
         dialogueLabel.text = "";
 

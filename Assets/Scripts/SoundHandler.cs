@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-[DisallowMultipleComponent, RequireComponent(typeof(AudioSource), typeof(Interactable))]
+[DisallowMultipleComponent, RequireComponent(typeof(AudioSource))]
 public sealed class SoundHandler : MonoBehaviour
 {
     private AudioSource audioSource;

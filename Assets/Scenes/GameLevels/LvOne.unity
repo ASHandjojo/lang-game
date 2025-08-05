@@ -2906,9 +2906,11 @@ MonoBehaviour:
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   entries:
   - line: Hi.
+    usesAudio: 0
     sound: {fileID: 0}
   - line: Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
       ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis.
+    usesAudio: 0
     sound: {fileID: 0}
 --- !u!61 &1988571624
 BoxCollider2D:

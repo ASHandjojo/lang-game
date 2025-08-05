@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Viewable : Interactable
+[DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
+public sealed class Viewable : Interactable
 {
     private UIDocument document;
     [SerializeField] private UIDocument hudDocument;
-    private bool isZoomed;
-    private float timeElapsed;
     [SerializeField] private float transitionTime = 1f;
     [SerializeField] private Texture2D zoomImage;
+
+    private bool isZoomed;
+    private float timeElapsed;
 
     private Vector3 cameraPos;
 
