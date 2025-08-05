@@ -130,12 +130,7 @@ public sealed class InputController : MonoBehaviour
 
     void Start()
     {
-        OpenKeyboard(); // NOTE: For testing, should be 
-    }
-
-    void Update()
-    {
-
+        CloseKeyboard();
     }
 
     public void OpenKeyboard()

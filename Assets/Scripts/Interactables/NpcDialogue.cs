@@ -7,21 +7,17 @@ using UnityEngine.UIElements;
 
 public class NpcDialogue : Interactable
 {
-    [Serializable]
-    private struct DialogueEntry
-    {
-        public string line;
-        public AudioClip sound;
-    }
-
     private UIDocument document;
     [SerializeField] private UIDocument hudDocument;
     private bool inDialogue;
+
     [SerializeField] private string npcName;
     [SerializeField] private Texture2D npcImage;
     private int index;
+
     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
     [SerializeField] private DialogueEntry[] entries;
+
     private Label dialogueLabel;
     private float textSpeed;
     private VisualElement nextLinePrompt;
@@ -30,8 +26,6 @@ public class NpcDialogue : Interactable
     private float bounceHeight = 30.0f;
     private float bounceSpeed  = 30.0f;
     private float bounceStartTime;
-
-    private PlayerController player;
 
     void Awake()
     {
@@ -50,10 +44,10 @@ public class NpcDialogue : Interactable
         document.rootVisualElement.Q("NpcImage").style.backgroundImage = npcImage;
 
         // Mkae sure text box begins empty
-        dialogueLabel = document.rootVisualElement.Q<Label>("DialogueText");
+        dialogueLabel      = document.rootVisualElement.Q<Label>("DialogueText");
         dialogueLabel.text = "";
 
-        textSpeed = 0.02f;
+        textSpeed      = 0.02f;
         nextLinePrompt = document.rootVisualElement.Q("NextLinePrompt");
         document.rootVisualElement.style.visibility = Visibility.Hidden;
         nextLinePrompt.visible = false;
@@ -134,8 +128,9 @@ public class NpcDialogue : Interactable
 
             // Restore in-game UI
             document.rootVisualElement.style.visibility    = Visibility.Hidden;
-            worldPromptIcon.enabled = true;
             hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
+
+            worldPromptIcon.enabled = true;
         }
     }
 
@@ -143,8 +138,7 @@ public class NpcDialogue : Interactable
     private void StartBounce()
     {
         nextLinePrompt.visible = true;
-
-        bounceStartTime = Time.time;
+        bounceStartTime        = Time.time;
 
         bounceSchedule = nextLinePrompt.schedule.Execute(() =>
         {

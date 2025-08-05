@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,10 +17,11 @@ public class Viewable : Interactable
 
     void Awake()
     {
-        document = GetComponent<UIDocument>();
+        document        = GetComponent<UIDocument>();
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
-        keybindIcon = Keybinds.instance.getKeyImage(Keybinds.instance.getIntersKey());
-        sh = GetComponent<SoundHandler>();
+        keybindIcon     = Keybinds.instance.getKeyImage(Keybinds.instance.getIntersKey());
+
+        soundHandler = GetComponent<SoundHandler>();
     }
 
     void Start()
@@ -37,16 +39,12 @@ public class Viewable : Interactable
     public override void Interact(PlayerController player)
     {
         Camera mainCamera = Camera.main;
-
-        if (mainCamera == null)
+        if (soundHandler.TryGet(out SoundHandler sh))
         {
-            Debug.LogWarning("Main camera not found.");
-            return;
+            sh.PlaySound(interactClip);
         }
 
-        sh.PlaySound(interactClip);
-
-        if(isZoomed)
+        if (isZoomed)
         {
             StartCoroutine(CamDetransition(mainCamera, player));
         }
@@ -60,7 +58,7 @@ public class Viewable : Interactable
     }
 
     // Zoom in
-    IEnumerator CamTransition(Camera mainCamera, PlayerController player)
+    private IEnumerator CamTransition(Camera mainCamera, PlayerController player)
     {
         hudDocument.rootVisualElement.style.visibility = Visibility.Hidden;
         worldPromptIcon.enabled = false;
@@ -70,22 +68,24 @@ public class Viewable : Interactable
         mainCamera.GetComponent<Camera_Movement>().enabled = false;
 
         Vector3 startPos = mainCamera.transform.position;
-        cameraPos = startPos;
+        cameraPos        = startPos;
 
-        Vector3 endPos = new Vector3(transform.position.x, transform.position.y, -10f);
-        timeElapsed = 0;
+        Vector3 endPos = new(transform.position.x, transform.position.y, -10.0f);
+        timeElapsed    = 0.0f;
 
         // Change camera's focus from player to viewable
         while (timeElapsed < transitionTime)
         {
-            mainCamera.transform.position = Vector3.Lerp(startPos, endPos, timeElapsed / transitionTime);
-            mainCamera.orthographicSize = Mathf.Lerp(5, 1, timeElapsed / transitionTime);
+            float fac = timeElapsed / transitionTime;
+
+            mainCamera.transform.position = Vector3.Lerp(startPos, endPos, fac);
+            mainCamera.orthographicSize   = Mathf.Lerp(5.0f, 1.0f, fac);
             timeElapsed += Time.deltaTime;
 
             yield return null;
         }
 
-        mainCamera.orthographicSize = 1;
+        mainCamera.orthographicSize   = 1.0f;
         mainCamera.transform.position = endPos;
 
         document.rootVisualElement.style.visibility = Visibility.Visible;
@@ -101,33 +101,35 @@ public class Viewable : Interactable
         player.GetComponent<BoxCollider2D>().enabled = false;
 
         Vector3 startPos = mainCamera.transform.position;
-        Vector3 endPos = cameraPos;
-        timeElapsed = 0;
+        Vector3 endPos   = cameraPos;
+        timeElapsed      = 0.0f;
 
-        document.rootVisualElement.style.display = DisplayStyle.None;
+        document.rootVisualElement.style.visibility = Visibility.Hidden;
         // Change camera focus from viewable to player
         while (timeElapsed < transitionTime)
         {
-            mainCamera.transform.position = Vector3.Lerp(startPos, endPos, timeElapsed / transitionTime);
-            mainCamera.orthographicSize = Mathf.Lerp(1, 5, timeElapsed / transitionTime);
+            float fac = timeElapsed / transitionTime;
+
+            mainCamera.transform.position = Vector3.Lerp(startPos, endPos, fac);
+            mainCamera.orthographicSize   = Mathf.Lerp(1.0f, 5.0f, fac);
             timeElapsed += Time.deltaTime;
 
             yield return null;
         }
 
-        mainCamera.orthographicSize = 5;
+        mainCamera.orthographicSize   = 5.0f;
         mainCamera.transform.position = endPos;
 
         mainCamera.GetComponent<Camera_Movement>().enabled = true;
 
         // Restore movement
-        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+        Rigidbody2D rb  = player.GetComponent<Rigidbody2D>();
         rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
 
         // Re-enable box collider to restore interaction
         player.GetComponent<BoxCollider2D>().enabled = true;
         worldPromptIcon.enabled = true;
 
-        hudDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+        hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
     }
 }

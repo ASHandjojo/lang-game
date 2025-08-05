@@ -1,33 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-public class SoundHandler : MonoBehaviour
+[DisallowMultipleComponent, RequireComponent(typeof(AudioSource), typeof(Interactable))]
+public sealed class SoundHandler : MonoBehaviour
 {
-
     private AudioSource audioSource;
-
     
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
     }
 
-   public void PlaySound(AudioClip clip)
-   {
-    if(clip != null)
+    public void PlaySound(AudioClip clip)
     {
         AudioSource.PlayClipAtPoint(clip, transform.position);
     }
-   }
 
-   public void PlaySoundUI(AudioClip clip)
-   {
-    if(clip != null)
+    public void PlaySoundUI(AudioClip clip)
     {
         audioSource.PlayOneShot(clip);
     }
-   }
-
-   
 }

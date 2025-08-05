@@ -2,28 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Item : Interactable
 {
     [Header("Sprites")]
     public Sprite open;
     public Sprite closed;
 
-    private SpriteRenderer sr;
+    private SpriteRenderer spriteRenderer;
     private bool isOpen = false;
 
-    
+    void Start()
+    {
+        // Initialize components added in Inspector
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        soundHandler   = GetComponent<SoundHandler>();
+
+        Debug.Assert(open != null && closed != null);
+
+        // Default sprite
+        spriteRenderer.sprite = closed;
+    }
+
     // Generic test item. Plays the sound effect and switches sprites.
     public override void Interact(PlayerController player)
     {
-        if(open == null || closed == null)
+
+        if (soundHandler.TryGet(out SoundHandler sh))
         {
-            Debug.LogWarning("Missing sprite references.");
-            return;
+            sh.PlaySound(interactClip);
         }
 
-        sh.PlaySound(interactClip);
-
-        sr.sprite = isOpen ? closed : open;
+        spriteRenderer.sprite = isOpen ? closed : open;
 
         isOpen = !isOpen;
 
@@ -31,27 +41,4 @@ public class Item : Interactable
         // Add to player array of items to show they have one?
         // Disable instance from world (unless dropped)?
     }
-
-    private void Start()
-    {
-        // Initialize components added in Inspector
-        sr = GetComponent<SpriteRenderer>();
-        sh = GetComponent<SoundHandler>();
-
-        if(sr == null)
-        {
-            Debug.LogWarning("Missing Spriterenderer.");
-            return;
-        }
-
-        if(closed == null)
-        {
-            Debug.LogWarning("No assigned closed sprite.");
-            return;
-        }
-
-        // default sprite
-        sr.sprite = closed;
-    }
-
 }
