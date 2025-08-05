@@ -26,7 +26,7 @@ public sealed class KeyboardUI : VisualElement
             this.buttons   = buttons;
         }
 
-        public void InitAlphaNumeric(Label inputField)
+        public readonly void InitAlphaNumeric(Label inputField)
         {
             for (int i = 0; i < buttons.Length; i++)
             {
@@ -38,7 +38,7 @@ public sealed class KeyboardUI : VisualElement
         /// <summary>
         /// For the last row (a row that has submission
         /// </summary>
-        public void InitSpecial(Label inputField)
+        public readonly void InitSpecial(Label inputField)
         {
             Button spacebar  = buttons.Where(x => x.name == "Spacebar").First();
             Button backspace = buttons.Where(x => x.name == "Backspace").First();

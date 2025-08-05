@@ -580,7 +580,6 @@ GameObject:
   - component: {fileID: 1074906776}
   - component: {fileID: 1074906778}
   - component: {fileID: 1074906777}
-  - component: {fileID: 1074906779}
   m_Layer: 0
   m_Name: Entrance
   m_TagString: Untagged
@@ -850,19 +849,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d3ac51e7ec2b1448dca9ee644aa0ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1074906779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1074906769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29de1a138e97b42d59c132af04669cff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  correctAnswer: a
 --- !u!1001 &1133875776
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2908,10 +2894,12 @@ MonoBehaviour:
   - line: Hi.
     usesAudio: 0
     sound: {fileID: 0}
+    hasResponse: 0
   - line: Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
       ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis.
     usesAudio: 0
     sound: {fileID: 0}
+    hasResponse: 0
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0
