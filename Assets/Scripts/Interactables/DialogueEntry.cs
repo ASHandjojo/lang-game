@@ -54,7 +54,24 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
 
         element.Add(soundClipField);
 
-        SerializedProperty 
+        SerializedProperty responseDataProperty = property.FindPropertyRelative(nameof(DialogueEntry.responseData));
+        PropertyField responseDataField = new(responseDataProperty);
+        responseDataField.BindProperty(responseDataProperty);
+
+        SerializedProperty hasResponseProperty = property.FindPropertyRelative(nameof(DialogueEntry.hasResponse));
+        Toggle hasResponseToggle = new("Has Response");
+        hasResponseToggle.BindProperty(hasResponseProperty);
+        hasResponseToggle.RegisterCallback(
+            (ChangeEvent<bool> e) =>
+            {
+                Visibility visiblityState          = e.newValue ? Visibility.Visible : Visibility.Hidden;
+                responseDataField.style.visibility = visiblityState;
+            }
+        );
+
+        responseDataField.style.visibility = hasResponseProperty.boolValue ? Visibility.Visible : Visibility.Hidden;
+        element.Add(hasResponseToggle);
+        element.Add(responseDataField);
 
         return element;
     }
