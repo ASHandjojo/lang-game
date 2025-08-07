@@ -17,10 +17,11 @@ public sealed class KeyboardUI : VisualElement
             VisualElement[] children = container.Children().ToArray();
             Debug.Assert(children.Length > 0);
 
+            // Filters for all children that are buttons
             Button[] buttons = children.Select(x => x as Button)
                 .Where(x => x != null)
                 .ToArray();
-            Debug.Assert(buttons.Length > 0);
+            Debug.Assert(buttons.Length > 0); // Expects a non-zero amount of buttons per row
 
             this.container = container;
             this.buttons   = buttons;
@@ -148,7 +149,7 @@ public sealed class InputController : MonoBehaviour
 
     public void SubmitInput()
     {
-        FindFirstObjectByType<AnswerChecker>().CheckAnswer(TranslatedStr);
+        // Add proper input checking once structure is resolved for NPC dialogue.
         CloseKeyboard();
     }
 }
