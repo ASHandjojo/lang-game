@@ -51,7 +51,7 @@ public sealed class NpcDialogue : Interactable
         nextLinePrompt = document.rootVisualElement.Q("NextLinePrompt");
         document.rootVisualElement.style.visibility = Visibility.Hidden;
         nextLinePrompt.visible = false;
-        inDialogue = false;
+        inDialogue             = false;
     }
 
     
@@ -93,7 +93,7 @@ public sealed class NpcDialogue : Interactable
         }
     }
 
-    IEnumerator TypeLine()
+    private IEnumerator TypeLine()
     {
         foreach (char c in entries[index].line)
         {
@@ -111,14 +111,19 @@ public sealed class NpcDialogue : Interactable
             index++;
             dialogueLabel.text = "";
             StartCoroutine(TypeLine());
+
+            if (entries[index - 1].hasResponse)
+            {
+                //InputController.Instance.OpenKeyboard();
+            }
         }
         else
         {
             StopBounce();
 
-            index = 0;
-            dialogueLabel.text = "";
-            inDialogue = false;
+            index                  = 0;
+            dialogueLabel.text     = "";
+            inDialogue             = false;
             nextLinePrompt.visible = false;
             // Stop listening for clicks
             Actions.OnClick -= Interact;
@@ -150,7 +155,6 @@ public sealed class NpcDialogue : Interactable
 
             // Animate size increase-decrease
             float normalizedT = yOffset / bounceHeight;
-            
             float scaleFactor = Mathf.Lerp(1.3f, 1.0f, normalizedT);
             // float scaleFactor = Mathf.Lerp(0.7f, 1.3f, normalizedT);
             nextLinePrompt.transform.scale = new Vector3(scaleFactor, scaleFactor, 1.0f);
@@ -163,7 +167,7 @@ public sealed class NpcDialogue : Interactable
         bounceSchedule?.Pause();
 
         // Reset position and scale
-        nextLinePrompt.style.translate = new Translate(0, 0);
+        nextLinePrompt.style.translate = new Translate(0.0f, 0.0f);
         nextLinePrompt.transform.scale = Vector3.one;
     }
 }

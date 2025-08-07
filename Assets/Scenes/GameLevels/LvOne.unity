@@ -2894,12 +2894,16 @@ MonoBehaviour:
   - line: Hi.
     usesAudio: 0
     sound: {fileID: 0}
-    hasResponse: 0
+    hasResponse: 1
+    responseData:
+      expectedInput: a
   - line: Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
       ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis.
     usesAudio: 0
     sound: {fileID: 0}
     hasResponse: 0
+    responseData:
+      expectedInput: 
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0

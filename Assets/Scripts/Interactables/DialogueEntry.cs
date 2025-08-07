@@ -58,6 +58,10 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         PropertyField responseDataField = new(responseDataProperty);
         responseDataField.BindProperty(responseDataProperty);
 
+        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Encoding/UI/StyleSheet.uss");
+        Debug.Assert(styleSheet != null);
+        responseDataField.AddToClassList("TranslatedLabel");
+
         SerializedProperty hasResponseProperty = property.FindPropertyRelative(nameof(DialogueEntry.hasResponse));
         Toggle hasResponseToggle = new("Has Response");
         hasResponseToggle.BindProperty(hasResponseProperty);
@@ -72,6 +76,7 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         responseDataField.style.visibility = hasResponseProperty.boolValue ? Visibility.Visible : Visibility.Hidden;
         element.Add(hasResponseToggle);
         element.Add(responseDataField);
+
 
         return element;
     }
