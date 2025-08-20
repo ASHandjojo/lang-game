@@ -1,17 +1,28 @@
+using System;
+
 using UnityEngine;
+using UnityEngine.UIElements;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.UIElements;
+#endif
 
 /// <summary>
 /// Avoids expensive null checks for Unity objects. Only checks on assignment.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public sealed class OptionalComponent<T> where T : Object
+[Serializable]
+public sealed class OptionalComponent<T> where T : UnityEngine.Object
 {
-    private T obj;
-    private bool isInitialized = false;
+    [SerializeField] private T obj;
+    [SerializeField, HideInInspector] private bool isInitialized = false;
 
     private OptionalComponent() { }
 
     public OptionalComponent(T obj) => SetObject(obj);
+
+    public bool HasComponent() => isInitialized;
 
     public void SetObject(T objIn)
     {
@@ -30,3 +41,31 @@ public sealed class OptionalComponent<T> where T : Object
         return new OptionalComponent<T>(obj);
     }
 }
+
+#if UNITY_EDITOR
+[CustomPropertyDrawer(typeof(OptionalComponent<>), useForChildren: true)]
+public sealed class OptionalComponentDrawer : PropertyDrawer
+{
+    public override VisualElement CreatePropertyGUI(SerializedProperty property)
+    {
+        VisualElement element = new();
+
+        SerializedProperty objProperty = property.FindPropertyRelative("obj");
+        PropertyField objField = new(objProperty, property.displayName);
+
+        SerializedProperty isInitProp = property.FindPropertyRelative("isInitialized");
+        objField.RegisterValueChangeCallback(
+            (SerializedPropertyChangeEvent e) =>
+            {
+                isInitProp.boolValue = e.changedProperty.boxedValue != null;
+                isInitProp.serializedObject.ApplyModifiedProperties();
+            }
+        );
+
+        objField.BindProperty(objProperty);
+        element.Add(objField);
+
+        return element;
+    }
+}
+#endif

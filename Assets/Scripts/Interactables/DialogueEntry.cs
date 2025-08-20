@@ -18,9 +18,7 @@ public struct DialogueEntry
     }
 
     public string line;
-
-    public bool usesAudio;
-    public AudioClip sound;
+    public OptionalComponent<AudioClip> sound;
 
     public bool hasResponse;
     public ResponseData responseData;
@@ -42,16 +40,7 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         SerializedProperty soundClipProperty = property.FindPropertyRelative(nameof(DialogueEntry.sound));
         PropertyField soundClipField         = new(soundClipProperty);
 
-        SerializedProperty useAudioProperty = property.FindPropertyRelative(nameof(DialogueEntry.usesAudio));
         soundClipField.BindProperty(soundClipProperty);
-        soundClipField.RegisterCallback(
-            (ChangeEvent<UnityEngine.Object> e) =>
-            {
-                useAudioProperty.boolValue = e.newValue != null;
-                useAudioProperty.serializedObject.ApplyModifiedProperties();
-            }
-        );
-
         element.Add(soundClipField);
 
         SerializedProperty responseDataProperty = property.FindPropertyRelative(nameof(DialogueEntry.responseData));
