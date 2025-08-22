@@ -20,20 +20,36 @@ public sealed class OptionalComponent<T> where T : UnityEngine.Object
 
     private OptionalComponent() { }
 
-    public OptionalComponent(T obj) => SetObject(obj);
+    public OptionalComponent(T obj) => Set(obj);
 
     public bool HasComponent() => isInitialized;
 
-    public void SetObject(T objIn)
+    public void Set(T objIn)
     {
         obj = objIn;
         isInitialized = objIn != null;
+    }
+
+    /// <summary>
+    /// SetObject but elides all checks. Is for when you know that the input is certain to be initialized. Can be dangerous.
+    /// </summary>
+    /// <param name="objIn"></param>
+    public void SetNonNull(T objIn)
+    {
+        obj = objIn;
+        isInitialized = true;
     }
 
     public bool TryGet(out T objectOut)
     {
         objectOut = obj;
         return isInitialized;
+    }
+
+    public void Unset()
+    {
+        obj = null;
+        isInitialized = false;
     }
 
     public static implicit operator OptionalComponent<T>(T obj)
@@ -51,7 +67,7 @@ public sealed class OptionalComponentDrawer : PropertyDrawer
         VisualElement element = new();
 
         SerializedProperty objProperty = property.FindPropertyRelative("obj");
-        PropertyField objField = new(objProperty, property.displayName);
+        PropertyField objField         = new(objProperty, property.displayName);
 
         SerializedProperty isInitProp = property.FindPropertyRelative("isInitialized");
         objField.RegisterValueChangeCallback(

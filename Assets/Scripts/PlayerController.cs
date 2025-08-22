@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Flags]
-public enum PlayerContext
+public enum PlayerContext : int
 {
-    Default,
-    Menu,
-    Interacting,
-    Dialogue,
-    PlayerInput
+    Default     = 0,
+    Menu        = 1,
+    Interacting = 2,
+    Dialogue    = 4,
+    PlayerInput = 8
 }
 
 [RequireComponent(typeof(SpriteRenderer), typeof(Collider2D), typeof(Rigidbody2D)),
@@ -27,7 +27,8 @@ public sealed class PlayerController : MonoBehaviour
     private Vector2 movementDirection;
     private bool facingRight = true, canMove = true;
 
-    private PlayerContext context = PlayerContext.Default;
+    [HideInInspector] public PlayerContext context = PlayerContext.Default;
+    [HideInInspector] public OptionalComponent<Interactable> currentInteraction;
 
     public static PlayerController Instance { get; private set; }
     public bool CanMove
@@ -65,8 +66,10 @@ public sealed class PlayerController : MonoBehaviour
     
     void Update()
     {
+        bool isInteracting  = (context & PlayerContext.Interacting) != 0;
+        bool useInteractKey = Input.GetKeyDown(Keybinds.Instance.getIntersKey());
         // Trigger for interact input
-        if (Input.GetKeyDown(Keybinds.Instance.getIntersKey()))
+        if (!isInteracting && useInteractKey)
         {
             // Prompts listeners to execute their Interact method
             // NOTE: Very dirty
@@ -75,9 +78,16 @@ public sealed class PlayerController : MonoBehaviour
             {
                 if (interactable.InteractCollider.IsTouching(playerCollider))
                 {
-                    interactable.Interact(this);
+                    StartCoroutine(interactable.Interact(this));
                     break;
                 }
+            }
+        }
+        else if (currentInteraction.TryGet(out Interactable obj) && (obj.TargetContext & PlayerContext.Dialogue) != 0)
+        {
+            if (useInteractKey)
+            {
+                Debug.Log(":)");
             }
         }
         

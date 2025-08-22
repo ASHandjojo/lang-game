@@ -16,14 +16,31 @@ public abstract class Interactable : MonoBehaviour
     protected Collider2D interactCollider;
     public Collider2D InteractCollider => interactCollider;
 
+    public virtual PlayerContext TargetContext { get => PlayerContext.Interacting; }
+
     void Awake()
     {
         interactCollider = GetComponent<Collider2D>();
         Debug.Assert(interactCollider.isTrigger);
+
+        Debug.Assert((TargetContext & PlayerContext.Interacting) != 0,
+            $"Invalid context for Interactable. Must include {nameof(PlayerContext.Interacting)} in context tags."
+        );
+    }
+
+    public IEnumerator Interact(PlayerController player)
+    {
+        player.currentInteraction.SetNonNull(this);
+        player.context = TargetContext;
+
+        yield return InteractLogic(player);
+
+        player.currentInteraction.Unset();
+        player.context = PlayerContext.Default;
     }
 
     // All will have their own behavior
-    public abstract void Interact(PlayerController player);
+    protected abstract IEnumerator InteractLogic(PlayerController player);
 
     // Know when Player has entered trigger area => Show prompt & listen for interact key
     private void OnTriggerEnter2D(Collider2D collider)

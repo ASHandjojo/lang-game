@@ -35,7 +35,7 @@ public sealed class Viewable : Interactable
     }
 
     // Zooms in for a closeup view of the object
-    public override void Interact(PlayerController player)
+    protected override IEnumerator InteractLogic(PlayerController player)
     {
         Camera mainCamera = Camera.main;
         if (soundHandler.TryGet(out SoundHandler sh))
@@ -45,11 +45,11 @@ public sealed class Viewable : Interactable
 
         if (isZoomed)
         {
-            StartCoroutine(CamDetransition(mainCamera, player));
+            yield return CamDetransition(mainCamera, player);
         }
         else
         {
-            StartCoroutine(CamTransition(mainCamera, player));
+            yield return CamTransition(mainCamera, player);
         }
         isZoomed = !isZoomed;
     }

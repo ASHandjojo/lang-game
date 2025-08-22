@@ -25,7 +25,7 @@ public class Item : Interactable
     }
 
     // Generic test item. Plays the sound effect and switches sprites.
-    public override void Interact(PlayerController player)
+    protected override IEnumerator InteractLogic(PlayerController player)
     {
         if (soundHandler.TryGet(out SoundHandler sh))
         {
@@ -38,5 +38,6 @@ public class Item : Interactable
         // Pick it up
         // Add to player array of items to show they have one?
         // Disable instance from world (unless dropped)?
+        return null;
     }
 }

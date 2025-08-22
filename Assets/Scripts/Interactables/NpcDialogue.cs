@@ -28,6 +28,8 @@ public sealed class NpcDialogue : Interactable
     private float bounceSpeed  = 30.0f;
     private float bounceStartTime;
 
+    public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
+
     void Start()
     {
         document        = GetComponent<UIDocument>();
@@ -51,14 +53,7 @@ public sealed class NpcDialogue : Interactable
         inDialogue             = false;
     }
 
-    
-    void OnDisable()
-    {
-        // Stop listening for clicks
-        //Actions.OnClick -= Interact;
-    }
-
-    public override void Interact(PlayerController player)
+    protected override IEnumerator InteractLogic(PlayerController player)
     {
         if (inDialogue)
         {
@@ -66,7 +61,7 @@ public sealed class NpcDialogue : Interactable
             if (dialogueLabel.text == entries[index].line)
             {
                 StopBounce();
-                NextLine();
+                yield return NextLine();
             }
             else
             {
@@ -82,11 +77,9 @@ public sealed class NpcDialogue : Interactable
             worldPromptIcon.enabled = false;
             
             // Prevent Movement
-            PlayerController.Instance.CanMove = false;
-
-            inDialogue = true;
-            StartCoroutine(TypeLine());
-            //Actions.OnClick += Interact;
+            player.CanMove = false;
+            inDialogue     = true;
+            yield return TypeLine();
         }
     }
 
@@ -101,13 +94,13 @@ public sealed class NpcDialogue : Interactable
         StartBounce();
     }
 
-    private void NextLine()
+    private IEnumerator NextLine()
     {
         if(index < entries.Length - 1)
         {
             index++;
             dialogueLabel.text = "";
-            StartCoroutine(TypeLine());
+            yield return TypeLine();
 
             if (entries[index - 1].hasResponse)
             {
