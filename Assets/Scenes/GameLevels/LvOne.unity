@@ -1647,6 +1647,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 158297739093587828, guid: 802ba45d66236d84ab0dc6543f5e1e9d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 974287804122600184, guid: 802ba45d66236d84ab0dc6543f5e1e9d, type: 3}
       propertyPath: m_Name
       value: Collision_StopperR

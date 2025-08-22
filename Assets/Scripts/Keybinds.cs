@@ -5,43 +5,44 @@ using UnityEngine.Rendering;
 
 public class Keybinds : MonoBehaviour
 {
-  public static Keybinds instance { get; private set;}
-  // right
-  [SerializeField] private KeyCode right_key = KeyCode.RightArrow;
-  // left
-  [SerializeField] private KeyCode left_key = KeyCode.LeftArrow;
-  // dictionary
-  [SerializeField] private KeyCode dict_key = KeyCode.W;
-  // back
-  [SerializeField] private KeyCode back_key = KeyCode.E;
-  // interactions
-  [SerializeField] private KeyCode inters_key = KeyCode.S;
-  // settings menu  
-  [SerializeField] private KeyCode settings_key = KeyCode.Q;
+    public static Keybinds Instance { get; private set; }
+    // right
+    [SerializeField] private KeyCode right_key = KeyCode.RightArrow;
+    // left
+    [SerializeField] private KeyCode left_key = KeyCode.LeftArrow;
+    // dictionary
+    [SerializeField] private KeyCode dict_key = KeyCode.W;
+    // back
+    [SerializeField] private KeyCode back_key = KeyCode.E;
+    // interactions
+    [SerializeField] private KeyCode inters_key = KeyCode.S;
+    // settings menu  
+    [SerializeField] private KeyCode settings_key = KeyCode.Q;
 
-  private bool just_changed_back = false;
+    private bool just_changed_back = false;
 
-  [SerializeField] private Texture2D[] keyImages = new Texture2D[26];
-  private Dictionary<KeyCode, Texture2D> keyImageMap;
+    [SerializeField] private Texture2D[] keyImages = new Texture2D[26];
+    private Dictionary<KeyCode, Texture2D> keyImageMap;
 
-    private void Awake()
+    void Awake()
     {
-        if (instance != null && instance != this) 
+        if (Instance != null) 
         {
-          Destroy(this);
+            Destroy(this);
+            return;
         }
         else 
         {
-          instance = this;
-          Object.DontDestroyOnLoad(this);
+            Instance = this;
+            Object.DontDestroyOnLoad(this);
         }
 
         // Holds A-Z keys
         keyImageMap = new Dictionary<KeyCode, Texture2D>(26);
 
-        for (int i = 0; i < 26; i++)
+        for (int i = 0; i < keyImages.Length; i++)
         {
-            KeyCode currentKey = (KeyCode)((int) KeyCode.A + i);
+            KeyCode currentKey = (KeyCode.A + i);
             Texture2D img = keyImages[i];
             keyImageMap[currentKey] = img;
         }

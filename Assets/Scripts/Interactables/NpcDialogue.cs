@@ -28,15 +28,12 @@ public sealed class NpcDialogue : Interactable
     private float bounceSpeed  = 30.0f;
     private float bounceStartTime;
 
-    void Awake()
+    void Start()
     {
         document        = GetComponent<UIDocument>();
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
-    }
 
-    void Start()
-    {
-        keybindIcon = Keybinds.instance.getKeyImage(Keybinds.instance.getIntersKey());
+        keybindIcon = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());
         worldPromptIcon.sprite = ConvertToSprite(keybindIcon);
 
         // Set name and portrait
@@ -58,7 +55,7 @@ public sealed class NpcDialogue : Interactable
     void OnDisable()
     {
         // Stop listening for clicks
-        Actions.OnClick -= Interact;
+        //Actions.OnClick -= Interact;
     }
 
     public override void Interact(PlayerController player)
@@ -89,7 +86,7 @@ public sealed class NpcDialogue : Interactable
 
             inDialogue = true;
             StartCoroutine(TypeLine());
-            Actions.OnClick += Interact;
+            //Actions.OnClick += Interact;
         }
     }
 
@@ -126,7 +123,7 @@ public sealed class NpcDialogue : Interactable
             inDialogue             = false;
             nextLinePrompt.visible = false;
             // Stop listening for clicks
-            Actions.OnClick -= Interact;
+            //Actions.OnClick -= Interact;
 
             // Restore Movement
             PlayerController.Instance.CanMove = true;

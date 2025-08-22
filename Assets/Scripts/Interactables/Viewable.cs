@@ -17,17 +17,14 @@ public sealed class Viewable : Interactable
 
     private Vector3 cameraPos;
 
-    void Awake()
+    void Start()
     {
         document        = GetComponent<UIDocument>();
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
-        keybindIcon     = Keybinds.instance.getKeyImage(Keybinds.instance.getIntersKey());
+        keybindIcon     = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());
 
         soundHandler = GetComponent<SoundHandler>();
-    }
 
-    void Start()
-    {
         // Initialize UI images, while hiding UI screen until interacted with
         document.rootVisualElement.Q("ViewImage").style.backgroundImage   = new StyleBackground(zoomImage);
         document.rootVisualElement.Q("PromptImage").style.backgroundImage = new StyleBackground(keybindIcon);
@@ -54,9 +51,7 @@ public sealed class Viewable : Interactable
         {
             StartCoroutine(CamTransition(mainCamera, player));
         }
-
         isZoomed = !isZoomed;
-        
     }
 
     // Zoom in

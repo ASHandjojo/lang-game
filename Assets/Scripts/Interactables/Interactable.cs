@@ -13,22 +13,24 @@ public abstract class Interactable : MonoBehaviour
     protected SpriteRenderer worldPromptIcon;
     protected Texture2D keybindIcon;
 
+    protected Collider2D interactCollider;
+    public Collider2D InteractCollider => interactCollider;
+
+    void Awake()
+    {
+        interactCollider = GetComponent<Collider2D>();
+        Debug.Assert(interactCollider.isTrigger);
+    }
+
     // All will have their own behavior
     public abstract void Interact(PlayerController player);
-
-    private void Reset()
-    {
-        // Make sure all Interactables have a trigger type collider
-        GetComponent<Collider2D>().isTrigger = true;
-    }
 
     // Know when Player has entered trigger area => Show prompt & listen for interact key
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.CompareTag("Player"))
         {
-            NotifyInteractable();
-            Actions.OnInteract += Interact;
+            interactionPrompt.SetActive(true);
         }
     }
 
@@ -37,21 +39,8 @@ public abstract class Interactable : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
-            DenotifyInteractable();
-            Actions.OnInteract -= Interact;
+            interactionPrompt.SetActive(false);
         }
-    }
-
-    // Interact key prompt shows up
-    protected virtual void NotifyInteractable()
-    {
-        interactionPrompt.SetActive(true);
-    }
-
-    // Interact key prompt disappears
-    protected virtual void DenotifyInteractable()
-    {
-        interactionPrompt.SetActive(false);
     }
 
     protected Sprite ConvertToSprite(Texture2D image)

@@ -56,8 +56,8 @@ public class GameHUDEvents : UIBase
     // Listen for Dictionary/Settings menu button keys
     void OnEnable()
     {
-        Actions.OnSettingsMenuCalled += OpenSettings;
-        Actions.OnDictionaryMenuCalled += OpenDictionary;
+        //Actions.OnSettingsMenuCalled += OpenSettings;
+        //Actions.OnDictionaryMenuCalled += OpenDictionary;
     }
 
     void OnDisable()
@@ -69,8 +69,8 @@ public class GameHUDEvents : UIBase
         settingsButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
         backButton.UnregisterCallback<ClickEvent>(CloseDictionary);
 
-        Actions.OnSettingsMenuCalled -= OpenSettings;
-        Actions.OnDictionaryMenuCalled -= OpenDictionary;
+        //Actions.OnSettingsMenuCalled -= OpenSettings;
+        //Actions.OnDictionaryMenuCalled -= OpenDictionary;
     }
 
     public void OpenDictionary(ClickEvent e)
@@ -90,10 +90,10 @@ public class GameHUDEvents : UIBase
 
         // Change the Display
         settingsDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-        selfDocument.rootVisualElement.style.display = DisplayStyle.None;
+        selfDocument.rootVisualElement.style.display     = DisplayStyle.None;
 
-        Actions.OnSettingsMenuCalled -= OpenSettings;
-        Actions.OnDictionaryMenuCalled -= OpenDictionary;
+        //Actions.OnSettingsMenuCalled -= OpenSettings;
+        //Actions.OnDictionaryMenuCalled -= OpenDictionary;
     }
 
     public void OpenSettings()
@@ -103,8 +103,8 @@ public class GameHUDEvents : UIBase
         settingsDocument.rootVisualElement.style.display = DisplayStyle.Flex;
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
 
-        Actions.OnSettingsMenuCalled -= OpenSettings;
-        Actions.OnDictionaryMenuCalled -= OpenDictionary;
+        //Actions.OnSettingsMenuCalled -= OpenSettings;
+        //Actions.OnDictionaryMenuCalled -= OpenDictionary;
     }
 
     private void CloseDictionary(ClickEvent e)
@@ -112,11 +112,10 @@ public class GameHUDEvents : UIBase
         StartCoroutine(ExitDictionary(dictionary, closedImage));
     }
 
-
     IEnumerator EnterDictionary(VisualElement dictionary, Texture2D closedImage)
     {
-        Actions.OnSettingsMenuCalled -= OpenSettings;
-        Actions.OnDictionaryMenuCalled -= OpenDictionary;
+        //Actions.OnSettingsMenuCalled -= OpenSettings;
+        //Actions.OnDictionaryMenuCalled -= OpenDictionary;
 
         dictionaryContainer.style.backgroundColor = new StyleColor(new Color(.08f,.08f,.08f, 0.8f));
         // Disable box collider to prevent interactions & freeze position to prevent movement
@@ -159,19 +158,18 @@ public class GameHUDEvents : UIBase
         
         // Restore movement, Re-enable box collider, listen for menu keys
         EnableWorldActions();
-        Actions.OnSettingsMenuCalled += OpenSettings;
-        Actions.OnDictionaryMenuCalled += OpenDictionary;
+        //Actions.OnSettingsMenuCalled += OpenSettings;
+        //Actions.OnDictionaryMenuCalled += OpenDictionary;
     }
 
 
     // Fade the alpha style property of a visual element
     IEnumerator Fade(VisualElement dict, float start, float end, float duration)
     {
-        float timeElapsed = 0;
-
+        float timeElapsed = 0.0f;
         while (duration > timeElapsed)
         {
-            float t = (timeElapsed) / duration;
+            float t     = (timeElapsed) / duration;
             float eased = Mathf.SmoothStep(start, end, t);
             dict.style.opacity = eased;
             timeElapsed += Time.deltaTime;
@@ -192,30 +190,29 @@ public class GameHUDEvents : UIBase
         if(start == -1500)
         {
             buttonStart = -start;
-            buttonEnd = 0;
+            buttonEnd   = 0;
         }
         else
         {
             buttonStart = 0;
-            buttonEnd = -end;
+            buttonEnd   = -end;
         }
         
 
-        float timeElapsed = 0;
-
+        float timeElapsed = 0.0f;
         while (duration > timeElapsed)
-            {
-                float t = (timeElapsed) / duration;
+        {
+            float t = (timeElapsed) / duration;
 
-                float easedDictionary = Mathf.SmoothStep(start, end, t);
-                float easedButton = Mathf.SmoothStep(buttonStart, buttonEnd, t);
+            float easedDictionary = Mathf.SmoothStep(start, end, t);
+            float easedButton     = Mathf.SmoothStep(buttonStart, buttonEnd, t);
 
-                dict.style.left = easedDictionary;
-                btn.style.left = easedButton;
-                timeElapsed += Time.deltaTime;
+            dict.style.left = easedDictionary;
+            btn.style.left  = easedButton;
+            timeElapsed    += Time.deltaTime;
 
-                yield return null;
-            }
+            yield return null;
+        }
 
             dict.style.left = end;
             btn.style.left = buttonEnd;

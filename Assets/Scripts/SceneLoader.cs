@@ -13,7 +13,6 @@ public class SceneLoader : MonoBehaviour
         StartCoroutine(LevelTransition());
     }
 
-
     IEnumerator LevelTransition()
     {
         // Play transition animation

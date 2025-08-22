@@ -27,14 +27,12 @@ public class Item : Interactable
     // Generic test item. Plays the sound effect and switches sprites.
     public override void Interact(PlayerController player)
     {
-
         if (soundHandler.TryGet(out SoundHandler sh))
         {
             sh.PlaySound(interactClip);
         }
 
         spriteRenderer.sprite = isOpen ? closed : open;
-
         isOpen = !isOpen;
 
         // Pick it up

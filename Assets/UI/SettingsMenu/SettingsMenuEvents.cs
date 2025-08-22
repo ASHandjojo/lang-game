@@ -88,12 +88,12 @@ public class SettingsMenuEvents : UIBase
     void Start()
     {
         //Initialize Keybinds on Settings Menu
-        SetRightImage(Keybinds.instance.getRightKey());
-        SetLeftImage(Keybinds.instance.getLeftKey());
-        SetIntersImage(Keybinds.instance.getIntersKey());
-        SetRetImage(Keybinds.instance.getBackKey());
-        SetDictImage(Keybinds.instance.getDictKey());
-        SetSettingsImage(Keybinds.instance.getSettingsKey());
+        SetRightImage(Keybinds.Instance.getRightKey());
+        SetLeftImage(Keybinds.Instance.getLeftKey());
+        SetIntersImage(Keybinds.Instance.getIntersKey());
+        SetRetImage(Keybinds.Instance.getBackKey());
+        SetDictImage(Keybinds.Instance.getDictKey());
+        SetSettingsImage(Keybinds.Instance.getSettingsKey());
         
     } 
 
@@ -128,8 +128,8 @@ public class SettingsMenuEvents : UIBase
         if(PlayerController.Instance != null)
         {
             EnableWorldActions();
-            Actions.OnSettingsMenuCalled += otherDocument.GetComponent<GameHUDEvents>().OpenSettings;
-            Actions.OnDictionaryMenuCalled += otherDocument.GetComponent<GameHUDEvents>().OpenDictionary;
+            //Actions.OnSettingsMenuCalled += otherDocument.GetComponent<GameHUDEvents>().OpenSettings;
+            //Actions.OnDictionaryMenuCalled += otherDocument.GetComponent<GameHUDEvents>().OpenDictionary;
         }
     }
 
@@ -155,17 +155,17 @@ public class SettingsMenuEvents : UIBase
                     if (Input.GetKeyDown(keyCode)) {
                         if ((int) keyCode > 96 && (int) keyCode < 123)
                         switch(current_keybind) {
-                            case 0: if (KeyCodeNotThis(0, keyCode)) {Keybinds.instance.setRightKey(keyCode); SetRightImage(keyCode); }
+                            case 0: if (KeyCodeNotThis(0, keyCode)) {Keybinds.Instance.setRightKey(keyCode); SetRightImage(keyCode); }
                             break;
-                            case 1: if (KeyCodeNotThis(1, keyCode)) {Keybinds.instance.setLeftKey(keyCode); SetLeftImage(keyCode); }
+                            case 1: if (KeyCodeNotThis(1, keyCode)) {Keybinds.Instance.setLeftKey(keyCode); SetLeftImage(keyCode); }
                             break;
-                            case 2: if (KeyCodeNotThis(2, keyCode)) {Keybinds.instance.setDictKey(keyCode); SetDictImage(keyCode); }
+                            case 2: if (KeyCodeNotThis(2, keyCode)) {Keybinds.Instance.setDictKey(keyCode); SetDictImage(keyCode); }
                             break;
-                            case 3: if (KeyCodeNotThis(3, keyCode)) {Keybinds.instance.setBackKey(keyCode); SetRetImage(keyCode); }
+                            case 3: if (KeyCodeNotThis(3, keyCode)) {Keybinds.Instance.setBackKey(keyCode); SetRetImage(keyCode); }
                             break;
-                            case 4: if (KeyCodeNotThis(4, keyCode)) {Keybinds.instance.setIntersKey(keyCode); SetIntersImage(keyCode); }
+                            case 4: if (KeyCodeNotThis(4, keyCode)) {Keybinds.Instance.setIntersKey(keyCode); SetIntersImage(keyCode); }
                             break;
-                            case 5: if (KeyCodeNotThis(5, keyCode)) {Keybinds.instance.setSettingsKey(keyCode); SetSettingsImage(keyCode); }
+                            case 5: if (KeyCodeNotThis(5, keyCode)) {Keybinds.Instance.setSettingsKey(keyCode); SetSettingsImage(keyCode); }
                             break;
                             default: 
                             break;
@@ -220,12 +220,12 @@ public class SettingsMenuEvents : UIBase
 
     bool KeyCodeNotThis(int num, KeyCode key) {
         switch(num) {
-            case 0: return (key != Keybinds.instance.getLeftKey() && key != Keybinds.instance.getDictKey() && key != Keybinds.instance.getBackKey() && key != Keybinds.instance.getIntersKey() && key != Keybinds.instance.getSettingsKey());
-            case 1: return (key != Keybinds.instance.getRightKey() && key != Keybinds.instance.getDictKey() && key != Keybinds.instance.getBackKey() && key != Keybinds.instance.getIntersKey() && key != Keybinds.instance.getSettingsKey());
-            case 2: return (key != Keybinds.instance.getRightKey() && key != Keybinds.instance.getLeftKey() && key != Keybinds.instance.getBackKey() && key != Keybinds.instance.getIntersKey() && key != Keybinds.instance.getSettingsKey());
-            case 3: return (key != Keybinds.instance.getRightKey() && key != Keybinds.instance.getLeftKey() && key != Keybinds.instance.getDictKey() && key != Keybinds.instance.getIntersKey() && key != Keybinds.instance.getSettingsKey());
-            case 4: return (key != Keybinds.instance.getRightKey() && key != Keybinds.instance.getLeftKey() && key != Keybinds.instance.getDictKey() && key != Keybinds.instance.getBackKey() && key != Keybinds.instance.getSettingsKey());
-            case 5: return (key != Keybinds.instance.getRightKey() && key != Keybinds.instance.getLeftKey() && key != Keybinds.instance.getDictKey() && key != Keybinds.instance.getBackKey() && key != Keybinds.instance.getIntersKey());
+            case 0: return (key != Keybinds.Instance.getLeftKey() && key != Keybinds.Instance.getDictKey() && key != Keybinds.Instance.getBackKey() && key != Keybinds.Instance.getIntersKey() && key != Keybinds.Instance.getSettingsKey());
+            case 1: return (key != Keybinds.Instance.getRightKey() && key != Keybinds.Instance.getDictKey() && key != Keybinds.Instance.getBackKey() && key != Keybinds.Instance.getIntersKey() && key != Keybinds.Instance.getSettingsKey());
+            case 2: return (key != Keybinds.Instance.getRightKey() && key != Keybinds.Instance.getLeftKey() && key != Keybinds.Instance.getBackKey() && key != Keybinds.Instance.getIntersKey() && key != Keybinds.Instance.getSettingsKey());
+            case 3: return (key != Keybinds.Instance.getRightKey() && key != Keybinds.Instance.getLeftKey() && key != Keybinds.Instance.getDictKey() && key != Keybinds.Instance.getIntersKey() && key != Keybinds.Instance.getSettingsKey());
+            case 4: return (key != Keybinds.Instance.getRightKey() && key != Keybinds.Instance.getLeftKey() && key != Keybinds.Instance.getDictKey() && key != Keybinds.Instance.getBackKey() && key != Keybinds.Instance.getSettingsKey());
+            case 5: return (key != Keybinds.Instance.getRightKey() && key != Keybinds.Instance.getLeftKey() && key != Keybinds.Instance.getDictKey() && key != Keybinds.Instance.getBackKey() && key != Keybinds.Instance.getIntersKey());
             default: return false;
         }
     }
