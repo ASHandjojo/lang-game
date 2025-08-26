@@ -30,6 +30,22 @@ public sealed class NpcDialogue : Interactable
 
     public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
 
+    public bool TryCheckInput(string content)
+    {
+        if (inDialogue && entries[index].hasResponse)
+        {
+            if (entries[index].responseData.expectedInput == content) // For when the content is equal to the expected
+            {
+                return true;
+            }
+            else // Otherwise, when it is invalid. This is temporary, incomplete logic handling.
+            {
+                index--;
+            }
+        }
+        return false;
+    }
+
     void Start()
     {
         document        = GetComponent<UIDocument>();
@@ -49,6 +65,7 @@ public sealed class NpcDialogue : Interactable
         textSpeed      = 0.02f;
         nextLinePrompt = document.rootVisualElement.Q("NextLinePrompt");
         document.rootVisualElement.style.visibility = Visibility.Hidden;
+        document.rootVisualElement.style.display    = DisplayStyle.None;
         nextLinePrompt.visible = false;
         inDialogue             = false;
     }
@@ -72,8 +89,11 @@ public sealed class NpcDialogue : Interactable
         }
         else
         {
-            document.rootVisualElement.style.visibility    = Visibility.Visible;
+            document.rootVisualElement.style.visibility = Visibility.Visible;
+            document.rootVisualElement.style.display    = DisplayStyle.Flex;
+
             hudDocument.rootVisualElement.style.visibility = Visibility.Hidden;
+            hudDocument.rootVisualElement.style.display    = DisplayStyle.None;
             worldPromptIcon.enabled = false;
             
             // Prevent Movement
@@ -102,9 +122,17 @@ public sealed class NpcDialogue : Interactable
             dialogueLabel.text = "";
             yield return TypeLine();
 
-            if (entries[index - 1].hasResponse)
+            if (entries[index].hasResponse)
             {
-                //InputController.Instance.OpenKeyboard();
+                PlayerController.Instance.context |= PlayerContext.PlayerInput;
+                InputController.Instance.OpenKeyboard();
+
+                yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0);
+            }
+            else
+            {
+                InputController.Instance.CloseKeyboard();
+                PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
             }
         }
         else
@@ -115,17 +143,21 @@ public sealed class NpcDialogue : Interactable
             dialogueLabel.text     = "";
             inDialogue             = false;
             nextLinePrompt.visible = false;
-            // Stop listening for clicks
-            //Actions.OnClick -= Interact;
 
             // Restore Movement
             PlayerController.Instance.CanMove = true;
 
             // Restore in-game UI
-            document.rootVisualElement.style.visibility    = Visibility.Hidden;
+            document.rootVisualElement.style.visibility = Visibility.Hidden;
+            document.rootVisualElement.style.display    = DisplayStyle.None;
+
             hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
+            hudDocument.rootVisualElement.style.display    = DisplayStyle.Flex;
 
             worldPromptIcon.enabled = true;
+
+            InputController.Instance.CloseKeyboard();
+            PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
         }
     }
 

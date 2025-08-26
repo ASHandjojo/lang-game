@@ -67,9 +67,10 @@ public sealed class PlayerController : MonoBehaviour
     void Update()
     {
         bool isInteracting  = (context & PlayerContext.Interacting) != 0;
+        bool isInInputMode  = (context & PlayerContext.PlayerInput) != 0;
         bool useInteractKey = Input.GetKeyDown(Keybinds.Instance.getIntersKey());
         // Trigger for interact input
-        if (!isInteracting && useInteractKey)
+        if (!isInteracting && !isInInputMode && useInteractKey)
         {
             // Prompts listeners to execute their Interact method
             // NOTE: Very dirty

@@ -9,7 +9,7 @@ public sealed class Viewable : Interactable
 {
     private UIDocument document;
     [SerializeField] private UIDocument hudDocument;
-    [SerializeField] private float transitionTime = 1f;
+    [SerializeField] private float transitionTime = 1.0f;
     [SerializeField] private Texture2D zoomImage;
 
     private bool isZoomed;
@@ -22,8 +22,7 @@ public sealed class Viewable : Interactable
         document        = GetComponent<UIDocument>();
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
         keybindIcon     = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());
-
-        soundHandler = GetComponent<SoundHandler>();
+        soundHandler    = GetComponent<SoundHandler>();
 
         // Initialize UI images, while hiding UI screen until interacted with
         document.rootVisualElement.Q("ViewImage").style.backgroundImage   = new StyleBackground(zoomImage);
@@ -31,6 +30,7 @@ public sealed class Viewable : Interactable
 
         worldPromptIcon.sprite = ConvertToSprite(keybindIcon);
         document.rootVisualElement.style.visibility = Visibility.Hidden;
+        document.rootVisualElement.style.display    = DisplayStyle.None;
         isZoomed = false;
     }
 
@@ -58,6 +58,7 @@ public sealed class Viewable : Interactable
     private IEnumerator CamTransition(Camera mainCamera, PlayerController player)
     {
         hudDocument.rootVisualElement.style.visibility = Visibility.Hidden;
+        hudDocument.rootVisualElement.style.display    = DisplayStyle.None;
         worldPromptIcon.enabled = false;
 
         // Freeze Movement
@@ -86,6 +87,7 @@ public sealed class Viewable : Interactable
         mainCamera.transform.position = endPos;
 
         document.rootVisualElement.style.visibility = Visibility.Visible;
+        document.rootVisualElement.style.display    = DisplayStyle.Flex;
 
         // Restore Movement
         player.CanMove = true;
@@ -102,6 +104,7 @@ public sealed class Viewable : Interactable
         timeElapsed      = 0.0f;
 
         document.rootVisualElement.style.visibility = Visibility.Hidden;
+        document.rootVisualElement.style.display    = DisplayStyle.None;
         // Change camera focus from viewable to player
         while (timeElapsed < transitionTime)
         {
@@ -128,5 +131,6 @@ public sealed class Viewable : Interactable
         worldPromptIcon.enabled = true;
 
         hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
+        hudDocument.rootVisualElement.style.display    = DisplayStyle.Flex;
     }
 }
