@@ -82,7 +82,6 @@ public sealed class NpcDialogue : Interactable
             }
             else
             {
-                StopAllCoroutines();
                 dialogueLabel.text = entries[index].line;
                 StartBounce();
             }
