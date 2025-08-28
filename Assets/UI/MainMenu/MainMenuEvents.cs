@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class MainMenuEvents : MonoBehaviour
+[DisallowMultipleComponent, RequireComponent(typeof(UIDocument), typeof(SoundHandler))]
+public sealed class MainMenuEvents : MonoBehaviour
 {
     private UIDocument selfDocument;
     [SerializeField] private UIDocument otherDocument;
@@ -11,18 +12,18 @@ public class MainMenuEvents : MonoBehaviour
     private Button settingsButton;
     private Button exitButton;
 
-    private List<Button> buttonList = new List<Button>();
+    private List<Button> buttonList;
 
-    private SceneLoader sl;
+    private SceneLoader  sl;
     private SoundHandler sh;
     [SerializeField] private AudioClip hoverClip;
     [SerializeField] private AudioClip selectionClip;
 
     void Awake()
     {
-        sl = FindFirstObjectByType<SceneLoader>();
+        sl           = FindFirstObjectByType<SceneLoader>();
         selfDocument = GetComponent<UIDocument>();
-        sh = GetComponent<SoundHandler>();
+        sh           = GetComponent<SoundHandler>();
 
         // Add click events to all buttons
         startButton = selfDocument.rootVisualElement.Q("StartButton") as Button;
@@ -41,20 +42,6 @@ public class MainMenuEvents : MonoBehaviour
         }
     }
 
-    // Remove click events from all buttons
-    void OnDisable()
-    {
-        startButton.UnregisterCallback<ClickEvent>(StartGame);
-        settingsButton.UnregisterCallback<ClickEvent>(ToggleSettings);
-        exitButton.UnregisterCallback<ClickEvent>(ExitGame);
-        
-        for(int i = 0; i < buttonList.Count; i++)
-        {
-            buttonList[i].UnregisterCallback<ClickEvent>(OnButtonClick);
-            buttonList[i].UnregisterCallback<MouseEnterEvent>(OnButtonHover);
-        }
-    }
-
     private void StartGame(ClickEvent e)
     {
         startButton.SetEnabled(false);
@@ -68,7 +55,7 @@ public class MainMenuEvents : MonoBehaviour
     private void ToggleSettings(ClickEvent e)
     {
         otherDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-        selfDocument.rootVisualElement.style.display = DisplayStyle.None;
+        selfDocument.rootVisualElement.style.display  = DisplayStyle.None;
     }
 
     // Exit to desktop
@@ -89,5 +76,4 @@ public class MainMenuEvents : MonoBehaviour
     {
         sh.PlaySoundUI(hoverClip);
     }
-    
 }

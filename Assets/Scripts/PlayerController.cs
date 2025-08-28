@@ -7,11 +7,12 @@ using UnityEngine;
 [Flags]
 public enum PlayerContext : int
 {
-    Default     = 0,
-    Menu        = 1,
-    Interacting = 2,
-    Dialogue    = 4,
-    PlayerInput = 8
+    Default      = 0,
+    Menu         = 1,
+    Interacting  = 2,
+    Dialogue     = 4,
+    PlayerInput  = 8,
+    InDictionary = 16
 }
 
 [RequireComponent(typeof(SpriteRenderer), typeof(Collider2D), typeof(Rigidbody2D)),
@@ -68,9 +69,10 @@ public sealed class PlayerController : MonoBehaviour
     {
         bool isInteracting  = (context & PlayerContext.Interacting) != 0;
         bool isInInputMode  = (context & PlayerContext.PlayerInput) != 0;
+        bool isInMenu       = (context & PlayerContext.Menu) != 0;
         bool useInteractKey = Input.GetKeyDown(Keybinds.Instance.getIntersKey());
         // Trigger for interact input
-        if (!isInteracting && !isInInputMode && useInteractKey)
+        if (!isInteracting && !isInInputMode && !isInMenu && useInteractKey)
         {
             // Prompts listeners to execute their Interact method
             // NOTE: Very dirty
