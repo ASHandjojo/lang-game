@@ -46,10 +46,12 @@ public sealed class Viewable : Interactable
         if (isZoomed)
         {
             yield return CamDetransition(mainCamera, player);
+            player.CanMove = true;
         }
         else
         {
             yield return CamTransition(mainCamera, player);
+            player.CanMove = false;
         }
         isZoomed = !isZoomed;
     }

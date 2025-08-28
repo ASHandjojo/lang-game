@@ -44,7 +44,6 @@ public class GameHUDEvents : UIBase
         settingsButton.RegisterCallback<ClickEvent>(OpenSettings);
         settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
 
-
         backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
         backButton.RegisterCallback<ClickEvent>(CloseDictionary);
 
@@ -62,13 +61,6 @@ public class GameHUDEvents : UIBase
 
     void OnDisable()
     {
-        // Remove click events from all buttons
-        dictionaryButton.UnregisterCallback<ClickEvent>(OpenDictionary);
-        dictionaryButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
-        settingsButton.UnregisterCallback<ClickEvent>(OpenSettings);
-        settingsButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
-        backButton.UnregisterCallback<ClickEvent>(CloseDictionary);
-
         //Actions.OnSettingsMenuCalled -= OpenSettings;
         //Actions.OnDictionaryMenuCalled -= OpenDictionary;
     }

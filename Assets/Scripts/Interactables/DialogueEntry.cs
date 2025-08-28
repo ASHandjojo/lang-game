@@ -66,7 +66,6 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         element.Add(hasResponseToggle);
         element.Add(responseDataField);
 
-
         return element;
     }
 }

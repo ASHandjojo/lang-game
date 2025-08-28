@@ -84,29 +84,22 @@ public sealed class PlayerController : MonoBehaviour
                 }
             }
         }
-        else if (currentInteraction.TryGet(out Interactable obj) && (obj.TargetContext & PlayerContext.Dialogue) != 0)
+        else if (currentInteraction.TryGet(out Interactable obj) && (obj.TargetContext & PlayerContext.Dialogue) != 0 && !isInInputMode)
         {
-            if (useInteractKey)
+            if (useInteractKey || Input.GetMouseButtonDown(0))
             {
-                Debug.Log(":)");
+                (obj as NpcDialogue).Advance();
             }
         }
-        
-        // Trigger Dictionary/Settings menu
-        if (Input.GetKeyDown(Keybinds.Instance.getDictKey()))
+        else if (Input.GetKeyDown(Keybinds.Instance.getDictKey()))
         {
-            //Actions.OnDictionaryMenuCalled?.Invoke();
+            var events = FindFirstObjectByType<GameHUDEvents>(); // NOTE: Very dirty
+            events.OpenDictionary();
         }
-
-        if (Input.GetKeyDown(Keybinds.Instance.getSettingsKey()))
+        else if (Input.GetKeyDown(Keybinds.Instance.getSettingsKey()))
         {
-            //Actions.OnSettingsMenuCalled?.Invoke();
-        }
-
-        // Trigger next line of dialogue
-        if (Input.GetMouseButtonDown(0))
-        {
-            //Actions.OnClick?.Invoke(this);
+            var events = FindFirstObjectByType<GameHUDEvents>(); // NOTE: Very dirty
+            events.OpenSettings();
         }
 
         if (canMove)

@@ -103,14 +103,23 @@ public sealed class NpcDialogue : Interactable
         }
     }
 
+    /// <summary>
+    /// Works currently by completely rendering text rather than suspending any execution/co-routines.
+    /// </summary>
+    public void Advance()
+    {
+        dialogueLabel.text = entries[index].line;
+    }
+
     private IEnumerator TypeLine()
     {
-        foreach (char c in entries[index].line)
+        string currentLine = entries[index].line;
+        int i = 0;
+        while (dialogueLabel.text.Length < currentLine.Length)
         {
-            dialogueLabel.text += c;
+            dialogueLabel.text += currentLine[i++];
             yield return new WaitForSeconds(textSpeed);
         }
-
         StartBounce();
     }
 
