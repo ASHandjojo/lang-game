@@ -9,7 +9,7 @@ public sealed class Viewable : Interactable
 {
     private UIDocument document;
     [SerializeField] private UIDocument hudDocument;
-    [SerializeField] private float transitionTime = 1f;
+    [SerializeField] private float transitionTime = 1.0f;
     [SerializeField] private Texture2D zoomImage;
 
     private bool isZoomed;
@@ -17,28 +17,25 @@ public sealed class Viewable : Interactable
 
     private Vector3 cameraPos;
 
-    void Awake()
+    void Start()
     {
         document        = GetComponent<UIDocument>();
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
-        keybindIcon     = Keybinds.instance.getKeyImage(Keybinds.instance.getIntersKey());
+        keybindIcon     = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());
+        soundHandler    = GetComponent<SoundHandler>();
 
-        soundHandler = GetComponent<SoundHandler>();
-    }
-
-    void Start()
-    {
         // Initialize UI images, while hiding UI screen until interacted with
         document.rootVisualElement.Q("ViewImage").style.backgroundImage   = new StyleBackground(zoomImage);
         document.rootVisualElement.Q("PromptImage").style.backgroundImage = new StyleBackground(keybindIcon);
 
         worldPromptIcon.sprite = ConvertToSprite(keybindIcon);
         document.rootVisualElement.style.visibility = Visibility.Hidden;
+        document.rootVisualElement.style.display    = DisplayStyle.None;
         isZoomed = false;
     }
 
     // Zooms in for a closeup view of the object
-    public override void Interact(PlayerController player)
+    protected override IEnumerator InteractLogic(PlayerController player)
     {
         Camera mainCamera = Camera.main;
         if (soundHandler.TryGet(out SoundHandler sh))
@@ -48,21 +45,22 @@ public sealed class Viewable : Interactable
 
         if (isZoomed)
         {
-            StartCoroutine(CamDetransition(mainCamera, player));
+            yield return CamDetransition(mainCamera, player);
+            player.CanMove = true;
         }
         else
         {
-            StartCoroutine(CamTransition(mainCamera, player));
+            yield return CamTransition(mainCamera, player);
+            player.CanMove = false;
         }
-
         isZoomed = !isZoomed;
-        
     }
 
     // Zoom in
     private IEnumerator CamTransition(Camera mainCamera, PlayerController player)
     {
         hudDocument.rootVisualElement.style.visibility = Visibility.Hidden;
+        hudDocument.rootVisualElement.style.display    = DisplayStyle.None;
         worldPromptIcon.enabled = false;
 
         // Freeze Movement
@@ -91,6 +89,7 @@ public sealed class Viewable : Interactable
         mainCamera.transform.position = endPos;
 
         document.rootVisualElement.style.visibility = Visibility.Visible;
+        document.rootVisualElement.style.display    = DisplayStyle.Flex;
 
         // Restore Movement
         player.CanMove = true;
@@ -107,6 +106,7 @@ public sealed class Viewable : Interactable
         timeElapsed      = 0.0f;
 
         document.rootVisualElement.style.visibility = Visibility.Hidden;
+        document.rootVisualElement.style.display    = DisplayStyle.None;
         // Change camera focus from viewable to player
         while (timeElapsed < transitionTime)
         {
@@ -133,5 +133,6 @@ public sealed class Viewable : Interactable
         worldPromptIcon.enabled = true;
 
         hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
+        hudDocument.rootVisualElement.style.display    = DisplayStyle.Flex;
     }
 }

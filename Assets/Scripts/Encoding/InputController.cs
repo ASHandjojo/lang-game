@@ -57,7 +57,19 @@ public sealed class KeyboardUI : VisualElement
                     }
                 }
             );
-            enter.RegisterCallback((ClickEvent e) => InputController.Instance.SubmitInput());
+            enter.RegisterCallback(
+                (ClickEvent e) =>
+                {
+                    InputController.Instance.CloseKeyboard();
+                    Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out Interactable NPC));
+                    if (NPC is NpcDialogue)
+                    {
+                        (NPC as NpcDialogue).TryCheckInput(InputController.Instance.TranslatedStr);
+                    }
+
+                    PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
+                }
+            );
         }
     }
 
@@ -74,6 +86,7 @@ public sealed class KeyboardUI : VisualElement
         Debug.Assert(children.Length > 1);
 
         inputField = this.Q<Label>("Input");
+        Debug.Assert(inputField != null);
         rows = new KeyboardRow[children.Length - 1];
         for (int i = 1; i < children.Length; i++) {
             rows[i - 1] = new KeyboardRow(children[i]);
@@ -104,12 +117,20 @@ public sealed class InputController : MonoBehaviour
     }
 
     public static InputController Instance { get; private set; }
+
     // Just shorter to get references lol
     private static ref readonly Processor Processor => ref LanguageTable.Processor;
     public string TranslatedStr => Processor.Translate(InputField.text);
 
     void Awake()
     {
+        if (Instance != null)
+        {
+            Debug.LogWarning($"Duplicate instance has been created of {nameof(InputController)}! Destroying duplicate instance.");
+            Destroy(this);
+            return;
+        }
+
         Debug.Assert(keyboardAsset != null);
         keyboardUI = new KeyboardUI(keyboardAsset);
 
@@ -118,13 +139,6 @@ public sealed class InputController : MonoBehaviour
         document.rootVisualElement.style.top   = new StyleLength(new Length(topPadding, LengthUnit.Percent));
         document.rootVisualElement.style.left  = new StyleLength(new Length(50.0f, LengthUnit.Percent));
         document.rootVisualElement.style.right = new StyleLength(new Length(50.0f, LengthUnit.Percent));
-
-        if (Instance != null)
-        {
-            Debug.LogWarning($"Duplicate instance has been created of {nameof(InputController)}! Destroying duplicate instance.");
-            Destroy(this);
-            return;
-        }
 
         Instance = this;
     }
@@ -138,18 +152,16 @@ public sealed class InputController : MonoBehaviour
     {
         InputField.text = ""; // Clears contents
         keyboardUI.style.visibility = Visibility.Visible;
+        keyboardUI.style.display    = DisplayStyle.Flex;
+
+        keyboardUI.parent.BringToFront();
     }
 
     public void CloseKeyboard()
     {
         keyboardUI.style.visibility = Visibility.Hidden;
+        keyboardUI.style.display    = DisplayStyle.None;
     }
 
     public void InsertCharacter(string character) => InputField.text += character;
-
-    public void SubmitInput()
-    {
-        // Add proper input checking once structure is resolved for NPC dialogue.
-        CloseKeyboard();
-    }
 }

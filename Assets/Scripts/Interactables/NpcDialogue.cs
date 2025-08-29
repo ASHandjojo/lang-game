@@ -28,15 +28,30 @@ public sealed class NpcDialogue : Interactable
     private float bounceSpeed  = 30.0f;
     private float bounceStartTime;
 
-    void Awake()
+    public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
+
+    public bool TryCheckInput(string content)
     {
-        document        = GetComponent<UIDocument>();
-        worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
+        if (inDialogue && entries[index].hasResponse)
+        {
+            if (entries[index].responseData.expectedInput == content) // For when the content is equal to the expected
+            {
+                return true;
+            }
+            else // Otherwise, when it is invalid. This is temporary, incomplete logic handling.
+            {
+                index--;
+            }
+        }
+        return false;
     }
 
     void Start()
     {
-        keybindIcon = Keybinds.instance.getKeyImage(Keybinds.instance.getIntersKey());
+        document        = GetComponent<UIDocument>();
+        worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
+
+        keybindIcon = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());
         worldPromptIcon.sprite = ConvertToSprite(keybindIcon);
 
         // Set name and portrait
@@ -50,18 +65,12 @@ public sealed class NpcDialogue : Interactable
         textSpeed      = 0.02f;
         nextLinePrompt = document.rootVisualElement.Q("NextLinePrompt");
         document.rootVisualElement.style.visibility = Visibility.Hidden;
+        document.rootVisualElement.style.display    = DisplayStyle.None;
         nextLinePrompt.visible = false;
         inDialogue             = false;
     }
 
-    
-    void OnDisable()
-    {
-        // Stop listening for clicks
-        Actions.OnClick -= Interact;
-    }
-
-    public override void Interact(PlayerController player)
+    protected override IEnumerator InteractLogic(PlayerController player)
     {
         if (inDialogue)
         {
@@ -69,52 +78,69 @@ public sealed class NpcDialogue : Interactable
             if (dialogueLabel.text == entries[index].line)
             {
                 StopBounce();
-                NextLine();
+                yield return NextLine();
             }
             else
             {
-                StopAllCoroutines();
                 dialogueLabel.text = entries[index].line;
                 StartBounce();
             }
         }
         else
         {
-            document.rootVisualElement.style.visibility    = Visibility.Visible;
+            document.rootVisualElement.style.visibility = Visibility.Visible;
+            document.rootVisualElement.style.display    = DisplayStyle.Flex;
+
             hudDocument.rootVisualElement.style.visibility = Visibility.Hidden;
+            hudDocument.rootVisualElement.style.display    = DisplayStyle.None;
             worldPromptIcon.enabled = false;
             
             // Prevent Movement
-            PlayerController.Instance.CanMove = false;
-
-            inDialogue = true;
-            StartCoroutine(TypeLine());
-            Actions.OnClick += Interact;
+            player.CanMove = false;
+            inDialogue     = true;
+            yield return TypeLine();
         }
+    }
+
+    /// <summary>
+    /// Works currently by completely rendering text rather than suspending any execution/co-routines.
+    /// </summary>
+    public void Advance()
+    {
+        dialogueLabel.text = entries[index].line;
     }
 
     private IEnumerator TypeLine()
     {
-        foreach (char c in entries[index].line)
+        string currentLine = entries[index].line;
+        int i = 0;
+        while (dialogueLabel.text.Length < currentLine.Length)
         {
-            dialogueLabel.text += c;
+            dialogueLabel.text += currentLine[i++];
             yield return new WaitForSeconds(textSpeed);
         }
-
         StartBounce();
     }
 
-    private void NextLine()
+    private IEnumerator NextLine()
     {
         if(index < entries.Length - 1)
         {
             index++;
             dialogueLabel.text = "";
-            StartCoroutine(TypeLine());
+            yield return TypeLine();
 
-            if (entries[index - 1].hasResponse)
+            if (entries[index].hasResponse)
             {
-                //InputController.Instance.OpenKeyboard();
+                PlayerController.Instance.context |= PlayerContext.PlayerInput;
+                InputController.Instance.OpenKeyboard();
+
+                yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0);
+            }
+            else
+            {
+                InputController.Instance.CloseKeyboard();
+                PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
             }
         }
         else
@@ -125,17 +151,21 @@ public sealed class NpcDialogue : Interactable
             dialogueLabel.text     = "";
             inDialogue             = false;
             nextLinePrompt.visible = false;
-            // Stop listening for clicks
-            Actions.OnClick -= Interact;
 
             // Restore Movement
             PlayerController.Instance.CanMove = true;
 
             // Restore in-game UI
-            document.rootVisualElement.style.visibility    = Visibility.Hidden;
+            document.rootVisualElement.style.visibility = Visibility.Hidden;
+            document.rootVisualElement.style.display    = DisplayStyle.None;
+
             hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
+            hudDocument.rootVisualElement.style.display    = DisplayStyle.Flex;
 
             worldPromptIcon.enabled = true;
+
+            InputController.Instance.CloseKeyboard();
+            PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
         }
     }
 

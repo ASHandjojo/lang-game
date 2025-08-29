@@ -20,11 +20,11 @@ public class ToSceneButton : MonoBehaviour
     void Update()
     {
         if (keybind_to_button == "Settings") {
-          if (Input.GetKey(Keybinds.instance.getSettingsKey())) {
+          if (Input.GetKey(Keybinds.Instance.getSettingsKey())) {
             ClickSettings();
           }
         } else if (keybind_to_button == "Return/Back") {
-          if (!Keybinds.instance.getChangeBack() && Input.GetKey(Keybinds.instance.getBackKey())) {
+          if (!Keybinds.Instance.getChangeBack() && Input.GetKey(Keybinds.Instance.getBackKey())) {
             ClickSettings();
           }
         }

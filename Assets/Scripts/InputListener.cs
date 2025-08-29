@@ -68,7 +68,7 @@ public class InputListener : ScriptableObject
                 back_timer -= Time.deltaTime;
             } else {
                 back_timing = false;
-                Keybinds.instance.setChangeBack(false);
+                Keybinds.Instance.setChangeBack(false);
             }
         }
     }
@@ -79,9 +79,9 @@ public class InputListener : ScriptableObject
            if (action_number < 0) {
             return;
            }
-           if (new_keyCode != Keybinds.instance.getLeftKey() && new_keyCode != Keybinds.instance.getDictKey() && new_keyCode != Keybinds.instance.getBackKey()
-           && new_keyCode != Keybinds.instance.getIntersKey() && new_keyCode != Keybinds.instance.getSettingsKey()) {
-              Keybinds.instance.setRightKey(new_keyCode);
+           if (new_keyCode != Keybinds.Instance.getLeftKey() && new_keyCode != Keybinds.Instance.getDictKey() && new_keyCode != Keybinds.Instance.getBackKey()
+           && new_keyCode != Keybinds.Instance.getIntersKey() && new_keyCode != Keybinds.Instance.getSettingsKey()) {
+              Keybinds.Instance.setRightKey(new_keyCode);
               //this_text.SetText(Keybinds.instance.getRightKey().ToString());
            } else {
               //this_text.SetText("Already Exists");
@@ -89,17 +89,17 @@ public class InputListener : ScriptableObject
            
          } else {
            if (action_number < 2) {
-              if (new_keyCode != Keybinds.instance.getRightKey() && new_keyCode != Keybinds.instance.getDictKey() && new_keyCode != Keybinds.instance.getBackKey()
-                  && new_keyCode != Keybinds.instance.getIntersKey() && new_keyCode != Keybinds.instance.getSettingsKey()) {
-                Keybinds.instance.setLeftKey(new_keyCode);
+              if (new_keyCode != Keybinds.Instance.getRightKey() && new_keyCode != Keybinds.Instance.getDictKey() && new_keyCode != Keybinds.Instance.getBackKey()
+                  && new_keyCode != Keybinds.Instance.getIntersKey() && new_keyCode != Keybinds.Instance.getSettingsKey()) {
+                Keybinds.Instance.setLeftKey(new_keyCode);
                 //this_text.SetText(Keybinds.instance.getLeftKey().ToString());
               } else {
                 //this_text.SetText("Already Exists");
               }
            } else {
-              if (new_keyCode != Keybinds.instance.getLeftKey() && new_keyCode != Keybinds.instance.getRightKey() && new_keyCode != Keybinds.instance.getBackKey()
-                  && new_keyCode != Keybinds.instance.getIntersKey() && new_keyCode != Keybinds.instance.getSettingsKey()) {
-                Keybinds.instance.setDictKey(new_keyCode);
+              if (new_keyCode != Keybinds.Instance.getLeftKey() && new_keyCode != Keybinds.Instance.getRightKey() && new_keyCode != Keybinds.Instance.getBackKey()
+                  && new_keyCode != Keybinds.Instance.getIntersKey() && new_keyCode != Keybinds.Instance.getSettingsKey()) {
+                Keybinds.Instance.setDictKey(new_keyCode);
                 //this_text.SetText(Keybinds.instance.getDictKey().ToString());
               } else {
                 //this_text.SetText("Already Exists");
@@ -108,28 +108,28 @@ public class InputListener : ScriptableObject
          }
        } else {
         if (action_number < 4) {
-          if (new_keyCode != Keybinds.instance.getLeftKey() && new_keyCode != Keybinds.instance.getDictKey() && new_keyCode != Keybinds.instance.getRightKey()
-              && new_keyCode != Keybinds.instance.getIntersKey() && new_keyCode != Keybinds.instance.getSettingsKey()) {
-            Keybinds.instance.setBackKey(new_keyCode);
+          if (new_keyCode != Keybinds.Instance.getLeftKey() && new_keyCode != Keybinds.Instance.getDictKey() && new_keyCode != Keybinds.Instance.getRightKey()
+              && new_keyCode != Keybinds.Instance.getIntersKey() && new_keyCode != Keybinds.Instance.getSettingsKey()) {
+            Keybinds.Instance.setBackKey(new_keyCode);
             //this_text.SetText(Keybinds.instance.getBackKey().ToString());
             back_timing = true;
             back_timer = 1;
-            Keybinds.instance.setChangeBack(true);
+            Keybinds.Instance.setChangeBack(true);
           } else {
             //this_text.SetText("Already Exists");
           }
         } else if (action_number == 4) {
-          if (new_keyCode != Keybinds.instance.getLeftKey() && new_keyCode != Keybinds.instance.getDictKey() && new_keyCode != Keybinds.instance.getBackKey()
-              && new_keyCode != Keybinds.instance.getRightKey() && new_keyCode != Keybinds.instance.getSettingsKey()) {
-            Keybinds.instance.setIntersKey(new_keyCode);
+          if (new_keyCode != Keybinds.Instance.getLeftKey() && new_keyCode != Keybinds.Instance.getDictKey() && new_keyCode != Keybinds.Instance.getBackKey()
+              && new_keyCode != Keybinds.Instance.getRightKey() && new_keyCode != Keybinds.Instance.getSettingsKey()) {
+            Keybinds.Instance.setIntersKey(new_keyCode);
             //this_text.SetText(Keybinds.instance.getIntersKey().ToString());
           } else {
             //this_text.SetText("Already Exists");
           }
         } else {
-          if (new_keyCode != Keybinds.instance.getLeftKey() && new_keyCode != Keybinds.instance.getDictKey() && new_keyCode != Keybinds.instance.getBackKey()
-              && new_keyCode != Keybinds.instance.getIntersKey() && new_keyCode != Keybinds.instance.getSettingsKey()) {
-            Keybinds.instance.setSettingsKey(new_keyCode);
+          if (new_keyCode != Keybinds.Instance.getLeftKey() && new_keyCode != Keybinds.Instance.getDictKey() && new_keyCode != Keybinds.Instance.getBackKey()
+              && new_keyCode != Keybinds.Instance.getIntersKey() && new_keyCode != Keybinds.Instance.getSettingsKey()) {
+            Keybinds.Instance.setSettingsKey(new_keyCode);
             //this_text.SetText(Keybinds.instance.getSettingsKey().ToString());
           } else {
             //this_text.SetText("Already Exists");
