@@ -1,0 +1,7 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/Encoding/UI/StyleSheet.uss?fileID=7433441132597879392&amp;guid=f8d5336c5247ec444a5799a7f5b6469b&amp;type=3#StyleSheet" />
+    <engine:GroupBox class="Window">
+        <engine:TextField label="Raw Phonetics" name="RawString" class="StandardFont" />
+        <engine:TextField label="Translation String" placeholder-text="filler text" name="TransString" class="Translate" />
+    </engine:GroupBox>
+</engine:UXML>
