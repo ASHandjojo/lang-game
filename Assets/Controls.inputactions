@@ -2,14 +2,14 @@
     "name": "Controls",
     "maps": [
         {
-            "name": "Gameplay",
+            "name": "SideScrolling",
             "id": "baa4feb0-30cb-4970-bc2a-4cd048a4ef58",
             "actions": [
                 {
                     "name": "Move",
                     "type": "Value",
                     "id": "d054c8d9-b802-472c-b18b-b4b47fc21dd9",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -53,9 +53,9 @@
             ],
             "bindings": [
                 {
-                    "name": "1D Axis",
+                    "name": "2D Vector",
                     "id": "bae487ab-315b-4e23-984c-5111c2e3c6c3",
-                    "path": "1DAxis",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -64,8 +64,30 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
+                    "name": "Up",
                     "id": "5c42ce4a-d7c6-4288-b4f6-345b03b48554",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Down",
+                    "id": "eebe0248-b87c-469e-8814-29f049ba6bc0",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Left",
+                    "id": "889ba8af-7a4a-4aa2-960b-d66163d547f1",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -75,8 +97,8 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
-                    "id": "eebe0248-b87c-469e-8814-29f049ba6bc0",
+                    "name": "Right",
+                    "id": "f062ebf8-9900-4b90-89cd-9d02ef4c34f2",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
@@ -126,6 +148,34 @@
                     "processors": "",
                     "groups": "",
                     "action": "Settings",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "59eaa9ea-145f-4dd2-8389-22a763832c89",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "106cb602-54d6-490b-a2de-d0b346588cb1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "51840633-1bf3-4b9c-b548-03b18bea93f1",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

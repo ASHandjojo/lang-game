@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6613895030291338528}
   - component: {fileID: 3748387681933907150}
   - component: {fileID: 1933509393299716365}
+  - component: {fileID: 5532612214630489121}
   m_Layer: 0
   m_Name: Basic_Player_for_Testing
   m_TagString: Player
@@ -177,6 +178,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 3
+  context: 0
+  currentInteraction:
+    obj: {fileID: 0}
+    isInitialized: 0
 --- !u!95 &1933509393299716365
 Animator:
   serializedVersion: 7
@@ -199,3 +204,69 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5532612214630489121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6008388264503053142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 4e79976aac6e57140b644939cad0956c, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3748387681933907150}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d054c8d9-b802-472c-b18b-b4b47fc21dd9
+    m_ActionName: 'SideScrolling/Move[/Keyboard/a,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eb1786f6-dbf2-4a06-80df-d39719a82c16
+    m_ActionName: 'SideScrolling/Interact[/Keyboard/k]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1824dd5a-de5c-42ab-9bfd-94b37cb7f309
+    m_ActionName: 'SideScrolling/Dictionary[/Keyboard/w]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6aa369d3-1ceb-4d9f-896c-9581d44d23c0
+    m_ActionName: 'SideScrolling/Return[/Keyboard/e]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f57022c4-5b35-4490-8c3a-276c1afae08d
+    m_ActionName: 'SideScrolling/Settings[/Keyboard/q]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 106cb602-54d6-490b-a2de-d0b346588cb1
+    m_ActionName: UI/New action
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: SideScrolling
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}

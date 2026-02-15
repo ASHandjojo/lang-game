@@ -22,8 +22,6 @@ public sealed class PlayerController : MonoBehaviour
 {
     [SerializeField] private float movementSpeed = 2.0f;
 
-    private InputAction moveAction;
-
     private Animator anim;
     private Rigidbody2D rb;
     private Collider2D playerCollider;
@@ -70,7 +68,6 @@ public sealed class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        moveAction = InputSystem.actions.FindAction("Move");
     }
 
     void Update()
@@ -111,19 +108,14 @@ public sealed class PlayerController : MonoBehaviour
             var events = FindFirstObjectByType<GameHUDEvents>(); // NOTE: Very dirty
             events.OpenSettings();
         }
-
-        if (canMove)
-        {
-            Move();
-        }
     }
 
-    private void Move()
+    public void OnMove(InputAction.CallbackContext context)
     {
-        double moveValue = moveAction.ReadValue<float>();
+        Vector2 moveValue = context.ReadValue<Vector2>();
         Debug.Log($"Move value: {moveValue}");
 
-        if (moveValue > 0) // Right movement
+        if (moveValue.x > 0) // Right movement
         {
             movementDirection = new Vector2(1.0f, 0.0f);
             anim.SetFloat("horizontal", Mathf.Abs(movementDirection.x));
@@ -132,7 +124,7 @@ public sealed class PlayerController : MonoBehaviour
                 Flip();
             }
         }
-        else if (moveValue < 0) // Left movement
+        else if (moveValue.x < 0) // Left movement
         {
             movementDirection = new Vector2(-1.0f, 0.0f);
             anim.SetFloat("horizontal", Mathf.Abs(movementDirection.x));
