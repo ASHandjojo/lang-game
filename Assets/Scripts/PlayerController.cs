@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [Flags]
 public enum PlayerContext : int
@@ -20,6 +21,8 @@ public enum PlayerContext : int
 public sealed class PlayerController : MonoBehaviour
 {
     [SerializeField] private float movementSpeed = 2.0f;
+
+    private InputAction moveAction;
 
     private Animator anim;
     private Rigidbody2D rb;
@@ -64,7 +67,12 @@ public sealed class PlayerController : MonoBehaviour
 
         playerCollider = GetComponent<Collider2D>();
     }
-    
+
+    private void Start()
+    {
+        moveAction = InputSystem.actions.FindAction("Move");
+    }
+
     void Update()
     {
         bool isInteracting  = (context & PlayerContext.Interacting) != 0;
@@ -112,7 +120,10 @@ public sealed class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (Input.GetKey(Keybinds.Instance.getRightKey()) && !Input.GetKey(Keybinds.Instance.getLeftKey())) // Right movement
+        double moveValue = moveAction.ReadValue<float>();
+        Debug.Log($"Move value: {moveValue}");
+
+        if (moveValue > 0) // Right movement
         {
             movementDirection = new Vector2(1.0f, 0.0f);
             anim.SetFloat("horizontal", Mathf.Abs(movementDirection.x));
@@ -121,7 +132,7 @@ public sealed class PlayerController : MonoBehaviour
                 Flip();
             }
         }
-        else if (Input.GetKey(Keybinds.Instance.getLeftKey()) && !Input.GetKey(Keybinds.Instance.getRightKey())) // Left movement
+        else if (moveValue < 0) // Left movement
         {
             movementDirection = new Vector2(-1.0f, 0.0f);
             anim.SetFloat("horizontal", Mathf.Abs(movementDirection.x));
