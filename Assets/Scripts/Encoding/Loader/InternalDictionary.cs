@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+
 using Unity.Collections;
 
 using UnityEngine;
@@ -17,10 +19,10 @@ public struct DictEntry
 public sealed class InternalDictionary : ScriptableObject
 {
 #if UNITY_EDITOR
+    public VisualTreeAsset entryUIAsset;
     // Used to properly populate tables through a reference.
     // Editor mode LigatureSub table has references to also underlying StandardSignTable.
-    [SerializeField] private LigatureSub ligatureSub;
+    public LigatureSub ligatureSub;
 #endif
-
-    public DictEntry[] entries;
+    public List<DictEntry> entries;
 }
