@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8233fb240e5a7aa48bebc015ed4db53e, type: 3}
   m_Name: Internal Dictionary
   m_EditorClassIdentifier: 
-  entryUIAsset: {fileID: 9197481963319205126, guid: fae814878a3b5a54282c090310885f11, type: 3}
-  ligatureSub: {fileID: 11400000, guid: 77015b68c3111de409d5641b8c8d11d3, type: 2}
   entries:
-  - rawString: ngplus
-    unicodeString: "ngp\u010Es"
+  - rawString: aiyah
+    unicodeString: "\xA2yah"
+    englishTranslation: bruh
+    wordType: 2

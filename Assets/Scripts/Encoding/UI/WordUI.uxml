@@ -3,5 +3,7 @@
     <engine:GroupBox class="Window">
         <engine:TextField label="Raw Phonetics" name="RawString" class="StandardFont" />
         <engine:TextField label="Translation String" placeholder-text="filler text" name="TransString" class="Translate" />
+        <engine:TextField label="English String" name="EnglishString" class="StandardFont" />
+        <engine:EnumField label="Word Type" value="Center" type="WordType, Assembly-CSharp" name="WordType" class="StandardFont" />
     </engine:GroupBox>
 </engine:UXML>

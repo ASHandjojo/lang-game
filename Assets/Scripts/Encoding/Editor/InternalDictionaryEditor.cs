@@ -64,6 +64,12 @@ internal sealed class DictEntryDrawer : PropertyDrawer
         SerializedProperty convStrProp = property.FindPropertyRelative(nameof(DictEntry.unicodeString));
         element.Q<TextField>("TransString").BindProperty(convStrProp);
 
+        SerializedProperty englishStrProp = property.FindPropertyRelative(nameof(DictEntry.englishTranslation));
+        element.Q<TextField>("EnglishString").BindProperty(englishStrProp);
+
+        SerializedProperty wordTypeProp = property.FindPropertyRelative(nameof(DictEntry.wordType));
+        element.Q<EnumField>("WordType").BindProperty(wordTypeProp);
+
         element.AssignCallback(ligatureSub);
         
         return element;
@@ -80,16 +86,8 @@ internal sealed class InternalDictEditor : Editor
         InternalDictionary dict = target as InternalDictionary;
         serializedObject.Update();
 
-        SerializedProperty uiTreeAssetProp = serializedObject.FindProperty(nameof(InternalDictionary.entryUIAsset));
-        PropertyField uiTreeAssetField     = new(uiTreeAssetProp);
-        element.Add(uiTreeAssetField);
-
-        SerializedProperty ligatureSubProp = serializedObject.FindProperty(nameof(InternalDictionary.ligatureSub));
-        PropertyField ligatureSubField     = new(ligatureSubProp);
-        element.Add(ligatureSubField);
-
         SerializedProperty arrayProp = serializedObject.FindProperty(nameof(InternalDictionary.entries));
-        PropertyField arrayField = new(arrayProp);
+        PropertyField arrayField     = new(arrayProp);
         element.Add(arrayField);
 
         return element;
