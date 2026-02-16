@@ -1,21 +1,18 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using System.IO;
 
-
+using UnityEngine;
 
 [Serializable]
-public class GameState
+public sealed class GameState
 {
     public Dictionary dictionary;
-
     public Vector3 position;
 
     public static void LoadPlayerData()
     {
-        string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave.json");
+        string savePath  = Path.Combine(Application.persistentDataPath, "PlayerSave.json");
         string emptyPath = Path.Combine(Application.dataPath, "Data/PlayerSaveEmpty.json");
 
         string jsonString;
@@ -23,17 +20,14 @@ public class GameState
         // Load Player Data JSON. If save data is empty load clean save (Currently just dictionary data)
         if (File.Exists(savePath))
         {
-            jsonString = jsonString = File.ReadAllText(savePath);
+            jsonString = File.ReadAllText(savePath);
         }
         else 
         {
             jsonString = File.ReadAllText(emptyPath);
         }
-
-        // Get Player object
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        PlayerController player = playerObject.GetComponent<PlayerController>();
-
+        // Get Player Object (Singleton)
+        PlayerController player = PlayerController.Instance;
         // Load player save
         GameState save = JsonUtility.FromJson<GameState>(jsonString);
 
@@ -43,19 +37,17 @@ public class GameState
 
     public static void SavePlayerData()
     {
-        // Get Player object
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        PlayerController player = playerObject.GetComponent<PlayerController>();
-
+        // Get Player Object (Singleton)
+        PlayerController player = PlayerController.Instance;
         // Create GameState object with all save data
-        GameState save = new GameState
+        GameState save = new()
         {
             dictionary = player.dictionary,
-            position = player.transform.position
+            position   = player.transform.position
         };
 
         // Serialize GameState and save to player save
-        string saveJson = JsonUtility.ToJson(save, true);
+        string saveJson = JsonUtility.ToJson(save, prettyPrint: true);
         string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave.json");
         File.WriteAllText(savePath, saveJson);
     }
@@ -64,8 +56,8 @@ public class GameState
 [Serializable]
 public struct DictionaryEntry
 {
-    public string Word;
-    string Notes;
+    public string word;
+    public string notes;
 }
 
 [Serializable]

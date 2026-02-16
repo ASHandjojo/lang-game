@@ -66,7 +66,8 @@ public sealed class PlayerController : MonoBehaviour
         playerCollider = GetComponent<Collider2D>();
 
         string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave.json");
-        if (File.Exists(savePath)) {
+        if (File.Exists(savePath))
+        {
             GameState.LoadPlayerData();
         }
     }
