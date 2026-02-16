@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEditor.Rendering.Universal.ShaderGraph;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,7 +14,7 @@ public sealed class NpcDialogue : Interactable
 
     [SerializeField] private string npcName;
     [SerializeField] private Texture2D npcImage;
-    private int index = 0;
+    private int index = 0; 
 
     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
     [SerializeField] private DialogueEntry[] entries;
