@@ -15,7 +15,5 @@ MonoBehaviour:
   entryUIAsset: {fileID: 9197481963319205126, guid: fae814878a3b5a54282c090310885f11, type: 3}
   ligatureSub: {fileID: 11400000, guid: 77015b68c3111de409d5641b8c8d11d3, type: 2}
   entries:
-  - rawString: 
-    unicodeString: 
-  - rawString: 
-    unicodeString: 
+  - rawString: ngplus
+    unicodeString: "ngp\u010Es"

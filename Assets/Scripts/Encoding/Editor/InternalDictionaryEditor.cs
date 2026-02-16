@@ -21,7 +21,6 @@ public sealed class DictEntryElement : VisualElement
 
         Debug.Assert(rawStringField  != null);
         Debug.Assert(unicodeStrField != null);
-
         unicodeStrField.isReadOnly = true;
     }
 
@@ -42,68 +41,32 @@ public sealed class DictEntryElement : VisualElement
     }
 }
 
-public sealed class InternalDictElement : VisualElement
+[CustomPropertyDrawer(typeof(DictEntry))]
+internal sealed class DictEntryDrawer : PropertyDrawer
 {
-    private readonly List<DictEntryElement> entries = new();
+    private const string RootImportDir  = "Assets/Scripts/Encoding";
+    private const string DictEntryUIDir = RootImportDir + "/UI/WordUI.uxml";
 
-    private readonly ListView listUI;
+    private const string LigatureSubDir = RootImportDir + "/Loader/Ligature Sub Table.asset";
 
-    public InternalDictElement()
+    public override VisualElement CreatePropertyGUI(SerializedProperty property)
     {
-        listUI = new ListView()
-        {
-            name            = "EntryList",
-            itemsSource     = entries,
-            fixedItemHeight = 100.0f
-        };
-        listUI.allowAdd = true;
-        listUI.showAddRemoveFooter = true;
-        Add(listUI);
-    }
+        VisualTreeAsset treeAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(DictEntryUIDir);
+        Debug.Assert(treeAsset != null);
+        DictEntryElement element = new(treeAsset);
 
-    public void SetValues(VisualTreeAsset entryUIAsset, LigatureSub ligatureSub, List<DictEntry> rawEntries, SerializedProperty arrayProp)
-    {
-        Debug.Assert(entryUIAsset != null);
-        Debug.Assert(entries      != null);
+        LigatureSub ligatureSub = AssetDatabase.LoadAssetAtPath<LigatureSub>(LigatureSubDir);
+        Debug.Assert(ligatureSub != null);
 
-        listUI.makeItem = () =>
-        {
-            DictEntryElement value = new(entryUIAsset);
-            value.AssignCallback(ligatureSub);
-            return value;
-        };
-        listUI.bindItem = (e, i) => (e as DictEntryElement).SetValue(rawEntries[i].rawString);
-        listUI.onAdd = (l) =>
-        {
-            l.itemsSource.Add(new DictEntryElement(entryUIAsset));
-            rawEntries.Add(new DictEntry());
+        SerializedProperty rawStrProp = property.FindPropertyRelative(nameof(DictEntry.rawString));
+        element.Q<TextField>("RawString").BindProperty(rawStrProp);
 
-            SerializedProperty elemProp  = arrayProp.GetArrayElementAtIndex(rawEntries.Count);
-            PropertyField propertyField  = new(elemProp);
-            propertyField.BindProperty(elemProp);
+        SerializedProperty convStrProp = property.FindPropertyRelative(nameof(DictEntry.unicodeString));
+        element.Q<TextField>("TransString").BindProperty(convStrProp);
 
-            listUI.RefreshItems();
-        };
-        listUI.onRemove = (l) =>
-        {
-            rawEntries.RemoveAt(l.itemsSource.Count    - 1);
-            l.itemsSource.RemoveAt(l.itemsSource.Count - 1);
-
-            SerializedProperty elemProp = arrayProp.GetArrayElementAtIndex(rawEntries.Count);
-            PropertyField propertyField = new(elemProp);
-            propertyField.BindProperty(elemProp);
-
-            listUI.RefreshItems();
-        };
-
-        for (int i = 0; i < rawEntries.Count; i++)
-        {
-            DictEntryElement child = new(entryUIAsset);
-            child.SetValue(rawEntries[i].rawString);
-            entries.Add(child);
-        }
-
-        listUI.RefreshItems();
+        element.AssignCallback(ligatureSub);
+        
+        return element;
     }
 }
 
@@ -112,25 +75,22 @@ internal sealed class InternalDictEditor : Editor
 {
     public override VisualElement CreateInspectorGUI()
     {
-        InternalDictElement element = new();
+        VisualElement element = new();
 
         InternalDictionary dict = target as InternalDictionary;
         serializedObject.Update();
 
         SerializedProperty uiTreeAssetProp = serializedObject.FindProperty(nameof(InternalDictionary.entryUIAsset));
         PropertyField uiTreeAssetField     = new(uiTreeAssetProp);
-        uiTreeAssetField.BindProperty(uiTreeAssetProp);
         element.Add(uiTreeAssetField);
 
         SerializedProperty ligatureSubProp = serializedObject.FindProperty(nameof(InternalDictionary.ligatureSub));
         PropertyField ligatureSubField     = new(ligatureSubProp);
-        ligatureSubField.BindProperty(ligatureSubProp);
         element.Add(ligatureSubField);
 
-        element.SetValues(dict.entryUIAsset, dict.ligatureSub, dict.entries, serializedObject.FindProperty(nameof(InternalDictionary.entries)));
-
-        EditorUtility.SetDirty(dict);
-        serializedObject.ApplyModifiedProperties();
+        SerializedProperty arrayProp = serializedObject.FindProperty(nameof(InternalDictionary.entries));
+        PropertyField arrayField = new(arrayProp);
+        element.Add(arrayField);
 
         return element;
     }

@@ -39,9 +39,9 @@ public sealed class CompoundSignElement : VisualElement
 
     public void SetValue(in CompoundSign compoundSign, StandardSign[] standardSigns, VisualTreeAsset standardUI)
     {
-        var characterList  = this.Q<ListView>("CharacterList");
-        var rawMapping     = this.Q<IntegerField>("UnicodeChar");
-        var resultField    = this.Q<TextField>("Result");
+        var characterList = this.Q<ListView>("CharacterList");
+        var rawMapping    = this.Q<IntegerField>("UnicodeChar");
+        var resultField   = this.Q<TextField>("Result");
 
         rawMapping.value  = compoundSign.mappedChar;
         resultField.value = $"{(char) compoundSign.mappedChar}";
