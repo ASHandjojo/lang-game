@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 using UnityEngine;
+using System;
+using System.IO;
 
 [Flags]
 public enum PlayerContext : int
@@ -47,6 +45,9 @@ public sealed class PlayerController : MonoBehaviour
         }
     }
 
+    // Dictionary
+    public Dictionary dictionary { get; set; }
+
     void Awake()
     {
         if (Instance != null)
@@ -63,6 +64,11 @@ public sealed class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
 
         playerCollider = GetComponent<Collider2D>();
+
+        string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave.json");
+        if (File.Exists(savePath)) {
+            GameState.LoadPlayerData();
+        }
     }
     
     void Update()
@@ -96,6 +102,7 @@ public sealed class PlayerController : MonoBehaviour
         else if (Input.GetKeyDown(Keybinds.Instance.getDictKey()))
         {
             var events = FindFirstObjectByType<GameHUDEvents>(); // NOTE: Very dirty
+            GameState.SavePlayerData();
             events.OpenDictionary();
         }
         else if (Input.GetKeyDown(Keybinds.Instance.getSettingsKey()))
