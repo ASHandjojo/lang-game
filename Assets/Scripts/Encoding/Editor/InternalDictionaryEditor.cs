@@ -1,11 +1,15 @@
 using System;
 using System.Buffers;
+
 using System.Collections.Generic;
+
 using Unity.Collections;
-using UnityEditor;
-using UnityEditor.UIElements;
+
 using UnityEngine;
 using UnityEngine.UIElements;
+
+using UnityEditor;
+using UnityEditor.UIElements;
 
 public sealed class DictEntryElement : VisualElement
 {
@@ -33,11 +37,6 @@ public sealed class DictEntryElement : VisualElement
                 unicodeStrField.value = processor.Translate(e.newValue);
             }
         );
-    }
-
-    public void SetValue(string rawStr)
-    {
-        rawStringField.value = rawStr;
     }
 }
 
@@ -79,6 +78,13 @@ internal sealed class DictEntryDrawer : PropertyDrawer
 [CustomEditor(typeof(InternalDictionary))]
 internal sealed class InternalDictEditor : Editor
 {
+    private static readonly Dictionary<string, WordType> WordTypeDict = new()
+    {
+        { nameof(WordType.Subject), WordType.Subject },
+        { nameof(WordType.Object),  WordType.Object  },
+        { nameof(WordType.Verb),    WordType.Verb    },
+    };
+
     public override VisualElement CreateInspectorGUI()
     {
         VisualElement element = new();
@@ -89,6 +95,46 @@ internal sealed class InternalDictEditor : Editor
         SerializedProperty arrayProp = serializedObject.FindProperty(nameof(InternalDictionary.entries));
         PropertyField arrayField     = new(arrayProp);
         element.Add(arrayField);
+
+        // CSV Importing
+        TextField importField = new("Import CSV")
+        {
+            name      = "ImportField",
+            multiline = true
+        };
+        element.Add(importField);
+
+        Button buttonImport = new()
+        {
+            name = "ImportButton",
+            text = "Import"
+        };
+        buttonImport.clicked += () =>
+        {
+            // Current Structure: [Phonetics, English Translation, Word Type {as str}]
+            const int ExpectedArgCount = 3;
+
+            string importText = importField.text;
+            string[] lines    = importText.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            if (lines.Length > 0)
+            {
+                foreach (string line in lines)
+                {
+                    string[] args = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                    Debug.Assert(args.Length == ExpectedArgCount, $"Invalid number of arguments (expected: {ExpectedArgCount})! String: {line}, Arg Count: {args.Length}");
+                    DictEntry entry = new()
+                    {
+                        rawString          = args[0],
+                        englishTranslation = args[1],
+                        wordType           = WordTypeDict[args[2]]
+                    };
+                    dict.entries.Add(entry);
+                }
+                EditorUtility.SetDirty(dict);
+                serializedObject.ApplyModifiedProperties();
+            }
+        };
+        element.Add(buttonImport);
 
         return element;
     }
