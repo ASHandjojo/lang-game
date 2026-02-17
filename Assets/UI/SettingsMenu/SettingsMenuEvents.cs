@@ -1,10 +1,40 @@
+using Mono.Cecil.Cil;
+using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using static System.Collections.Specialized.BitVector32;
+
+readonly struct RebindButton
+{
+    public string ID { get; }
+    public string ActionID { get; }
+    public int BindingIndex { get; }
+        // for Button: 0; for Vector2: 1-4 (left: 3, right: 4)
+
+    public RebindButton(string id, string actionID, int bindingIndex)
+    {
+        ID = id;
+        ActionID = actionID;
+        BindingIndex = bindingIndex;
+    }
+}
 
 public class SettingsMenuEvents : MonoBehaviour, IOpenClosable
 {
-    [SerializeField] MenuToggler menuToggler;
+    private static readonly RebindButton[] RebindButtons =
+    {
+        new("MoveRight", "Move", 4),
+        new("MoveLeft", "Move", 3),
+        new("Interact", "Interact", 0),
+        new("Dictionary", "Dictionary", 0),
+        new("Return", "Return", 0),
+        new("SettingMenu", "Settings", 0),
+    };
+
+    private Dictionary<string, EventCallback<ClickEvent>> rebindButtonEventHandlers;
     
     private UIDocument selfDocument;
 
@@ -14,23 +44,7 @@ public class SettingsMenuEvents : MonoBehaviour, IOpenClosable
     [SerializeField] private AudioClip hoverClip;
     [SerializeField] private AudioClip selectionClip;
 
-    private Button right_listener;
-    private Button left_listener;
-
-    private Button inter_listener;
-    private Button dict_listener;
-    private Button ret_listener;
-    private Button settings_listener;
-
-    private bool shouldListen;
-    private int current_keybind = -1;
-
     private Sprite[] azSprites = {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null};
-
-    public void Close()
-    {
-        ToggleMenu(null);
-    }
 
     void Awake()
     {
@@ -55,67 +69,65 @@ public class SettingsMenuEvents : MonoBehaviour, IOpenClosable
         //    Debug.Log("Sprite Loaded correctly");
         //}
 
-        // Add events to back button
-        backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
-        backButton.RegisterCallback<ClickEvent>(e => MenuToggler.Instance.CurrentMenu = null);
-
-
-        // Add input listeners for Keybinds
-        right_listener =  selfDocument.rootVisualElement.Q("MoveRightButton") as Button;
-        right_listener.RegisterCallback<ClickEvent>(ListenForInputRight);
-        left_listener = selfDocument.rootVisualElement.Q("MoveLeftButton") as Button;
-        left_listener.RegisterCallback<ClickEvent>(ListenForInputLeft);
-        inter_listener = selfDocument.rootVisualElement.Q("InteractButton") as Button;
-        inter_listener.RegisterCallback<ClickEvent>(ListenForInputInters);
-        dict_listener = selfDocument.rootVisualElement.Q("DictionaryButton") as Button;
-        dict_listener.RegisterCallback<ClickEvent>(ListenForInputDict);
-        ret_listener = selfDocument.rootVisualElement.Q("ReturnButton") as Button;
-        ret_listener.RegisterCallback<ClickEvent>(ListenForInputBack);
-        settings_listener = selfDocument.rootVisualElement.Q("SettingMenuButton") as Button;
-        settings_listener.RegisterCallback<ClickEvent>(ListenForInputSettings);
-
-        shouldListen = false;
-
-
-
-        
-        
-        // Add sounds
-        backButton.RegisterCallback<ClickEvent>(OnButtonClick);
-        backButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
-
         // Begin with settings menu not displayed
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
-
     }
 
     void Start()
     {
+        var rebinds = PlayerPrefs.GetString("rebinds");
+        if (!string.IsNullOrEmpty(rebinds))
+        {
+            InputSystem.actions.LoadBindingOverridesFromJson(rebinds);
+        }
+
         //Initialize Keybinds on Settings Menu
-        SetRightImage(Keybinds.Instance.getRightKey());
-        SetLeftImage(Keybinds.Instance.getLeftKey());
-        SetIntersImage(Keybinds.Instance.getIntersKey());
-        SetRetImage(Keybinds.Instance.getBackKey());
-        SetDictImage(Keybinds.Instance.getDictKey());
-        SetSettingsImage(Keybinds.Instance.getSettingsKey());
-        
+        foreach (RebindButton rebindButton in RebindButtons)
+        {
+            // currently unused; TODO: display correct image based on this
+            InputBinding binding = InputSystem.actions.FindAction(rebindButton.ActionID)
+                .bindings[rebindButton.BindingIndex];
+
+            // change ui image
+            SetRebindKeyImage(rebindButton.ID, 97);
+                // keycode 97; temporary fix to make it work with the old keycode system 
+        } 
     } 
+
+    void OnEnable()
+    {
+        // Add events to back button
+        backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
+        backButton.RegisterCallback<ClickEvent>(e => MenuToggler.Instance.CurrentMenu = null);
+
+        // Add input listeners for Keybinds
+        rebindButtonEventHandlers = new();
+
+        foreach (RebindButton rebindButton in RebindButtons)
+        {
+            void handler(ClickEvent e) => OnRebindButton(rebindButton);
+            rebindButtonEventHandlers.Add(rebindButton.ID + "Button", handler);
+            Button uiButton = selfDocument.rootVisualElement.Q(rebindButton.ID + "Button") as Button;
+            uiButton.RegisterCallback<ClickEvent>(handler);
+        }
+
+        backButton.RegisterCallback<ClickEvent>(OnButtonClick);
+
+        // Add sounds
+        backButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
+    }
 
     // Get rid of button events
     void OnDisable()
     {
-        backButton.UnregisterCallback<ClickEvent>(ToggleMenu);
-
         backButton.UnregisterCallback<ClickEvent>(OnButtonClick);
         backButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
 
-        right_listener.UnregisterCallback<ClickEvent>(ListenForInputRight);
-        left_listener.UnregisterCallback<ClickEvent>(ListenForInputLeft);
-        inter_listener.UnregisterCallback<ClickEvent>(ListenForInputInters);
-        dict_listener.UnregisterCallback<ClickEvent>(ListenForInputDict);
-        ret_listener.UnregisterCallback<ClickEvent>(ListenForInputBack);
-        settings_listener.UnregisterCallback<ClickEvent>(ListenForInputSettings);
-        
+        foreach (var (buttonID, handler) in rebindButtonEventHandlers)
+        {
+            Button uiButton = selfDocument.rootVisualElement.Q(buttonID) as Button;
+            uiButton.UnregisterCallback(handler);
+        }
     }
 
     public void Open()
@@ -128,7 +140,7 @@ public class SettingsMenuEvents : MonoBehaviour, IOpenClosable
     }
 
     // Return to main menu or gameHud
-    private void ToggleMenu(ClickEvent e)
+    public void Close()
     {
         backButton.SetEnabled(false);
 
@@ -144,6 +156,7 @@ public class SettingsMenuEvents : MonoBehaviour, IOpenClosable
     {
         //Debug.Log("Click");
         sh.PlaySoundUI(selectionClip);
+        Close();
     }
 
     // Play sound when cursor is over a button
@@ -152,114 +165,46 @@ public class SettingsMenuEvents : MonoBehaviour, IOpenClosable
         sh.PlaySoundUI(hoverClip);
     }
 
-    void Update()
+    private void OnRebindButton(RebindButton rebindButton)
     {
-        if (shouldListen) {
-            if (Input.anyKeyDown) {
-                foreach (KeyCode keyCode in System.Enum.GetValues(typeof(KeyCode))) {
-                    if (Input.GetKeyDown(keyCode)) {
-                        if ((int) keyCode > 96 && (int) keyCode < 123)
-                        switch(current_keybind) {
-                            case 0: if (KeyCodeNotThis(0, keyCode)) {Keybinds.Instance.setRightKey(keyCode); SetRightImage(keyCode); }
-                            break;
-                            case 1: if (KeyCodeNotThis(1, keyCode)) {Keybinds.Instance.setLeftKey(keyCode); SetLeftImage(keyCode); }
-                            break;
-                            case 2: if (KeyCodeNotThis(2, keyCode)) {Keybinds.Instance.setDictKey(keyCode); SetDictImage(keyCode); }
-                            break;
-                            case 3: if (KeyCodeNotThis(3, keyCode)) {Keybinds.Instance.setBackKey(keyCode); SetRetImage(keyCode); }
-                            break;
-                            case 4: if (KeyCodeNotThis(4, keyCode)) {Keybinds.Instance.setIntersKey(keyCode); SetIntersImage(keyCode); }
-                            break;
-                            case 5: if (KeyCodeNotThis(5, keyCode)) {Keybinds.Instance.setSettingsKey(keyCode); SetSettingsImage(keyCode); }
-                            break;
-                            default: 
-                            break;
-                        }
-                        //Debug.Log("Rebinded");
-                        break;
-                    }
-                }
-                shouldListen = false;
-                current_keybind = -1;
-            }
-        }
+        Debug.Log("REBIND BUTTON: " + rebindButton.ID);
+
+        Button uiButton = selfDocument.rootVisualElement.Q(rebindButton.ID + "Button") as Button;
+        uiButton.AddToClassList("rebinding"); // rebinding styles
+
+        InputAction action = InputSystem.actions.FindAction(rebindButton.ActionID);
+
+        // action needs to be disabled before rebinding
+        action.Disable();
+
+        action.PerformInteractiveRebinding(rebindButton.BindingIndex)
+            .OnComplete(operation => {
+                string newKeyPath = operation.selectedControl.path;
+                string newKeyeadableName = operation.selectedControl.displayName;
+
+                // change ui image
+                SetRebindKeyImage(rebindButton.ID, 97);
+                    // keycode 97; temporary fix to make it work with the old keycode system 
+
+                // save to playerprefs
+                PlayerPrefs.SetString("rebinds", InputSystem.actions.SaveBindingOverridesAsJson());
+
+                uiButton.RemoveFromClassList("rebinding"); // remove rebinding styles
+                operation.Dispose();
+                action.Enable();
+            })
+            .OnCancel(operation => {
+                uiButton.RemoveFromClassList("rebinding"); // remove rebinding styles
+                operation.Dispose();
+                action.Enable();
+            })
+            .Start();
     }
-
-    void ListenForInputRight(ClickEvent e) {
-        //Debug.Log("Right Click");
-        shouldListen = true;
-        current_keybind = 0;
-    }
-
-    void ListenForInputLeft(ClickEvent e) {
-        //Debug.Log("Left Click");
-        shouldListen = true;
-        current_keybind = 1;
-    }
-
-    void ListenForInputDict(ClickEvent e) {
-        //Debug.Log("Dict Click");
-        shouldListen = true;
-        current_keybind = 2;
-    }
-
-    void ListenForInputBack(ClickEvent e) {
-        //Debug.Log("Back Click");
-        shouldListen = true;
-        current_keybind = 3;
-    }
-
-    void ListenForInputInters(ClickEvent e) {
-        //Debug.Log("Inters Click");
-        shouldListen = true;
-        current_keybind = 4;
-    }
-
-    void ListenForInputSettings(ClickEvent e) {
-        //Debug.Log("Settings Click");
-        shouldListen = true;
-        current_keybind = 5;
-    }
-
-
-
-    bool KeyCodeNotThis(int num, KeyCode key) {
-        switch(num) {
-            case 0: return (key != Keybinds.Instance.getLeftKey() && key != Keybinds.Instance.getDictKey() && key != Keybinds.Instance.getBackKey() && key != Keybinds.Instance.getIntersKey() && key != Keybinds.Instance.getSettingsKey());
-            case 1: return (key != Keybinds.Instance.getRightKey() && key != Keybinds.Instance.getDictKey() && key != Keybinds.Instance.getBackKey() && key != Keybinds.Instance.getIntersKey() && key != Keybinds.Instance.getSettingsKey());
-            case 2: return (key != Keybinds.Instance.getRightKey() && key != Keybinds.Instance.getLeftKey() && key != Keybinds.Instance.getBackKey() && key != Keybinds.Instance.getIntersKey() && key != Keybinds.Instance.getSettingsKey());
-            case 3: return (key != Keybinds.Instance.getRightKey() && key != Keybinds.Instance.getLeftKey() && key != Keybinds.Instance.getDictKey() && key != Keybinds.Instance.getIntersKey() && key != Keybinds.Instance.getSettingsKey());
-            case 4: return (key != Keybinds.Instance.getRightKey() && key != Keybinds.Instance.getLeftKey() && key != Keybinds.Instance.getDictKey() && key != Keybinds.Instance.getBackKey() && key != Keybinds.Instance.getSettingsKey());
-            case 5: return (key != Keybinds.Instance.getRightKey() && key != Keybinds.Instance.getLeftKey() && key != Keybinds.Instance.getDictKey() && key != Keybinds.Instance.getBackKey() && key != Keybinds.Instance.getIntersKey());
-            default: return false;
-        }
-    }
-
-
-    // Change .hotkey-image based on assigned Keybind
-
-    void SetRightImage(KeyCode num) {
-      selfDocument.rootVisualElement.Q("MoveRightImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
-    }
-
-    void SetLeftImage(KeyCode num) {
-        selfDocument.rootVisualElement.Q("MoveLeftImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
-    }
-
-    void SetIntersImage(KeyCode num) {
-        selfDocument.rootVisualElement.Q("InteractImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
-    }
-
-    void SetDictImage(KeyCode num) {
-        selfDocument.rootVisualElement.Q("DictionaryImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
-    }
-
-    void SetRetImage(KeyCode num) {
-        selfDocument.rootVisualElement.Q("ReturnImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
-    }
-
-    void SetSettingsImage(KeyCode num) {
-        selfDocument.rootVisualElement.Q("SettingsImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
+    
+    private void SetRebindKeyImage(string rebindID, int keycode)
+    {
+        //selfDocument.rootVisualElement.Q(rebindID + "Image").style.backgroundImage
+        //    = Background.FromSprite(azSprites[keycode - 97]);
     }
 
     // Change dialogue text speed based on slider position 

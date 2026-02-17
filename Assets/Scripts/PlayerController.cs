@@ -27,6 +27,7 @@ public sealed class PlayerController : MonoBehaviour
     private Collider2D playerCollider;
 
     private InputAction moveAction;
+    private InputAction interactAction;
 
     private Vector2 movementDirection;
     private bool facingRight = true, canMove = true;
@@ -67,7 +68,8 @@ public sealed class PlayerController : MonoBehaviour
 
         playerCollider = GetComponent<Collider2D>();
 
-        moveAction = InputSystem.actions.FindAction("move");
+        moveAction = InputSystem.actions.FindAction("Move");
+        interactAction = InputSystem.actions.FindAction("Interact");
     }
 
     private void Start()
@@ -77,32 +79,32 @@ public sealed class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //bool isInteracting = (context & PlayerContext.Interacting) != 0;
-        //bool isInInputMode = (context & PlayerContext.PlayerInput) != 0;
-        //bool isInMenu = (context & PlayerContext.Menu) != 0;
-        //bool useInteractKey = Input.GetKeyDown(Keybinds.Instance.getIntersKey());
-        //// Trigger for interact input
-        //if (!isInteracting && !isInInputMode && !isInMenu && useInteractKey)
-        //{
-        //    // Prompts listeners to execute their Interact method
-        //    // NOTE: Very dirty
-        //    Interactable[] interactables = FindObjectsByType<Interactable>(FindObjectsSortMode.None);
-        //    foreach (Interactable interactable in interactables)
-        //    {
-        //        if (interactable.InteractCollider.IsTouching(playerCollider))
-        //        {
-        //            StartCoroutine(interactable.Interact(this));
-        //            break;
-        //        }
-        //    }
-        //}
-        //else if (currentInteraction.TryGet(out Interactable obj) && (obj.TargetContext & PlayerContext.Dialogue) != 0 && !isInInputMode)
-        //{
-        //    if (useInteractKey || Input.GetMouseButtonDown(0))
-        //    {
-        //        (obj as NpcDialogue).Advance();
-        //    }
-        //}
+        bool isInteracting = (context & PlayerContext.Interacting) != 0;
+        bool isInInputMode = (context & PlayerContext.PlayerInput) != 0;
+        bool isInMenu = (context & PlayerContext.Menu) != 0;
+        bool useInteractKey = interactAction.IsPressed();
+        // Trigger for interact input
+        if (!isInteracting && !isInInputMode && !isInMenu && useInteractKey)
+        {
+            // Prompts listeners to execute their Interact method
+            // NOTE: Very dirty
+            Interactable[] interactables = FindObjectsByType<Interactable>(FindObjectsSortMode.None);
+            foreach (Interactable interactable in interactables)
+            {
+                if (interactable.InteractCollider.IsTouching(playerCollider))
+                {
+                    StartCoroutine(interactable.Interact(this));
+                    break;
+                }
+            }
+        }
+        else if (currentInteraction.TryGet(out Interactable obj) && (obj.TargetContext & PlayerContext.Dialogue) != 0 && !isInInputMode)
+        {
+            if (useInteractKey)
+            {
+                (obj as NpcDialogue).Advance();
+            }
+        }
 
         if (canMove)
         {

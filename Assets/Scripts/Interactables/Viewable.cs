@@ -21,14 +21,14 @@ public sealed class Viewable : Interactable
     {
         document        = GetComponent<UIDocument>();
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
-        keybindIcon     = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());
+        //keybindIcon     = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());
         soundHandler    = GetComponent<SoundHandler>();
 
         // Initialize UI images, while hiding UI screen until interacted with
         document.rootVisualElement.Q("ViewImage").style.backgroundImage   = new StyleBackground(zoomImage);
-        document.rootVisualElement.Q("PromptImage").style.backgroundImage = new StyleBackground(keybindIcon);
+        //document.rootVisualElement.Q("PromptImage").style.backgroundImage = new StyleBackground(keybindIcon);
 
-        worldPromptIcon.sprite = ConvertToSprite(keybindIcon);
+        //worldPromptIcon.sprite = ConvertToSprite(keybindIcon);
         document.rootVisualElement.style.visibility = Visibility.Hidden;
         document.rootVisualElement.style.display    = DisplayStyle.None;
         isZoomed = false;
