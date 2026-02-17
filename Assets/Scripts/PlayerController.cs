@@ -82,7 +82,7 @@ public sealed class PlayerController : MonoBehaviour
         bool isInteracting = (context & PlayerContext.Interacting) != 0;
         bool isInInputMode = (context & PlayerContext.PlayerInput) != 0;
         bool isInMenu = (context & PlayerContext.Menu) != 0;
-        bool useInteractKey = interactAction.IsPressed();
+        bool useInteractKey = interactAction.WasPerformedThisFrame();
         // Trigger for interact input
         if (!isInteracting && !isInInputMode && !isInMenu && useInteractKey)
         {
