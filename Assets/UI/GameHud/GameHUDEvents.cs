@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameHUDEvents : UIBase
+public class GameHUDEvents : MonoBehaviour, IOpenClosable
 {
     [Header("Audio")]
     [SerializeField] private AudioClip openClip;
@@ -26,6 +26,16 @@ public class GameHUDEvents : UIBase
 
     private Button backButton;
 
+    public void Open()
+    {
+        OpenDictionary();
+    }
+
+    public void Close() 
+    {
+        CloseDictionary(null);
+    }
+
     void Awake()
     {
         selfDocument = GetComponent<UIDocument>();
@@ -41,11 +51,11 @@ public class GameHUDEvents : UIBase
         dictionaryButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
 
         settingsButton = selfDocument.rootVisualElement.Q<Button>("SettingsButton");
-        settingsButton.RegisterCallback<ClickEvent>(OpenSettings);
+        //settingsButton.RegisterCallback<ClickEvent>(OpenSettings);
         settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
 
         backButton = selfDocument.rootVisualElement.Q<Button>("BackButton");
-        backButton.RegisterCallback<ClickEvent>(CloseDictionary);
+        backButton.RegisterCallback<ClickEvent>(e => MenuToggler.Instance.CurrentMenu = null);
 
         Button settingsBackButton = settingsDocument.rootVisualElement.Q<Button>("BackButton");
         settingsBackButton.RegisterCallback(
@@ -65,15 +75,7 @@ public class GameHUDEvents : UIBase
     }
     private void OpenDictionary(ClickEvent e) => OpenDictionary();
 
-    public void OpenSettings()
-    {
-        PlayerController.Instance.context |= PlayerContext.Menu;
-        DisableWorldActions();
-
-        settingsDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-        selfDocument.rootVisualElement.style.display     = DisplayStyle.None;
-    }
-    public void OpenSettings(ClickEvent e) => OpenSettings();
+    //public void OpenSettings(ClickEvent e) => OpenSettings();
 
     private void CloseDictionary(ClickEvent e)
     {
@@ -85,7 +87,7 @@ public class GameHUDEvents : UIBase
     {
         dictionaryContainer.style.backgroundColor = new StyleColor(new Color(0.08f, 0.08f, 0.08f, 0.8f));
         // Disable box collider to prevent interactions & freeze position to prevent movement
-        DisableWorldActions();
+        //DisableWorldActions();
         
         // Enable Dictionary elements, Disable HUD
         dictionaryContainer.visible = true;
@@ -121,7 +123,7 @@ public class GameHUDEvents : UIBase
         hudContainer.visible        = true;
         
         // Restore movement, Re-enable box collider, listen for menu keys
-        EnableWorldActions();
+        //EnableWorldActions();
     }
 
     // Fade the alpha style property of a visual element

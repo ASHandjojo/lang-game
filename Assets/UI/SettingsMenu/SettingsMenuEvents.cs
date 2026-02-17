@@ -2,10 +2,12 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class SettingsMenuEvents : UIBase
+public class SettingsMenuEvents : MonoBehaviour, IOpenClosable
 {
+    [SerializeField] MenuToggler menuToggler;
+    
     private UIDocument selfDocument;
-    [SerializeField] private UIDocument otherDocument;
+
     private Button backButton;
     private SoundHandler sh;
     [Header("Audio")]
@@ -25,8 +27,10 @@ public class SettingsMenuEvents : UIBase
 
     private Sprite[] azSprites = {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null};
 
-
-
+    public void Close()
+    {
+        ToggleMenu(null);
+    }
 
     void Awake()
     {
@@ -53,7 +57,7 @@ public class SettingsMenuEvents : UIBase
 
         // Add events to back button
         backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
-        backButton.RegisterCallback<ClickEvent>(ToggleMenu);
+        backButton.RegisterCallback<ClickEvent>(e => MenuToggler.Instance.CurrentMenu = null);
 
 
         // Add input listeners for Keybinds
@@ -114,23 +118,24 @@ public class SettingsMenuEvents : UIBase
         
     }
 
+    public void Open()
+    {
+        PlayerController.Instance.context |= PlayerContext.Menu;
+
+        selfDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+
+        //Debug.Log("Settings Menu Open");
+    }
+
     // Return to main menu or gameHud
-     private void ToggleMenu(ClickEvent e)
+    private void ToggleMenu(ClickEvent e)
     {
         backButton.SetEnabled(false);
 
-        otherDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+        //otherDocument.rootVisualElement.style.display = DisplayStyle.Flex;
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
 
         backButton.SetEnabled(true);
-
-        // If a Player Instance is available (not in main menu), return movement and listening for interactions/menu keys
-        if(PlayerController.Instance != null)
-        {
-            EnableWorldActions();
-            //Actions.OnSettingsMenuCalled += otherDocument.GetComponent<GameHUDEvents>().OpenSettings;
-            //Actions.OnDictionaryMenuCalled += otherDocument.GetComponent<GameHUDEvents>().OpenDictionary;
-        }
     }
 
 
@@ -256,7 +261,6 @@ public class SettingsMenuEvents : UIBase
     void SetSettingsImage(KeyCode num) {
         selfDocument.rootVisualElement.Q("SettingsImage").style.backgroundImage = Background.FromSprite(azSprites[(int)num - 97]);
     }
-
 
     // Change dialogue text speed based on slider position 
 }

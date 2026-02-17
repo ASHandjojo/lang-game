@@ -33,5 +33,5 @@ EditorBuildSettings:
     path: Assets/Scenes/GameLevels/LvOne.unity
     guid: e4a0858f97a7a204799d245157c50614
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 4e79976aac6e57140b644939cad0956c, type: 3}
   m_UseUCBPForAssetBundles: 0

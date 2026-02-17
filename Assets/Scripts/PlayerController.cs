@@ -26,6 +26,8 @@ public sealed class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D playerCollider;
 
+    private InputAction moveAction;
+
     private Vector2 movementDirection;
     private bool facingRight = true, canMove = true;
 
@@ -64,56 +66,54 @@ public sealed class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
 
         playerCollider = GetComponent<Collider2D>();
+
+        moveAction = InputSystem.actions.FindAction("move");
     }
 
     private void Start()
     {
+
     }
 
     void Update()
     {
-        bool isInteracting  = (context & PlayerContext.Interacting) != 0;
-        bool isInInputMode  = (context & PlayerContext.PlayerInput) != 0;
-        bool isInMenu       = (context & PlayerContext.Menu) != 0;
-        bool useInteractKey = Input.GetKeyDown(Keybinds.Instance.getIntersKey());
-        // Trigger for interact input
-        if (!isInteracting && !isInInputMode && !isInMenu && useInteractKey)
+        //bool isInteracting = (context & PlayerContext.Interacting) != 0;
+        //bool isInInputMode = (context & PlayerContext.PlayerInput) != 0;
+        //bool isInMenu = (context & PlayerContext.Menu) != 0;
+        //bool useInteractKey = Input.GetKeyDown(Keybinds.Instance.getIntersKey());
+        //// Trigger for interact input
+        //if (!isInteracting && !isInInputMode && !isInMenu && useInteractKey)
+        //{
+        //    // Prompts listeners to execute their Interact method
+        //    // NOTE: Very dirty
+        //    Interactable[] interactables = FindObjectsByType<Interactable>(FindObjectsSortMode.None);
+        //    foreach (Interactable interactable in interactables)
+        //    {
+        //        if (interactable.InteractCollider.IsTouching(playerCollider))
+        //        {
+        //            StartCoroutine(interactable.Interact(this));
+        //            break;
+        //        }
+        //    }
+        //}
+        //else if (currentInteraction.TryGet(out Interactable obj) && (obj.TargetContext & PlayerContext.Dialogue) != 0 && !isInInputMode)
+        //{
+        //    if (useInteractKey || Input.GetMouseButtonDown(0))
+        //    {
+        //        (obj as NpcDialogue).Advance();
+        //    }
+        //}
+
+        if (canMove)
         {
-            // Prompts listeners to execute their Interact method
-            // NOTE: Very dirty
-            Interactable[] interactables = FindObjectsByType<Interactable>(FindObjectsSortMode.None);
-            foreach (Interactable interactable in interactables)
-            {
-                if (interactable.InteractCollider.IsTouching(playerCollider))
-                {
-                    StartCoroutine(interactable.Interact(this));
-                    break;
-                }
-            }
-        }
-        else if (currentInteraction.TryGet(out Interactable obj) && (obj.TargetContext & PlayerContext.Dialogue) != 0 && !isInInputMode)
-        {
-            if (useInteractKey || Input.GetMouseButtonDown(0))
-            {
-                (obj as NpcDialogue).Advance();
-            }
-        }
-        else if (Input.GetKeyDown(Keybinds.Instance.getDictKey()))
-        {
-            var events = FindFirstObjectByType<GameHUDEvents>(); // NOTE: Very dirty
-            events.OpenDictionary();
-        }
-        else if (Input.GetKeyDown(Keybinds.Instance.getSettingsKey()))
-        {
-            var events = FindFirstObjectByType<GameHUDEvents>(); // NOTE: Very dirty
-            events.OpenSettings();
+            HandleMovement();
         }
     }
 
-    public void OnMove(InputAction.CallbackContext context)
+    private void HandleMovement()
     {
-        Vector2 moveValue = context.ReadValue<Vector2>();
-        Debug.Log($"Move value: {moveValue}");
+        Vector2 moveValue = moveAction.ReadValue<Vector2>();
+        //Debug.Log($"Move value: {moveValue}");
 
         if (moveValue.x > 0) // Right movement
         {
@@ -139,6 +139,7 @@ public sealed class PlayerController : MonoBehaviour
             anim.SetFloat("horizontal", Mathf.Abs(movementDirection.x));
         }
     }
+
 
     void FixedUpdate()
     {
