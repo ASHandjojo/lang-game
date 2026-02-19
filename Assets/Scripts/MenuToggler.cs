@@ -35,12 +35,14 @@ public sealed class MenuToggler : MonoBehaviour
         // Closes active menu
         if (currentMenu.TryGet(out OpenClosable menu))
         {
+            Debug.Log("Closing previous menu");
             menu.Close();
-            uiActionMap.Enable();
-            prevActionMap.Disable();
-
-            DisableWorldActions();
         }
+
+        //uiActionMap.Enable();
+        prevActionMap.Disable();
+        DisableWorldActions();
+
         currentMenu.SetNonNull(closable);
         closable.Open();
 
@@ -54,14 +56,14 @@ public sealed class MenuToggler : MonoBehaviour
         if (currentMenu.TryGet(out OpenClosable menu))
         {
             Debug.Log("Cleared!");
-            uiActionMap.Disable();
-            prevActionMap.Enable();
-
-            EnableWorldActions();
-
             menu.Close();
             currentMenu.Unset();
         }
+
+        //uiActionMap.Disable();
+        prevActionMap.Enable();
+
+        EnableWorldActions();
 
         PlayerController.Instance.context &= ~PlayerContext.Menu;
     }
@@ -82,6 +84,7 @@ public sealed class MenuToggler : MonoBehaviour
     void Start()
     {
         uiActionMap = InputSystem.actions.FindActionMap("UI");
+        uiActionMap.Enable();
 
         // Set initial state of action maps
         InputSystem.actions.Disable();

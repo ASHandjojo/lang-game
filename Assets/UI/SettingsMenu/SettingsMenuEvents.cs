@@ -1,11 +1,8 @@
-using Mono.Cecil.Cil;
-using System;
 using System.Collections.Generic;
-using Unity.Collections;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using static System.Collections.Specialized.BitVector32;
 
 readonly struct RebindButton
 {
@@ -22,6 +19,7 @@ readonly struct RebindButton
     }
 }
 
+[DisallowMultipleComponent]
 public sealed class SettingsMenuEvents : OpenClosable
 {
     private static readonly RebindButton[] RebindButtons =
@@ -110,9 +108,6 @@ public sealed class SettingsMenuEvents : OpenClosable
             Button uiButton = selfDocument.rootVisualElement.Q(rebindButton.ID + "Button") as Button;
             uiButton.RegisterCallback<ClickEvent>(handler);
         }
-
-        backButton.RegisterCallback<ClickEvent>(OnButtonClick);
-
         // Add sounds
         backButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
     }
@@ -139,8 +134,6 @@ public sealed class SettingsMenuEvents : OpenClosable
     public override void Close()
     {
         backButton.SetEnabled(false);
-
-        //otherDocument.rootVisualElement.style.display = DisplayStyle.Flex;
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
 
         backButton.SetEnabled(true);
@@ -150,7 +143,6 @@ public sealed class SettingsMenuEvents : OpenClosable
     // Play sound when a button is clicked
     private void OnButtonClick(ClickEvent e)
     {
-        //Debug.Log("Click");
         sh.PlaySoundUI(selectionClip);
         MenuToggler.Instance.UseMenu(this);
     }

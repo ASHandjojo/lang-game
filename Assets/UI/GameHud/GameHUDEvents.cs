@@ -52,22 +52,14 @@ public sealed class GameHUDEvents : OpenClosable
         dictionaryButton = selfDocument.rootVisualElement.Q<Button>("DictionaryButton");
         dictionaryButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(this));
         dictionaryButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
-
-        settingsButton = selfDocument.rootVisualElement.Q<Button>("SettingsButton");
-        //settingsButton.RegisterCallback<ClickEvent>(OpenSettings);
-        settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
-
+        // Back button for dictionary
         backButton = selfDocument.rootVisualElement.Q<Button>("BackButton");
         backButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.ClearAllMenus());
 
-
-        Button settingsBackButton = settingsDocument.rootVisualElement.Q<Button>("BackButton");
-        settingsBackButton.RegisterCallback(
-            (ClickEvent e) =>
-            {
-                PlayerController.Instance.context &= ~PlayerContext.Menu;
-            }
-        );
+        var settingsComponent = settingsDocument.gameObject.GetComponent<SettingsMenuEvents>();
+        settingsButton = selfDocument.rootVisualElement.Q<Button>("SettingsButton");
+        settingsButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(settingsComponent));
+        settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
 
         dictionaryContainer.visible = false;
     }
