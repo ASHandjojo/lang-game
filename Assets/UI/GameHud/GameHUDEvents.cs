@@ -42,6 +42,7 @@ public sealed class GameHUDEvents : OpenClosable
     {
         selfDocument = GetComponent<UIDocument>();
         sh           = GetComponent<SoundHandler>();
+
         hudContainer = selfDocument.rootVisualElement.Q("ScreenContainer");
 
         dictionaryContainer = selfDocument.rootVisualElement.Q("DictionaryContainer");
@@ -49,7 +50,7 @@ public sealed class GameHUDEvents : OpenClosable
 
         // Add events to all buttons
         dictionaryButton = selfDocument.rootVisualElement.Q<Button>("DictionaryButton");
-        dictionaryButton.RegisterCallback<ClickEvent>(OpenDictionary);
+        dictionaryButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(this));
         dictionaryButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
 
         settingsButton = selfDocument.rootVisualElement.Q<Button>("SettingsButton");
@@ -57,7 +58,8 @@ public sealed class GameHUDEvents : OpenClosable
         settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
 
         backButton = selfDocument.rootVisualElement.Q<Button>("BackButton");
-        backButton.RegisterCallback<ClickEvent>(e => MenuToggler.Instance.CurrentMenu = null);
+        backButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.ClearAllMenus());
+
 
         Button settingsBackButton = settingsDocument.rootVisualElement.Q<Button>("BackButton");
         settingsBackButton.RegisterCallback(
@@ -75,7 +77,6 @@ public sealed class GameHUDEvents : OpenClosable
         PlayerController.Instance.context |= PlayerContext.InDictionary;
         StartCoroutine(EnterDictionary(dictionary, openImage));
     }
-    private void OpenDictionary(ClickEvent e) => OpenDictionary();
 
     //public void OpenSettings(ClickEvent e) => OpenSettings();
 

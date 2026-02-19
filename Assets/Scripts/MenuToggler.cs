@@ -1,4 +1,5 @@
 using System;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,45 +23,47 @@ public sealed class MenuToggler : MonoBehaviour
     [SerializeField] private SettingsMenuEvents settingsMenu;
     [SerializeField] private GameHUDEvents dictionaryMenu;
 
-    private OpenClosable currentMenu;
+    private OptionalComponent<OpenClosable> currentMenu = new(); // Starts uninitialized
 
     // For caching
     private Rigidbody2D playerRB;
     private Collider2D  playerCollider;
 
-    public OpenClosable CurrentMenu 
-    { 
-        get => currentMenu; 
-        set
+    public void UseMenu(OpenClosable closable)
+    {
+        Debug.Assert(closable != null);
+        // Closes active menu
+        if (currentMenu.TryGet(out OpenClosable menu))
         {
-            if (value == currentMenu) return;
+            menu.Close();
+            uiActionMap.Enable();
+            prevActionMap.Disable();
 
-            if (currentMenu == null)
-            {
-                //prevActionMap = *get current action map*;
-                prevActionMap.Disable();
-                DisableWorldActions();
-
-                uiActionMap.Enable();
-            }
-            else
-            {
-                currentMenu.Close();
-            }
-
-            currentMenu = value;
-
-            if (currentMenu == null)
-            {
-                uiActionMap.Disable();
-
-                prevActionMap.Enable();
-                EnableWorldActions();
-            } else
-            {
-                currentMenu.Open();
-            }
+            DisableWorldActions();
         }
+        currentMenu.SetNonNull(closable);
+        closable.Open();
+
+        PlayerController.Instance.context |= PlayerContext.Menu;
+
+        Debug.Log("Adding menu!");
+    }
+
+    public void ClearAllMenus()
+    {
+        if (currentMenu.TryGet(out OpenClosable menu))
+        {
+            Debug.Log("Cleared!");
+            uiActionMap.Disable();
+            prevActionMap.Enable();
+
+            EnableWorldActions();
+
+            menu.Close();
+            currentMenu.Unset();
+        }
+
+        PlayerController.Instance.context &= ~PlayerContext.Menu;
     }
 
     void Awake()
@@ -74,7 +77,10 @@ public sealed class MenuToggler : MonoBehaviour
 
         DontDestroyOnLoad(this);
         Instance = this;
+    }
 
+    void Start()
+    {
         uiActionMap = InputSystem.actions.FindActionMap("UI");
 
         // Set initial state of action maps
@@ -93,46 +99,36 @@ public sealed class MenuToggler : MonoBehaviour
             Debug.Log($"Map: {map.name} is {(map.enabled ? "ACTIVE" : "OFF")}");
         }
 
-
-        settingsAction = InputSystem.actions.FindAction("Settings");
+        settingsAction   = InputSystem.actions.FindAction("Settings");
         dictionaryAction = InputSystem.actions.FindAction("Dictionary");
+
+        playerRB       = PlayerController.Instance.GetComponent<Rigidbody2D>();
+        playerCollider = PlayerController.Instance.GetComponent<Collider2D>();
     }
 
-    private void Update()
+    void Update()
     {
         if (settingsAction.WasPerformedThisFrame())
         {
-            OnMenuKey(settingsMenu);
+            UseMenu(settingsMenu);
         }
         if (dictionaryAction.WasPerformedThisFrame())
         {
-            OnMenuKey(dictionaryMenu);
+            UseMenu(dictionaryMenu);
         }
-    }
-
-    /// <summary>
-    /// Pressing a menu key while in another menu will close that menu, and open the new menu;
-    /// pressing a menu key while already being in that menu will just close the menu. <br/>
-    ///   - Can be changed to just ignore the keypresses instead (like how it was previously)
-    /// </summary>
-    /// <param name="menu">The menu to switch to.</param>
-    private void OnMenuKey(OpenClosable menu)
-    {
-        currentMenu = currentMenu == menu ? null : menu;
-
     }
 
     // Disable box collider to prevent further interaction & freeze position to prevent movement
     private void DisableWorldActions()
     {
-        PlayerController.Instance.GetComponent<BoxCollider2D>().enabled = false;
-        PlayerController.Instance.GetComponent<Rigidbody2D>().constraints |= RigidbodyConstraints2D.FreezePositionX;
+        playerRB.constraints  |= RigidbodyConstraints2D.FreezePositionX;
+        playerCollider.enabled = false;
     }
 
     // Restore movement & Re-enable box collider
     private void EnableWorldActions()
     {
-        PlayerController.Instance.GetComponent<Rigidbody2D>().constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-        PlayerController.Instance.GetComponent<BoxCollider2D>().enabled    = true;
+        playerRB.constraints  &= ~RigidbodyConstraints2D.FreezePositionX;
+        playerCollider.enabled = true;
     }
 }

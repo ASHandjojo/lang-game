@@ -98,7 +98,7 @@ public sealed class SettingsMenuEvents : OpenClosable
     {
         // Add events to back button
         backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
-        backButton.RegisterCallback<ClickEvent>(e => MenuToggler.Instance.CurrentMenu = null);
+        backButton.RegisterCallback<ClickEvent>(e => MenuToggler.Instance.ClearAllMenus());
 
         // Add input listeners for Keybinds
         rebindButtonEventHandlers = new();
@@ -132,11 +132,7 @@ public sealed class SettingsMenuEvents : OpenClosable
 
     public override void Open()
     {
-        PlayerController.Instance.context |= PlayerContext.Menu;
-
         selfDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-
-        //Debug.Log("Settings Menu Open");
     }
 
     // Return to main menu or gameHud
@@ -156,7 +152,7 @@ public sealed class SettingsMenuEvents : OpenClosable
     {
         //Debug.Log("Click");
         sh.PlaySoundUI(selectionClip);
-        Close();
+        MenuToggler.Instance.UseMenu(this);
     }
 
     // Play sound when cursor is over a button
