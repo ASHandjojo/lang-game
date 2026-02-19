@@ -7,12 +7,12 @@ using UnityEngine.InputSystem;
 /// NOTE: input action map toggling is a somewhat separate concern;
 ///   should be refactored out into its own class if more features are added
 /// </remarks>
-public class MenuToggler : MonoBehaviour
+[DisallowMultipleComponent]
+public sealed class MenuToggler : MonoBehaviour
 {
     public static MenuToggler Instance { get; private set; }
 
     private InputActionMap uiActionMap;
-
     private InputActionMap prevActionMap;
     // SideScrolling is the default starting action map for now; could change later
 
@@ -22,8 +22,13 @@ public class MenuToggler : MonoBehaviour
     [SerializeField] private SettingsMenuEvents settingsMenu;
     [SerializeField] private GameHUDEvents dictionaryMenu;
 
-    private IOpenClosable currentMenu;
-    public IOpenClosable CurrentMenu 
+    private OpenClosable currentMenu;
+
+    // For caching
+    private Rigidbody2D playerRB;
+    private Collider2D  playerCollider;
+
+    public OpenClosable CurrentMenu 
     { 
         get => currentMenu; 
         set
@@ -95,8 +100,14 @@ public class MenuToggler : MonoBehaviour
 
     private void Update()
     {
-        if (settingsAction.WasPerformedThisFrame()) OnMenuKey(settingsMenu);
-        if (dictionaryAction.WasPerformedThisFrame()) OnMenuKey(dictionaryMenu);
+        if (settingsAction.WasPerformedThisFrame())
+        {
+            OnMenuKey(settingsMenu);
+        }
+        if (dictionaryAction.WasPerformedThisFrame())
+        {
+            OnMenuKey(dictionaryMenu);
+        }
     }
 
     /// <summary>
@@ -105,10 +116,10 @@ public class MenuToggler : MonoBehaviour
     ///   - Can be changed to just ignore the keypresses instead (like how it was previously)
     /// </summary>
     /// <param name="menu">The menu to switch to.</param>
-    private void OnMenuKey(IOpenClosable menu)
+    private void OnMenuKey(OpenClosable menu)
     {
-        if (currentMenu == menu) CurrentMenu = null;
-        else CurrentMenu = menu;
+        currentMenu = currentMenu == menu ? null : menu;
+
     }
 
     // Disable box collider to prevent further interaction & freeze position to prevent movement
@@ -122,6 +133,6 @@ public class MenuToggler : MonoBehaviour
     private void EnableWorldActions()
     {
         PlayerController.Instance.GetComponent<Rigidbody2D>().constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-        PlayerController.Instance.GetComponent<BoxCollider2D>().enabled = true;
+        PlayerController.Instance.GetComponent<BoxCollider2D>().enabled    = true;
     }
 }

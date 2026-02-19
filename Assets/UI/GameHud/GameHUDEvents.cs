@@ -1,9 +1,11 @@
-using UnityEngine;
-using UnityEngine.UIElements;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameHUDEvents : MonoBehaviour, IOpenClosable
+using UnityEngine;
+using UnityEngine.UIElements;
+
+[DisallowMultipleComponent]
+public sealed class GameHUDEvents : OpenClosable
 {
     [Header("Audio")]
     [SerializeField] private AudioClip openClip;
@@ -26,12 +28,12 @@ public class GameHUDEvents : MonoBehaviour, IOpenClosable
 
     private Button backButton;
 
-    public void Open()
+    public override void Open()
     {
         OpenDictionary();
     }
 
-    public void Close() 
+    public override void Close() 
     {
         CloseDictionary(null);
     }

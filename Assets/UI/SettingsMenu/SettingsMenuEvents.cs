@@ -16,13 +16,13 @@ readonly struct RebindButton
 
     public RebindButton(string id, string actionID, int bindingIndex)
     {
-        ID = id;
-        ActionID = actionID;
+        ID           = id;
+        ActionID     = actionID;
         BindingIndex = bindingIndex;
     }
 }
 
-public class SettingsMenuEvents : MonoBehaviour, IOpenClosable
+public sealed class SettingsMenuEvents : OpenClosable
 {
     private static readonly RebindButton[] RebindButtons =
     {
@@ -130,7 +130,7 @@ public class SettingsMenuEvents : MonoBehaviour, IOpenClosable
         }
     }
 
-    public void Open()
+    public override void Open()
     {
         PlayerController.Instance.context |= PlayerContext.Menu;
 
@@ -140,7 +140,7 @@ public class SettingsMenuEvents : MonoBehaviour, IOpenClosable
     }
 
     // Return to main menu or gameHud
-    public void Close()
+    public override void Close()
     {
         backButton.SetEnabled(false);
 

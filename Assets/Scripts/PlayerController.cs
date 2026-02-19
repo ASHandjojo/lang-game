@@ -79,9 +79,9 @@ public sealed class PlayerController : MonoBehaviour
 
     void Update()
     {
-        bool isInteracting = (context & PlayerContext.Interacting) != 0;
-        bool isInInputMode = (context & PlayerContext.PlayerInput) != 0;
-        bool isInMenu = (context & PlayerContext.Menu) != 0;
+        bool isInteracting  = (context & PlayerContext.Interacting) != 0;
+        bool isInInputMode  = (context & PlayerContext.PlayerInput) != 0;
+        bool isInMenu       = (context & PlayerContext.Menu) != 0;
         bool useInteractKey = interactAction.WasPerformedThisFrame();
         // Trigger for interact input
         if (!isInteracting && !isInInputMode && !isInMenu && useInteractKey)
@@ -115,8 +115,6 @@ public sealed class PlayerController : MonoBehaviour
     private void HandleMovement()
     {
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
-        //Debug.Log($"Move value: {moveValue}");
-
         if (moveValue.x > 0) // Right movement
         {
             movementDirection = new Vector2(1.0f, 0.0f);
