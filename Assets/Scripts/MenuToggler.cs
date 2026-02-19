@@ -35,7 +35,6 @@ public sealed class MenuToggler : MonoBehaviour
         // Closes active menu
         if (currentMenu.TryGet(out OpenClosable menu))
         {
-            Debug.Log("Closing previous menu");
             menu.Close();
         }
 
@@ -47,15 +46,12 @@ public sealed class MenuToggler : MonoBehaviour
         closable.Open();
 
         PlayerController.Instance.context |= PlayerContext.Menu;
-
-        Debug.Log("Adding menu!");
     }
 
     public void ClearAllMenus()
     {
         if (currentMenu.TryGet(out OpenClosable menu))
         {
-            Debug.Log("Cleared!");
             menu.Close();
             currentMenu.Unset();
         }
@@ -95,12 +91,6 @@ public sealed class MenuToggler : MonoBehaviour
         // Enable default starting action map ("SideScrolling" for now)
         prevActionMap = InputSystem.actions.FindActionMap("SideScrolling");
         prevActionMap.Enable();
-
-        // Log which action maps are currently enabled
-        foreach (var map in InputSystem.actions.actionMaps)
-        {
-            Debug.Log($"Map: {map.name} is {(map.enabled ? "ACTIVE" : "OFF")}");
-        }
 
         settingsAction   = InputSystem.actions.FindAction("Settings");
         dictionaryAction = InputSystem.actions.FindAction("Dictionary");
