@@ -108,6 +108,7 @@ public sealed class SettingsMenuEvents : OpenClosable
             Button uiButton = selfDocument.rootVisualElement.Q(rebindButton.ID + "Button") as Button;
             uiButton.RegisterCallback<ClickEvent>(handler);
         }
+
         // Add sounds
         backButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
     }
@@ -118,11 +119,13 @@ public sealed class SettingsMenuEvents : OpenClosable
         backButton.UnregisterCallback<ClickEvent>(OnButtonClick);
         backButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
 
+        /**
         foreach (var (buttonID, handler) in rebindButtonEventHandlers)
         {
             Button uiButton = selfDocument.rootVisualElement.Q(buttonID) as Button;
             uiButton.UnregisterCallback(handler);
         }
+        */
     }
 
     public override void Open()
