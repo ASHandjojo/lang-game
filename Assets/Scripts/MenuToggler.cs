@@ -17,6 +17,8 @@ public sealed class MenuToggler : MonoBehaviour
     private InputActionMap prevActionMap;
     // SideScrolling is the default starting action map for now; could change later
 
+    private InputAction returnAction;
+
     private InputAction settingsAction;
     private InputAction dictionaryAction;
 
@@ -128,6 +130,8 @@ public sealed class MenuToggler : MonoBehaviour
             Debug.Log($"Map: {map.name} is {(map.enabled ? "ACTIVE" : "OFF")}");
         }
 
+        returnAction = InputSystem.actions.FindAction("Return");
+
         settingsAction   = InputSystem.actions.FindAction("Settings");
         dictionaryAction = InputSystem.actions.FindAction("Dictionary");
 
@@ -136,7 +140,12 @@ public sealed class MenuToggler : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        if (returnAction.WasCompletedThisFrame())
+        {
+            ClearAllMenus();
+        }
+
         if (settingsAction.WasPerformedThisFrame())
         {
             HandleMenuButton(settingsMenu);
