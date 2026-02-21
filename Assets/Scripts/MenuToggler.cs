@@ -1,5 +1,5 @@
 using System;
-
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,46 +23,30 @@ public sealed class MenuToggler : MonoBehaviour
     [SerializeField] private SettingsMenuEvents settingsMenu;
     [SerializeField] private GameHUDEvents dictionaryMenu;
 
-    private OptionalComponent<OpenClosable> currentMenu = new(); // Starts uninitialized
+    private OptionalComponent<UIMenuController> currentMenu = new(); // Starts uninitialized
+
+    public bool IsTransitioning { get; private set; } = false;
 
     // For caching
     private Rigidbody2D playerRB;
     private Collider2D  playerCollider;
 
-    public void UseMenu(OpenClosable closable)
-    {
-        Debug.Assert(closable != null);
-
-        // Closes active menu
-        if (currentMenu.TryGet(out OpenClosable menu))
-        {
-            // don't need to do anything if the menu is already open
-            if (menu == closable) return;
-
-            Debug.Log("Closing previous menu");
-            menu.Close();
-        }
-
-        //uiActionMap.Enable();
-        prevActionMap.Disable();
-        DisableWorldActions();
-
-        currentMenu.SetNonNull(closable);
-        closable.Open();
-
-        PlayerController.Instance.context |= PlayerContext.Menu;
-
-        Debug.Log("Adding menu!");
-    }
-
     public void ClearAllMenus()
     {
-        if (currentMenu.TryGet(out OpenClosable menu))
-        {
-            Debug.Log("Cleared!");
-            menu.Close();
-            currentMenu.Unset();
-        }
+        Debug.Log("Closing Menu");
+        StartCoroutine(ClearAllMenusCoroutine());
+    }
+
+    private IEnumerator ClearAllMenusCoroutine()
+    {
+        if (!currentMenu.TryGet(out UIMenuController menu)) yield break;
+
+        // ignore if still in the process of playing opening/closing animation
+        if (IsTransitioning) yield break;
+        IsTransitioning = true;
+
+        yield return menu.Close();
+        currentMenu.Unset();
 
         //uiActionMap.Disable();
         prevActionMap.Enable();
@@ -70,6 +54,44 @@ public sealed class MenuToggler : MonoBehaviour
         EnableWorldActions();
 
         PlayerController.Instance.context &= ~PlayerContext.Menu;
+
+        IsTransitioning = false;
+    }
+
+    public void UseMenu(UIMenuController menu)
+    {
+        StartCoroutine(UseMenuCoroutine(menu));
+    }
+
+    private IEnumerator UseMenuCoroutine(UIMenuController menu)
+    {
+        // ignore if still in the process of playing opening/closing animation
+        if (IsTransitioning) yield break;
+
+        // Closes active menu
+        if (currentMenu.TryGet(out UIMenuController prevMenu))
+        {
+            // break out of the whole thing if the menu to open is already open
+            if (menu == prevMenu) yield break;
+
+            Debug.Log("Closing Previous Menu");
+            yield return ClearAllMenusCoroutine();
+        }
+
+        Debug.Log("Opening Menu");
+
+        IsTransitioning = true;
+
+        //uiActionMap.Enable();
+        prevActionMap.Disable();
+        DisableWorldActions();
+
+        PlayerController.Instance.context |= PlayerContext.Menu;
+
+        currentMenu.SetNonNull(menu);
+        yield return menu.Open();
+
+        IsTransitioning = false;
     }
 
     void Awake()
@@ -125,9 +147,9 @@ public sealed class MenuToggler : MonoBehaviour
         }
     }
 
-    private void HandleMenuButton(OpenClosable menu)
+    private void HandleMenuButton(UIMenuController menu)
     {
-        if (currentMenu.TryGet(out OpenClosable prev_menu) && prev_menu == menu)
+        if (currentMenu.TryGet(out UIMenuController prevMenu) && prevMenu == menu)
         {
             // if menu is already open, pressing the button again closes it
             ClearAllMenus();

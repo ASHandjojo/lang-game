@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,7 +21,7 @@ readonly struct RebindButton
 }
 
 [DisallowMultipleComponent]
-public sealed class SettingsMenuEvents : OpenClosable
+public sealed class SettingsMenuEvents : UIMenuController
 {
     private static readonly RebindButton[] RebindButtons =
     {
@@ -128,18 +129,21 @@ public sealed class SettingsMenuEvents : OpenClosable
         */
     }
 
-    public override void Open()
+    public override IEnumerator Open()
     {
         selfDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+        yield break;
     }
 
     // Return to main menu or gameHud
-    public override void Close()
+    public override IEnumerator Close()
     {
         backButton.SetEnabled(false);
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
 
         backButton.SetEnabled(true);
+
+        yield break;
     }
 
 

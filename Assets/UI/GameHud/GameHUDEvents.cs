@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [DisallowMultipleComponent]
-public sealed class GameHUDEvents : OpenClosable
+public sealed class GameHUDEvents : UIMenuController
 {
     [Header("Audio")]
     [SerializeField] private AudioClip openClip;
@@ -28,14 +28,16 @@ public sealed class GameHUDEvents : OpenClosable
 
     private Button backButton;
 
-    public override void Open()
+    public override IEnumerator Open()
     {
-        OpenDictionary();
+        yield return EnterDictionary(dictionary, openImage);
+        PlayerController.Instance.context |= PlayerContext.InDictionary;
     }
 
-    public override void Close() 
+    public override IEnumerator Close() 
     {
-        CloseDictionary(null);
+        PlayerController.Instance.context &= ~PlayerContext.InDictionary;
+        yield return ExitDictionary(dictionary, closedImage);
     }
 
     void Awake()
@@ -64,19 +66,7 @@ public sealed class GameHUDEvents : OpenClosable
         dictionaryContainer.visible = false;
     }
 
-    public void OpenDictionary()
-    {
-        PlayerController.Instance.context |= PlayerContext.InDictionary;
-        StartCoroutine(EnterDictionary(dictionary, openImage));
-    }
-
     //public void OpenSettings(ClickEvent e) => OpenSettings();
-
-    private void CloseDictionary(ClickEvent e)
-    {
-        PlayerController.Instance.context &= ~PlayerContext.InDictionary;
-        StartCoroutine(ExitDictionary(dictionary, closedImage));
-    }
 
     private IEnumerator EnterDictionary(VisualElement dictionary, Texture2D closedImage)
     {
