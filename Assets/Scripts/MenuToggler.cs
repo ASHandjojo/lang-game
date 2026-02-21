@@ -32,9 +32,13 @@ public sealed class MenuToggler : MonoBehaviour
     public void UseMenu(OpenClosable closable)
     {
         Debug.Assert(closable != null);
+
         // Closes active menu
         if (currentMenu.TryGet(out OpenClosable menu))
         {
+            // don't need to do anything if the menu is already open
+            if (menu == closable) return;
+
             Debug.Log("Closing previous menu");
             menu.Close();
         }
@@ -113,11 +117,24 @@ public sealed class MenuToggler : MonoBehaviour
     {
         if (settingsAction.WasPerformedThisFrame())
         {
-            UseMenu(settingsMenu);
+            HandleMenuButton(settingsMenu);
         }
         if (dictionaryAction.WasPerformedThisFrame())
         {
-            UseMenu(dictionaryMenu);
+            HandleMenuButton(dictionaryMenu);
+        }
+    }
+
+    private void HandleMenuButton(OpenClosable menu)
+    {
+        if (currentMenu.TryGet(out OpenClosable prev_menu) && prev_menu == menu)
+        {
+            // if menu is already open, pressing the button again closes it
+            ClearAllMenus();
+        }
+        else
+        {
+            UseMenu(menu);
         }
     }
 
