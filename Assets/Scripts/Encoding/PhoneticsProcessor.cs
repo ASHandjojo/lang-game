@@ -25,7 +25,7 @@ public struct Processor : IDisposable
     [NativeDisableContainerSafetyRestriction]
     private NativeHashMap<char, NativeList<CompoundTable>> prefixMap;
 
-    public Processor(in ReadOnlySpan<StandardSign> standardSigns, in ReadOnlySpan<CompoundSign> compoundSigns)
+    public Processor(in ReadOnlySpan<StandardSign> standardSigns, in ReadOnlySpan<CompoundSign> compoundSigns, Allocator allocator)
     {
         StandardSign[] standardSignSort = ProcessorExtMethods.Sort(standardSigns);
         CompoundSign[] compoundSignSort = ProcessorExtMethods.Sort(compoundSigns);
@@ -44,19 +44,19 @@ public struct Processor : IDisposable
         }
 
         // Initializing structures
-        standardSignData = new NativeArray<char>(standardStrLength, Allocator.Persistent);
-        compoundSignData = new NativeArray<char>(compoundStrLength, Allocator.Persistent);
+        standardSignData = new NativeArray<char>(standardStrLength, allocator);
+        compoundSignData = new NativeArray<char>(compoundStrLength, allocator);
 
-        standardData = new NativeArray<SignData>(standardSigns.Length, Allocator.Persistent);
-        compoundData = new NativeArray<SignData>(compoundSigns.Length, Allocator.Persistent);
+        standardData = new NativeArray<SignData>(standardSigns.Length, allocator);
+        compoundData = new NativeArray<SignData>(compoundSigns.Length, allocator);
 
-        prefixMap = new NativeHashMap<char, NativeList<CompoundTable>>(compoundSigns.Length, Allocator.Persistent);
+        prefixMap = new NativeHashMap<char, NativeList<CompoundTable>>(compoundSigns.Length, allocator);
 
         Span<char> standardSpan = standardSignData.AsSpan();
         Span<char> compoundSpan = compoundSignData.AsSpan();
 
         InitStandardSigns(standardSpan, standardSignSort);
-        InitCompoundSigns(compoundSpan, compoundSignSort);
+        InitCompoundSigns(compoundSpan, compoundSignSort, allocator);
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ public struct Processor : IDisposable
     /// </summary>
     /// <param name="compoundSpan"></param>
     /// <param name="compoundSigns"></param>
-    private void InitCompoundSigns(in Span<char> compoundSpan, in ReadOnlySpan<CompoundSign> compoundSigns)
+    private void InitCompoundSigns(in Span<char> compoundSpan, in ReadOnlySpan<CompoundSign> compoundSigns, Allocator allocator)
     {
         int compoundOffset = 0;
         for (int i = 0; i < compoundSigns.Length; i++)
@@ -106,7 +106,7 @@ public struct Processor : IDisposable
             }
             else // Otherwise, create list, add compound table to list, add list to table
             {
-                NativeList<CompoundTable> tableList = new(1, Allocator.Persistent);
+                NativeList<CompoundTable> tableList = new(1, allocator);
                 tableList.AddNoResize(table);
 
                 prefixMap.Add(firstMappedChar, tableList);

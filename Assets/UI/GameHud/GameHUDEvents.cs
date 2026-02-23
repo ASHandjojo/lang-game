@@ -1,9 +1,11 @@
-using UnityEngine;
-using UnityEngine.UIElements;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameHUDEvents : UIBase
+using UnityEngine;
+using UnityEngine.UIElements;
+
+[DisallowMultipleComponent]
+public sealed class GameHUDEvents : OpenClosable
 {
     [Header("Audio")]
     [SerializeField] private AudioClip openClip;
@@ -26,10 +28,21 @@ public class GameHUDEvents : UIBase
 
     private Button backButton;
 
+    public override void Open()
+    {
+        OpenDictionary();
+    }
+
+    public override void Close() 
+    {
+        CloseDictionary(null);
+    }
+
     void Awake()
     {
         selfDocument = GetComponent<UIDocument>();
         sh           = GetComponent<SoundHandler>();
+
         hudContainer = selfDocument.rootVisualElement.Q("ScreenContainer");
 
         dictionaryContainer = selfDocument.rootVisualElement.Q("DictionaryContainer");
@@ -37,23 +50,16 @@ public class GameHUDEvents : UIBase
 
         // Add events to all buttons
         dictionaryButton = selfDocument.rootVisualElement.Q<Button>("DictionaryButton");
-        dictionaryButton.RegisterCallback<ClickEvent>(OpenDictionary);
+        dictionaryButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(this));
         dictionaryButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
-
-        settingsButton = selfDocument.rootVisualElement.Q<Button>("SettingsButton");
-        settingsButton.RegisterCallback<ClickEvent>(OpenSettings);
-        settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
-
+        // Back button for dictionary
         backButton = selfDocument.rootVisualElement.Q<Button>("BackButton");
-        backButton.RegisterCallback<ClickEvent>(CloseDictionary);
+        backButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.ClearAllMenus());
 
-        Button settingsBackButton = settingsDocument.rootVisualElement.Q<Button>("BackButton");
-        settingsBackButton.RegisterCallback(
-            (ClickEvent e) =>
-            {
-                PlayerController.Instance.context &= ~PlayerContext.Menu;
-            }
-        );
+        var settingsComponent = settingsDocument.gameObject.GetComponent<SettingsMenuEvents>();
+        settingsButton = selfDocument.rootVisualElement.Q<Button>("SettingsButton");
+        settingsButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(settingsComponent));
+        settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
 
         dictionaryContainer.visible = false;
     }
@@ -63,17 +69,8 @@ public class GameHUDEvents : UIBase
         PlayerController.Instance.context |= PlayerContext.InDictionary;
         StartCoroutine(EnterDictionary(dictionary, openImage));
     }
-    private void OpenDictionary(ClickEvent e) => OpenDictionary();
 
-    public void OpenSettings()
-    {
-        PlayerController.Instance.context |= PlayerContext.Menu;
-        DisableWorldActions();
-
-        settingsDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-        selfDocument.rootVisualElement.style.display     = DisplayStyle.None;
-    }
-    public void OpenSettings(ClickEvent e) => OpenSettings();
+    //public void OpenSettings(ClickEvent e) => OpenSettings();
 
     private void CloseDictionary(ClickEvent e)
     {
@@ -85,7 +82,7 @@ public class GameHUDEvents : UIBase
     {
         dictionaryContainer.style.backgroundColor = new StyleColor(new Color(0.08f, 0.08f, 0.08f, 0.8f));
         // Disable box collider to prevent interactions & freeze position to prevent movement
-        DisableWorldActions();
+        //DisableWorldActions();
         
         // Enable Dictionary elements, Disable HUD
         dictionaryContainer.visible = true;
@@ -121,7 +118,7 @@ public class GameHUDEvents : UIBase
         hudContainer.visible        = true;
         
         // Restore movement, Re-enable box collider, listen for menu keys
-        EnableWorldActions();
+        //EnableWorldActions();
     }
 
     // Fade the alpha style property of a visual element

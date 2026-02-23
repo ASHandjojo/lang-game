@@ -1,8 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.IO;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [Flags]
 public enum PlayerContext : int
@@ -24,6 +24,9 @@ public sealed class PlayerController : MonoBehaviour
     private Animator anim;
     private Rigidbody2D rb;
     private Collider2D playerCollider;
+
+    private InputAction moveAction;
+    private InputAction interactAction;
 
     private Vector2 movementDirection;
     private bool facingRight = true, canMove = true;
@@ -47,6 +50,9 @@ public sealed class PlayerController : MonoBehaviour
         }
     }
 
+    // Dictionary
+    public Dictionary dictionary { get; set; }
+
     void Awake()
     {
         if (Instance != null)
@@ -63,14 +69,27 @@ public sealed class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
 
         playerCollider = GetComponent<Collider2D>();
+
+        string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave.json");
+        if (File.Exists(savePath))
+        {
+            GameState.LoadPlayerData();
+        }
+        moveAction     = InputSystem.actions.FindAction("Move");
+        interactAction = InputSystem.actions.FindAction("Interact");
     }
-    
+
+    private void Start()
+    {
+
+    }
+
     void Update()
     {
         bool isInteracting  = (context & PlayerContext.Interacting) != 0;
         bool isInInputMode  = (context & PlayerContext.PlayerInput) != 0;
         bool isInMenu       = (context & PlayerContext.Menu) != 0;
-        bool useInteractKey = Input.GetKeyDown(Keybinds.Instance.getIntersKey());
+        bool useInteractKey = interactAction.WasPerformedThisFrame();
         // Trigger for interact input
         if (!isInteracting && !isInInputMode && !isInMenu && useInteractKey)
         {
@@ -88,31 +107,21 @@ public sealed class PlayerController : MonoBehaviour
         }
         else if (currentInteraction.TryGet(out Interactable obj) && (obj.TargetContext & PlayerContext.Dialogue) != 0 && !isInInputMode)
         {
-            if (useInteractKey || Input.GetMouseButtonDown(0))
+            if (useInteractKey)
             {
                 (obj as NpcDialogue).Advance();
             }
         }
-        else if (Input.GetKeyDown(Keybinds.Instance.getDictKey()))
-        {
-            var events = FindFirstObjectByType<GameHUDEvents>(); // NOTE: Very dirty
-            events.OpenDictionary();
-        }
-        else if (Input.GetKeyDown(Keybinds.Instance.getSettingsKey()))
-        {
-            var events = FindFirstObjectByType<GameHUDEvents>(); // NOTE: Very dirty
-            events.OpenSettings();
-        }
-
         if (canMove)
         {
-            Move();
+            HandleMovement();
         }
     }
 
-    private void Move()
+    private void HandleMovement()
     {
-        if (Input.GetKey(Keybinds.Instance.getRightKey()) && !Input.GetKey(Keybinds.Instance.getLeftKey())) // Right movement
+        Vector2 moveValue = moveAction.ReadValue<Vector2>();
+        if (moveValue.x > 0) // Right movement
         {
             movementDirection = new Vector2(1.0f, 0.0f);
             anim.SetFloat("horizontal", Mathf.Abs(movementDirection.x));
@@ -121,7 +130,7 @@ public sealed class PlayerController : MonoBehaviour
                 Flip();
             }
         }
-        else if (Input.GetKey(Keybinds.Instance.getLeftKey()) && !Input.GetKey(Keybinds.Instance.getRightKey())) // Left movement
+        else if (moveValue.x < 0) // Left movement
         {
             movementDirection = new Vector2(-1.0f, 0.0f);
             anim.SetFloat("horizontal", Mathf.Abs(movementDirection.x));
@@ -136,6 +145,7 @@ public sealed class PlayerController : MonoBehaviour
             anim.SetFloat("horizontal", Mathf.Abs(movementDirection.x));
         }
     }
+
 
     void FixedUpdate()
     {

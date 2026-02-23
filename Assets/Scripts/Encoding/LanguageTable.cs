@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Unity.Collections;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,7 +33,7 @@ public sealed class LanguageTable : MonoBehaviour
         DontDestroyOnLoad(this);
         Instance = this;
 
-        processor = new Processor(StandardSigns, CompoundSigns);
+        processor = new Processor(StandardSigns, CompoundSigns, Allocator.Persistent);
     }
 
     void OnDestroy()

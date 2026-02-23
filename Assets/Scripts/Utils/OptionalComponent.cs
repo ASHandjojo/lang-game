@@ -9,7 +9,7 @@ using UnityEditor.UIElements;
 #endif
 
 /// <summary>
-/// Avoids expensive null checks for Unity objects. Only checks on assignment.
+/// Avoids expensive null checks for Unity objects. Only checks on checked assignment.
 /// </summary>
 /// <typeparam name="T"></typeparam>
 [Serializable]
@@ -18,7 +18,11 @@ public sealed class OptionalComponent<T> where T : UnityEngine.Object
     [SerializeField] private T obj;
     [SerializeField, HideInInspector] private bool isInitialized = false;
 
-    private OptionalComponent() { }
+    public OptionalComponent()
+    {
+        obj           = null;
+        isInitialized = false;
+    }
 
     public OptionalComponent(T obj) => Set(obj);
 
@@ -26,7 +30,7 @@ public sealed class OptionalComponent<T> where T : UnityEngine.Object
 
     public void Set(T objIn)
     {
-        obj = objIn;
+        obj           = objIn;
         isInitialized = objIn != null;
     }
 
@@ -36,7 +40,7 @@ public sealed class OptionalComponent<T> where T : UnityEngine.Object
     /// <param name="objIn"></param>
     public void SetNonNull(T objIn)
     {
-        obj = objIn;
+        obj           = objIn;
         isInitialized = true;
     }
 

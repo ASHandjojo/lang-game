@@ -51,8 +51,8 @@ public sealed class NpcDialogue : Interactable
         document        = GetComponent<UIDocument>();
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
 
-        keybindIcon = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());
-        worldPromptIcon.sprite = ConvertToSprite(keybindIcon);
+        //keybindIcon = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());
+        //worldPromptIcon.sprite = ConvertToSprite(keybindIcon);
 
         // Set name and portrait
         document.rootVisualElement.Q<Label>("NpcName").text = npcName;
