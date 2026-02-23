@@ -297,9 +297,6 @@ public class DialogueTree : MonoBehaviour
         InDialogueList = true;
         return 1;
 
-
-
-
     }
 
 
