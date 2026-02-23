@@ -13,45 +13,84 @@ MonoBehaviour:
   m_Name: Standard Sign Table
   m_EditorClassIdentifier: 
   fileDir: Assets/Scripts/Encoding/Loader/StandardNames.json
+  overrides:
+  - phonetics: plus
+    replace: +
+  - phonetics: exclam
+    replace: '!'
+  - phonetics: quotedbl
+    replace: '"'
+  - phonetics: quotesingle
+    replace: ''''
+  - phonetics: parenleft
+    replace: (
+  - phonetics: parenright
+    replace: )
+  - phonetics: asterisk
+    replace: '*'
+  - phonetics: hyphen
+    replace: '-'
+  - phonetics: period
+    replace: .
+  - phonetics: zero
+    replace: 0
+  - phonetics: one
+    replace: 1
+  - phonetics: two
+    replace: 2
+  - phonetics: three
+    replace: 3
+  - phonetics: four
+    replace: 4
+  - phonetics: five
+    replace: 5
+  - phonetics: six
+    replace: 6
+  - phonetics: seven
+    replace: 7
+  - phonetics: eight
+    replace: 8
+  - phonetics: nine
+    replace: 9
   standardUI: {fileID: 9197481963319205126, guid: faae68990d5741b469a71cd2b5ce9633, type: 3}
   entries:
-  - phonetics: exclam
+  - phonetics: '!'
     mappedChar: 33
-  - phonetics: quotedbl
+  - phonetics: '"'
     mappedChar: 34
-  - phonetics: quotesingle
+  - phonetics: ''''
     mappedChar: 39
-  - phonetics: parenleft
+  - phonetics: (
     mappedChar: 40
-  - phonetics: parenright
+  - phonetics: )
     mappedChar: 41
-  - phonetics: asterisk
+  - phonetics: '*'
     mappedChar: 42
-  - phonetics: plus
+  - phonetics: +
     mappedChar: 43
-  - phonetics: hyphen
+  - phonetics: '-'
     mappedChar: 45
   - phonetics: period
     mappedChar: 46
-  - phonetics: zero
+  - phonetics: 0
     mappedChar: 48
-  - phonetics: one
+  - phonetics: 1
     mappedChar: 49
-  - phonetics: two
+  - phonetics: 2
     mappedChar: 50
-  - phonetics: three
+  - phonetics: 3
     mappedChar: 51
-  - phonetics: four
+  - phonetics: 4
     mappedChar: 52
-  - phonetics: five
+  - phonetics: 5
     mappedChar: 53
-  - phonetics: six
+  - phonetics: 6
     mappedChar: 54
-  - phonetics: seven
+  - phonetics: 7
     mappedChar: 55
-  - phonetics: eight
+  - phonetics: 8
     mappedChar: 56
-  - phonetics: nine
+  - phonetics: 9
     mappedChar: 57
   - phonetics: question
     mappedChar: 63

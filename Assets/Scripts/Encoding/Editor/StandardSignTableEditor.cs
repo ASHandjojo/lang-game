@@ -64,6 +64,14 @@ public sealed class SignImporterEditor : Editor
                         phonetics  = sign.Characters
                     }
                 ).ToArray();
+                for (int i = 0; i < standardSigns.Length; i++)
+                {
+                    var overrides = table.overrides.Where(x => x.phonetics == standardSigns[i].phonetics).FirstOrDefault();
+                    if (overrides != null)
+                    {
+                        standardSigns[i].phonetics = overrides.replace;
+                    }
+                }
 
                 table.entries = standardSigns;
 
