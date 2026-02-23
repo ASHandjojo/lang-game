@@ -609,6 +609,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPrompt: {fileID: 1470832120}
   interactClip: {fileID: 8300000, guid: 49e6681ee88d775489f293846fa8cdf6, type: 3}
+  worldPromptInput: 2
   hudDocument: {fileID: 1605222084}
   transitionTime: 1
   zoomImage: {fileID: 2800000, guid: 1d080e14bfd6e654caffc1bcdc0789b5, type: 3}
@@ -1841,6 +1842,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPrompt: {fileID: 173549046}
   interactClip: {fileID: 8300000, guid: 49e6681ee88d775489f293846fa8cdf6, type: 3}
+  worldPromptInput: 2
   hudDocument: {fileID: 1605222084}
   transitionTime: 1
   zoomImage: {fileID: 2800000, guid: bfcff620facc2b24d8abb2b4cfbb148d, type: 3}
@@ -2336,7 +2338,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f78e05aba10ed534a8b5f9497069243d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuToggler: {fileID: 0}
   hoverClip: {fileID: 8300000, guid: 83167905238c1f540b72936c019e6809, type: 3}
   selectionClip: {fileID: 8300000, guid: 6eef3ad492586934990852bc54efdcb8, type: 3}
 --- !u!82 &1724572786
@@ -2989,6 +2990,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPrompt: {fileID: 1969015810}
   interactClip: {fileID: 0}
+  worldPromptInput: 2
   hudDocument: {fileID: 1605222084}
   npcName: Florence
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
