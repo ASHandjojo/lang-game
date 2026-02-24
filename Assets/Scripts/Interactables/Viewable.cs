@@ -19,6 +19,7 @@ public sealed class Viewable : Interactable
 
     void Start()
     {
+
         document        = GetComponent<UIDocument>();
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
         //keybindIcon     = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());

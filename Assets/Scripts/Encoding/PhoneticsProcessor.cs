@@ -242,6 +242,7 @@ public struct Processor : IDisposable
         unsafe
         {
             UnsafeList<char> firstPass  = TranslatePass(span);
+            Debug.Log($"First Pass: {new string(firstPass.Ptr, 0, firstPass.Length)}");
             UnsafeList<char> secondPass = TranslatePass(new(firstPass.Ptr, firstPass.Length));
             return new string(secondPass.Ptr, 0, secondPass.Length);
         }

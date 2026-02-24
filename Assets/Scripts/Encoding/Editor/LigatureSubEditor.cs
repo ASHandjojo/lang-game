@@ -34,7 +34,7 @@ public sealed class CompoundSignElement : VisualElement
         resultField.isReadOnly    = true;
 
         characterList.itemsSource     = children;
-        characterList.fixedItemHeight = 137.5f;
+        characterList.fixedItemHeight = 150.0f;
     }
 
     public void SetValue(in CompoundSign compoundSign, StandardSign[] standardSigns, VisualTreeAsset standardUI)

@@ -1,92 +1,124 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-public sealed class KeyboardUI : VisualElement
+public struct KeyboardRow
 {
-    public struct KeyboardRow
+    public VisualElement container;
+    public Button[]      buttons;
+
+    public KeyboardRow(VisualElement container)
     {
-        public VisualElement container;
-        public Button[] buttons;
+        Debug.Assert(container != null);
 
-        public KeyboardRow(VisualElement container)
+        VisualElement[] children = container.Children().ToArray();
+        Debug.Assert(children.Length > 0);
+
+        // Filters for all children that are buttons
+        Button[] buttons = children.Select(x => x as Button)
+            .Where(x => x != null)
+            .ToArray();
+        Debug.Assert(buttons.Length > 0); // Expects a non-zero amount of buttons per row
+
+        this.container = container;
+        this.buttons   = buttons;
+    }
+
+    public readonly void InitAlphaNumeric(string phoneticsField, string unicodeField, Processor processor, Action<string> assignCallback)
+    {
+        for (int i = 0; i < buttons.Length; i++)
         {
-            Debug.Assert(container != null);
-
-            VisualElement[] children = container.Children().ToArray();
-            Debug.Assert(children.Length > 0);
-
-            // Filters for all children that are buttons
-            Button[] buttons = children.Select(x => x as Button)
-                .Where(x => x != null)
-                .ToArray();
-            Debug.Assert(buttons.Length > 0); // Expects a non-zero amount of buttons per row
-
-            this.container = container;
-            this.buttons   = buttons;
-        }
-
-        public readonly void InitAlphaNumeric(Label inputField)
-        {
-            for (int i = 0; i < buttons.Length; i++)
-            {
-                string text = buttons[i].text; // Using text to infer the output
-                buttons[i].RegisterCallback((ClickEvent e) => inputField.text += text); // WATCH
-            }
-        }
-
-        /// <summary>
-        /// For the last row (a row that has submission
-        /// </summary>
-        public readonly void InitSpecial(Label inputField)
-        {
-            Button spacebar  = buttons.Where(x => x.name == "Spacebar").First();
-            Button backspace = buttons.Where(x => x.name == "Backspace").First();
-            Button enter     = buttons.Where(x => x.name == "Enter").First();
-
-            Debug.Assert(spacebar != null && backspace != null && enter != null);
-
-            spacebar.RegisterCallback((ClickEvent e) => inputField.text += ' ');
-            backspace.RegisterCallback(
+            string text = buttons[i].text; // Using text to infer the output
+            buttons[i].RegisterCallback(
                 (ClickEvent e) =>
                 {
-                    if (inputField.text.Length > 0)
-                    {
-                        inputField.text = inputField.text[..^1];
-                    }
+                    phoneticsField += text;
+                    unicodeField    = processor.Translate(phoneticsField);
+                    Debug.Log($"Unicode Field: {unicodeField}");
+                    assignCallback?.Invoke(unicodeField);
                 }
-            );
-            enter.RegisterCallback(
-                (ClickEvent e) =>
-                {
-                    InputController.Instance.CloseKeyboard();
-                    Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out Interactable NPC));
-                    if (NPC is NpcDialogue)
-                    {
-                        (NPC as NpcDialogue).TryCheckInput(InputController.Instance.TranslatedStr);
-                    }
-
-                    PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
-                }
-            );
+            ); // WATCH
         }
     }
 
-    public Label inputField;
+    /// <summary>
+    /// For the last row (a row that has submission
+    /// </summary>
+    public readonly void InitSpecial(string phoneticsField, string unicodeField, Processor processor, Action<string> assignCallback)
+    {
+        Button spacebar  = buttons.Where(x => x.name == "Spacebar").First();
+        Button backspace = buttons.Where(x => x.name == "Backspace").First();
+        Button enter     = buttons.Where(x => x.name == "Enter").First();
+
+        Debug.Assert(spacebar != null && backspace != null && enter != null);
+
+        spacebar.RegisterCallback(
+            (ClickEvent e) =>
+            {
+                phoneticsField += ' ';
+                unicodeField    = processor.Translate(phoneticsField);
+                assignCallback?.Invoke(unicodeField);
+            }
+        );
+        backspace.RegisterCallback(
+            (ClickEvent e) =>
+            {
+                if (phoneticsField.Length > 0)
+                {
+                    phoneticsField = phoneticsField[..^1];
+                    unicodeField   = processor.Translate(phoneticsField);
+                    assignCallback?.Invoke(unicodeField);
+                }
+            }
+        );
+        enter.RegisterCallback(
+            (ClickEvent e) =>
+            {
+                Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out Interactable NPC));
+                if (NPC is NpcDialogue)
+                {
+                    Debug.Log($"Phonetics Field: {phoneticsField} | Unicode Field: {unicodeField}");
+                    (NPC as NpcDialogue).TryCheckInput(unicodeField);
+                    assignCallback?.Invoke(unicodeField);
+                }
+
+                InputController.Instance.CloseKeyboard();
+                PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
+            }
+        );
+    }
+}
+
+public sealed class KeyboardUI : VisualElement
+{
+    private string phoneticsStr = string.Empty; // Raw
+    private string unicodeStr   = string.Empty;
+
+    public string PhoneticsString => phoneticsStr;
+    public string UnicodeString   => unicodeStr;
+
+    private Processor processor;
     public KeyboardRow[] rows;
 
-    public KeyboardUI(VisualTreeAsset layout)
+    public Action<string> assignCallback;
+
+    public KeyboardUI(VisualTreeAsset layout, in Processor processor, Action<string> assignCallback)
     {
         Debug.Assert(layout != null);
         layout.CloneTree(this);
+
+        this.assignCallback = assignCallback;
+
+        this.processor = processor;
 
         VisualElement parent     = this.Q<VisualElement>("KeyboardParent");
         VisualElement[] children = parent.Children().ToArray(); // First one is input bar
         Debug.Assert(children.Length > 1);
 
-        inputField = this.Q<Label>("Input");
-        Debug.Assert(inputField != null);
         rows = new KeyboardRow[children.Length - 1];
         for (int i = 1; i < children.Length; i++) {
             rows[i - 1] = new KeyboardRow(children[i]);
@@ -94,9 +126,9 @@ public sealed class KeyboardUI : VisualElement
 
         for (int i = 0; i < rows.Length - 1; i++)
         {
-            rows[i].InitAlphaNumeric(inputField);
+            rows[i].InitAlphaNumeric(phoneticsStr, unicodeStr, processor, assignCallback);
         }
-        rows[^1].InitSpecial(inputField);
+        rows[^1].InitSpecial(phoneticsStr, unicodeStr, processor, assignCallback);
     }
 }
 
@@ -107,20 +139,16 @@ public sealed class InputController : MonoBehaviour
     private KeyboardUI keyboardUI;
     private UIDocument document;
 
+    private Label inputField;
+
     [SerializeField] private float topPadding = 0.0f;
 
-    public Label InputField => keyboardUI.inputField;
-
-    public string InputStr
-    {
-        set => InputField.text = value;
-    }
+    public Label InputField => inputField;
 
     public static InputController Instance { get; private set; }
 
     // Just shorter to get references lol
     private static ref readonly Processor Processor => ref LanguageTable.Processor;
-    public string TranslatedStr => Processor.Translate(InputField.text);
 
     void Awake()
     {
@@ -131,16 +159,22 @@ public sealed class InputController : MonoBehaviour
             return;
         }
 
+        Instance = this;
         Debug.Assert(keyboardAsset != null);
-        keyboardUI = new KeyboardUI(keyboardAsset);
 
         document = GetComponent<UIDocument>();
-        document.rootVisualElement.Add(keyboardUI);
         document.rootVisualElement.style.top   = new StyleLength(new Length(topPadding, LengthUnit.Percent));
         document.rootVisualElement.style.left  = new StyleLength(new Length(50.0f, LengthUnit.Percent));
         document.rootVisualElement.style.right = new StyleLength(new Length(50.0f, LengthUnit.Percent));
 
-        Instance = this;
+        keyboardUI = new KeyboardUI(keyboardAsset, Processor, (unicodeInput) =>
+        {
+            inputField.text = unicodeInput;
+        });
+        document.rootVisualElement.Add(keyboardUI);
+
+        inputField = keyboardUI.Q<Label>("Input");
+        Debug.Assert(inputField != null);
     }
 
     void Start()

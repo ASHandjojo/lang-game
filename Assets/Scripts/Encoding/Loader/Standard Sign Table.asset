@@ -32,6 +32,10 @@ MonoBehaviour:
     replace: '-'
   - phonetics: period
     replace: .
+  - phonetics: comma
+    replace: ','
+  - phonetics: question
+    replace: '?'
   - phonetics: zero
     replace: 0
   - phonetics: one
@@ -70,7 +74,7 @@ MonoBehaviour:
     mappedChar: 43
   - phonetics: '-'
     mappedChar: 45
-  - phonetics: period
+  - phonetics: .
     mappedChar: 46
   - phonetics: 0
     mappedChar: 48
@@ -92,7 +96,7 @@ MonoBehaviour:
     mappedChar: 56
   - phonetics: 9
     mappedChar: 57
-  - phonetics: question
+  - phonetics: '?'
     mappedChar: 63
   - phonetics: A
     mappedChar: 65
