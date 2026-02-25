@@ -207,7 +207,7 @@ public sealed class SettingsMenuEvents : UIMenuController
     
     private void SetRebindBindingIcon(RebindableInput input, string controlPath)
     {
-        if (BindingIcons.Instance.Icons.TryGetValue(controlPath, out Sprite iconSprite)) 
+        if (MenuToggler.BindingIcons.Icons.TryGetValue(controlPath, out Sprite iconSprite)) 
         {
             selfDocument.rootVisualElement.Q(input + "Image").style.backgroundImage 
                 = Background.FromSprite(iconSprite);

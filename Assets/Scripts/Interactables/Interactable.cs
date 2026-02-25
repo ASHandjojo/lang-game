@@ -95,7 +95,7 @@ public abstract class Interactable : MonoBehaviour
         string controlPath = SettingsMenuEvents.RebindableInputPaths[worldPromptInput]
             .GetBinding().effectivePath;
 
-        if (BindingIcons.Instance.Icons.TryGetValue(controlPath, out Sprite iconSprite))
+        if (MenuToggler.BindingIcons.Icons.TryGetValue(controlPath, out Sprite iconSprite))
         {
             worldPromptIcon.sprite = iconSprite;
         }

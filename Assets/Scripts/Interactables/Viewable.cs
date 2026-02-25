@@ -18,12 +18,16 @@ public sealed class Viewable : Interactable
 
     private Vector3 cameraPos;
 
+    protected override void Awake()
+    {
+        document = GetComponent<UIDocument>();
+        base.Awake();
+    }
+
     protected override void Start()
     {
         base.Start();
-
-        document        = GetComponent<UIDocument>();
-        soundHandler    = GetComponent<SoundHandler>();
+        soundHandler = GetComponent<SoundHandler>();
 
         // Initialize UI images, while hiding UI screen until interacted with
         document.rootVisualElement.Q("ViewImage").style.backgroundImage   = new StyleBackground(zoomImage);
@@ -158,8 +162,9 @@ public sealed class Viewable : Interactable
         string controlPath = SettingsMenuEvents.RebindableInputPaths[worldPromptInput]
             .GetBinding().effectivePath;
 
-        if (BindingIcons.Instance.Icons.TryGetValue(controlPath, out Sprite iconSprite))
+        if (MenuToggler.BindingIcons.Icons.TryGetValue(controlPath, out Sprite iconSprite))
         {
+            Debug.Log($"Prompt Image: {document.rootVisualElement.Q("PromptImage")}");
             document.rootVisualElement.Q("PromptImage").style.backgroundImage
                 = Background.FromSprite(iconSprite);
         }
