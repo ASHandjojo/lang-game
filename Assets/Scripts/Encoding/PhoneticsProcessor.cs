@@ -241,6 +241,7 @@ public struct Processor : IDisposable
 
         unsafe
         {
+            Debug.Log($"Initial Pass: {input}");
             UnsafeList<char> firstPass  = TranslatePass(span);
             Debug.Log($"First Pass: {new string(firstPass.Ptr, 0, firstPass.Length)}");
             UnsafeList<char> secondPass = TranslatePass(new(firstPass.Ptr, firstPass.Length));
@@ -255,10 +256,12 @@ public struct Processor : IDisposable
         for (int i = 0; i < span.Length; i++)
         {
             char mappedChar = span[i];
+            Debug.Log($"Char at Idx #{i}: {mappedChar}");
             // Continues (skips current iter) if it is an invalid character
             // (This shouldn't happen with the on-screen keyboard)
 
             bool hasCompound = prefixMap.ContainsKey(mappedChar);
+            Debug.Log($"Has Compound: {hasCompound}");
             // Checks whether the current key *could* be compound.
             if (hasCompound)
             {

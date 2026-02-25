@@ -70,6 +70,7 @@ public struct KeyboardRow
                 if (phoneticsField.Length > 0)
                 {
                     phoneticsField = phoneticsField[..^1];
+                    Debug.Log($"New Phonetics Field: {phoneticsField}");
                     unicodeField   = processor.Translate(phoneticsField);
                     assignCallback?.Invoke(unicodeField);
                 }
@@ -130,6 +131,14 @@ public sealed class KeyboardUI : VisualElement
         }
         rows[^1].InitSpecial(phoneticsStr, unicodeStr, processor, assignCallback);
     }
+
+    public void ClearStrings()
+    {
+        phoneticsStr = string.Empty;
+        unicodeStr   = string.Empty;
+
+        assignCallback?.Invoke(phoneticsStr);
+    }
 }
 
 [DisallowMultipleComponent, RequireComponent(typeof(Transform), typeof(UIDocument))]
@@ -166,25 +175,27 @@ public sealed class InputController : MonoBehaviour
         document.rootVisualElement.style.top   = new StyleLength(new Length(topPadding, LengthUnit.Percent));
         document.rootVisualElement.style.left  = new StyleLength(new Length(50.0f, LengthUnit.Percent));
         document.rootVisualElement.style.right = new StyleLength(new Length(50.0f, LengthUnit.Percent));
-
-        keyboardUI = new KeyboardUI(keyboardAsset, Processor, (unicodeInput) =>
-        {
-            inputField.text = unicodeInput;
-        });
-        document.rootVisualElement.Add(keyboardUI);
-
-        inputField = keyboardUI.Q<Label>("Input");
-        Debug.Assert(inputField != null);
     }
 
     void Start()
     {
+        keyboardUI = new KeyboardUI(keyboardAsset, Processor,
+            (unicodeInput) =>
+            {
+                inputField.text = unicodeInput;
+            }
+        );
+        document.rootVisualElement.Add(keyboardUI);
+
+        inputField = keyboardUI.Q<Label>("Input");
+        Debug.Assert(inputField != null);
+
         CloseKeyboard();
     }
 
     public void OpenKeyboard()
     {
-        InputField.text = ""; // Clears contents
+        keyboardUI.ClearStrings(); // Clears contents
         keyboardUI.style.visibility = Visibility.Visible;
         keyboardUI.style.display    = DisplayStyle.Flex;
 
