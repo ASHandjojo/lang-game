@@ -43,7 +43,7 @@ public sealed class SignImporterEditor : Editor
 {
     public override VisualElement CreateInspectorGUI()
     {
-        VisualElement element = new();
+        VisualElement element   = new();
         StandardSignTable table = target as StandardSignTable;
 
         InspectorElement.FillDefaultInspector(element, serializedObject, this);

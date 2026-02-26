@@ -6,6 +6,19 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
+using Impl;
+
+namespace Impl
+{
+    /// <summary>
+    /// For mutability purposes. Strings are reference types but also immutable.
+    /// </summary>
+    public sealed class InnerInput
+    {
+        public string phoneticsStr = string.Empty; // Raw
+        public string unicodeStr   = string.Empty;
+    }
+}
 public struct KeyboardRow
 {
     public VisualElement container;
@@ -28,7 +41,7 @@ public struct KeyboardRow
         this.buttons   = buttons;
     }
 
-    public readonly void InitAlphaNumeric(string phoneticsField, string unicodeField, Processor processor, Action<string> assignCallback)
+    public readonly void InitAlphaNumeric(InnerInput input, Processor processor, Action<string> assignCallback)
     {
         for (int i = 0; i < buttons.Length; i++)
         {
@@ -36,10 +49,10 @@ public struct KeyboardRow
             buttons[i].RegisterCallback(
                 (ClickEvent e) =>
                 {
-                    phoneticsField += text;
-                    unicodeField    = processor.Translate(phoneticsField);
-                    Debug.Log($"Unicode Field: {unicodeField}");
-                    assignCallback?.Invoke(unicodeField);
+                    input.phoneticsStr += text;
+                    input.unicodeStr    = processor.Translate(input.phoneticsStr);
+                    Debug.Log($"Unicode Field: {input.unicodeStr}");
+                    assignCallback?.Invoke(input.unicodeStr);
                 }
             ); // WATCH
         }
@@ -48,7 +61,7 @@ public struct KeyboardRow
     /// <summary>
     /// For the last row (a row that has submission
     /// </summary>
-    public readonly void InitSpecial(string phoneticsField, string unicodeField, Processor processor, Action<string> assignCallback)
+    public readonly void InitSpecial(InnerInput input, Processor processor, Action<string> assignCallback)
     {
         Button spacebar  = buttons.Where(x => x.name == "Spacebar").First();
         Button backspace = buttons.Where(x => x.name == "Backspace").First();
@@ -59,20 +72,20 @@ public struct KeyboardRow
         spacebar.RegisterCallback(
             (ClickEvent e) =>
             {
-                phoneticsField += ' ';
-                unicodeField    = processor.Translate(phoneticsField);
-                assignCallback?.Invoke(unicodeField);
+                Debug.Log($"New Phonetics Field: {input.phoneticsStr}");
+                input.phoneticsStr += ' ';
+                input.unicodeStr    = processor.Translate(input.phoneticsStr);
+                assignCallback?.Invoke(input.unicodeStr);
             }
         );
         backspace.RegisterCallback(
             (ClickEvent e) =>
             {
-                if (phoneticsField.Length > 0)
+                if (input.phoneticsStr.Length > 0)
                 {
-                    phoneticsField = phoneticsField[..^1];
-                    Debug.Log($"New Phonetics Field: {phoneticsField}");
-                    unicodeField   = processor.Translate(phoneticsField);
-                    assignCallback?.Invoke(unicodeField);
+                    input.phoneticsStr = input.phoneticsStr[..^1];
+                    input.unicodeStr   = processor.Translate(input.phoneticsStr);
+                    assignCallback?.Invoke(input.unicodeStr);
                 }
             }
         );
@@ -82,9 +95,9 @@ public struct KeyboardRow
                 Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out Interactable NPC));
                 if (NPC is NpcDialogue)
                 {
-                    Debug.Log($"Phonetics Field: {phoneticsField} | Unicode Field: {unicodeField}");
-                    (NPC as NpcDialogue).TryCheckInput(unicodeField);
-                    assignCallback?.Invoke(unicodeField);
+                    input.unicodeStr = processor.Translate(input.phoneticsStr);
+                    (NPC as NpcDialogue).TryCheckInput(input.unicodeStr);
+                    assignCallback?.Invoke(input.unicodeStr);
                 }
 
                 InputController.Instance.CloseKeyboard();
@@ -96,11 +109,10 @@ public struct KeyboardRow
 
 public sealed class KeyboardUI : VisualElement
 {
-    private string phoneticsStr = string.Empty; // Raw
-    private string unicodeStr   = string.Empty;
+    private InnerInput inner = new();
 
-    public string PhoneticsString => phoneticsStr;
-    public string UnicodeString   => unicodeStr;
+    public string PhoneticsString => inner.phoneticsStr;
+    public string UnicodeString   => inner.unicodeStr;
 
     private Processor processor;
     public KeyboardRow[] rows;
@@ -113,8 +125,7 @@ public sealed class KeyboardUI : VisualElement
         layout.CloneTree(this);
 
         this.assignCallback = assignCallback;
-
-        this.processor = processor;
+        this.processor      = processor;
 
         VisualElement parent     = this.Q<VisualElement>("KeyboardParent");
         VisualElement[] children = parent.Children().ToArray(); // First one is input bar
@@ -127,17 +138,17 @@ public sealed class KeyboardUI : VisualElement
 
         for (int i = 0; i < rows.Length - 1; i++)
         {
-            rows[i].InitAlphaNumeric(phoneticsStr, unicodeStr, processor, assignCallback);
+            rows[i].InitAlphaNumeric(inner, processor, assignCallback);
         }
-        rows[^1].InitSpecial(phoneticsStr, unicodeStr, processor, assignCallback);
+        rows[^1].InitSpecial(inner, processor, assignCallback);
     }
 
     public void ClearStrings()
     {
-        phoneticsStr = string.Empty;
-        unicodeStr   = string.Empty;
+        inner.phoneticsStr = string.Empty;
+        inner.unicodeStr   = string.Empty;
 
-        assignCallback?.Invoke(phoneticsStr);
+        assignCallback?.Invoke(inner.unicodeStr);
     }
 }
 

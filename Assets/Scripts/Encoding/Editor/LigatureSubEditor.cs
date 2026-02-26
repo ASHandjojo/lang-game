@@ -30,8 +30,8 @@ public sealed class CompoundSignElement : VisualElement
         // The visual preview of the unicode character (custom alphabet)
         var resultField = this.Q<TextField>("Result");
 
-        rawMapping.isReadOnly     = true;
-        resultField.isReadOnly    = true;
+        rawMapping.isReadOnly  = true;
+        resultField.isReadOnly = true;
 
         characterList.itemsSource     = children;
         characterList.fixedItemHeight = 150.0f;

@@ -56,6 +56,14 @@ MonoBehaviour:
     replace: 8
   - phonetics: nine
     replace: 9
+  - phonetics: quoteleft
+    replace: "\u2018"
+  - phonetics: quoteright
+    replace: "\u2019"
+  - phonetics: quotedblleft
+    replace: "\u201C"
+  - phonetics: quotedblright
+    replace: "\u201D"
   standardUI: {fileID: 9197481963319205126, guid: faae68990d5741b469a71cd2b5ce9633, type: 3}
   entries:
   - phonetics: '!'
@@ -198,11 +206,11 @@ MonoBehaviour:
     mappedChar: 121
   - phonetics: z
     mappedChar: 122
-  - phonetics: quoteleft
+  - phonetics: "\u2018"
     mappedChar: 8216
-  - phonetics: quoteright
+  - phonetics: "\u2019"
     mappedChar: 8217
-  - phonetics: quotedblleft
+  - phonetics: "\u201C"
     mappedChar: 8220
-  - phonetics: quotedblright
+  - phonetics: "\u201D"
     mappedChar: 8221
