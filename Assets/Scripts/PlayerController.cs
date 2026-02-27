@@ -70,10 +70,11 @@ public sealed class PlayerController : MonoBehaviour
 
         playerCollider = GetComponent<Collider2D>();
 
-        string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave.json");
+        // For now on start load save slot 1 unless no saves are available
+        string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave1.json");
         if (File.Exists(savePath))
         {
-            GameState.LoadPlayerData();
+            GameState.LoadPlayerData(1);
         }
         moveAction     = InputSystem.actions.FindAction("Move");
         interactAction = InputSystem.actions.FindAction("Interact");

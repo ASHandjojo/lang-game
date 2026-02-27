@@ -37,6 +37,8 @@ public sealed class SettingsMenuEvents : OpenClosable
     private UIDocument selfDocument;
 
     private Button backButton;
+    private Button saveButton;
+    [SerializeField] private UIDocument saveDocument;
     private SoundHandler sh;
     [Header("Audio")]
     [SerializeField] private AudioClip hoverClip;
@@ -98,6 +100,10 @@ public sealed class SettingsMenuEvents : OpenClosable
         backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
         backButton.RegisterCallback<ClickEvent>(e => MenuToggler.Instance.ClearAllMenus());
 
+        saveButton = selfDocument.rootVisualElement.Q("SaveButton") as Button;
+        var saveComponent = saveDocument.gameObject.GetComponent<SaveMenuEvents>();
+        saveButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(saveComponent));
+
         // Add input listeners for Keybinds
         rebindButtonEventHandlers = new();
 
@@ -111,6 +117,7 @@ public sealed class SettingsMenuEvents : OpenClosable
 
         // Add sounds
         backButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
+        saveButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
     }
 
     // Get rid of button events
@@ -118,6 +125,9 @@ public sealed class SettingsMenuEvents : OpenClosable
     {
         backButton.UnregisterCallback<ClickEvent>(OnButtonClick);
         backButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
+
+        saveButton.UnregisterCallback<ClickEvent>(OnButtonClick);
+        saveButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
 
         /**
         foreach (var (buttonID, handler) in rebindButtonEventHandlers)
@@ -137,9 +147,11 @@ public sealed class SettingsMenuEvents : OpenClosable
     public override void Close()
     {
         backButton.SetEnabled(false);
+        saveButton.SetEnabled(false);
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
 
         backButton.SetEnabled(true);
+        saveButton.SetEnabled(true);
     }
 
 
