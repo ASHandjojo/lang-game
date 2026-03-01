@@ -20,7 +20,7 @@ public sealed class GameHUDEvents : UIMenuController
     private UIDocument selfDocument;
     [SerializeField] private UIDocument settingsDocument;
 
-    private VisualElement hudContainer;
+    public VisualElement hudContainer;
     private VisualElement dictionaryContainer;
     private VisualElement dictionary;
     private Button dictionaryButton;
