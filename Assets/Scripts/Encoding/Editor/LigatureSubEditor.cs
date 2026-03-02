@@ -90,7 +90,6 @@ public sealed class LigatureSubEditor : Editor
                 int flatIdx = 0;
 
                 StandardSign[] singleEntries = standardTable.entries.Where(x => x.phonetics.Length == 1).ToArray();
-
                 foreach (LigatureSubGroup ligatureCategory in ligatures)
                 {
                     ushort first = ligatureCategory.First;
@@ -110,12 +109,6 @@ public sealed class LigatureSubEditor : Editor
 
                         compoundSign.combinedString = standardSigns.Select(sign => sign.phonetics).Aggregate(string.Empty, (x, y) => x + y);
                         compoundSign.mappedChars    = standardSigns.Select(sign => sign.mappedChar).ToArray();
-                        string total = string.Empty;
-                        foreach (var i in standardSigns)
-                        {
-                            total += $"{i}\n";
-                        }
-                        Debug.Log(total);
                         compoundSigns[flatIdx++]    = compoundSign;
                     }
                 }

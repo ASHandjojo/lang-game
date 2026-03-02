@@ -39,7 +39,6 @@ public struct Processor : IDisposable
             standardStrLength   += phoneticsLength;
             multiStandardLength += (phoneticsLength > 1).CastAsInt32();
         }
-        Debug.Log($"Multi Standard Length: {multiStandardLength}");
 
         for (int i = 0; i < compoundSigns.Length; i++)
         {
