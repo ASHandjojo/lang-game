@@ -13,6 +13,8 @@ public struct StandardSign : IEquatable<StandardSign>
     public int mappedChar;
 
     public readonly bool Equals(StandardSign other) => phonetics.Equals(other.phonetics);
+
+    public override readonly string ToString() => $"Phonetics: {phonetics}, Mapped Char: {mappedChar}";
 }
 
 [Serializable]

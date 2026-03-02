@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Internal Dictionary
   m_EditorClassIdentifier: 
   entries:
-  - rawString: ngge
-    unicodeString: "\u0115"
+  - rawString: nga
+    unicodeString: qa
     englishTranslation: bruh
     wordType: 2

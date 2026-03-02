@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 
 using UnityEngine;
@@ -80,12 +81,15 @@ public sealed class LigatureSubEditor : Editor
             {
                 using FileStream stream = new(table.FileDir, FileMode.Open);
 
-                LigatureSubGroup[]? ligatures = JsonSerializer.Deserialize<LigatureSubGroup[]>(stream);
+                var options = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+                LigatureSubGroup[] ligatures = JsonSerializer.Deserialize<LigatureSubGroup[]>(stream, options);
                 Debug.Assert(ligatures != null);
 
                 int flatLength = ligatures.Select(arr => arr.Ligatures.Length).Sum();
                 CompoundSign[] compoundSigns = new CompoundSign[flatLength];
                 int flatIdx = 0;
+
+                StandardSign[] singleEntries = standardTable.entries.Where(x => x.phonetics.Length == 1).ToArray();
 
                 foreach (LigatureSubGroup ligatureCategory in ligatures)
                 {
@@ -99,15 +103,21 @@ public sealed class LigatureSubEditor : Editor
                         };
 
                         List<StandardSign> standardSigns = ligature.Components
-                            .Select(unicode => Array.FindIndex(standardTable.entries, 0, sign => sign.mappedChar == unicode))
+                            .Select(unicode => Array.FindIndex(singleEntries, 0, sign => sign.mappedChar == unicode))
                             .Where(index    => index != -1)
-                            .Select(index   => standardTable.entries[index])
+                            .Select(index   => singleEntries[index])
                         .ToList();
 
-                        standardSigns.Insert(0, Array.Find(standardTable.entries, sign => sign.mappedChar == first));
-
+                        //Debug.Log($"First: {first}");
+                        //standardSigns.Insert(0, Array.Find(singleEntries, sign  => sign.mappedChar == first));
                         compoundSign.combinedString = standardSigns.Select(sign => sign.phonetics).Aggregate(string.Empty, (x, y) => x + y);
                         compoundSign.mappedChars    = standardSigns.Select(sign => sign.mappedChar).ToArray();
+                        string total = string.Empty;
+                        foreach (var i in standardSigns)
+                        {
+                            total += $"{i}\n";
+                        }
+                        Debug.Log(total);
                         compoundSigns[flatIdx++]    = compoundSign;
                     }
                 }
