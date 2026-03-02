@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
@@ -17,7 +18,7 @@ public sealed class Viewable : Interactable
 
     private Vector3 cameraPos;
 
-    void Start()
+    protected override void Awake()
     {
 
         document        = GetComponent<UIDocument>();
@@ -29,7 +30,6 @@ public sealed class Viewable : Interactable
         document.rootVisualElement.Q("ViewImage").style.backgroundImage   = new StyleBackground(zoomImage);
         //document.rootVisualElement.Q("PromptImage").style.backgroundImage = new StyleBackground(keybindIcon);
 
-        //worldPromptIcon.sprite = ConvertToSprite(keybindIcon);
         document.rootVisualElement.style.visibility = Visibility.Hidden;
         document.rootVisualElement.style.display    = DisplayStyle.None;
         isZoomed = false;
@@ -135,5 +135,39 @@ public sealed class Viewable : Interactable
 
         hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
         hudDocument.rootVisualElement.style.display    = DisplayStyle.Flex;
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        InputSystem.onActionChange += HandleActionChange;
+    }
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        InputSystem.onActionChange -= HandleActionChange;
+    }
+
+    private void HandleActionChange(object actionOrMap, InputActionChange change)
+    {
+        // ignore if not a rebinding update
+        if (change != InputActionChange.BoundControlsChanged) return;
+        UpdateRebindBindingIcon();
+    }
+    private void UpdateRebindBindingIcon()
+    {
+        string controlPath = SettingsMenuEvents.RebindableInputPaths[worldPromptInput]
+            .GetBinding().effectivePath;
+
+        if (MenuToggler.BindingIcons.Icons.TryGetValue(controlPath, out Sprite iconSprite))
+        {
+            Debug.Log($"Prompt Image: {document.rootVisualElement.Q("PromptImage")}");
+            document.rootVisualElement.Q("PromptImage").style.backgroundImage
+                = Background.FromSprite(iconSprite);
+        }
+        else
+        {
+            Debug.LogWarning("No icon found for control path '" + controlPath + "'");
+        }
     }
 }

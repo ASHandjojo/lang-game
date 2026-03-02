@@ -10,9 +10,9 @@ public sealed class GameState
     public Dictionary dictionary;
     public Vector3 position;
 
-    public static void LoadPlayerData()
+    public static void LoadPlayerData(int slot)
     {
-        string savePath  = Path.Combine(Application.persistentDataPath, "PlayerSave.json");
+        string savePath  = Path.Combine(Application.persistentDataPath, "PlayerSave" + slot + ".json");
         string emptyPath = Path.Combine(Application.dataPath, "Data/PlayerSaveEmpty.json");
 
         string jsonString;
@@ -35,7 +35,7 @@ public sealed class GameState
         player.transform.position = save.position;
     }
 
-    public static void SavePlayerData()
+    public static void SavePlayerData(int slot)
     {
         // Get Player Object (Singleton)
         PlayerController player = PlayerController.Instance;
@@ -48,7 +48,7 @@ public sealed class GameState
 
         // Serialize GameState and save to player save
         string saveJson = JsonUtility.ToJson(save, prettyPrint: true);
-        string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave.json");
+        string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave" + slot + ".json");
         File.WriteAllText(savePath, saveJson);
     }
 }

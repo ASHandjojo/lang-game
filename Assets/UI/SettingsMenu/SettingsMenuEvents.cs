@@ -1,35 +1,60 @@
+using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-readonly struct RebindButton
+public enum RebindableInput
 {
-    public string ID { get; }
-    public string ActionID { get; }
-    public int BindingIndex { get; }
-        // for Button: 0; for Vector2: 1-4 (left: 3, right: 4)
+    // don't rename values
+    MoveRight,
+    MoveLeft,
+    Interact,
+    Dictionary,
+    Return,
+    Settings
+}
 
-    public RebindButton(string id, string actionID, int bindingIndex)
+[System.Serializable]
+public struct RebindableInputPath
+{
+    public string ActionId { get; }
+    public int BindingIndex { get; }
+
+    public RebindableInputPath(string actionId, int bindingIndex)
     {
-        ID           = id;
-        ActionID     = actionID;
+        ActionId = actionId;
         BindingIndex = bindingIndex;
+    }
+
+    public readonly InputAction GetAction()
+    {
+        return InputSystem.actions.FindAction(ActionId);
+    }
+    public readonly InputBinding GetBinding()
+    {
+        return GetAction().bindings[BindingIndex];
+    }
+
+    public readonly bool Equals(string actionId, int bindingIndex)
+    {
+        return ActionId == actionId && BindingIndex == bindingIndex;
     }
 }
 
 [DisallowMultipleComponent]
-public sealed class SettingsMenuEvents : OpenClosable
+public sealed class SettingsMenuEvents : UIMenuController
 {
-    private static readonly RebindButton[] RebindButtons =
+    public static readonly IReadOnlyDictionary<RebindableInput, RebindableInputPath>
+        RebindableInputPaths = new Dictionary<RebindableInput, RebindableInputPath>()
     {
-        new("MoveRight", "Move", 4),
-        new("MoveLeft", "Move", 3),
-        new("Interact", "Interact", 0),
-        new("Dictionary", "Dictionary", 0),
-        new("Return", "Return", 0),
-        new("SettingMenu", "Settings", 0),
+        { RebindableInput.MoveRight, new("Move", 4) },
+        { RebindableInput.MoveLeft, new("Move", 3) },
+        { RebindableInput.Interact, new("Interact", 0) },
+        { RebindableInput.Dictionary, new("Dictionary", 0) },
+        { RebindableInput.Return, new("Return", 0) },
+        { RebindableInput.Settings, new("Settings", 0) },
     };
 
     private Dictionary<string, EventCallback<ClickEvent>> rebindButtonEventHandlers;
@@ -37,35 +62,17 @@ public sealed class SettingsMenuEvents : OpenClosable
     private UIDocument selfDocument;
 
     private Button backButton;
+    private Button saveButton;
+    [SerializeField] private UIDocument saveDocument;
     private SoundHandler sh;
     [Header("Audio")]
     [SerializeField] private AudioClip hoverClip;
     [SerializeField] private AudioClip selectionClip;
 
-    private Sprite[] azSprites = {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null};
-
     void Awake()
     {
         selfDocument = GetComponent<UIDocument>();
         sh = GetComponent<SoundHandler>();
-
-        char start = (char)97;
-        for (int i = 0; i < 26; i++) {
-            //Debug.Log(start);
-            if (i % 23 == 0 || i % 23 == 1) {
-                azSprites[i] = Resources.Load<Sprite>("Keys/" + start + "_key_light");
-            } else {
-                azSprites[i] = Resources.Load<Sprite>("Keys/" + start + "_light");
-            }
-            
-            start = (char) (start + 1);
-        }
-
-        //vSprite.push(Resources.Load<Sprite>("Keys/v_light"));
-
-        //if (vSprite != null) {
-        //    Debug.Log("Sprite Loaded correctly");
-        //}
 
         // Begin with settings menu not displayed
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
@@ -73,23 +80,14 @@ public sealed class SettingsMenuEvents : OpenClosable
 
     void Start()
     {
-        var rebinds = PlayerPrefs.GetString("rebinds");
+        string rebinds = PlayerPrefs.GetString("rebinds");
         if (!string.IsNullOrEmpty(rebinds))
         {
             InputSystem.actions.LoadBindingOverridesFromJson(rebinds);
         }
 
-        //Initialize Keybinds on Settings Menu
-        foreach (RebindButton rebindButton in RebindButtons)
-        {
-            // currently unused; TODO: display correct image based on this
-            InputBinding binding = InputSystem.actions.FindAction(rebindButton.ActionID)
-                .bindings[rebindButton.BindingIndex];
-
-            // change ui image
-            SetRebindKeyImage(rebindButton.ID, 97);
-                // keycode 97; temporary fix to make it work with the old keycode system 
-        } 
+        // initialize ui images
+        UpdateAllRebindBindingIcons();
     } 
 
     void OnEnable()
@@ -98,19 +96,28 @@ public sealed class SettingsMenuEvents : OpenClosable
         backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
         backButton.RegisterCallback<ClickEvent>(e => MenuToggler.Instance.ClearAllMenus());
 
+        saveButton = selfDocument.rootVisualElement.Q("SaveButton") as Button;
+        var saveComponent = saveDocument.gameObject.GetComponent<SaveMenuEvents>();
+        saveButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(saveComponent));
+
         // Add input listeners for Keybinds
         rebindButtonEventHandlers = new();
 
-        foreach (RebindButton rebindButton in RebindButtons)
+        foreach (var (input, path) in RebindableInputPaths)
         {
-            void handler(ClickEvent e) => OnRebindButton(rebindButton);
-            rebindButtonEventHandlers.Add(rebindButton.ID + "Button", handler);
-            Button uiButton = selfDocument.rootVisualElement.Q(rebindButton.ID + "Button") as Button;
+            void handler(ClickEvent e) => OnRebindButton(input, path);
+
+            string buttonId = input + "Button";
+            rebindButtonEventHandlers.Add(buttonId, handler);
+
+            Button uiButton = selfDocument.rootVisualElement.Q(buttonId) as Button;
             uiButton.RegisterCallback<ClickEvent>(handler);
         }
 
         // Add sounds
         backButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
+
+        InputSystem.onActionChange += HandleActionChange;
     }
 
     // Get rid of button events
@@ -119,6 +126,9 @@ public sealed class SettingsMenuEvents : OpenClosable
         backButton.UnregisterCallback<ClickEvent>(OnButtonClick);
         backButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
 
+        saveButton.UnregisterCallback<ClickEvent>(OnButtonClick);
+        saveButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
+
         /**
         foreach (var (buttonID, handler) in rebindButtonEventHandlers)
         {
@@ -126,20 +136,34 @@ public sealed class SettingsMenuEvents : OpenClosable
             uiButton.UnregisterCallback(handler);
         }
         */
+
+        InputSystem.onActionChange -= HandleActionChange;
     }
 
-    public override void Open()
+    private void HandleActionChange(object actionOrMap, InputActionChange change)
+    {
+        // ignore if not a rebinding update
+        if (change != InputActionChange.BoundControlsChanged) return;
+        UpdateAllRebindBindingIcons();
+    }
+
+    public override IEnumerator Open()
     {
         selfDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+        yield break;
     }
 
     // Return to main menu or gameHud
-    public override void Close()
+    public override IEnumerator Close()
     {
         backButton.SetEnabled(false);
+        saveButton.SetEnabled(false);
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
 
         backButton.SetEnabled(true);
+        saveButton.SetEnabled(true);
+
+        yield break;
     }
 
 
@@ -156,25 +180,25 @@ public sealed class SettingsMenuEvents : OpenClosable
         sh.PlaySoundUI(hoverClip);
     }
 
-    private void OnRebindButton(RebindButton rebindButton)
+    private void OnRebindButton(RebindableInput input, RebindableInputPath path)
     {
-        Debug.Log("REBIND BUTTON: " + rebindButton.ID);
+        Debug.Log("REBIND BUTTON: " + input);
 
-        Button uiButton = selfDocument.rootVisualElement.Q(rebindButton.ID + "Button") as Button;
+        Button uiButton = selfDocument.rootVisualElement.Q(input + "Button") as Button;
         uiButton.AddToClassList("rebinding"); // rebinding styles
 
-        InputAction action = InputSystem.actions.FindAction(rebindButton.ActionID);
+        InputAction action = path.GetAction();
 
         // action needs to be disabled before rebinding
         action.Disable();
 
-        action.PerformInteractiveRebinding(rebindButton.BindingIndex)
+        action.PerformInteractiveRebinding(path.BindingIndex)
             .OnComplete(operation => {
                 string newKeyPath = operation.selectedControl.path;
                 string newKeyeadableName = operation.selectedControl.displayName;
 
                 // change ui image
-                SetRebindKeyImage(rebindButton.ID, 97);
+                //SetRebindKeyImage(rebindButton.ID, 97);
                     // keycode 97; temporary fix to make it work with the old keycode system 
 
                 // save to playerprefs
@@ -192,10 +216,27 @@ public sealed class SettingsMenuEvents : OpenClosable
             .Start();
     }
     
-    private void SetRebindKeyImage(string rebindID, int keycode)
+    private void SetRebindBindingIcon(RebindableInput input, string controlPath)
     {
-        //selfDocument.rootVisualElement.Q(rebindID + "Image").style.backgroundImage
-        //    = Background.FromSprite(azSprites[keycode - 97]);
+        if (MenuToggler.BindingIcons.Icons.TryGetValue(controlPath, out Sprite iconSprite)) 
+        {
+            selfDocument.rootVisualElement.Q(input + "Image").style.backgroundImage 
+                = Background.FromSprite(iconSprite);
+        }
+        else
+        {
+            Debug.LogWarning("No icon found for control path '" + controlPath + "'");
+        }
+    }
+
+    private void UpdateAllRebindBindingIcons()
+    {
+        Debug.Log("Updating Settings Menu UI Binding Icons");
+
+        foreach (var (input, path) in RebindableInputPaths)
+        {
+            SetRebindBindingIcon(input, path.GetBinding().effectivePath);
+        }
     }
 
     // Change dialogue text speed based on slider position 
