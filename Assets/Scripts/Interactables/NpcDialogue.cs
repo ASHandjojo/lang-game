@@ -14,10 +14,13 @@ public sealed class NpcDialogue : Interactable
 
     [SerializeField] private string npcName;
     [SerializeField] private Texture2D npcImage;
-    private int index = 0; 
+    //private int index = 0; 
 
     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
     [SerializeField] private DialogueEntry[] entries;
+    [SerializeField] private DialogueTree npcTree;
+    
+    private bool alreadyIncrDiag = false;
 
     private Label dialogueLabel;
     private float textSpeed;
@@ -32,16 +35,29 @@ public sealed class NpcDialogue : Interactable
 
     public bool TryCheckInput(string content)
     {
-        if (inDialogue && entries[index].hasResponse)
+        
+        if (inDialogue && npcTree.NeedPlayerInput()) // if we are in dialogue and we need a response from the player
         {
-            if (entries[index].responseData.expectedInput == content) // For when the content is equal to the expected
+            DialogueEntry currDiag = (DialogueEntry)npcTree.GetCurrentEntry(); // This will get the current dialogue entry
+            int errno = npcTree.DialogueForward(content); // This will increment the dialogue accordingly or return error
+            alreadyIncrDiag = true; // make sure to set that we have already progressed the dialogue!
+            if (errno < 0) 
+            {
+                Debug.Log("Error in Moving Dialogue Forward");
+            }
+
+            
+
+            if (currDiag.responseData.expectedInput == content) // For when the content is equal to the expected
             {
                 return true;
             }
-            else // Otherwise, when it is invalid. This is temporary, incomplete logic handling.
-            {
-                index--;
-            }
+
+            // old code for reference!
+            //else // Otherwise, when it is invalid. This is temporary, incomplete logic handling.
+            //{
+            //    index--;
+            //}
         }
         return false;
     }
@@ -71,16 +87,27 @@ public sealed class NpcDialogue : Interactable
     {
         if (inDialogue)
         {
+            //Debug.Log("Interact Logic Called");
             // Interact key pressed when dialogue line is finished -> to next line/end dialogue
-            if (dialogueLabel.text == entries[index].line)
+            if (npcTree.InDialogue()) { // Ensure our tree is in dialogue before getting the current entry
+                DialogueEntry currDiag = (DialogueEntry) npcTree.GetCurrentEntry();
+                
+                if (dialogueLabel.text == currDiag.line || alreadyIncrDiag)
+                {
+                    //Debug.Log("New Line");
+                    StopBounce();
+                    yield return NextLine();
+                }
+                else
+                {
+                    //Debug.Log("Setting");
+                    dialogueLabel.text = currDiag.line;
+                    StartBounce();
+                }
+            } else
             {
-                StopBounce();
-                yield return NextLine();
-            }
-            else
-            {
-                dialogueLabel.text = entries[index].line;
-                StartBounce();
+                // If we are not in dialogue, end the dialogue
+                EndDialogue();
             }
         }
         else
@@ -95,6 +122,13 @@ public sealed class NpcDialogue : Interactable
             // Prevent Movement
             player.CanMove = false;
             inDialogue     = true;
+
+            int errno = npcTree.InitializeTree(); // initialize the current dialogue tree!
+            if (errno < 0) // If there is an error initiLizing the tree, take note!
+            {
+                Debug.Log("Error with NPC Tree Initialize");
+            }
+
             yield return TypeLine();
         }
     }
@@ -104,66 +138,121 @@ public sealed class NpcDialogue : Interactable
     /// </summary>
     public void Advance()
     {
-        dialogueLabel.text = entries[index].line;
+        //dialogueLabel.text = entries[index].line;
+        //Debug.Log("Advance Called");
+        if (npcTree.InDialogue())
+        {
+            dialogueLabel.text = ((DialogueEntry) npcTree.GetCurrentEntry()).line; // 
+        } else
+        {
+            EndDialogue();
+        }
+        
     }
 
     private IEnumerator TypeLine()
     {
-        string currentLine = entries[index].line;
-        int i = 0;
-        while (dialogueLabel.text.Length < currentLine.Length)
+        //Debug.Log("Type Line Called");
+        if (npcTree.InDialogue()) // Ensure we are in dialogue before getting the current entry
         {
-            dialogueLabel.text += currentLine[i++];
-            yield return new WaitForSeconds(textSpeed);
-        }
-        StartBounce();
+           string currentLine = ((DialogueEntry) npcTree.GetCurrentEntry()).line;
+            int i = 0;
+            while (dialogueLabel.text.Length < currentLine.Length)
+            {
+                dialogueLabel.text += currentLine[i++];
+                yield return new WaitForSeconds(textSpeed);
+            }
+            StartBounce(); 
+        } else
+        {
+            EndDialogue();
+        } 
+    }
+
+    private void EndDialogue() // This will be a function that is called when the Dialogue has ended!
+    {
+        //Debug.Log("End Dialogue Called");
+        StopBounce();
+
+        //index                  = 0;
+        dialogueLabel.text     = "";
+        inDialogue             = false;
+        nextLinePrompt.visible = false;
+
+        // Restore Movement
+        PlayerController.Instance.CanMove = true;
+
+        // Restore in-game UI
+        document.rootVisualElement.style.visibility = Visibility.Hidden;
+        document.rootVisualElement.style.display    = DisplayStyle.None;
+
+        hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
+        hudDocument.rootVisualElement.style.display    = DisplayStyle.Flex;
+
+        worldPromptIcon.enabled = true;
+
+        InputController.Instance.CloseKeyboard();
+        PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
     }
 
     private IEnumerator NextLine()
     {
-        if(index < entries.Length - 1)
+        //Debug.Log("Next Line Called");
+        if (!npcTree.InDialogue()) // If we are currently not in dialogue, end it!
         {
-            index++;
+            EndDialogue();
+        } else
+        {
+            if (!alreadyIncrDiag) // If we haven't already incremented the dialogue, ensure to increment it
+            {
+                int err = npcTree.DialogueForward(); // This will increment the dialogue accordingly
+                if (err < 0) // reports if there is an error!
+                {
+                    Debug.Log("Error in Moving Dialogue Forward");
+                }
+            } else
+            {
+                alreadyIncrDiag = false;
+            }
+
             dialogueLabel.text = "";
             yield return TypeLine();
 
-            if (entries[index].hasResponse)
+            if (npcTree.NeedPlayerInput())
             {
                 PlayerController.Instance.context |= PlayerContext.PlayerInput;
                 InputController.Instance.OpenKeyboard();
-
-                yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0);
-            }
-            else
+                
+                yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0); 
+            } else
             {
                 InputController.Instance.CloseKeyboard();
                 PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
             }
         }
-        else
-        {
-            StopBounce();
+        // if(index < entries.Length - 1) old code for viewing
+        // {
+        //     index++;
+        //     dialogueLabel.text = "";
+        //     yield return TypeLine();
 
-            index                  = 0;
-            dialogueLabel.text     = "";
-            inDialogue             = false;
-            nextLinePrompt.visible = false;
+        //     if (entries[index].hasResponse)
+        //     {
+        //         PlayerController.Instance.context |= PlayerContext.PlayerInput;
+        //         InputController.Instance.OpenKeyboard();
 
-            // Restore Movement
-            PlayerController.Instance.CanMove = true;
-
-            // Restore in-game UI
-            document.rootVisualElement.style.visibility = Visibility.Hidden;
-            document.rootVisualElement.style.display    = DisplayStyle.None;
-
-            hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
-            hudDocument.rootVisualElement.style.display    = DisplayStyle.Flex;
-
-            worldPromptIcon.enabled = true;
-
-            InputController.Instance.CloseKeyboard();
-            PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
-        }
+        //         yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0);
+        //     }
+        //     else
+        //     {
+        //         InputController.Instance.CloseKeyboard();
+        //         PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
+        //     }
+        // }
+        // else
+        // {
+        //   EndDialogue()
+        // }
     }
 
     // Animates the prompt for informing the player that the current line is finished
