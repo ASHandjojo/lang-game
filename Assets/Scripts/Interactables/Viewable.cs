@@ -20,7 +20,7 @@ public sealed class Viewable : Interactable
 
     protected override void Awake()
     {
-
+        base.Awake();
         document        = GetComponent<UIDocument>();
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
         //keybindIcon     = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());

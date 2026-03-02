@@ -12,8 +12,9 @@ public class Item : Interactable
     private SpriteRenderer spriteRenderer;
     private bool isOpen = false;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         // Initialize components added in Inspector
         spriteRenderer = GetComponent<SpriteRenderer>();
         soundHandler   = GetComponent<SoundHandler>();

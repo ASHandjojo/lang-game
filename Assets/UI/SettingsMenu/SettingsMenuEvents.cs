@@ -72,7 +72,7 @@ public sealed class SettingsMenuEvents : UIMenuController
     void Awake()
     {
         selfDocument = GetComponent<UIDocument>();
-        sh = GetComponent<SoundHandler>();
+        sh           = GetComponent<SoundHandler>();
 
         // Begin with settings menu not displayed
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
