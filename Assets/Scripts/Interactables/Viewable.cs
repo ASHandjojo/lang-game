@@ -20,14 +20,11 @@ public sealed class Viewable : Interactable
 
     protected override void Awake()
     {
-        document = GetComponent<UIDocument>();
         base.Awake();
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-        soundHandler = GetComponent<SoundHandler>();
+        document        = GetComponent<UIDocument>();
+        worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
+        //keybindIcon     = Keybinds.Instance.getKeyImage(Keybinds.Instance.getIntersKey());
+        soundHandler    = GetComponent<SoundHandler>();
 
         // Initialize UI images, while hiding UI screen until interacted with
         document.rootVisualElement.Q("ViewImage").style.backgroundImage   = new StyleBackground(zoomImage);
