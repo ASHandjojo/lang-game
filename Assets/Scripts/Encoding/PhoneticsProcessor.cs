@@ -18,9 +18,8 @@ public struct Processor : IDisposable
 
     // Ranges into contiguous memory (basically, using pooled strings)
     private NativeArray<SignData> standardData;
-    private NativeArray<SignData> compoundData; // Strategy/usage is subject to change! Could add other part for 
+    private NativeArray<SignData> compoundData;
 
-    private NativeArray<PackedStandard> standardMulti;
     // Nested structure, contains a mapping between the first unicode character in a...
     // Compound sign to all of the characters & the index to compound data
     [NativeDisableContainerSafetyRestriction]
@@ -54,7 +53,6 @@ public struct Processor : IDisposable
         standardData = new NativeArray<SignData>(standardSigns.Length, allocator);
         compoundData = new NativeArray<SignData>(compoundSigns.Length, allocator);
 
-        standardMulti     = new NativeArray<PackedStandard>(multiStandardLength, allocator);
         compoundPrefixMap = new NativeHashMap<char, NativeList<CompoundTable>>(compoundSigns.Length, allocator);
 
         Span<char> standardSpan = standardSignData.AsSpan();
@@ -72,7 +70,6 @@ public struct Processor : IDisposable
     private void InitStandardSigns(in Span<char> standardSpan, in ReadOnlySpan<StandardSign> standardSigns)
     {
         int standardOffset = 0;
-        int multiIndex     = 0;
         for (int i = 0; i < standardSigns.Length; i++)
         {
             ref readonly StandardSign sign = ref standardSigns[i];
@@ -80,12 +77,8 @@ public struct Processor : IDisposable
 
             Range range = standardOffset..(standardOffset + phoneticStr.Length);
             phoneticStr.CopyTo(standardSpan[range]);
-            standardData[i] = new SignData(range, (char) sign.mappedChar);
 
-            if (phoneticStr.Length > 1) 
-            {
-                standardMulti[multiIndex++] = new PackedStandard(phoneticStr[0], phoneticStr[1], index: i);
-            }
+            standardData[i] = new SignData(range, (char) sign.mappedChar);
             standardOffset += phoneticStr.Length;
         }
     }
@@ -226,18 +219,15 @@ public struct Processor : IDisposable
             {
                 continue;
             }
-            Debug.Log($"Sign Count: {signCount} | Max Match Size: {maxMatchSize}");
             for (int elementIdx = 1; elementIdx < signCount && isEqual; elementIdx++)
             {
                 char inputSign   = input[elementIdx];
                 char compareSign = compoundTable.signData[elementIdx];
-                Debug.Log($"Chars at {elementIdx}: Input: {inputSign} | Compare: {compareSign}");
                 isEqual = isEqual && inputSign == compareSign;
             }
 
             if (isEqual)
             {
-                Debug.Log("Found!");
                 currentTable = compoundTable;
                 maxMatchSize = signCount;
             }
@@ -256,60 +246,10 @@ public struct Processor : IDisposable
         ReadOnlySpan<char> span = input.ToLower(); // Converts to span (much faster)
         unsafe
         {
-            UnsafeList<char> basePass     = BasePass(span);
-            UnsafeList<char> compoundPass = CompoundPass(new ReadOnlySpan<char>(basePass.Ptr, basePass.Length));
+            //UnsafeList<char> basePass     = BasePass(span);
+            UnsafeList<char> compoundPass = CompoundPass(span);
             return new string(compoundPass.Ptr, 0, compoundPass.Length);
         }
-    }
-
-    /// <summary>
-    /// Handles base pass of unicode conversion for all base characters; including single and multiple character phonetics.
-    /// </summary>
-    /// <param name="span"></param>
-    /// <returns></returns>
-    private readonly UnsafeList<char> BasePass(in ReadOnlySpan<char> span)
-    {
-        // Deliberate probable overestimate of size, fine lol
-        UnsafeList<char> addedChars = new(initialCapacity: span.Length, Allocator.Temp);
-        for (int i = 0; i < span.Length; i++)
-        {
-            char mappedChar    = span[i];
-            bool possibleMulti = false; // Find if any match the first characters (could be multi)
-            // Compare first character
-            for (int j = 0; j < standardMulti.Length && !possibleMulti && i < span.Length - 1; j++)
-            {
-                possibleMulti = mappedChar == standardMulti[j][0];
-            }
-            if (possibleMulti) // Could be multi
-            {
-                int index = -1;
-                PackedStandard packed = new(mappedChar, span[i + 1], 0); // Index is dummy
-                for (int j = 0; j < standardMulti.Length; j++)
-                {
-                    if (standardMulti[j].Equals(packed))
-                    {
-                        index = j;
-                        break;
-                    }
-                }
-                if (index >= 0) // If key is found
-                {
-                    int standardIndex = standardMulti[index].Index;
-                    char unicodeStr   = standardData[standardIndex].unicodeChar;
-                    addedChars.AddNoResize(unicodeStr);
-                    i++;
-                }
-                else // Otherwise, insert as normal
-                {
-                    addedChars.AddNoResize(mappedChar);
-                }
-            }
-            else // Standard case, copy unchanged
-            {
-                addedChars.AddNoResize(mappedChar);
-            }
-        }
-        return addedChars;
     }
 
     private readonly UnsafeList<char> CompoundPass(in ReadOnlySpan<char> span)
@@ -322,7 +262,6 @@ public struct Processor : IDisposable
             // Continues (skips current iter) if it is an invalid character
             // (This shouldn't happen with the on-screen keyboard)
             bool hasCompound = compoundPrefixMap.ContainsKey(mappedChar);
-            Debug.Log($"Has Compound: {hasCompound}");
             // Checks whether the current key *could* be compound.
             if (hasCompound)
             {
@@ -339,7 +278,6 @@ public struct Processor : IDisposable
 
             addedChars.AddNoResize(mappedChar);
         }
-
         return addedChars;
     }
 
@@ -350,8 +288,6 @@ public struct Processor : IDisposable
 
         standardData.Dispose();
         compoundData.Dispose();
-
-        standardMulti.Dispose();
 
         // Disposes nested lists first before disposing hash map
         foreach (var arr in compoundPrefixMap.GetValueArray(Allocator.Temp))

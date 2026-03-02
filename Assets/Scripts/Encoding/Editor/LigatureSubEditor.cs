@@ -108,8 +108,6 @@ public sealed class LigatureSubEditor : Editor
                             .Select(index   => singleEntries[index])
                         .ToList();
 
-                        //Debug.Log($"First: {first}");
-                        //standardSigns.Insert(0, Array.Find(singleEntries, sign  => sign.mappedChar == first));
                         compoundSign.combinedString = standardSigns.Select(sign => sign.phonetics).Aggregate(string.Empty, (x, y) => x + y);
                         compoundSign.mappedChars    = standardSigns.Select(sign => sign.mappedChar).ToArray();
                         string total = string.Empty;

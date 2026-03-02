@@ -20,59 +20,6 @@ namespace Impl
         }
     }
 
-    /// <summary>
-    /// Made for comparing 2 character based standard characters (e.g. ng, sh).
-    /// </summary>
-    public struct PackedStandard : IEquatable<PackedStandard>, IComparable<PackedStandard>
-    {
-        private unsafe fixed char Chars[2];
-        private int index;
-
-        private unsafe readonly Span<char> AsSpanMut()
-        {
-            fixed (char* charPtr = Chars) return new Span<char>(charPtr, 2);
-        }
-        public unsafe readonly ReadOnlySpan<char> AsSpan() => AsSpanMut();
-
-        public readonly int Index => index;
-
-        public PackedStandard(char a1, char a2, int index)
-        {
-            Debug.Assert(index >= 0);
-            this.index = index;
-
-            var spanMut = AsSpanMut();
-            spanMut[0]  = a1;
-            spanMut[1]  = a2;
-        }
-
-        public readonly char this[int index]
-        {
-            get => AsSpan()[index];
-        }
-
-        public readonly bool Equals(PackedStandard rhs)
-        {
-            var lhsSpan = AsSpan();
-            var rhsSpan = rhs.AsSpan();
-            return lhsSpan[0] == rhsSpan[0] && lhsSpan[1] == rhsSpan[1];
-        }
-        
-        public readonly int CompareTo(PackedStandard rhs)
-        {
-            var lhsSpan  = AsSpan();
-            var rhsSpan  = rhs.AsSpan();
-            int compare1 = lhsSpan[0].CompareTo(rhsSpan[0]);
-            return compare1 == 0 ? lhsSpan[1].CompareTo(rhsSpan[1]) : compare1;
-        }
-
-        public readonly override string ToString()
-        {
-            var span = AsSpan();
-            return $"{span[0]}{span[1]}";
-        }
-    }
-
     public struct CompoundTable : IEquatable<CompoundTable>
     {
         /// <summary>
