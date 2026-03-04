@@ -3145,15 +3145,15 @@ MonoBehaviour:
   - FirstNode:
       ConditionalValue: 0
       Node:
-        Type: 1
-        SuccIdx: -1
-        FailIdx: 1
+        Type: 10
+        SuccIdx: 1
+        FailIdx: 0
         Entry:
-          line: Hi
+          line: Hi? Welcome to New York! It's been waiting for you!
           sound:
             obj: {fileID: 0}
             isInitialized: 0
-          hasResponse: 0
+          hasResponse: 1
           responseData:
             expectedInput: 
     OtherNodes:

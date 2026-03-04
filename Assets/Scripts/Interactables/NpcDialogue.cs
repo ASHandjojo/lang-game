@@ -130,6 +130,18 @@ public sealed class NpcDialogue : Interactable
             }
 
             yield return TypeLine();
+
+            if (npcTree.NeedPlayerInput())
+            {
+                PlayerController.Instance.context |= PlayerContext.PlayerInput;
+                InputController.Instance.OpenKeyboard();
+                
+                yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0); 
+            } else
+            {
+                InputController.Instance.CloseKeyboard();
+                PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
+            }
         }
     }
 
