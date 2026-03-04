@@ -61,6 +61,10 @@ public struct Processor : IDisposable
         InitCompoundSigns(compoundSpan, compoundSignSort, allocator);
     }
 
+    public readonly bool IsValid => standardSignData.IsCreated && compoundSignData.IsCreated &&
+        standardData.IsCreated && compoundData.IsCreated &&
+        compoundPrefixMap.IsCreated;
+
     /// <summary>
     /// Populating standard sign backing arrays.
     /// </summary>
