@@ -3157,7 +3157,7 @@ MonoBehaviour:
           responseData:
             expectedInput: 
     OtherNodes:
-    - Type: 6
+    - Type: 10
       SuccIdx: 3
       FailIdx: 2
       Entry:
@@ -3172,7 +3172,7 @@ MonoBehaviour:
           expectedInput: 
     - Type: 1
       SuccIdx: -1
-      FailIdx: 5
+      FailIdx: 1
       Entry:
         line: womp womp loser
         sound:
@@ -3181,7 +3181,7 @@ MonoBehaviour:
         hasResponse: 0
         responseData:
           expectedInput: 
-    - Type: 6
+    - Type: 10
       SuccIdx: 4
       FailIdx: 2
       Entry:
@@ -3192,9 +3192,9 @@ MonoBehaviour:
         hasResponse: 0
         responseData:
           expectedInput: 
-    - Type: 1
+    - Type: 5
       SuccIdx: -1
-      FailIdx: 5
+      FailIdx: -1
       Entry:
         line: Congratulations! You did it! Worlds best cup of coffee!
         sound:

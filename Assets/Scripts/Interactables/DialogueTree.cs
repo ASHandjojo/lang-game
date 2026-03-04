@@ -7,8 +7,9 @@ public enum NodeType : uint
 {
     Default = 1,
     Conditional = 2,
-    Binary = 4 | Conditional,
-    Multiheaded = 8 | Conditional
+    End = 4 | Default, // new node type added to be the end node (will only end at an end node)
+    Binary = 8 | Conditional,
+    Multiheaded = 16 | Conditional
     
 }
 
@@ -229,7 +230,7 @@ public class DialogueTree : MonoBehaviour
 
         //Debug.Log("Going to" + to_go_to);
 
-        if (to_go_to == CurrTreeLength )
+        if (((DialogueTreeNode) curr).Type == NodeType.End )
         { // If the index of the next one is the end of the list, then we are officially done!
             //Debug.Log("Ending ha ha ha");
             NpcOptions[CurrListIdx].CurrNode = -1; // Set the current node to no current node
