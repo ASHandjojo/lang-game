@@ -3173,22 +3173,7 @@ MonoBehaviour:
   hudDocument: {fileID: 1605222084}
   npcName: Florence
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
-  entries:
-  - line: Hi
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 0
-    responseData:
-      expectedInput: 
-  - line: Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
-      ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis.
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 1
-    responseData:
-      expectedInput: 
+  entries: []
   npcTree: {fileID: 1988571627}
 --- !u!61 &1988571624
 BoxCollider2D:

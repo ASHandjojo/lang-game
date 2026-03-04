@@ -36,9 +36,8 @@ public sealed class NpcDialogue : Interactable
     public bool TryCheckInput(string content)
     {
         
-        if (inDialogue && npcTree.NeedPlayerInput()) // if we are in dialogue and we need a response from the player
+        if (inDialogue && npcTree.NeedsPlayerInput()) // if we are in dialogue and we need a response from the player
         {
-            DialogueEntry currDiag = (DialogueEntry)npcTree.GetCurrentEntry(); // This will get the current dialogue entry
             int errno = npcTree.DialogueForward(content); // This will increment the dialogue accordingly or return error
             alreadyIncrDiag = true; // make sure to set that we have already progressed the dialogue!
             if (errno < 0) 
@@ -46,18 +45,11 @@ public sealed class NpcDialogue : Interactable
                 Debug.Log("Error in Moving Dialogue Forward");
             }
 
-            
-
-            if (currDiag.responseData.expectedInput == content) // For when the content is equal to the expected
+            npcTree.TryGetCurrentNode(out var currDiag);
+            if (currDiag.Entry.responseData.expectedInput == content) // For when the content is equal to the expected
             {
                 return true;
             }
-
-            // old code for reference!
-            //else // Otherwise, when it is invalid. This is temporary, incomplete logic handling.
-            //{
-            //    index--;
-            //}
         }
         return false;
     }
@@ -89,10 +81,10 @@ public sealed class NpcDialogue : Interactable
         {
             //Debug.Log("Interact Logic Called");
             // Interact key pressed when dialogue line is finished -> to next line/end dialogue
-            if (npcTree.InDialogue()) { // Ensure our tree is in dialogue before getting the current entry
-                DialogueEntry currDiag = (DialogueEntry) npcTree.GetCurrentEntry();
-                
-                if (dialogueLabel.text == currDiag.line || alreadyIncrDiag)
+            if (npcTree.InDialogue())
+            {
+                bool hasEntry = npcTree.TryGetCurrentEntry(out DialogueEntry currDiag);
+                if (dialogueLabel.text == currDiag.line || alreadyIncrDiag && hasEntry)
                 {
                     //Debug.Log("New Line");
                     StopBounce();
@@ -131,13 +123,14 @@ public sealed class NpcDialogue : Interactable
 
             yield return TypeLine();
 
-            if (npcTree.NeedPlayerInput())
+            if (npcTree.NeedsPlayerInput())
             {
                 PlayerController.Instance.context |= PlayerContext.PlayerInput;
                 InputController.Instance.OpenKeyboard();
                 
                 yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0); 
-            } else
+            }
+            else
             {
                 InputController.Instance.CloseKeyboard();
                 PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
@@ -150,12 +143,11 @@ public sealed class NpcDialogue : Interactable
     /// </summary>
     public void Advance()
     {
-        //dialogueLabel.text = entries[index].line;
-        //Debug.Log("Advance Called");
-        if (npcTree.InDialogue())
+        if (npcTree.InDialogue() && npcTree.TryGetCurrentEntry(out DialogueEntry currDiag))
         {
-            dialogueLabel.text = ((DialogueEntry) npcTree.GetCurrentEntry()).line; // 
-        } else
+            dialogueLabel.text = currDiag.line;
+        }
+        else
         {
             EndDialogue();
         }
@@ -164,10 +156,10 @@ public sealed class NpcDialogue : Interactable
 
     private IEnumerator TypeLine()
     {
-        //Debug.Log("Type Line Called");
-        if (npcTree.InDialogue()) // Ensure we are in dialogue before getting the current entry
+        // Ensure we are in dialogue before getting the current entry
+        if (npcTree.InDialogue() && npcTree.TryGetCurrentEntry(out DialogueEntry currDiag))
         {
-           string currentLine = ((DialogueEntry) npcTree.GetCurrentEntry()).line;
+            string currentLine = currDiag.line;
             int i = 0;
             while (dialogueLabel.text.Length < currentLine.Length)
             {
@@ -213,30 +205,32 @@ public sealed class NpcDialogue : Interactable
         if (!npcTree.InDialogue()) // If we are currently not in dialogue, end it!
         {
             EndDialogue();
-        } else
+        }
+        else
         {
             if (!alreadyIncrDiag) // If we haven't already incremented the dialogue, ensure to increment it
             {
                 int err = npcTree.DialogueForward(); // This will increment the dialogue accordingly
                 if (err < 0) // reports if there is an error!
                 {
-                    Debug.Log("Error in Moving Dialogue Forward");
+                    Debug.Log($"Error in Moving Dialogue Forward | Error: {err}");
                 }
-            } else
+            }
+            else
             {
                 alreadyIncrDiag = false;
             }
-
             dialogueLabel.text = "";
             yield return TypeLine();
 
-            if (npcTree.NeedPlayerInput())
+            if (npcTree.NeedsPlayerInput())
             {
                 PlayerController.Instance.context |= PlayerContext.PlayerInput;
                 InputController.Instance.OpenKeyboard();
                 
                 yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0); 
-            } else
+            }
+            else
             {
                 InputController.Instance.CloseKeyboard();
                 PlayerController.Instance.context &= ~PlayerContext.PlayerInput;

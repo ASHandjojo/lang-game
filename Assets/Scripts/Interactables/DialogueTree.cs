@@ -2,15 +2,20 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-
 public enum NodeType : uint
 {
-    Default = 1,
+    Default     = 1,
     Conditional = 2,
-    End = 4 | Default, // new node type added to be the end node (will only end at an end node)
-    Binary = 8 | Conditional,
+    // New node type added to be the end node (will only end at an end node)
+    End         = 4  | Default,
+    Binary      = 8  | Conditional,
     Multiheaded = 16 | Conditional
-    
+}
+
+public enum TraverseStatus : uint
+{
+    Successful = 1,
+    IsAtEnd    = 2 | Successful
 }
 
 [Serializable]
@@ -19,10 +24,8 @@ public struct DialogueTreeList
     // This will hold the first node in the tree list
     // This will help to know whether to go into the list or not
     [SerializeField] public DialogueTreeHead FirstNode;
-
     // This will hold all the other nodes in the list
     [SerializeField] public DialogueTreeNode[] OtherNodes;
-
     // This will be the current node in the list when traversing
     //   * It equals -1 if it is not being used 
     //   * It equals 0 if it is the first node
@@ -33,13 +36,10 @@ public struct DialogueTreeList
 [Serializable]
 public struct DialogueTreeHead
 {
-    
-
     // conditional value will have the value that should be compared with
     // to evaluate if this dialogue should be taken
     // it is -1 if no node exists
     [SerializeField] public int ConditionalValue;
-
     // This will hold the first node in the list's entry
     [SerializeField] public DialogueTreeNode Node;
 }
@@ -51,53 +51,41 @@ public struct DialogueTreeHead
 [Serializable]
 public struct DialogueTreeNode
 {
-
-    // type will be set to Default if it should be the default branch of diologue
+    // type will be set to Default if it should be the default branch of dialogue
     //      otherwise, type will be conditional (meaning it depends on some 
     //      condition to be chosen)
     [SerializeField] public NodeType Type;
-    
     // This will hold the index of the next dialogue in the list if successful
     // This will hold -1 if the node will immediately go to the next one!
     // This will hold the size of the list if this transition ends the dialogue!
     [SerializeField] public int SuccIdx;
-
     // This will hold the index of the next dialogue if the user fails
     // i.e. the default next value!
     // This will hold the size of the list if this transition ends the dialogue!
     [SerializeField] public int FailIdx;
-
-
     // This will hold the actual dialogue entry in this Node!
     [SerializeField] public DialogueEntry Entry;
 }
 
-public class DialogueTree : MonoBehaviour
+public sealed class DialogueTree : MonoBehaviour
 {
-
-    
-    // This will hold a list of diologue tree lists 
+    // This will hold a list of dialogue tree lists 
     [SerializeField] private DialogueTreeList[] NpcOptions;
-
     [SerializeField] private int TreeSize = -1;
 
-    // This will be true if we are currently in a diologue list (to be traversed)
-    // otherwise it will be false (signaling we need to choose a new diologue list to be in)
+    // This will be true if we are currently in a dialogue list (to be traversed)
+    // otherwise it will be false (signaling we need to choose a new dialogue list to be in)
     private bool InDialogueList = false;
 
-    // This will be the current list that the diologue is in
-    private int CurrListIdx = -1;
-
+    // This will be the current list that the dialogue is in
+    private int CurrListIdx    = -1;
     private int CurrTreeLength = -1;
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         TreeSize = NpcOptions.Length;
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -109,7 +97,6 @@ public class DialogueTree : MonoBehaviour
         return InDialogueList;
     }
 
-
     // This will print out errors if the Dialogue Tree entries are set up wrong! Will be useful for debugging
     // Could be removed in release to make it run faster with err replaced with indx!
     private int AssertGetNodeIndex()
@@ -118,74 +105,47 @@ public class DialogueTree : MonoBehaviour
         Debug.Assert(InDialogueList, "Error: DialogueTree has no Current entry");
         // Means the DialogueTree index stored is out of bounds in the list of all npc Dialogue lists
         Debug.Assert(CurrListIdx >= 0 && CurrListIdx < TreeSize, "Error: DialogueTree Index is out of bounds: " + CurrListIdx.ToString());
-
         // This is the index of the currently in use Dialogue tree list
         int idx = NpcOptions[CurrListIdx].CurrNode;
-
         // If the index of the node in the current tree is less than -1, the list is not in use
         Debug.Assert(idx >= 0, "Error: Current Dialogue Tree is not in any current Node");
-            
-
         if (idx == 0)
         {
             // If the index of the node in the current tree is 0, then the list being used is the first node
             return 0;
         }
-
         // This checks the index to see if it is out of bounds
         Debug.Assert(idx < NpcOptions[CurrListIdx].OtherNodes.Length + 1, "Error: Current Dialogue Tree is trying to access a Node that is out of bounds: " + idx.ToString());
-
         // This will return the index which will be the exact node being used at the current!
         return idx;
         
     }
 
-    private DialogueTreeNode? GetCurrentNode()
+    public bool TryGetCurrentNode(out DialogueTreeNode node)
     {
-        int err = AssertGetNodeIndex(); // gets the index or less than 0 if there is an error
-        
-        if (err < 0)
-        { // on error, return null
-            return null;
-        }    
-
-        if (err == 0)
-        { // if index is 0, this refers to the first node
-            return NpcOptions[CurrListIdx].FirstNode.Node;
-        }
-
-        // otherwise, subtract one in the otherNodes list!
-        return NpcOptions[CurrListIdx].OtherNodes[err - 1];
+        int index = AssertGetNodeIndex(); // gets the index or less than 0 if there is an error
+        node = index switch
+        {
+            < 0 => default,
+            0   => NpcOptions[CurrListIdx].FirstNode.Node,
+            > 0 => NpcOptions[CurrListIdx].OtherNodes[index - 1]
+        };
+        return index >= 0;
     }
 
+    public bool NeedsPlayerInput() => InDialogueList && TryGetCurrentNode(out var curr) && (curr.Type & NodeType.Conditional) != 0;
 
     // This will return the current entry of dialogue that will be said
     // or it will return null if there was an error
-    public DialogueEntry? GetCurrentEntry()
+    public bool TryGetCurrentEntry(out DialogueEntry entry)
     {
-        DialogueTreeNode? curr_node = GetCurrentNode(); // get current node
-        if (curr_node == null)
-        { // if there is an error, also return null
-            return null;
-        }
-        return ((DialogueTreeNode)curr_node).Entry; // return the entry at the current node
-        
-    }
-
-    public bool NeedPlayerInput()
-    {
-        if (!InDialogueList)
+        if (TryGetCurrentNode(out DialogueTreeNode node))
         {
-            return false;
-        } // if we are not in dialogue, return false
-        DialogueTreeNode? curr = GetCurrentNode(); // get the node
-        if (curr == null)
-        { // if there is an error getting the node, return false
-            return false;
+            entry = node.Entry;
+            return true;
         }
-
-        // otherwise, return whether the current node is a conditional
-        return (((DialogueTreeNode)curr).Type & NodeType.Conditional) != 0; 
+        entry = default;
+        return false;
     }
 
     // The function will return 1 if it has successfully incremented to the next dialogue
@@ -205,32 +165,25 @@ public class DialogueTree : MonoBehaviour
             return -2;
         }
 
-        DialogueTreeNode? curr = GetCurrentNode(); // get the current node
-        if (curr == null)
+        bool hasCurrentNode = TryGetCurrentNode(out DialogueTreeNode curr); // get the current node
+        if (!hasCurrentNode)
         { // if there was an error getting the current node, return an error
             return -3;
         }
 
-
-        if (!useTest && (((DialogueTreeNode)curr).Type & NodeType.Conditional) != 0)
-        { // if we are specifying not to use the string but the node is a conditional
-            return -1;
-        } else if (useTest && ((((DialogueTreeNode)curr).Type & NodeType.Conditional) == 0))
-        { // if we are specifying to use the string but the node is not a conditional
+        if (useTest ^ (curr.Type & NodeType.Conditional) != 0) // XOR op
+        {
             return -1;
         }
 
-        int to_go_to = ((DialogueTreeNode)curr).FailIdx; // by default goes to failure
-
-        if (useTest && (testing == ((DialogueTreeNode)curr).Entry.responseData.expectedInput))
+        int to_go_to = curr.FailIdx; // by default goes to failure
+        if (useTest && (testing == curr.Entry.responseData.expectedInput))
         { // if we are using the string and the string matches the expected data!
             //Debug.Log("Testing string was same as data");
-           to_go_to = ((DialogueTreeNode)curr).SuccIdx;
-        } 
+           to_go_to = curr.SuccIdx;
+        }
 
-        //Debug.Log("Going to" + to_go_to);
-
-        if (((DialogueTreeNode) curr).Type == NodeType.End )
+        if (curr.Type == NodeType.End)
         { // If the index of the next one is the end of the list, then we are officially done!
             //Debug.Log("Ending ha ha ha");
             NpcOptions[CurrListIdx].CurrNode = -1; // Set the current node to no current node
@@ -245,11 +198,8 @@ public class DialogueTree : MonoBehaviour
         }
 
         NpcOptions[CurrListIdx].CurrNode = to_go_to; // If index is valid, then we will set this as our index
-        return 1;  // return that you went to a next node
-
-        
+        return 1;  // return that you went to a next node   
     }
-
 
     // The function will return 1 if it has successfully incremented to the next dialogue
     // The function will return 0 if it has successfully incremented to the end of the dialogue
@@ -276,7 +226,6 @@ public class DialogueTree : MonoBehaviour
     {
         return DialogueForwardWithText(testingText, true); // call helper function noting you do have text input
     }
-
 
     // The function will return 1 if it has successfully incremented to the next dialogue
     // The function will return a number < 0 if it has unsuccessfully incremented to the next dialogue
@@ -311,6 +260,4 @@ public class DialogueTree : MonoBehaviour
         return 1; // return success!
 
     }
-
-
 }
