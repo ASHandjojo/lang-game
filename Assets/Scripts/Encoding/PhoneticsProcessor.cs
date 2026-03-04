@@ -10,7 +10,7 @@ using UnityEngine;
 
 using Impl;
 
-public struct Processor : IDisposable
+public struct PhoneticProcessor : IDisposable
 {
     // Made to basically throw all the data into two giant buffers
     private NativeArray<char> standardSignData;
@@ -25,7 +25,7 @@ public struct Processor : IDisposable
     [NativeDisableContainerSafetyRestriction]
     private NativeHashMap<char, NativeList<CompoundTable>> compoundPrefixMap;
 
-    public Processor(in ReadOnlySpan<StandardSign> standardSigns, in ReadOnlySpan<CompoundSign> compoundSigns, Allocator allocator)
+    public PhoneticProcessor(in ReadOnlySpan<StandardSign> standardSigns, in ReadOnlySpan<CompoundSign> compoundSigns, Allocator allocator)
     {
         StandardSign[] standardSignSort = ProcessorExtMethods.Sort(standardSigns);
         CompoundSign[] compoundSignSort = ProcessorExtMethods.Sort(compoundSigns);
@@ -62,8 +62,7 @@ public struct Processor : IDisposable
     }
 
     public readonly bool IsValid => standardSignData.IsCreated && compoundSignData.IsCreated &&
-        standardData.IsCreated && compoundData.IsCreated &&
-        compoundPrefixMap.IsCreated;
+        standardData.IsCreated && compoundData.IsCreated && compoundPrefixMap.IsCreated;
 
     /// <summary>
     /// Populating standard sign backing arrays.
