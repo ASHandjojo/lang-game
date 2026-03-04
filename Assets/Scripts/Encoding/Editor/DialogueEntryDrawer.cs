@@ -13,18 +13,18 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         VisualElement element = new();
 
         SerializedProperty lineProperty = property.FindPropertyRelative(nameof(DialogueEntry.line));
-        PropertyField lineField = new(lineProperty);
+        PropertyField lineField         = new(lineProperty);
         lineField.BindProperty(lineProperty);
         element.Add(lineField);
 
         SerializedProperty soundClipProperty = property.FindPropertyRelative(nameof(DialogueEntry.sound));
-        PropertyField soundClipField = new(soundClipProperty);
+        PropertyField soundClipField         = new(soundClipProperty);
 
         soundClipField.BindProperty(soundClipProperty);
         element.Add(soundClipField);
 
         SerializedProperty responseDataProperty = property.FindPropertyRelative(nameof(DialogueEntry.responseData));
-        PropertyField responseDataField = new(responseDataProperty);
+        PropertyField responseDataField         = new(responseDataProperty);
         responseDataField.BindProperty(responseDataProperty);
 
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Encoding/UI/StyleSheet.uss");
@@ -37,9 +37,9 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         hasResponseToggle.RegisterCallback(
             (ChangeEvent<bool> e) =>
             {
-                Visibility visiblityState = e.newValue ? Visibility.Visible : Visibility.Hidden;
+                Visibility visiblityState          = e.newValue ? Visibility.Visible : Visibility.Hidden;
                 responseDataField.style.visibility = visiblityState;
-                responseDataField.style.display = e.newValue ? DisplayStyle.Flex : DisplayStyle.None;
+                responseDataField.style.display    = e.newValue ? DisplayStyle.Flex : DisplayStyle.None;
             }
         );
 

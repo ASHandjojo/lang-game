@@ -8,9 +8,13 @@ using UnityEngine.UIElements;
 
 public enum WordType : int
 {
-    Subject = 1,
-    Verb    = 2,
-    Object  = 3
+    Noun      = 1,
+    Adjective = 2,
+
+    Verb    = 4,
+    Adverb  = 8 | Verb,
+
+    Object  = 32,
 }
 
 [Serializable]

@@ -41,6 +41,9 @@
                 <engine:Slider label="Slider" value="42" high-value="2" name="SpeedSlider" low-value="0.5" />
             </engine:VisualElement>
         </engine:VisualElement>
-        <engine:Button text="Main Menu" name="BackButton" enable-rich-text="false" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="button" style="align-self: center; width: 320px; height: 100px; overflow: visible; margin-bottom: 0; margin-top: 50px; padding-left: 0; padding-bottom: 0; padding-right: 0; padding-top: 0; white-space: normal; margin-right: 0; margin-left: 0;" />
+        <engine:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: center;">
+            <engine:Button text="Main Menu" name="BackButton" enable-rich-text="false" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="button" style="align-self: center; width: 320px; height: 100px; overflow: visible; margin-bottom: 0; margin-top: 50px; padding-left: 0; padding-bottom: 0; padding-right: 0; padding-top: 0; white-space: normal; margin-right: 10px; margin-left: 0;" />
+            <engine:Button text="Save Menu" name="SaveButton" enable-rich-text="false" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="button" style="align-self: center; width: 320px; height: 100px; overflow: visible; margin-bottom: 0; margin-top: 50px; padding-left: 0; padding-bottom: 0; padding-right: 0; padding-top: 0; white-space: normal; margin-right: 0; margin-left: 10px;" />
+        </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

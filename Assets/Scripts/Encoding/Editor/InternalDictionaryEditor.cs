@@ -79,9 +79,9 @@ internal sealed class InternalDictEditor : Editor
 {
     private static readonly Dictionary<string, WordType> WordTypeDict = new()
     {
-        { nameof(WordType.Subject), WordType.Subject },
-        { nameof(WordType.Object),  WordType.Object  },
-        { nameof(WordType.Verb),    WordType.Verb    },
+        { nameof(WordType.Noun),    WordType.Noun   },
+        { nameof(WordType.Object),  WordType.Object },
+        { nameof(WordType.Verb),    WordType.Verb   },
     };
 
     public override VisualElement CreateInspectorGUI()

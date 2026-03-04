@@ -62,6 +62,8 @@ public sealed class SettingsMenuEvents : UIMenuController
     private UIDocument selfDocument;
 
     private Button backButton;
+    private Button saveButton;
+    [SerializeField] private UIDocument saveDocument;
     private SoundHandler sh;
     [Header("Audio")]
     [SerializeField] private AudioClip hoverClip;
@@ -70,7 +72,7 @@ public sealed class SettingsMenuEvents : UIMenuController
     void Awake()
     {
         selfDocument = GetComponent<UIDocument>();
-        sh = GetComponent<SoundHandler>();
+        sh           = GetComponent<SoundHandler>();
 
         // Begin with settings menu not displayed
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
@@ -93,6 +95,10 @@ public sealed class SettingsMenuEvents : UIMenuController
         // Add events to back button
         backButton = selfDocument.rootVisualElement.Q("BackButton") as Button;
         backButton.RegisterCallback<ClickEvent>(e => MenuToggler.Instance.ClearAllMenus());
+
+        saveButton = selfDocument.rootVisualElement.Q("SaveButton") as Button;
+        var saveComponent = saveDocument.gameObject.GetComponent<SaveMenuEvents>();
+        saveButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(saveComponent));
 
         // Add input listeners for Keybinds
         rebindButtonEventHandlers = new();
@@ -119,6 +125,9 @@ public sealed class SettingsMenuEvents : UIMenuController
     {
         backButton.UnregisterCallback<ClickEvent>(OnButtonClick);
         backButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
+
+        saveButton.UnregisterCallback<ClickEvent>(OnButtonClick);
+        saveButton.UnregisterCallback<MouseEnterEvent>(OnButtonHover);
 
         /**
         foreach (var (buttonID, handler) in rebindButtonEventHandlers)
@@ -148,9 +157,11 @@ public sealed class SettingsMenuEvents : UIMenuController
     public override IEnumerator Close()
     {
         backButton.SetEnabled(false);
+        saveButton.SetEnabled(false);
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
 
         backButton.SetEnabled(true);
+        saveButton.SetEnabled(true);
 
         yield break;
     }

@@ -65,7 +65,7 @@ public sealed class NpcDialogue : Interactable
     protected override void Start()
     {
         base.Start();
-        document        = GetComponent<UIDocument>();
+        document = GetComponent<UIDocument>();
 
         // Set name and portrait
         document.rootVisualElement.Q<Label>("NpcName").text = npcName;
