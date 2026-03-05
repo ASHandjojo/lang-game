@@ -6,8 +6,6 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-using static DialogueEntry;
-
 #nullable enable
 public sealed class EditorUI : EditorWindow
 {
@@ -17,7 +15,6 @@ public sealed class EditorUI : EditorWindow
     private const string EncodingImportDir = "Assets/Scripts/Encoding";
     // Ligature sub table also references standard table, kind of a shortcut :)
     private const string LigatureSubDir    = EncodingImportDir + "/Loader/Ligature Sub Table.asset";
-    private const string InternalDictDir   = EncodingImportDir + "/Loader/Internal Dictionary.asset";
 
     private const string EditorName = "Text Editor";
 
@@ -25,9 +22,9 @@ public sealed class EditorUI : EditorWindow
     private KeyboardUI keyboardUI;
     private Label      label;
 
-    private PropertyField? expectedLabel;
+    private SerializedProperty? prop;
 
-    private ResponseData? responseData = null;
+    private EncodingEntry? responseData = null;
 
     /// <summary>
     /// Base function, does not enable editing towards a specific dialogue though.
@@ -36,7 +33,6 @@ public sealed class EditorUI : EditorWindow
     public static void ShowWindow()
     {
         EditorUI baseWindow = GetWindow<EditorUI>(EditorName, true);
-
     }
 
     /// <summary>
@@ -44,16 +40,15 @@ public sealed class EditorUI : EditorWindow
     /// </summary>
     /// <param name="dialogueEntry"></param>
     [MenuItem("Conlang/Text Editor")]
-    public static void ShowWindow(in DialogueEntry dialogueEntry, PropertyField expectedLabel)
+    public static void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty prop)
     {
-        Debug.Assert(expectedLabel != null);
-        Debug.Assert(dialogueEntry.hasResponse && dialogueEntry.responseData != null);
+        Debug.Assert(dialogueEntry != null);
 
         EditorUI baseWindow     = GetWindow<EditorUI>(EditorName, true);
-        baseWindow.responseData = dialogueEntry.responseData;
-        baseWindow.label!.text  = baseWindow.responseData!.expectedInput;
+        baseWindow.responseData = dialogueEntry;
+        baseWindow.label!.text  = baseWindow.responseData!.line;
 
-        baseWindow.expectedLabel = expectedLabel;
+        baseWindow.prop = prop;
     }
 
     private void WriteToWindow(string input)
@@ -63,7 +58,10 @@ public sealed class EditorUI : EditorWindow
         {
             return;
         }
-        expectedLabel!.label = input;
+        prop!.stringValue = input;
+
+        Undo.RecordObject(prop.serializedObject.targetObject, "TextEdit");
+        EditorUtility.SetDirty(prop.serializedObject.targetObject);
     }
 
     public void CreateGUI()
@@ -83,7 +81,7 @@ public sealed class EditorUI : EditorWindow
         }
         if (responseData != null)
         {
-            keyboardUI = new KeyboardUI(treeAsset, processor, WriteToWindow, responseData.expectedInput);
+            keyboardUI = new KeyboardUI(treeAsset, processor, WriteToWindow, responseData.line);
         }
         else
         {

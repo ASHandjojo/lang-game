@@ -23,53 +23,33 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         LigatureSub ligatureSub = AssetDatabase.LoadAssetAtPath<LigatureSub>(LigatureSubDir);
         Debug.Assert(ligatureSub != null);
 
-        // Initialization
-
+        // Input Line
         SerializedProperty lineProperty = property.FindPropertyRelative(nameof(DialogueEntry.line));
         PropertyField lineField         = new(lineProperty);
         lineField.BindProperty(lineProperty);
         element.Add(lineField);
 
+        // Sound
         SerializedProperty soundClipProperty = property.FindPropertyRelative(nameof(DialogueEntry.sound));
         PropertyField soundClipField         = new(soundClipProperty);
-
         soundClipField.BindProperty(soundClipProperty);
         element.Add(soundClipField);
 
+        // Response Data
         SerializedProperty responseDataProperty = property.FindPropertyRelative(nameof(DialogueEntry.responseData));
-        PropertyField responseDataField         = new(responseDataProperty);
+        PropertyField responseDataField = new(responseDataProperty);
         responseDataField.BindProperty(responseDataProperty);
         responseDataField.AddToClassList("Translate");
 
+        // Has Response
         SerializedProperty hasResponseProperty = property.FindPropertyRelative(nameof(DialogueEntry.hasResponse));
         Toggle hasResponseToggle = new("Has Response");
         hasResponseToggle.BindProperty(hasResponseProperty);
 
-        // Text Editor Window Button
-        Button openWindowButton = new()
-        {
-            text = "Open Text Editor"
-        };
-        openWindowButton.RegisterCallback(
-            (ClickEvent e) =>
-            {
-                DialogueEntry entry = (DialogueEntry) property.boxedValue;
-                EditorUI.ShowWindow(entry, responseDataField);
-            }
-        );
-
-        Label unicodeField = new("Layout");
-        PhoneticProcessor processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
-        string expectInput = responseDataProperty.FindPropertyRelative(nameof(DialogueEntry.ResponseData.expectedInput)).stringValue;
-        unicodeField.text  = processor.Translate(expectInput);
-
-        unicodeField.AddToClassList("TranslatedLabel");
         responseDataField.RegisterCallback(
             (ChangeEvent<string> e) =>
             {
                 PhoneticProcessor processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
-                unicodeField.text = processor.Translate(e.newValue);
-
                 property.serializedObject.ApplyModifiedProperties();
 
                 Debug.Log($"Grease! {e.newValue}");
@@ -85,19 +65,12 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
 
                 responseDataField.style.visibility = visiblityState;
                 responseDataField.style.display    = displayStyle;
-
-                unicodeField.style.visibility = visiblityState;
-                unicodeField.style.display    = displayStyle;
             }
         );
         responseDataField.style.visibility = hasResponseProperty.boolValue ? Visibility.Visible : Visibility.Hidden;
-        unicodeField.style.visibility      = hasResponseProperty.boolValue ? Visibility.Visible : Visibility.Hidden;
 
         element.Add(hasResponseToggle);
         element.Add(responseDataField);
-        element.Add(unicodeField);
-
-        element.Add(openWindowButton);
 
         return element;
     }
