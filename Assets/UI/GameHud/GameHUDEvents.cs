@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.Progress;
 
 [DisallowMultipleComponent]
 public sealed class GameHUDEvents : UIMenuController
@@ -23,10 +25,19 @@ public sealed class GameHUDEvents : UIMenuController
     public VisualElement hudContainer;
     private VisualElement dictionaryContainer;
     private VisualElement dictionary;
+    [SerializeField] private VisualTreeAsset dictionarySlots;
+    private TemplateContainer dictionaryContents;
+
     private Button dictionaryButton;
     private Button settingsButton;
 
     private Button backButton;
+
+    private Button backPage;
+    private Button forwardPage;
+
+    private List<VisualElement> Slots = new List<VisualElement>();
+    private int pageNumber = 0;
 
     public override IEnumerator Open()
     {
@@ -64,6 +75,42 @@ public sealed class GameHUDEvents : UIMenuController
         settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
 
         dictionaryContainer.visible = false;
+        dictionaryContents = dictionarySlots.Instantiate();
+        dictionary.Add(dictionaryContents);
+
+        for (int i = 0; i < 5; i++)
+        {
+            int slotNumber = i + 1;
+            var item = dictionaryContents.Q("DictionarySlot" + slotNumber);
+
+            if (item == null)
+            {
+                Debug.LogError("Could not find Slot" + slotNumber);
+                continue;
+            }
+
+            var notes = item.Q<TextField>("Notes" + slotNumber);
+            notes.RegisterValueChangedCallback(evt => {
+                NotesUpdate(evt.newValue, slotNumber - 1);
+            });
+            notes.isDelayed = true;
+
+            Slots.Add(item);
+        }
+
+        LoadPage(pageNumber);
+
+        backPage = selfDocument.rootVisualElement.Q<Button>("BackPage");
+        backPage.RegisterCallback<ClickEvent>((e) => LoadPage(pageNumber - 1));
+
+        forwardPage = selfDocument.rootVisualElement.Q<Button>("ForwardPage");
+        forwardPage.RegisterCallback<ClickEvent>((e) => LoadPage(pageNumber + 1));
+
+        dictionaryContents.visible = false;
+        foreach (VisualElement slot in Slots) 
+        {
+            slot.visible = false;
+        }
     }
 
     //public void OpenSettings(ClickEvent e) => OpenSettings();
@@ -84,6 +131,11 @@ public sealed class GameHUDEvents : UIMenuController
         // Play transition animations
         yield return Fade(dictionary, 1.0f, 0.0f, 0.45f);
         dictionary.style.backgroundImage = new StyleBackground(openImage);
+        dictionaryContents.visible = true;
+        foreach (VisualElement slot in Slots)
+        {
+            slot.visible = true;
+        }
         yield return Fade(dictionary, 0.0f, 1.0f, 1.5f);
 
         backButton.SetEnabled(true);  
@@ -96,6 +148,11 @@ public sealed class GameHUDEvents : UIMenuController
         // Play transition animations
         sh.PlaySoundUI(closeClip);
         yield return Fade(dictionary, 1.0f, 0.0f, 0.45f);
+        dictionaryContents.visible = false;
+        foreach (VisualElement slot in Slots)
+        {
+            slot.visible = false;
+        }
         dictionary.style.backgroundImage = new StyleBackground(closedImage);
         yield return Fade(dictionary, 0.0f, 1.0f, 1.5f);
 
@@ -161,6 +218,60 @@ public sealed class GameHUDEvents : UIMenuController
 
         dict.style.left = end;
         btn.style.left  = buttonEnd;
+    }
+
+    private void LoadPage(int pageNum)
+    {
+        if (pageNum < 0) 
+        {
+            return;
+        }
+
+        PlayerController player = PlayerController.Instance;
+        if (pageNum > (int)player.dictionary.dictionaryList.Length / Slots.Count)
+        {
+            return;
+        }
+
+
+        int index = pageNum * Slots.Count;
+
+        pageNumber = pageNum;
+
+        foreach (VisualElement slot in Slots) 
+        {
+            if (index >= player.dictionary.dictionaryList.Length)
+            {
+                slot.visible = false;
+                continue;
+            }
+
+            slot.visible = true;
+
+            var word = slot.Q<Label>("Word" + ((index% Slots.Count) + 1));
+            var notes = slot.Q<TextField>("Notes" + ((index % Slots.Count) + 1));
+
+            word.text = player.dictionary.dictionaryList[index].Word;
+
+            if (player.dictionary.dictionaryList[index].Notes == "")
+            {
+                notes.textEdition.placeholder = "Notes...";
+            }
+            else 
+            {
+                notes.textEdition.placeholder =  player.dictionary.dictionaryList[index].Notes;
+            }
+            index++;
+        } 
+    }
+
+    private void NotesUpdate(string newValue, int index)
+    {
+        var notes = Slots[index].Q<TextField>("Notes" + (index + 1));
+        notes.textEdition.placeholder = newValue;
+
+        PlayerController player = PlayerController.Instance;
+        player.dictionary.dictionaryList[(pageNumber * Slots.Count) + index].Notes = newValue;
     }
 
     private void OnButtonHover(MouseEnterEvent e)

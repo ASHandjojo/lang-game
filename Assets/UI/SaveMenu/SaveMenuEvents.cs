@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,7 +8,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 [DisallowMultipleComponent]
-public sealed class SaveMenuEvents : OpenClosable
+public sealed class SaveMenuEvents : UIMenuController
 {
     private UIDocument selfDocument;
 
@@ -90,18 +91,20 @@ public sealed class SaveMenuEvents : OpenClosable
         */
     }
 
-    public override void Open()
+    public override IEnumerator Open()
     {
         selfDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+        yield break;
     }
 
     // Return to main menu or gameHud
-    public override void Close()
+    public override IEnumerator Close()
     {
         backButton.SetEnabled(false);
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
 
         backButton.SetEnabled(true);
+        yield break;
     }
 
 
