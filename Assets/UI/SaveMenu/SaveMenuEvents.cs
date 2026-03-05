@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 [DisallowMultipleComponent]
@@ -18,12 +17,12 @@ public sealed class SaveMenuEvents : UIMenuController
     [SerializeField] private AudioClip hoverClip;
     [SerializeField] private AudioClip selectionClip;
 
-    public List<VisualElement> Slots = new List<VisualElement>();
+    public List<VisualElement> Slots = new();
 
     void Awake()
     {
         selfDocument = GetComponent<UIDocument>();
-        sh = GetComponent<SoundHandler>();
+        sh           = GetComponent<SoundHandler>();
 
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
     }

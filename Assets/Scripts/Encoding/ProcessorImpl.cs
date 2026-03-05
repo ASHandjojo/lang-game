@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Unity.Collections;
@@ -10,11 +11,11 @@ namespace Impl
     public struct SignData
     {
         public Range range;
-        public char unicodeChar;
+        public char  unicodeChar;
 
         public SignData(in Range range, char unicodeChar)
         {
-            this.range = range;
+            this.range       = range;
             this.unicodeChar = unicodeChar;
         }
     }

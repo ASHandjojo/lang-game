@@ -32,6 +32,7 @@ public abstract class Interactable : MonoBehaviour
 
         worldPromptIcon = GetComponentsInChildren<SpriteRenderer>(true)[1];
     }
+
     protected virtual void Start()
     {
         UpdateWorldPromptIconBinding();

@@ -107,6 +107,8 @@ public sealed class PlayerController : MonoBehaviour
             Interactable[] interactables = FindObjectsByType<Interactable>(FindObjectsSortMode.None);
             foreach (Interactable interactable in interactables)
             {
+                Debug.Log(interactable.InteractCollider);
+                Debug.Log(playerCollider);
                 if (interactable.InteractCollider.IsTouching(playerCollider))
                 {
                     StartCoroutine(interactable.Interact(this));
