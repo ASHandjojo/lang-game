@@ -787,7 +787,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPrompt: {fileID: 1470832120}
   interactClip: {fileID: 8300000, guid: 49e6681ee88d775489f293846fa8cdf6, type: 3}
-  worldPromptInput: 2
+  worldPromptInput: 0
   hudDocument: {fileID: 1605222084}
   transitionTime: 1
   zoomImage: {fileID: 2800000, guid: 1d080e14bfd6e654caffc1bcdc0789b5, type: 3}
@@ -2048,7 +2048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPrompt: {fileID: 173549046}
   interactClip: {fileID: 8300000, guid: 49e6681ee88d775489f293846fa8cdf6, type: 3}
-  worldPromptInput: 2
+  worldPromptInput: 0
   hudDocument: {fileID: 1605222084}
   transitionTime: 1
   zoomImage: {fileID: 2800000, guid: bfcff620facc2b24d8abb2b4cfbb148d, type: 3}
@@ -2367,8 +2367,9 @@ MonoBehaviour:
   closeClip: {fileID: 8300000, guid: fd108821f38ecd942a95778abac0a057, type: 3}
   hoverClip: {fileID: 8300000, guid: c520791ce7781f845bc1fa5a54de960e, type: 3}
   closedImage: {fileID: 2800000, guid: e17c6ea311215de4fb66d7c7f9de7d4d, type: 3}
-  openImage: {fileID: 2800000, guid: 3e646dddcea448244942a65448e90f06, type: 3}
+  openImage: {fileID: 2800000, guid: 9c812bf860a213d47a524a182b2f1c0e, type: 3}
   settingsDocument: {fileID: 1724572783}
+  dictionarySlots: {fileID: 9197481963319205126, guid: b50215d666cea5045be6ebfdfe102e0f, type: 3}
 --- !u!82 &1605222087
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3197,7 +3198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPrompt: {fileID: 1969015810}
   interactClip: {fileID: 0}
-  worldPromptInput: 2
+  worldPromptInput: 0
   hudDocument: {fileID: 1605222084}
   npcName: Florence
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}

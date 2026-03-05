@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -39,16 +39,29 @@ public sealed class GameState
     {
         // Get Player Object (Singleton)
         PlayerController player = PlayerController.Instance;
-        // Create GameState object with all save data
-        GameState save = new()
+
+        GameState save;
+        string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave" + slot + ".json");
+        if (player.dictionary.dictionaryList.Length == 0)
         {
-            dictionary = player.dictionary,
-            position   = player.transform.position
-        };
+            string emptyPath = Path.Combine(Application.dataPath, "Data/PlayerSaveEmpty.json");
+            string jsonString = File.ReadAllText(emptyPath);
+
+            save = JsonUtility.FromJson<GameState>(jsonString);
+            save.position = player.transform.position;
+        }
+        else
+        {
+            // Create GameState object with all save data
+            save = new()
+            {
+                dictionary = player.dictionary,
+                position = player.transform.position
+            };
+        }
 
         // Serialize GameState and save to player save
         string saveJson = JsonUtility.ToJson(save, prettyPrint: true);
-        string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave" + slot + ".json");
         File.WriteAllText(savePath, saveJson);
     }
 }
@@ -56,8 +69,8 @@ public sealed class GameState
 [Serializable]
 public struct DictionaryEntry
 {
-    public string word;
-    public string notes;
+    public string Word;
+    public string Notes;
 }
 
 [Serializable]
