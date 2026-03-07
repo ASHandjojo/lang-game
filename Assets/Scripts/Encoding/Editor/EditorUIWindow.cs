@@ -49,6 +49,7 @@ public sealed class EditorUI : EditorWindow
         baseWindow.label!.text  = baseWindow.responseData!.line;
 
         baseWindow.prop = prop;
+        baseWindow.keyboardUI.PhoneticsString = baseWindow.responseData!.line;
     }
 
     private void WriteToWindow(string input)
@@ -61,7 +62,7 @@ public sealed class EditorUI : EditorWindow
         prop!.stringValue = input;
 
         Undo.RecordObject(prop.serializedObject.targetObject, "TextEdit");
-        EditorUtility.SetDirty(prop.serializedObject.targetObject);
+        prop.serializedObject.ApplyModifiedProperties();
     }
 
     public void CreateGUI()

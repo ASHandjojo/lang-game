@@ -92,7 +92,7 @@ public struct KeyboardRow
             (ClickEvent e) =>
             {
 #if UNITY_EDITOR
-                if (Application.isEditor)
+                if (!Application.isPlaying)
                 {
                     return;
                 }
@@ -116,7 +116,15 @@ public sealed class KeyboardUI : VisualElement
 {
     private InnerInput inner = new();
 
-    public string PhoneticsString => inner.phoneticsStr;
+    public string PhoneticsString
+    {
+        get => inner.phoneticsStr;
+        set
+        {
+            inner.phoneticsStr = value;
+            inner.unicodeStr   = processor.Translate(value);
+        }
+    }
     public string UnicodeString   => inner.unicodeStr;
 
     private PhoneticProcessor processor;

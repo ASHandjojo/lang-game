@@ -51,8 +51,6 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
             {
                 PhoneticProcessor processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
                 property.serializedObject.ApplyModifiedProperties();
-
-                Debug.Log($"Grease! {e.newValue}");
             }
         );
 

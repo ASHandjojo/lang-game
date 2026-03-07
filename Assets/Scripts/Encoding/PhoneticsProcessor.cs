@@ -104,7 +104,6 @@ public struct PhoneticProcessor : IDisposable
 
             char firstMappedChar = (char) sign.mappedChars[0];
             CompoundTable table  = new(sign, i);
-
             if (compoundPrefixMap.ContainsKey(firstMappedChar)) // If already has entry, add to list @ prefix map location
             {
                 compoundPrefixMap[firstMappedChar].Add(table);
@@ -132,67 +131,6 @@ public struct PhoneticProcessor : IDisposable
     }
 
     /// <summary>
-    /// A safe method of finding SignData structs based off of a sign character input.
-    /// </summary>
-    /// <param name="signChars">The character input to search for.</param>
-    /// <param name="sign">If found, the corresponding SignData struct.</param>
-    /// <returns>Whether the standard sign exists.</returns>
-    private readonly bool TryFind(in ReadOnlySpan<char> signChars, out SignData sign)
-    {
-        Span<char> standardSpan = standardSignData.AsSpan();
-
-        for (int i = 0; i < standardData.Length; i++)
-        {
-            ReadOnlySpan<char> compareStr = standardSpan[standardData[i].range];
-            if (compareStr.SequenceEqual(signChars))
-            {
-                sign = standardData[i];
-                return true;
-            }
-        }
-
-        sign = default;
-        return false;
-    }
-
-    private readonly bool TryFind(char mappedChar, out SignData sign)
-    {
-        for (int i = 0; i < standardData.Length; i++)
-        {
-            if (mappedChar == standardData[i].unicodeChar)
-            {
-                sign = standardData[i];
-                return true;
-            }
-        }
-
-        sign = default;
-        return false;
-    }
-
-    /// <summary>
-    /// Finds based off of input Unicode character.
-    /// </summary>
-    /// <param name="signChar"></param>
-    /// <returns></returns>
-    public readonly bool TryGetStringStandard(char signChar, out ReadOnlySpan<char> signChars)
-    {
-        for (int i = 0; i < standardData.Length; i++)
-        {
-            if (signChar == standardData[i].unicodeChar)
-            {
-                signChars = standardSignData.AsReadOnlySpan()[standardData[i].range];
-                return true;
-            }
-        }
-
-        signChars = default;
-        return false;
-    }
-
-    public readonly bool TryGetStringStandard(char signChar, out string signChars) => TryGetStringStandard(signChar, out signChars);
-
-    /// <summary>
     /// A safe method of determining, if any; the corresponding compound sign.
     /// </summary>
     /// <param name="rootSign"></param>
@@ -216,11 +154,13 @@ public struct PhoneticProcessor : IDisposable
             bool isEqual  = true;
             int signCount = compoundTable.signData.Length;
 
-            // If the current sign position + the sign data count of the compound sign @ compoundIdx is out of bounds, skip
+            // If the current sign position + the sign data count of the compound sign @ compoundIdx is out of bounds, skip;
+            // or if the size is smaller than the current maximum, skip
             if (signCount > input.Length || maxMatchSize >= signCount)
             {
                 continue;
             }
+            // Does a character-wise comparison over the compound characters.
             for (int elementIdx = 1; elementIdx < signCount && isEqual; elementIdx++)
             {
                 char inputSign   = input[elementIdx];
@@ -245,10 +185,10 @@ public struct PhoneticProcessor : IDisposable
     /// <returns>A string with all valid phonetics converted to the specified mapped Unicode characters..</returns>
     public readonly string Translate(string input)
     {
-        ReadOnlySpan<char> span = input.ToLower(); // Converts to span (much faster)
+        // Converts to span (much faster)
+        ReadOnlySpan<char> span = input.ToLower();
         unsafe
         {
-            //UnsafeList<char> basePass     = BasePass(span);
             UnsafeList<char> compoundPass = CompoundPass(span);
             return new string(compoundPass.Ptr, 0, compoundPass.Length);
         }
@@ -256,7 +196,7 @@ public struct PhoneticProcessor : IDisposable
 
     private readonly UnsafeList<char> CompoundPass(in ReadOnlySpan<char> span)
     {
-        // Deliberate probable overestimate of size, fine lol
+        // Deliberate probable overestimate of size
         UnsafeList<char> addedChars = new(initialCapacity: span.Length, Allocator.Temp);
         for (int i = 0; i < span.Length; i++)
         {
@@ -277,7 +217,7 @@ public struct PhoneticProcessor : IDisposable
                     i += compoundTable.signData.Length - 1;
                 }
             }
-
+            // Push back found mapped char (whether standard or compound)
             addedChars.AddNoResize(mappedChar);
         }
         return addedChars;
@@ -285,6 +225,11 @@ public struct PhoneticProcessor : IDisposable
 
     public void Dispose()
     {
+        if (!IsValid)
+        {
+            Debug.LogWarning($"Dispose was called on an invalid {nameof(PhoneticProcessor)} instance.");
+            return;
+        }
         standardSignData.Dispose();
         compoundSignData.Dispose();
 

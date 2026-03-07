@@ -786,7 +786,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPrompt: {fileID: 1470832120}
   interactClip: {fileID: 8300000, guid: 49e6681ee88d775489f293846fa8cdf6, type: 3}
-  worldPromptInput: 0
+  worldPromptInput: 2
   hudDocument: {fileID: 1605222084}
   transitionTime: 1
   zoomImage: {fileID: 2800000, guid: 1d080e14bfd6e654caffc1bcdc0789b5, type: 3}
@@ -1977,8 +1977,8 @@ Transform:
   m_GameObject: {fileID: 1499353901}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: 0.03, z: 10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.03, y: 0.0517, z: 10}
+  m_LocalScale: {x: 1, y: 0.996, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2019,7 +2019,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPrompt: {fileID: 173549046}
   interactClip: {fileID: 8300000, guid: 49e6681ee88d775489f293846fa8cdf6, type: 3}
-  worldPromptInput: 0
+  worldPromptInput: 2
   hudDocument: {fileID: 1605222084}
   transitionTime: 1
   zoomImage: {fileID: 2800000, guid: bfcff620facc2b24d8abb2b4cfbb148d, type: 3}
@@ -3169,7 +3169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPrompt: {fileID: 1969015810}
   interactClip: {fileID: 0}
-  worldPromptInput: 0
+  worldPromptInput: 2
   hudDocument: {fileID: 1605222084}
   npcName: Florence
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
@@ -3191,7 +3191,7 @@ MonoBehaviour:
       isInitialized: 0
     hasResponse: 1
     responseData:
-      line: u
+      line: hqcn
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0
