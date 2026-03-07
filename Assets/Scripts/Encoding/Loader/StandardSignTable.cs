@@ -15,7 +15,7 @@ public interface ISign
 public struct StandardSign : ISign, IEquatable<StandardSign>
 {
     public string phonetics;
-    public int mappedChar;
+    public int    mappedChar;
 
     public readonly int MappedChar => mappedChar;
 

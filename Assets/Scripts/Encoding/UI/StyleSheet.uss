@@ -50,4 +50,6 @@
     color: white;
     padding: 1.25%;
     -unity-font-definition: url('/Assets/Fonts/Melody SDF.asset');
+
+    white-space: normal;
 }

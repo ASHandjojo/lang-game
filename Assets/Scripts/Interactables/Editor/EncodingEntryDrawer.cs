@@ -15,10 +15,10 @@ public sealed class EncodingEntryDrawer : PropertyDrawer
         Debug.Assert(styleSheet != null);
         element.styleSheets.Add(styleSheet);
 
-        SerializedProperty lineProperty = property.FindPropertyRelative(nameof(EncodingEntry.line));
-        PropertyField lineField         = new(lineProperty);
+        var lineProperty = property.FindPropertyRelative(nameof(EncodingEntry.line));
+        Label lineField  = new("Line");
         lineField.BindProperty(lineProperty);
-        lineField.AddToClassList("Translate");
+        lineField.AddToClassList("TranslatedLabel");
         element.Add(lineField);
 
         // Text Editor Window Button

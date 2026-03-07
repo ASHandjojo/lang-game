@@ -218,7 +218,10 @@ public struct PhoneticProcessor : IDisposable
                 }
             }
             // Push back found mapped char (whether standard or compound)
-            addedChars.AddNoResize(mappedChar);
+            if (mappedChar != '\u000a')
+            {
+                addedChars.AddNoResize(mappedChar);
+            }
         }
         return addedChars;
     }
