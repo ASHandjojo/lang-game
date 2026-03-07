@@ -3222,7 +3222,7 @@ MonoBehaviour:
       isInitialized: 0
     hasResponse: 1
     responseData:
-      line: "llhmqwlnm+pcwqqqqqqqqqqqqqqqqqqqqss\xEEiiiiiswwuu\xB4oowqquu"
+      line: 
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0
