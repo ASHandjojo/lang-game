@@ -21,27 +21,19 @@ public enum TraverseStatus : uint
 [Serializable]
 public struct DialogueTreeList
 {
-    // This will hold the first node in the tree list
-    // This will help to know whether to go into the list or not
-    [SerializeField] public DialogueTreeHead FirstNode;
-    // This will hold all the other nodes in the list
-    [SerializeField] public DialogueTreeNode[] OtherNodes;
+    // conditional value will have the value that should be compared with
+    // to evaluate if this dialogue should be taken
+    // it is -1 if no node exists
+    [SerializeField] public int ConditionalValue;
+    // The value of the starting id!
+    [SerializeField] public int startingId;
+    // This will hold all the nodes in the list
+    [SerializeField] public DialogueTreeNode[] Nodes;
     // This will be the current node in the list when traversing
     //   * It equals -1 if it is not being used 
     //   * It equals 0 if it is the first node
     //   * If it is greater than 0, then it is an index in the other_nodes list
     [SerializeField] public int CurrNode;
-}
-
-[Serializable]
-public struct DialogueTreeHead
-{
-    // conditional value will have the value that should be compared with
-    // to evaluate if this dialogue should be taken
-    // it is -1 if no node exists
-    [SerializeField] public int ConditionalValue;
-    // This will hold the first node in the list's entry
-    [SerializeField] public DialogueTreeNode Node;
 }
 
 
@@ -109,13 +101,8 @@ public sealed class DialogueTree : MonoBehaviour
         int idx = NpcOptions[CurrListIdx].CurrNode;
         // If the index of the node in the current tree is less than -1, the list is not in use
         Debug.Assert(idx >= 0, "Error: Current Dialogue Tree is not in any current Node");
-        if (idx == 0)
-        {
-            // If the index of the node in the current tree is 0, then the list being used is the first node
-            return 0;
-        }
         // This checks the index to see if it is out of bounds
-        Debug.Assert(idx < NpcOptions[CurrListIdx].OtherNodes.Length + 1, "Error: Current Dialogue Tree is trying to access a Node that is out of bounds: " + idx.ToString());
+        Debug.Assert(idx < NpcOptions[CurrListIdx].Nodes.Length, "Error: Current Dialogue Tree is trying to access a Node that is out of bounds: " + idx.ToString());
         // This will return the index which will be the exact node being used at the current!
         return idx;
         
@@ -127,8 +114,7 @@ public sealed class DialogueTree : MonoBehaviour
         node = index switch
         {
             < 0 => default,
-            0   => NpcOptions[CurrListIdx].FirstNode.Node,
-            > 0 => NpcOptions[CurrListIdx].OtherNodes[index - 1]
+            >= 0 => NpcOptions[CurrListIdx].Nodes[index]
         };
         return index >= 0;
     }
@@ -244,12 +230,7 @@ public sealed class DialogueTree : MonoBehaviour
         }
 
         CurrListIdx = GetStartIdx;
-        int empty = 0; // to check whether the list is empty or not
-        if (NpcOptions[GetStartIdx].FirstNode.ConditionalValue != -1)
-        {
-            empty = 1;
-        }
-        CurrTreeLength = empty +  NpcOptions[GetStartIdx].OtherNodes.Length; // initialize current tree length
+        CurrTreeLength = NpcOptions[GetStartIdx].Nodes.Length; // initialize current tree length
         //Debug.Log("Current Tree Length" + CurrTreeLength);
         if (CurrTreeLength == 0)
         { // if no tree, then return an error
