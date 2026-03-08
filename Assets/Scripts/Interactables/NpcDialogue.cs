@@ -47,6 +47,7 @@ public sealed class NpcDialogue : Interactable
 
             npcTree.TryGetCurrentNode(out var currDiag);
             if (currDiag.Entry.responseData.expectedInput == content) // For when the content is equal to the expected
+            if (entries[index].responseData.line == content) // For when the content is equal to the expected
             {
                 return true;
             }

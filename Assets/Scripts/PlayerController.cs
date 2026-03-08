@@ -76,6 +76,14 @@ public sealed class PlayerController : MonoBehaviour
         {
             GameState.LoadPlayerData(1);
         }
+        else
+        {
+            string emptyPath = Path.Combine(Application.dataPath, "Data/PlayerSaveEmpty.json");
+            string jsonString = File.ReadAllText(emptyPath);
+
+            GameState save = JsonUtility.FromJson<GameState>(jsonString);
+            dictionary = save.dictionary;
+        }
         moveAction     = InputSystem.actions.FindAction("Move");
         interactAction = InputSystem.actions.FindAction("Interact");
     }

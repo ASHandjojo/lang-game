@@ -1,12 +1,11 @@
+using Impl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-
-using Impl;
+using UnityEngine.Windows;
 
 namespace Impl
 {
@@ -41,7 +40,7 @@ public struct KeyboardRow
         this.buttons   = buttons;
     }
 
-    public readonly void InitAlphaNumeric(InnerInput input, Processor processor, Action<string> assignCallback)
+    public readonly void InitAlphaNumeric(InnerInput input, PhoneticProcessor processor, Action<string> assignCallback)
     {
         for (int i = 0; i < buttons.Length; i++)
         {
@@ -61,7 +60,7 @@ public struct KeyboardRow
     /// <summary>
     /// For the last row (a row that has submission
     /// </summary>
-    public readonly void InitSpecial(InnerInput input, Processor processor, Action<string> assignCallback)
+    public readonly void InitSpecial(InnerInput input, PhoneticProcessor processor, Action<string> assignCallback)
     {
         Button spacebar  = buttons.Where(x => x.name == "Spacebar").First();
         Button backspace = buttons.Where(x => x.name == "Backspace").First();
@@ -92,6 +91,12 @@ public struct KeyboardRow
         enter.RegisterCallback(
             (ClickEvent e) =>
             {
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    return;
+                }
+#endif
                 Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out Interactable NPC));
                 if (NPC is NpcDialogue)
                 {
@@ -111,16 +116,30 @@ public sealed class KeyboardUI : VisualElement
 {
     private InnerInput inner = new();
 
-    public string PhoneticsString => inner.phoneticsStr;
+    public string PhoneticsString
+    {
+        get => inner.phoneticsStr;
+        set
+        {
+            inner.phoneticsStr = value;
+            inner.unicodeStr   = processor.Translate(value);
+        }
+    }
     public string UnicodeString   => inner.unicodeStr;
 
-    private Processor processor;
+    private PhoneticProcessor processor;
     public KeyboardRow[] rows;
 
     public Action<string> assignCallback;
 
-    public KeyboardUI(VisualTreeAsset layout, in Processor processor, Action<string> assignCallback)
+    public KeyboardUI(VisualTreeAsset layout, in PhoneticProcessor processor, Action<string> assignCallback) : this(layout, processor, assignCallback, string.Empty) { }
+
+    public KeyboardUI(VisualTreeAsset layout, in PhoneticProcessor processor, Action<string> assignCallback, string phoneticsStr)
     {
+        Debug.Assert(phoneticsStr != null);
+        inner.phoneticsStr = phoneticsStr;
+        inner.unicodeStr   = processor.Translate(inner.phoneticsStr);
+
         Debug.Assert(layout != null);
         layout.CloneTree(this);
 
@@ -168,7 +187,7 @@ public sealed class InputController : MonoBehaviour
     public static InputController Instance { get; private set; }
 
     // Just shorter to get references lol
-    private static ref readonly Processor Processor => ref LanguageTable.Processor;
+    private static ref readonly PhoneticProcessor PhoneticProcessor => ref LanguageTable.PhoneticProcessor;
 
     void Awake()
     {
@@ -190,7 +209,7 @@ public sealed class InputController : MonoBehaviour
 
     void Start()
     {
-        keyboardUI = new KeyboardUI(keyboardAsset, Processor,
+        keyboardUI = new KeyboardUI(keyboardAsset, PhoneticProcessor,
             (unicodeInput) =>
             {
                 inputField.text = unicodeInput;
