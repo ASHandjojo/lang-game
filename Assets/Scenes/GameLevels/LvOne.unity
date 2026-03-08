@@ -3051,6 +3051,7 @@ GameObject:
   - component: {fileID: 1988571622}
   - component: {fileID: 1988571621}
   - component: {fileID: 1988571620}
+  - component: {fileID: 1988571627}
   m_Layer: 0
   m_Name: TestNPC
   m_TagString: Untagged
@@ -3204,25 +3205,8 @@ MonoBehaviour:
   hudDocument: {fileID: 1605222084}
   npcName: Florence
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
-  entries:
-  - line:
-      line: Hi
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 0
-    responseData:
-      line: 
-  - line:
-      line: Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
-        ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus
-        duis.
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 1
-    responseData:
-      line: 
+  entries: []
+  npcTree: {fileID: 1988571627}
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3340,6 +3324,83 @@ Transform:
   - {fileID: 1969015811}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1988571627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988571619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f925e3e10a9621468bffd1fba582ee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NpcOptions:
+  - ConditionalValue: 0
+    Nodes:
+    - Type: 1
+      SuccIdx: -1
+      FailIdx: 1
+      Entry:
+        line:
+          line: 
+        sound:
+          obj: {fileID: 0}
+          isInitialized: 0
+        hasResponse: 0
+        responseData:
+          line: 
+    - Type: 10
+      SuccIdx: 3
+      FailIdx: 2
+      Entry:
+        line:
+          line: 
+        sound:
+          obj: {fileID: 0}
+          isInitialized: 0
+        hasResponse: 1
+        responseData:
+          line: 
+    - Type: 1
+      SuccIdx: -1
+      FailIdx: 1
+      Entry:
+        line:
+          line: 
+        sound:
+          obj: {fileID: 0}
+          isInitialized: 0
+        hasResponse: 0
+        responseData:
+          line: 
+    - Type: 10
+      SuccIdx: 4
+      FailIdx: 2
+      Entry:
+        line:
+          line: 
+        sound:
+          obj: {fileID: 0}
+          isInitialized: 0
+        hasResponse: 1
+        responseData:
+          line: 
+    - Type: 5
+      SuccIdx: -1
+      FailIdx: -1
+      Entry:
+        line:
+          line: 
+        sound:
+          obj: {fileID: 0}
+          isInitialized: 0
+        hasResponse: 1
+        responseData:
+          line: 
+    CurrNode: -1
+  TreeSize: -1
 --- !u!1001 &4689684343003680694
 PrefabInstance:
   m_ObjectHideFlags: 0
