@@ -177,7 +177,7 @@ public sealed class DialogueTree : MonoBehaviour
         }
 
         int to_go_to = curr.FailIdx; // by default goes to failure
-        if (useTest && (testing == curr.Entry.responseData.expectedInput))
+        if (useTest && (testing == curr.Entry.responseData.line))
         { // if we are using the string and the string matches the expected data!
             //Debug.Log("Testing string was same as data");
            to_go_to = curr.SuccIdx;
