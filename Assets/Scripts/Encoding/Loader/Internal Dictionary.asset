@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Internal Dictionary
   m_EditorClassIdentifier: 
   entries:
-  - rawString: aiyah
-    unicodeString: "\xA2yah"
+  - rawString: 
+    unicodeString: s
     englishTranslation: bruh
     wordType: 2

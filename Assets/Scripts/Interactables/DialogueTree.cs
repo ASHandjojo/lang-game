@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -43,9 +45,6 @@ public struct DialogueTreeList
 [Serializable]
 public struct DialogueTreeNode
 {
-    // type will be set to Default if it should be the default branch of dialogue
-    //      otherwise, type will be conditional (meaning it depends on some 
-    //      condition to be chosen)
     [SerializeField] public NodeType Type;
     // This will hold the index of the next dialogue in the list if successful
     // This will hold -1 if the node will immediately go to the next one!
