@@ -15,10 +15,13 @@ public sealed class EditorUI : EditorWindow
     private const string EncodingImportDir = "Assets/Scripts/Encoding";
     // Ligature sub table also references standard table, kind of a shortcut :)
     private const string LigatureSubDir    = EncodingImportDir + "/Loader/Ligature Sub Table.asset";
+    private const string WordEncoderDir    = EncodingImportDir + "/Loader/Internal Dictionary.asset";
 
     private const string EditorName = "Text Editor";
 
     private PhoneticProcessor processor;
+    private WordEncoder       wordEncoder;
+
     private KeyboardUI keyboardUI;
     private Label      label;
 
@@ -75,10 +78,13 @@ public sealed class EditorUI : EditorWindow
 
         LigatureSub ligatureSub = AssetDatabase.LoadAssetAtPath<LigatureSub>(LigatureSubDir);
         Debug.Assert(ligatureSub != null);
+        InternalDictionary internalDict = AssetDatabase.LoadAssetAtPath<InternalDictionary>(WordEncoderDir);
+        Debug.Assert(internalDict != null);
 
         if (!processor.IsValid)
         {
-            processor = new PhoneticProcessor(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);
+            processor   = new PhoneticProcessor(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);
+            wordEncoder = WordEncoder.Create(internalDict!.entries.ToArray(), Allocator.Persistent);
         }
         if (responseData != null)
         {
@@ -99,6 +105,7 @@ public sealed class EditorUI : EditorWindow
         if (processor.IsValid)
         {
             processor.Dispose();
+            wordEncoder.Dispose();
         }
     }
 }

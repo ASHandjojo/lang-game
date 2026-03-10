@@ -1,4 +1,5 @@
 using System;
+
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -45,7 +46,7 @@ public sealed class CompoundSignElement : VisualElement
         var resultField   = this.Q<TextField>("Result");
 
         rawMapping.value  = compoundSign.mappedChar;
-        resultField.value = $"{(char) compoundSign.mappedChar}";
+        resultField.value = ((char) compoundSign.mappedChar).ToString();
 
         characterList.makeItem = ()     => new StandardSignElement(standardUI);
         characterList.bindItem = (e, i) => (e as StandardSignElement).SetValue(standardSigns[i]);

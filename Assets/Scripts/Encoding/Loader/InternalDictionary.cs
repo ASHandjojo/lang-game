@@ -12,9 +12,11 @@ public enum WordType : int
     Adjective = 2,
 
     Verb    = 4,
-    Adverb  = 8 | Verb,
+    Adverb  = 8,
 
-    Object  = 32,
+    Object  = 16,
+
+    TypeCount = 5
 }
 
 [Serializable]

@@ -2008,7 +2008,7 @@ Transform:
   m_GameObject: {fileID: 1499353901}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: 0.0517, z: 10}
+  m_LocalPosition: {x: -0.05, y: 0.0517, z: 10}
   m_LocalScale: {x: 1, y: 0.996, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3206,7 +3206,7 @@ MonoBehaviour:
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   entries:
   - line:
-      line: Hi
+      line: lwwhhttcwhccqyl
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -3214,15 +3214,13 @@ MonoBehaviour:
     responseData:
       line: 
   - line:
-      line: Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
-        ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus
-        duis.
+      line: "\u010D\u0110m ip\xF0m \xD1l"
     sound:
       obj: {fileID: 0}
       isInitialized: 0
     hasResponse: 1
     responseData:
-      line: 
+      line: "\xAD\xAD\xAD\xAD\xADomh+pct\xE5qwwsyl\u0101rl\xC2\xAB\xABa\xAD\xAD"
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0

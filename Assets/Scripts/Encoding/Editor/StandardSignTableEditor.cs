@@ -61,7 +61,7 @@ public sealed class SignImporterEditor : Editor
                     sign => new StandardSign()
                     {
                         mappedChar = sign.Unicode,
-                        phonetics  = sign.Characters.Trim()
+                        phonetics  = sign.Characters
                     }
                 ).ToArray();
                 for (int i = 0; i < standardSigns.Length; i++)
