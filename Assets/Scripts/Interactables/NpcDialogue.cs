@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
 
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
 public sealed class NpcDialogue : Interactable
@@ -22,10 +23,11 @@ public sealed class NpcDialogue : Interactable
     private Label dialogueLabel;
     private float textSpeed;
     private VisualElement nextLinePrompt;
+    private VisualElement wordTooltip;
 
     private IVisualElementScheduledItem bounceSchedule;
     private float bounceHeight = 30.0f;
-    private float bounceSpeed  = 30.0f;
+    private float bounceSpeed = 30.0f;
     private float bounceStartTime;
 
     public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
@@ -55,16 +57,19 @@ public sealed class NpcDialogue : Interactable
         document.rootVisualElement.Q<Label>("NpcName").text = npcName;
         document.rootVisualElement.Q("NpcImage").style.backgroundImage = npcImage;
 
-        // Make sure text box begins empty
-        dialogueLabel      = document.rootVisualElement.Q<Label>("DialogueText");
-        dialogueLabel.text = "";
+        //// Make sure text box begins empty
+        //dialogueLabel      = document.rootVisualElement.Q<Label>("DialogueText");
+        //dialogueLabel.text = "";
 
-        textSpeed      = 0.02f;
+        textSpeed = 0.02f;
         nextLinePrompt = document.rootVisualElement.Q("NextLinePrompt");
         document.rootVisualElement.style.visibility = Visibility.Hidden;
-        document.rootVisualElement.style.display    = DisplayStyle.None;
+        document.rootVisualElement.style.display = DisplayStyle.None;
         nextLinePrompt.visible = false;
-        inDialogue             = false;
+        inDialogue = false;
+
+        // Set Tooltip
+        wordTooltip = document.rootVisualElement.Q("WordTooltip");
     }
 
     protected override IEnumerator InteractLogic(PlayerController player)
@@ -72,29 +77,30 @@ public sealed class NpcDialogue : Interactable
         if (inDialogue)
         {
             // Interact key pressed when dialogue line is finished -> to next line/end dialogue
-            if (dialogueLabel.text == entries[index].line)
+            var textContainer = document.rootVisualElement.Q("TextContainer");
+            if (textContainer.childCount > 0)
             {
                 StopBounce();
                 yield return NextLine();
             }
             else
             {
-                dialogueLabel.text = entries[index].line;
+                // dialogueLabel.text = entries[index].line;
                 StartBounce();
             }
         }
         else
         {
             document.rootVisualElement.style.visibility = Visibility.Visible;
-            document.rootVisualElement.style.display    = DisplayStyle.Flex;
+            document.rootVisualElement.style.display = DisplayStyle.Flex;
 
             hudDocument.rootVisualElement.style.visibility = Visibility.Hidden;
-            hudDocument.rootVisualElement.style.display    = DisplayStyle.None;
+            hudDocument.rootVisualElement.style.display = DisplayStyle.None;
             worldPromptIcon.enabled = false;
-            
+
             // Prevent Movement
             player.CanMove = false;
-            inDialogue     = true;
+            inDialogue = true;
             yield return TypeLine();
         }
     }
@@ -104,27 +110,109 @@ public sealed class NpcDialogue : Interactable
     /// </summary>
     public void Advance()
     {
-        dialogueLabel.text = entries[index].line;
+        //dialogueLabel.text = entries[index].line;
     }
 
     private IEnumerator TypeLine()
     {
+        var textContainer = document.rootVisualElement.Q("TextContainer");
+        textContainer.Clear();
+
         string currentLine = entries[index].line;
         int i = 0;
-        while (dialogueLabel.text.Length < currentLine.Length)
+
+        Label wordLabel = new Label();
+        wordLabel.AddToClassList("dialogue-text");
+        wordLabel.style.marginRight = 12;
+        textContainer.Add(wordLabel);
+
+        while (i < currentLine.Length)
         {
-            dialogueLabel.text += currentLine[i++];
-            yield return new WaitForSeconds(textSpeed);
+            if (currentLine[i] == ' ')
+            {
+                string name = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
+                wordLabel.name = name;
+
+                StyleColor orig = wordLabel.style.color;
+
+                wordLabel.RegisterCallback<PointerEnterEvent>(evt =>
+                {
+                    Label target = (Label)evt.target;
+                    target.style.color = new StyleColor(Color.red);
+                    ShowTooltip(name, evt.position);
+                });
+
+                wordLabel.RegisterCallback<PointerMoveEvent>(evt =>
+                {
+                    MoveTooltip(evt.position);
+                });
+
+                wordLabel.RegisterCallback<PointerLeaveEvent>(evt =>
+                {
+                    Label target = (Label)evt.target;
+                    target.style.color = orig;
+                    HideTooltip();
+                });
+
+                wordLabel.RegisterCallback<DetachFromPanelEvent>(evt =>
+                {
+                    HideTooltip();
+                });
+
+                wordLabel = new Label();
+                wordLabel.AddToClassList("dialogue-text");
+                wordLabel.style.marginRight = 12;
+                textContainer.Add(wordLabel);
+            }
+            else
+            {
+                wordLabel.text += currentLine[i];
+                yield return new WaitForSeconds(textSpeed);
+            }
+            i++;
         }
+
+        string word = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
+        wordLabel.name = word;
+
+        StyleColor originalColor = wordLabel.style.color;
+
+        wordLabel.RegisterCallback<PointerEnterEvent>(evt =>
+        {
+            Label target = (Label)evt.target;
+            target.style.color = new StyleColor(Color.red);
+            ShowTooltip(word, evt.position);
+        });
+
+        wordLabel.RegisterCallback<PointerMoveEvent>(evt =>
+        {
+            MoveTooltip(evt.position);
+        });
+
+        wordLabel.RegisterCallback<PointerLeaveEvent>(evt =>
+        {
+            Label target = (Label)evt.target;
+            target.style.color = originalColor;
+            HideTooltip();
+        });
+
         StartBounce();
+    }
+
+    private string RemovePunctuationLinq(string input)
+    {
+        // Filters the string, keeping only characters that are not punctuation
+        var result = new string(input.Where(c => !Char.IsPunctuation(c)).ToArray());
+        return result;
     }
 
     private IEnumerator NextLine()
     {
-        if(index < entries.Length - 1)
+        if (index < entries.Length - 1)
         {
             index++;
-            dialogueLabel.text = "";
+            var textContainer = document.rootVisualElement.Q("TextContainer");
+            textContainer.Clear();
             yield return TypeLine();
 
             if (entries[index].hasResponse)
@@ -144,9 +232,10 @@ public sealed class NpcDialogue : Interactable
         {
             StopBounce();
 
-            index                  = 0;
-            dialogueLabel.text     = "";
-            inDialogue             = false;
+            index = 0;
+            var textContainer = document.rootVisualElement.Q("TextContainer");
+            textContainer.Clear();
+            inDialogue = false;
             nextLinePrompt.visible = false;
 
             // Restore Movement
@@ -154,10 +243,10 @@ public sealed class NpcDialogue : Interactable
 
             // Restore in-game UI
             document.rootVisualElement.style.visibility = Visibility.Hidden;
-            document.rootVisualElement.style.display    = DisplayStyle.None;
+            document.rootVisualElement.style.display = DisplayStyle.None;
 
             hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
-            hudDocument.rootVisualElement.style.display    = DisplayStyle.Flex;
+            hudDocument.rootVisualElement.style.display = DisplayStyle.Flex;
 
             worldPromptIcon.enabled = true;
 
@@ -170,14 +259,14 @@ public sealed class NpcDialogue : Interactable
     private void StartBounce()
     {
         nextLinePrompt.visible = true;
-        bounceStartTime        = Time.time;
+        bounceStartTime = Time.time;
 
         bounceSchedule = nextLinePrompt.schedule.Execute(() =>
         {
             // Animate up and down movement
             float t = Time.time - bounceStartTime;
 
-            float yOffset = Mathf.PingPong(t * bounceSpeed,  bounceHeight);
+            float yOffset = Mathf.PingPong(t * bounceSpeed, bounceHeight);
             nextLinePrompt.style.translate = new Translate(0.0f, yOffset);
 
             // Animate size increase-decrease
@@ -196,5 +285,47 @@ public sealed class NpcDialogue : Interactable
         // Reset position and scale
         nextLinePrompt.style.translate = new Translate(0.0f, 0.0f);
         nextLinePrompt.transform.scale = Vector3.one;
+    }
+
+    private void ShowTooltip(string name, Vector2 mousePosition)
+    {
+        Label word = document.rootVisualElement.Q<Label>("Word");
+        Label notes = document.rootVisualElement.Q<Label>("Notes");
+
+        word.text = name;
+        notes.text = GetPlayerNotes(name);
+
+        MoveTooltip(mousePosition);
+        wordTooltip.style.display = DisplayStyle.Flex;
+    }
+
+    private void MoveTooltip(Vector2 mousePosition)
+    {
+        float offsetX = 12f;
+        float offsetY = 12f;
+
+        wordTooltip.style.left = mousePosition.x + offsetX;
+        wordTooltip.style.top = mousePosition.y + offsetY;
+    }
+
+    private void HideTooltip()
+    {
+        wordTooltip.style.display = DisplayStyle.None;
+    }
+
+    private string GetPlayerNotes(string word)
+    {
+        PlayerController player = PlayerController.Instance;
+        Dictionary dictionary = player.dictionary;
+
+        foreach (DictionaryEntry entry in dictionary.dictionaryList) 
+        {
+            if (entry.Word == word) 
+            {
+                return entry.Notes;
+            }
+        }
+
+        return "No Notes Available For This Word";
     }
 }

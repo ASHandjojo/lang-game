@@ -253,13 +253,15 @@ public sealed class GameHUDEvents : UIMenuController
 
             word.text = player.dictionary.dictionaryList[index].Word;
 
+            notes.value = "";
+
             if (player.dictionary.dictionaryList[index].Notes == "")
             {
                 notes.textEdition.placeholder = "Notes...";
             }
             else 
             {
-                notes.textEdition.placeholder =  player.dictionary.dictionaryList[index].Notes;
+                notes.value =  player.dictionary.dictionaryList[index].Notes;
             }
             index++;
         } 
@@ -268,7 +270,7 @@ public sealed class GameHUDEvents : UIMenuController
     private void NotesUpdate(string newValue, int index)
     {
         var notes = Slots[index].Q<TextField>("Notes" + (index + 1));
-        notes.textEdition.placeholder = newValue;
+        notes.value = newValue;
 
         PlayerController player = PlayerController.Instance;
         player.dictionary.dictionaryList[(pageNumber * Slots.Count) + index].Notes = newValue;

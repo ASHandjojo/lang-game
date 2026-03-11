@@ -4,8 +4,12 @@
         <engine:Label text="NPC NAME" name="NpcName" class="nametag" />
         <engine:VisualElement name="DialogueBox" class="dialogue-box">
             <engine:VisualElement name="NpcImage" class="dialogue-image" />
-            <engine:Label name="DialogueText" enable-rich-text="false" emoji-fallback-support="true" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" class="dialogue-text" />
+            <engine:VisualElement name="TextContainer" style="flex-grow: 1; align-items: center; align-self: center; flex-direction: row; justify-content: center; flex-wrap: wrap; align-content: flex-start; margin-left: 20px; padding-left: 0;" />
             <engine:VisualElement name="NextLinePrompt" class="prompt" />
         </engine:VisualElement>
+    </engine:VisualElement>
+    <engine:VisualElement name="WordTooltip" style="flex-grow: 1; position: absolute; display: none; background-color: rgb(245, 215, 157); border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; height: auto; width: auto; align-items: center; align-self: auto; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;">
+        <engine:Label text="Word" name="Word" class="dialogue-text" style="font-size: 40px; height: auto; width: auto; align-items: flex-start; align-self: center; flex-shrink: 1; -unity-text-outline-color: rgba(165, 0, 0, 0); color: rgb(165, 0, 0);" />
+        <engine:Label text="No Notes For This Word" name="Notes" class="dialogue-text" style="font-size: 30px; margin-left: 10px; margin-right: 10px;" />
     </engine:VisualElement>
 </engine:UXML>

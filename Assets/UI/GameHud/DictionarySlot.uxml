@@ -1,5 +1,6 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/SettingsMenu/SettingsStyles.uss?fileID=7433441132597879392&amp;guid=183042a5c782ff6498ee751526cafc95&amp;type=3#SettingsStyles" />
+    <Style src="project://database/Assets/UI/GameHud/InGame.uss?fileID=7433441132597879392&amp;guid=dd2b906b7c2acb14aa1334c009b6b1ec&amp;type=3#InGame" />
     <engine:VisualElement name="Dictionary" style="flex-grow: 1; background-color: rgb(255, 224, 152); width: 1000px; height: 1000px; align-content: auto;">
         <engine:Label text="Dictionary" name="Title" class="headers" style="font-size: 60px; -unity-text-align: upper-center;" />
         <engine:VisualElement name="DictionarySlot1" style="flex-grow: 1; height: 100%; flex-direction: row; width: 100%; background-image: none; -unity-text-align: middle-left; justify-content: center; align-items: center;">
