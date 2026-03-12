@@ -6,17 +6,18 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public enum WordType : int
+public enum WordType : ushort
 {
     Noun      = 1,
     Adjective = 2,
 
     Verb    = 4,
     Adverb  = 8,
-
     Object  = 16,
 
-    TypeCount = 5
+    TypeCount = 5,
+
+    Unknown   = ushort.MaxValue
 }
 
 [Serializable]

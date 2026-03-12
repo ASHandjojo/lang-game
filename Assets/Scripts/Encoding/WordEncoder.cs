@@ -1,62 +1,107 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 
 using UnityEngine;
 
-public struct WordEncoder : IDisposable
+using static Unity.Collections.LowLevel.Unsafe.NativeArrayUnsafeUtility;
+
+internal struct StringPool : IDisposable
 {
-    internal struct StringPool : IDisposable
+    private NativeArray<char> pool;
+    private NativeArray<int>  offsets;
+
+    public readonly bool IsValid => pool.IsCreated && offsets.IsCreated;
+
+    private unsafe readonly char* PoolPtr    => (char*) GetUnsafeBufferPointerWithoutChecks(pool);
+    private readonly Span<char> PoolMut      => pool.AsSpan();
+    private readonly ReadOnlySpan<char> Pool => pool.AsReadOnlySpan();
+
+    /// <summary>
+    /// Get readonly substring.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public unsafe readonly ReadOnlySpan<char> this[int index]
     {
-        private NativeArray<char> pool;
-        private NativeArray<int>  offsets;
-
-        public static StringPool Create<T>(in T strs, Allocator allocator) where T : IEnumerable<string>
-        {
-            int strCount = strs.Count();
-            Debug.Assert(strCount > 0);
-
-            StringPool result = new()
-            {
-                offsets = new NativeArray<int>(strCount + 1, allocator)
-            };
-            int length = 0; // Total length
-            int value  = 0;
-            int index  = 0;
-            foreach (string str in strs) // Combined total count + exclusive prefix sum
-            {
-                result.offsets[index++] = value;
-                Debug.Log(value);
-                length += str.Length;
-                value  += str.Length;
-            }
-            result.offsets[^1] = length;
-
-            index = 0;
-            result.pool  = new NativeArray<char>(length, allocator);
-            var poolSpan = result.pool.AsSpan();
-            foreach (string str in strs)
-            {
-                Range range = result.offsets[index]..result.offsets[index + 1];
-                str.AsSpan().CopyTo(poolSpan[range]);
-                index++;
-            }
-
-            return result;
-        }
-
-        public void Dispose()
-        {
-            pool.Dispose();
-            pool = default;
-
-            offsets.Dispose();
-            offsets = default;
-        }
+        get => Pool[offsets[index]..offsets[index + 1]];
     }
 
+    public static StringPool Create<T>(in T strs, Allocator allocator) where T : IEnumerable<string>
+    {
+        int strCount = strs.Count();
+        Debug.Assert(strCount > 0);
+
+        StringPool result = new()
+        {
+            offsets = new NativeArray<int>(strCount + 1, allocator)
+        };
+        int length = 0; // Total length
+        int value  = 0;
+        int index  = 0;
+        foreach (string str in strs) // Combined total count + exclusive prefix sum
+        {
+            result.offsets[index++] = value;
+            Debug.Log(value);
+            length += str.Length;
+            value  += str.Length;
+        }
+        result.offsets[^1] = length;
+
+        index = 0;
+        result.pool  = new NativeArray<char>(length, allocator);
+        var poolSpan = result.pool.AsSpan();
+        foreach (string str in strs)
+        {
+            Range range = result.offsets[index]..result.offsets[index + 1];
+            str.AsSpan().CopyTo(poolSpan[range]);
+            index++;
+        }
+
+        return result;
+    }
+
+    public void Dispose()
+    {
+        pool.Dispose();
+        pool = default;
+
+        offsets.Dispose();
+        offsets = default;
+    }
+}
+
+public struct WordNode
+{
+    [NativeDisableUnsafePtrRestriction]
+    private unsafe char* ptr;
+    private ushort       length;
+    private WordType     type;
+
+    public unsafe readonly bool IsValid => ptr != null && length > 0;
+
+    public unsafe WordNode(in ReadOnlySpan<char> span, WordType wordType)
+    {
+        Debug.Assert(!span.IsEmpty);
+        Debug.Assert(wordType != WordType.Unknown);
+
+        fixed (char* ptr = span) this.ptr = ptr;
+        type   = wordType;
+        length = unchecked((ushort) span.Length);
+    }
+
+    public static WordNode Unknown => new()
+    {
+        type = WordType.Unknown
+    };
+}
+
+public struct WordEncoder : IDisposable
+{
     private const int WordTypeOffsetSize = (int) WordType.TypeCount + 1;
     // Stores an exclusive prefix sum inline, no heap ;)
     private unsafe fixed int WordTypeOffsetsRaw[WordTypeOffsetSize];
@@ -120,6 +165,28 @@ public struct WordEncoder : IDisposable
         encoder.englishPool = StringPool.Create(sortedEntries.Select(x => x.englishTranslation), allocator);
         encoder.unicodePool = StringPool.Create(sortedEntries.Select(x => x.unicodeString),      allocator);
         return encoder;
+    }
+
+    public NativeArray<WordNode> Parse(in ReadOnlySpan<char> str, Allocator allocator)
+    {
+        if (str.IsEmpty) // Short-circuit if empty
+        {
+            return default;
+        }
+        int wordCount = str.ConvertU16().WordCount(' ');
+        if (wordCount == 0) // Short-circuit if all whitespace
+        {
+            return default;
+        }
+        NativeArray<WordNode> nodes = new(wordCount, allocator);
+        using SplitIterator iter    = SplitIterator.Create(str, ' ');
+        int index = 0;
+        while (iter.MoveNext())
+        {
+            ReadOnlySpan<char> span = iter.Current;
+            //nodes[index++] = new WordNode();
+        }
+        return nodes;
     }
 
     public void Dispose()
