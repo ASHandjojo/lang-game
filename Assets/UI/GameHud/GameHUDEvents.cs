@@ -10,10 +10,10 @@ using static UnityEditor.Progress;
 public sealed class GameHUDEvents : UIMenuController
 {
     [Header("Audio")]
-    [SerializeField] private AudioClip openClip;
-    [SerializeField] private AudioClip closeClip;
-    [SerializeField] private AudioClip hoverClip;
-    private SoundHandler sh;
+    // [SerializeField] private AudioClip openClip;
+    // [SerializeField] private AudioClip closeClip;
+    // [SerializeField] private AudioClip hoverClip;
+    // private SoundHandler sh;
 
     [Header("Sprites")]
     [SerializeField] private Texture2D closedImage;
@@ -54,7 +54,7 @@ public sealed class GameHUDEvents : UIMenuController
     void Awake()
     {
         selfDocument = GetComponent<UIDocument>();
-        sh           = GetComponent<SoundHandler>();
+        // sh           = GetComponent<SoundHandler>();
 
         hudContainer = selfDocument.rootVisualElement.Q("ScreenContainer");
 
@@ -126,7 +126,7 @@ public sealed class GameHUDEvents : UIMenuController
         hudContainer.visible        = false;
 
         // Enter the screen
-        sh.PlaySoundUI(openClip);
+        // sh.PlaySoundUI(openClip);
         yield return Translate(dictionary, backButton, -1500.0f, -350.0f, 1.0f);
         // Play transition animations
         yield return Fade(dictionary, 1.0f, 0.0f, 0.45f);
@@ -146,7 +146,7 @@ public sealed class GameHUDEvents : UIMenuController
         backButton.SetEnabled(false);
 
         // Play transition animations
-        sh.PlaySoundUI(closeClip);
+        // sh.PlaySoundUI(closeClip);
         yield return Fade(dictionary, 1.0f, 0.0f, 0.45f);
         dictionaryContents.visible = false;
         foreach (VisualElement slot in Slots)
@@ -276,6 +276,6 @@ public sealed class GameHUDEvents : UIMenuController
 
     private void OnButtonHover(MouseEnterEvent e)
     {
-        sh.PlaySoundUI(hoverClip);
+        // sh.PlaySoundUI(hoverClip);
     }
 }

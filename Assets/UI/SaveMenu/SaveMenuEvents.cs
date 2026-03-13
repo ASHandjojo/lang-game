@@ -12,17 +12,17 @@ public sealed class SaveMenuEvents : UIMenuController
     private UIDocument selfDocument;
 
     private Button backButton;
-    private SoundHandler sh;
+    // private SoundHandler sh;
     [Header("Audio")]
-    [SerializeField] private AudioClip hoverClip;
-    [SerializeField] private AudioClip selectionClip;
+    // [SerializeField] private AudioClip hoverClip;
+    // [SerializeField] private AudioClip selectionClip;
 
     public List<VisualElement> Slots = new();
 
     void Awake()
     {
         selfDocument = GetComponent<UIDocument>();
-        sh           = GetComponent<SoundHandler>();
+        // sh           = GetComponent<SoundHandler>();
 
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
     }
@@ -110,14 +110,14 @@ public sealed class SaveMenuEvents : UIMenuController
     // Play sound when a button is clicked
     private void OnButtonClick(ClickEvent e)
     {
-        sh.PlaySoundUI(selectionClip);
+        // sh.PlaySoundUI(selectionClip);
         MenuToggler.Instance.UseMenu(this);
     }
 
     // Play sound when cursor is over a button
     private void OnButtonHover(MouseEnterEvent e)
     {
-        sh.PlaySoundUI(hoverClip);
+        // sh.PlaySoundUI(hoverClip);
     }
 
     void OnLoadClicked(int index)

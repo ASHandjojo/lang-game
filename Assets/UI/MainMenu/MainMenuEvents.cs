@@ -15,15 +15,15 @@ public sealed class MainMenuEvents : MonoBehaviour
     private List<Button> buttonList;
 
     private SceneLoader  sl;
-    private SoundHandler sh;
-    [SerializeField] private AudioClip hoverClip;
-    [SerializeField] private AudioClip selectionClip;
+    // private SoundHandler sh;
+    // [SerializeField] private AudioClip hoverClip;
+    // [SerializeField] private AudioClip selectionClip;
 
     void Awake()
     {
         sl           = FindFirstObjectByType<SceneLoader>();
         selfDocument = GetComponent<UIDocument>();
-        sh           = GetComponent<SoundHandler>();
+        // sh           = GetComponent<SoundHandler>();
 
         // Add click events to all buttons
         startButton = selfDocument.rootVisualElement.Q("StartButton") as Button;
@@ -68,12 +68,12 @@ public sealed class MainMenuEvents : MonoBehaviour
     // Play sound when a button is clicked
     private void OnButtonClick(ClickEvent e)
     {
-        sh.PlaySoundUI(selectionClip);
+        // sh.PlaySoundUI(selectionClip);
     }
 
     // Play sound when cursor is over a button
     private void OnButtonHover(MouseEnterEvent e)
     {
-        sh.PlaySoundUI(hoverClip);
+        // sh.PlaySoundUI(hoverClip);
     }
 }

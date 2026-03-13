@@ -64,15 +64,15 @@ public sealed class SettingsMenuEvents : UIMenuController
     private Button backButton;
     private Button saveButton;
     [SerializeField] private UIDocument saveDocument;
-    private SoundHandler sh;
-    [Header("Audio")]
-    [SerializeField] private AudioClip hoverClip;
-    [SerializeField] private AudioClip selectionClip;
+    // private SoundHandler sh;
+    // [Header("Audio")]
+    // [SerializeField] private AudioClip hoverClip;
+    // [SerializeField] private AudioClip selectionClip;
 
     void Awake()
     {
         selfDocument = GetComponent<UIDocument>();
-        sh           = GetComponent<SoundHandler>();
+        // sh           = GetComponent<SoundHandler>();
 
         // Begin with settings menu not displayed
         selfDocument.rootVisualElement.style.display = DisplayStyle.None;
@@ -170,14 +170,14 @@ public sealed class SettingsMenuEvents : UIMenuController
     // Play sound when a button is clicked
     private void OnButtonClick(ClickEvent e)
     {
-        sh.PlaySoundUI(selectionClip);
+        // sh.PlaySoundUI(selectionClip);
         MenuToggler.Instance.UseMenu(this);
     }
 
     // Play sound when cursor is over a button
     private void OnButtonHover(MouseEnterEvent e)
     {
-        sh.PlaySoundUI(hoverClip);
+        // sh.PlaySoundUI(hoverClip);
     }
 
     private void OnRebindButton(RebindableInput input, RebindableInputPath path)

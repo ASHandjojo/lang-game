@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent, RequireComponent(typeof(AudioSource))]
+
+// Do not reference this class! We're using FMOD now
+
 public sealed class SoundHandler : MonoBehaviour
 {
     private AudioSource audioSource;
