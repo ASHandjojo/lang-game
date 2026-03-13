@@ -13,13 +13,13 @@ public sealed class LanguageTable : MonoBehaviour
     [SerializeField] private StandardSignTable signTable;
     [SerializeField] private LigatureSub ligatureSub;
 
-    private Processor processor;
+    private PhoneticProcessor processor;
 
     private static LanguageTable Instance { get; set; }
 
     public static ReadOnlySpan<StandardSign> StandardSigns => Instance.signTable.entries;
     public static ReadOnlySpan<CompoundSign> CompoundSigns => Instance.ligatureSub.entries;
-    public static ref readonly Processor Processor => ref Instance.processor;
+    public static ref readonly PhoneticProcessor PhoneticProcessor => ref Instance.processor;
 
     void Awake()
     {
@@ -33,7 +33,7 @@ public sealed class LanguageTable : MonoBehaviour
         DontDestroyOnLoad(this);
         Instance = this;
 
-        processor = new Processor(StandardSigns, CompoundSigns, Allocator.Persistent);
+        processor = new PhoneticProcessor(StandardSigns, CompoundSigns, Allocator.Persistent);
     }
 
     void OnDestroy()

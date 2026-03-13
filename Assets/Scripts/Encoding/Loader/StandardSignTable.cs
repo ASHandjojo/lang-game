@@ -6,11 +6,18 @@ using System.Text.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+public interface ISign
+{
+    public int MappedChar { get; }
+}
+
 [Serializable]
-public struct StandardSign : IEquatable<StandardSign>
+public struct StandardSign : ISign, IEquatable<StandardSign>
 {
     public string phonetics;
-    public int mappedChar;
+    public int    mappedChar;
+
+    public readonly int MappedChar => mappedChar;
 
     public readonly bool Equals(StandardSign other) => phonetics.Equals(other.phonetics);
 

@@ -11,7 +11,7 @@ public abstract class Interactable : MonoBehaviour
     [SerializeField] protected GameObject interactionPrompt;
     [SerializeField] protected AudioClip interactClip;
 
-    [SerializeField] protected RebindableInput worldPromptInput;
+    [SerializeField] protected RebindableInput worldPromptInput = RebindableInput.Interact;
 
     protected OptionalComponent<SoundHandler> soundHandler;
     protected SpriteRenderer worldPromptIcon;
