@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[DisallowMultipleComponent, RequireComponent(typeof(UIDocument), typeof(SoundHandler))]
+[DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
 public sealed class MainMenuEvents : MonoBehaviour
 {
     private UIDocument selfDocument;
