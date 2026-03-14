@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 
 using Unity.Burst;
 using Unity.Collections;
@@ -6,7 +7,6 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 
 using UnityEngine;
-using UnityEngine.Rendering;
 
 using static Unity.Collections.LowLevel.Unsafe.NativeArrayUnsafeUtility;
 
@@ -42,9 +42,16 @@ namespace Impl
 internal struct StringPool : IDisposable
 {
     private NativeArray<ushort> pool;
-    private NativeArray<int>  offsets; // Exclusive prefix sum
+    // Exclusive Prefix Sum (for Lengths)
+    private NativeArray<int> lengthOffsets;
+    // For Prefix Lookup (Exclusive Prefix Sum per length, stored contiguously)
+    private NativeArray<int> prefixOffsets;
+    // Gives the proper offsets for each prefix
+    private NativeArray<int> prefixLocations;
+    // Gives the minimum shift values for lookup
+    private NativeArray<ushort> minPrefixChars;
 
-    public readonly bool IsValid => pool.IsCreated && offsets.IsCreated;
+    public readonly bool IsValid => pool.IsCreated && lengthOffsets.IsCreated;
 
     private unsafe readonly char* PoolPtr      => (char*) GetUnsafeBufferPointerWithoutChecks(pool);
     private readonly Span<ushort> PoolMut      => pool.AsSpan();
@@ -57,7 +64,7 @@ internal struct StringPool : IDisposable
     /// <returns></returns>
     public unsafe readonly ReadOnlySpan<ushort> this[int index]
     {
-        get => Pool[offsets[index]..offsets[index + 1]];
+        get => Pool[lengthOffsets[index]..lengthOffsets[index + 1]];
     }
 
     /// <summary>
@@ -71,7 +78,66 @@ internal struct StringPool : IDisposable
     {
         Debug.Assert(entries.Length       > 0);
         Debug.Assert(lengthOffsets.Length > 0);
+        T selectFunc = new();
 
+        int prefixOffsetLength = 0;
+        NativeArray<int> prefixLocations   = new(lengthOffsets.Length,     allocator);
+        NativeArray<ushort> minPrefixChars = new(lengthOffsets.Length - 1, allocator);
+        // Used to cache prefix accesses (this is otherwise cache incineration lol)
+        NativeArray<ushort> prefixChars = new(entries.Length, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+        // First, find minimums (for shifting) and the sizes of each 
+        for (int x = 0; x < lengthOffsets.Length - 1; x++)
+        {
+            int minPrefixChar = int.MaxValue, maxPrefixChar = 0;
+            for (int i = lengthOffsets[x]; i < lengthOffsets[x + 1]; i++)
+            {
+                var selectStr  = selectFunc.Select(entries[i]);
+                ushort current = selectStr[0];
+
+                minPrefixChar  = math.min(minPrefixChar, current);
+                maxPrefixChar  = math.max(maxPrefixChar, current);
+
+                prefixChars[i] = current;
+            }
+            if (minPrefixChar != int.MaxValue)
+            {
+                minPrefixChars[x] = (ushort) minPrefixChar;
+                // Added 1 to get last offset :)
+                int prefixExtents   = (maxPrefixChar - minPrefixChar) + 1;
+                prefixOffsetLength += prefixExtents;
+                prefixLocations[x]  = prefixExtents;
+            }
+        }
+        // Compute prefix sum over prefix locations
+        for (int i = 0, value = 0; i < prefixLocations.Length - 1; i++)
+        {
+            int count          = prefixLocations[i];
+            prefixLocations[i] = value;
+            value             += count;
+        }
+        prefixLocations[^1] = prefixOffsetLength;
+
+        NativeArray<int> prefixOffsets = new(prefixOffsetLength, allocator);
+        for (int x = 0; x < lengthOffsets.Length - 1; x++)
+        {
+            int minPrefixChar = minPrefixChars[x];
+            NativeSlice<int> prefixHist = prefixOffsets.Slice();
+            // Compute histogram
+            for (int i = lengthOffsets[x]; i < lengthOffsets[x + 1]; i++)
+            {
+                int key = prefixChars[i] - minPrefixChar; // Shifts by min so min equals 0 on index :)
+                prefixHist[key]++;
+            }
+            // Compute prefix sums locally
+            for (int i = 0, value = 0; i < prefixHist.Length - 1; i++)
+            {
+                int count     = prefixHist[i];
+                prefixHist[i] = value;
+                value        += count;
+            }
+            prefixHist[^1] = lengthOffsets[x + 1] - lengthOffsets[x]; // Assign length last
+        }
+        // Calculating total memory usage for string pool
         int totalCharLength = 0;
         for (int i = 0; i < lengthOffsets.Length - 1; i++)
         {
@@ -79,12 +145,15 @@ internal struct StringPool : IDisposable
         }
         StringPool result = new()
         {
-            offsets = new NativeArray<int>(lengthOffsets.Length, allocator, NativeArrayOptions.UninitializedMemory),
-            pool    = new NativeArray<ushort>(totalCharLength,   allocator, NativeArrayOptions.UninitializedMemory)
-        };
-        lengthOffsets.CopyTo(result.offsets);
+            lengthOffsets = new NativeArray<int>(lengthOffsets.Length, allocator, NativeArrayOptions.UninitializedMemory),
+            pool          = new NativeArray<ushort>(totalCharLength,   allocator, NativeArrayOptions.UninitializedMemory),
 
-        T selectFunc = new();
+            prefixOffsets   = prefixOffsets,
+            prefixLocations = prefixLocations,
+            minPrefixChars  = minPrefixChars
+        };
+        lengthOffsets.CopyTo(result.lengthOffsets);
+        // Copies selected string to contiguous pool
         var poolSpan = result.pool.AsSpan();
         for (int x = 0, offset = 0; x < lengthOffsets.Length - 1; x++)
         {
@@ -93,7 +162,7 @@ internal struct StringPool : IDisposable
                 var dst = poolSpan[offset..(offset + x + 1)];
                 var src = selectFunc.Select(entries[i]);
                 src.CopyTo(dst);
-                offset    += x + 1;
+                offset += x + 1;
             }
         }
 
@@ -105,11 +174,12 @@ internal struct StringPool : IDisposable
         pool.Dispose();
         pool = default;
 
-        offsets.Dispose();
-        offsets = default;
+        lengthOffsets.Dispose();
+        lengthOffsets = default;
     }
 }
 
+[StructLayout(LayoutKind.Sequential)]
 public struct WordNode
 {
     [NativeDisableUnsafePtrRestriction]
@@ -135,11 +205,13 @@ public struct WordNode
     };
 }
 
+[BurstCompile]
 public struct WordEncoder : IDisposable
 {
     // Heap
     private StringPool rawPool;
     private StringPool englishPool;
+
     private StringPool unicodePool;
 
     private NativeArray<WordType> wordTypes;
@@ -196,6 +268,8 @@ public struct WordEncoder : IDisposable
             int strLen = entries[i].UnicodeString.Length;
             minLength  = math.min(minLength, strLen);
             maxLength  = math.max(maxLength, strLen);
+
+            encoder.wordTypes[i] = entries[i].WordType;
         }
         var prefixSum = SortEntries(entries, maxLength);
 
@@ -205,13 +279,19 @@ public struct WordEncoder : IDisposable
         return encoder;
     }
 
-    public NativeArray<WordNode> Parse(in ReadOnlySpan<char> str, Allocator allocator)
+    private readonly bool TryFind(in ReadOnlySpan<ushort> str, out WordNode node)
+    {
+        node = default;
+        return true;
+    }
+
+    public readonly NativeArray<WordNode> Parse(in ReadOnlySpan<ushort> str, Allocator allocator)
     {
         if (str.IsEmpty) // Short-circuit if empty
         {
             return default;
         }
-        int wordCount = str.ConvertU16().WordCount(' ');
+        int wordCount = str.WordCount(' ');
         if (wordCount == 0) // Short-circuit if all whitespace
         {
             return default;
@@ -222,7 +302,7 @@ public struct WordEncoder : IDisposable
         while (iter.MoveNext())
         {
             ReadOnlySpan<char> span = iter.Current;
-            //nodes[index++] = new WordNode();
+            nodes[index++] = new WordNode();
         }
         return nodes;
     }
