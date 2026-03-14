@@ -84,7 +84,7 @@ public sealed class EditorUI : EditorWindow
         if (!processor.IsValid)
         {
             processor   = new PhoneticProcessor(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);
-            wordEncoder = WordEncoder.Create(internalDict!.entries.ToArray(), Allocator.Persistent);
+            wordEncoder = WordEncoder.Create(internalDict!.entries.Convert(Allocator.Temp), Allocator.Persistent);
         }
         if (responseData != null)
         {

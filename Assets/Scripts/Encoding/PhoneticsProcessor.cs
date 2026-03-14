@@ -220,7 +220,7 @@ public struct PhoneticProcessor : IDisposable
                 }
             }
             // Push back found mapped char (whether standard or compound)
-            if (mappedChar != '\u000a' || (int) mappedChar == 173)
+            if (mappedChar != '\u000a' || mappedChar == 173)
             {
                 addedChars.AddNoResize(mappedChar);
             }
