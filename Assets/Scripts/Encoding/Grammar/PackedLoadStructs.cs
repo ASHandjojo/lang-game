@@ -40,13 +40,13 @@ public struct DictEntryUnmanaged : IDisposable, IComparable<DictEntryUnmanaged>
     public unsafe readonly bool IsValid => ptr != null && length > 0 && Allocator != Allocator.Invalid;
 
     [BurstDiscard]
-    public static unsafe DictEntryUnmanaged Create(in DictEntry dictEntry, Allocator allocator)
+    public static unsafe DictEntryUnmanaged Create(in DictEntry dictEntry, WordType wordType, Allocator allocator)
     {
         int totalLength = dictEntry.rawString.Length + dictEntry.unicodeString.Length + dictEntry.englishTranslation.Length;
         DictEntryUnmanaged output = new()
         {
             ptr       = (ushort*) UnsafeUtility.MallocTracked(totalLength * sizeof(ushort), UnsafeUtility.AlignOf<ushort>(), allocator, 0),
-            wordType  = dictEntry.wordType,
+            wordType  = wordType,
             allocator = (byte)   allocator,
             length    = (ushort) totalLength
         };
@@ -96,22 +96,42 @@ public struct DictEntryUnmanaged : IDisposable, IComparable<DictEntryUnmanaged>
 
 public static class PackedLoadStructExts
 {
-    public static NativeArray<DictEntryUnmanaged> Convert(in this ReadOnlySpan<DictEntry> entries, Allocator allocator)
+    public static NativeArray<DictEntryUnmanaged> Convert(in this ReadOnlySpan<DictEntryColumn> entries, Allocator allocator)
     {
-        NativeArray<DictEntryUnmanaged> output = new(entries.Length, allocator, NativeArrayOptions.UninitializedMemory);
+        int totalCount = 0;
         for (int i = 0; i < entries.Length; i++)
         {
-            output[i] = DictEntryUnmanaged.Create(entries[i], allocator);
+            totalCount += entries[i].entries.Count;
+        }
+
+        NativeArray<DictEntryUnmanaged> output = new(totalCount, allocator, NativeArrayOptions.UninitializedMemory);
+        for (int i = 0, linearIdx = 0; i < entries.Length; i++)
+        {
+            DictEntryColumn column = entries[i];
+            for (int j = 0; j < column.entries.Count; j++)
+            {
+                output[linearIdx++] = DictEntryUnmanaged.Create(column.entries[j], column.wordType, allocator);
+            }
         }
         return output;
     }
 
-    public static NativeArray<DictEntryUnmanaged> Convert<T>(this T entries, Allocator allocator) where T : IList<DictEntry>
+    public static NativeArray<DictEntryUnmanaged> Convert<T>(this T entries, Allocator allocator) where T : IList<DictEntryColumn>
     {
-        NativeArray<DictEntryUnmanaged> output = new(entries.Count, allocator, NativeArrayOptions.UninitializedMemory);
+        int totalCount = 0;
         for (int i = 0; i < entries.Count; i++)
         {
-            output[i] = DictEntryUnmanaged.Create(entries[i], allocator);
+            totalCount += entries[i].entries.Count;
+        }
+
+        NativeArray<DictEntryUnmanaged> output = new(totalCount, allocator, NativeArrayOptions.UninitializedMemory);
+        for (int i = 0, linearIdx = 0; i < entries.Count; i++)
+        {
+            DictEntryColumn column = entries[i];
+            for (int j = 0; j < column.entries.Count; j++)
+            {
+                output[linearIdx++] = DictEntryUnmanaged.Create(column.entries[j], column.wordType, allocator);
+            }
         }
         return output;
     }

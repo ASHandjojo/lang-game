@@ -10,14 +10,18 @@ using UnityEngine;
 
 public enum WordType : ushort
 {
-    Noun      = 1,
-    Adjective = 2,
+    Noun      = 0,
+    Adjective = 1,
 
-    Verb    = 4,
-    Adverb  = 8,
-    Object  = 16,
+    Verb    = 2,
+    Adverb  = 3,
+    Object  = 4,
 
-    TypeCount = 5,
+    Particle = 5,
+
+    Interjection = 6,
+
+    TypeCount = 7,
 
     Unknown   = ushort.MaxValue
 }
@@ -31,12 +35,17 @@ public struct DictEntry
     public string unicodeString;
     [Tooltip("The English equivalent translation.")]
     public string englishTranslation;
+}
 
-    public WordType wordType;
+[Serializable]
+public struct DictEntryColumn
+{
+    public WordType        wordType;
+    public List<DictEntry> entries;
 }
 
 [CreateAssetMenu(menuName = "Linguistics/Internal Dictionary")]
 public sealed class InternalDictionary : ScriptableObject
 {
-    public List<DictEntry> entries;
+    public List<DictEntryColumn> entries;
 }

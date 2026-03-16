@@ -59,7 +59,7 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
             (ChangeEvent<bool> e) =>
             {
                 Visibility visiblityState = e.newValue ? Visibility.Visible : Visibility.Hidden;
-                DisplayStyle displayStyle = e.newValue ? DisplayStyle.Flex : DisplayStyle.None;
+                DisplayStyle displayStyle = e.newValue ? DisplayStyle.Flex  : DisplayStyle.None;
 
                 responseDataField.style.visibility = visiblityState;
                 responseDataField.style.display    = displayStyle;

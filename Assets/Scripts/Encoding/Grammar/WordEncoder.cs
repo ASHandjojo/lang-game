@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 
 using Unity.Burst;
+using Unity.Burst.CompilerServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
@@ -44,11 +45,14 @@ internal struct StringPool : IDisposable
     private NativeArray<ushort> pool;
     // Exclusive Prefix Sum (for Lengths)
     private NativeArray<int> lengthOffsets;
-    // For Prefix Lookup (Exclusive Prefix Sum per length, stored contiguously)
+    // Memory Offsets for Length Chunks (Exclusive Prefix Sum)
+    private NativeArray<int> charOffsets;
+
+    // For Prefix Lookup (Exclusive prefix sum per length, stored contiguously, offsets are str length agnostic)
     private NativeArray<int> prefixOffsets;
-    // Gives the proper offsets for each prefix
+    // Gives the proper offsets for each lexicographical prefix sum stored in prefixOffsets
     private NativeArray<int> prefixLocations;
-    // Gives the minimum shift values for lookup
+    // Gives the minimum shift values for lexicographical lookup
     private NativeArray<ushort> minPrefixChars;
 
     public readonly bool IsValid => pool.IsCreated && lengthOffsets.IsCreated;
@@ -57,15 +61,7 @@ internal struct StringPool : IDisposable
     private readonly Span<ushort> PoolMut      => pool.AsSpan();
     private readonly ReadOnlySpan<ushort> Pool => pool.AsReadOnlySpan();
 
-    /// <summary>
-    /// Get readonly substring.
-    /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    public unsafe readonly ReadOnlySpan<ushort> this[int index]
-    {
-        get => Pool[lengthOffsets[index]..lengthOffsets[index + 1]];
-    }
+    public readonly int MaxStrLength => lengthOffsets.Length - 1;
 
     /// <summary>
     /// Takes a sorted list of 
@@ -121,7 +117,7 @@ internal struct StringPool : IDisposable
         for (int x = 0; x < lengthOffsets.Length - 1; x++)
         {
             int minPrefixChar = minPrefixChars[x];
-            NativeSlice<int> prefixHist = prefixOffsets.Slice();
+            NativeSlice<int> prefixHist = prefixOffsets.Slice(prefixLocations[x], prefixLocations[x + 1] - prefixLocations[x]);
             // Compute histogram
             for (int i = lengthOffsets[x]; i < lengthOffsets[x + 1]; i++)
             {
@@ -135,22 +131,33 @@ internal struct StringPool : IDisposable
                 prefixHist[i] = value;
                 value        += count;
             }
-            prefixHist[^1] = lengthOffsets[x + 1] - lengthOffsets[x]; // Assign length last
+            if (Hint.Likely(lengthOffsets[x + 1] - lengthOffsets[x] > 0))
+            {
+                prefixHist[^1] = lengthOffsets[x + 1] - lengthOffsets[x]; // Assign length last
+            }
         }
         // Calculating total memory usage for string pool
+        NativeArray<int> charOffsets = new(lengthOffsets.Length, allocator);
         int totalCharLength = 0;
-        for (int i = 0; i < lengthOffsets.Length - 1; i++)
+        for (int i = 0, value = 0; i < lengthOffsets.Length - 1; i++)
         {
-            totalCharLength += (lengthOffsets[i + 1] - lengthOffsets[i]) * (i + 1);
+            int currCharLen  = (lengthOffsets[i + 1] - lengthOffsets[i]) * (i + 1);
+            totalCharLength += currCharLen;
+            Debug.Log(lengthOffsets[i]);
+
+            charOffsets[i] = value;
+            value         += currCharLen;
         }
+        charOffsets[^1]   = totalCharLength * sizeof(ushort);
         StringPool result = new()
         {
-            lengthOffsets = new NativeArray<int>(lengthOffsets.Length, allocator, NativeArrayOptions.UninitializedMemory),
             pool          = new NativeArray<ushort>(totalCharLength,   allocator, NativeArrayOptions.UninitializedMemory),
+            lengthOffsets = new NativeArray<int>(lengthOffsets.Length, allocator, NativeArrayOptions.UninitializedMemory),
+            charOffsets   = charOffsets,
 
             prefixOffsets   = prefixOffsets,
             prefixLocations = prefixLocations,
-            minPrefixChars  = minPrefixChars
+            minPrefixChars  = minPrefixChars,
         };
         lengthOffsets.CopyTo(result.lengthOffsets);
         // Copies selected string to contiguous pool
@@ -159,14 +166,55 @@ internal struct StringPool : IDisposable
         {
             for (int i = lengthOffsets[x]; i < lengthOffsets[x + 1]; i++)
             {
-                var dst = poolSpan[offset..(offset + x + 1)];
-                var src = selectFunc.Select(entries[i]);
+                Span<ushort> dst         = poolSpan[offset..];
+                ReadOnlySpan<ushort> src = selectFunc.Select(entries[i]);
+
                 src.CopyTo(dst);
                 offset += x + 1;
             }
         }
 
         return result;
+    }
+
+    public readonly bool IsPresent(in ReadOnlySpan<ushort> str)
+    {
+        if (Hint.Unlikely(str.IsEmpty)) // Short-circuit when length of zero.
+        {
+            return false;
+        }
+        // Length check
+        if (Hint.Likely(MaxStrLength >= str.Length)) // Max length bounds check (the min is 1 implicitly for StringPool)
+        {
+            int lengthIndex   = str.Length - 1;
+            int lenBucketSize = lengthOffsets[lengthIndex + 1] - lengthOffsets[lengthIndex];
+            if (Hint.Likely(lenBucketSize > 0)) // If the bucket is not empty
+            {
+                int prefixIndex = str[0] - minPrefixChars[lengthIndex];
+                // Lexicographical bounds check
+                if (Hint.Likely(prefixIndex >= 0 && prefixIndex >= prefixLocations[lengthIndex + 1] - prefixLocations[lengthIndex]))
+                {
+                    var poolSpan = pool.AsReadOnlySpan();
+
+                    int charLenOffset = charOffsets[lengthIndex];
+                    int lexLenOffset  = prefixLocations[lengthIndex] + prefixIndex;
+                    for (int i = charLenOffset + prefixOffsets[lexLenOffset]; i < charLenOffset + prefixOffsets[lexLenOffset + 1]; i += str.Length)
+                    {
+                        ReadOnlySpan<ushort> rhs = poolSpan[i..(i + str.Length)];
+                        bool isEqual = true;
+                        for (int j = 0; j < rhs.Length && isEqual; j++)
+                        {
+                            isEqual = str[j] == rhs[j];
+                        }
+                        if (isEqual)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void Dispose()
@@ -220,7 +268,7 @@ public struct WordEncoder : IDisposable
     {
         // First, sort by length with a counting sort :)
         NativeArray<DictEntryUnmanaged> temp = new(entries.Length, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
-        Span<int> lengthHist = stackalloc int[maxLength + 1];
+        Span<int> lengthHist = stackalloc int[maxLength];
         lengthHist.Fill(0);
         for (int i = 0; i < entries.Length; i++)
         {
@@ -234,24 +282,28 @@ public struct WordEncoder : IDisposable
             lengthHist[i]  = value;
             value         += countAtIdx; 
         }
-        NativeArray<int> sumCopy = new(maxLength, Allocator.Temp);
-        lengthHist[..^1].CopyTo(sumCopy.AsSpan());
+        NativeArray<int> sumCopy = new(maxLength + 1, Allocator.Temp);
+        sumCopy[^1] = entries.Length;
+        lengthHist.CopyTo(sumCopy.AsSpan());
         // Scatter back
         for (int i = 0; i < entries.Length; i++)
         {
             int key = entries[i].UnicodeString.Length - 1;
             temp[lengthHist[key]++] = entries[i];
         }
+
         // Then, sort by lexicographical
         for (int i = 0; i < maxLength; i++)
         {
-            int count = lengthHist[i + 1] - lengthHist[i];
+            int count = sumCopy[i + 1] - sumCopy[i];
             if (count == 0)
             {
                 continue;
             }
-            entries.GetSubArray(lengthHist[i], lengthHist[i + 1]).Sort();
+            var subArray = temp.GetSubArray(sumCopy[i], count);
+            subArray.Sort();
         }
+        temp.CopyTo(entries);
         return sumCopy;
     }
 
@@ -273,9 +325,9 @@ public struct WordEncoder : IDisposable
         }
         var prefixSum = SortEntries(entries, maxLength);
 
-        encoder.rawPool     = StringPool.Create<RawPhoneticsSelector>(entries, prefixSum, allocator);
+        //encoder.rawPool     = StringPool.Create<RawPhoneticsSelector>(entries, prefixSum, allocator);
         encoder.unicodePool = StringPool.Create<UnicodeStrSelector>(entries,   prefixSum, allocator);
-        encoder.englishPool = StringPool.Create<EnglishTransSelector>(entries, prefixSum, allocator);
+        //encoder.englishPool = StringPool.Create<EnglishTransSelector>(entries, prefixSum, allocator);
         return encoder;
     }
 

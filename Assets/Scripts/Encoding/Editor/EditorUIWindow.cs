@@ -1,3 +1,5 @@
+using System;
+
 using Unity.Collections;
 
 using UnityEngine;
@@ -80,7 +82,6 @@ public sealed class EditorUI : EditorWindow
         Debug.Assert(ligatureSub != null);
         InternalDictionary internalDict = AssetDatabase.LoadAssetAtPath<InternalDictionary>(WordEncoderDir);
         Debug.Assert(internalDict != null);
-
         if (!processor.IsValid)
         {
             processor   = new PhoneticProcessor(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);

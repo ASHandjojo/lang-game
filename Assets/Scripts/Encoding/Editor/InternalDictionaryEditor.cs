@@ -1,6 +1,6 @@
 using System;
-
 using System.Collections.Generic;
+using System.Linq;
 
 using Unity.Collections;
 
@@ -65,9 +65,6 @@ internal sealed class DictEntryDrawer : PropertyDrawer
         SerializedProperty englishStrProp = property.FindPropertyRelative(nameof(DictEntry.englishTranslation));
         element.Q<TextField>("EnglishString").BindProperty(englishStrProp);
 
-        SerializedProperty wordTypeProp = property.FindPropertyRelative(nameof(DictEntry.wordType));
-        element.Q<EnumField>("WordType").BindProperty(wordTypeProp);
-
         element.AssignCallback(ligatureSub);
         
         return element;
@@ -79,9 +76,11 @@ internal sealed class InternalDictEditor : Editor
 {
     private static readonly Dictionary<string, WordType> WordTypeDict = new()
     {
-        { nameof(WordType.Noun),    WordType.Noun   },
-        { nameof(WordType.Object),  WordType.Object },
-        { nameof(WordType.Verb),    WordType.Verb   },
+        { nameof(WordType.Noun),      WordType.Noun      },
+        { nameof(WordType.Adjective), WordType.Adjective },
+        { nameof(WordType.Verb),      WordType.Verb      },
+        { nameof(WordType.Adverb),    WordType.Adverb    },
+        { nameof(WordType.Object),    WordType.Object    },
     };
 
     public override VisualElement CreateInspectorGUI()
@@ -117,6 +116,11 @@ internal sealed class InternalDictEditor : Editor
             string[] lines    = importText.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length > 0)
             {
+                Dictionary<WordType, List<DictEntry>> entries = new();
+                for (int i = 0; i < dict.entries.Count; i++)
+                {
+                    entries.Add(dict.entries[i].wordType, dict.entries[i].entries);
+                }
                 foreach (string line in lines)
                 {
                     string[] args = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
@@ -124,10 +128,18 @@ internal sealed class InternalDictEditor : Editor
                     DictEntry entry = new()
                     {
                         rawString          = args[0],
-                        englishTranslation = args[1],
-                        wordType           = WordTypeDict[args[2]]
+                        englishTranslation = args[2],
                     };
-                    dict.entries.Add(entry);
+                    WordType wordType = WordTypeDict[args[1]];
+                    if (entries.ContainsKey(wordType))
+                    {
+                        entries[wordType].Add(entry);
+                    }
+                    else
+                    {
+                        dict.entries.Add(new DictEntryColumn() { entries = new(), wordType = wordType });
+                        entries.Add(dict.entries[^1].wordType, dict.entries[^1].entries);
+                    }
                 }
                 EditorUtility.SetDirty(dict);
                 serializedObject.ApplyModifiedProperties();

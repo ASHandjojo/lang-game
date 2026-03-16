@@ -175,7 +175,6 @@ public struct PhoneticProcessor : IDisposable
             }
         }
         compoundTableOut = currentTable;
-        Debug.Log($"Max Match Size: {maxMatchSize}");
         return maxMatchSize > 0;
     }
 
@@ -214,7 +213,6 @@ public struct PhoneticProcessor : IDisposable
                 {
                     // Changes the character to compound character if there is a valid compound representation
                     mappedChar = compoundData[compoundTable.compoundIndex].unicodeChar;
-                    Debug.Log((int) mappedChar);
                     // Offsets by the number of characters a compound sign consumes
                     i += compoundTable.signData.Length - 1;
                 }

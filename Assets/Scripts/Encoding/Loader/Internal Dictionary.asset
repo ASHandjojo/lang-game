@@ -13,7 +13,32 @@ MonoBehaviour:
   m_Name: Internal Dictionary
   m_EditorClassIdentifier: 
   entries:
-  - rawString: aiyah
-    unicodeString: "\xA2yah"
-    englishTranslation: bruh
-    wordType: 2
+  - wordType: 6
+    entries:
+    - rawString: melaia
+      unicodeString: "\u0101\u010A\xA9"
+      englishTranslation: hello
+    - rawString: melai
+      unicodeString: "\u0101\u010Ai"
+      englishTranslation: hi
+    - rawString: meruve
+      unicodeString: "\u0101\u0113\xE8"
+      englishTranslation: goodbye
+    - rawString: meru
+      unicodeString: "\u0101\u0113"
+      englishTranslation: bye
+    - rawString: merali
+      unicodeString: "\u0101\u010F\u010C"
+      englishTranslation: welcome
+    - rawString: gurema
+      unicodeString: "\xC8\u0110\u0100"
+      englishTranslation: thank you
+    - rawString: grema
+      unicodeString: "g\u0110\u0100"
+      englishTranslation: thanks
+    - rawString: wabi
+      unicodeString: "wa\xBC"
+      englishTranslation: yes
+    - rawString: chie
+      unicodeString: "c\xDAe"
+      englishTranslation: no
