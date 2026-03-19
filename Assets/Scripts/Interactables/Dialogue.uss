@@ -60,7 +60,7 @@
     white-space: normal;
     font-size: 48px;
     -unity-font-style: bold;
-    -unity-font-definition: url("project://database/Assets/Fonts/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
+    -unity-font-definition: url("project://database/Assets/Fonts/Melody.otf?fileID=12800000&guid=ef39abd9056a9d446b1bf89b37383641&type=3#Melody");
     flex-shrink: 1;
     -unity-text-align: middle-center;
     margin-right: 0;

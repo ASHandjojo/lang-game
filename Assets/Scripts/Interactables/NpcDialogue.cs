@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
+using Unity.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.EventSystems.EventTrigger;
@@ -29,6 +32,15 @@ public sealed class NpcDialogue : Interactable
     private float bounceHeight = 30.0f;
     private float bounceSpeed = 30.0f;
     private float bounceStartTime;
+
+    public Font conlangFont;
+    public Font englishFont;
+
+    private const string RootImportDir = "Assets/Scripts/Encoding";
+    private const string LigatureSubDir = RootImportDir + "/Loader/Ligature Sub Table.asset";
+
+    private LigatureSub ligatureSub;
+    private Processor processor;
 
     public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
 
@@ -70,6 +82,8 @@ public sealed class NpcDialogue : Interactable
 
         // Set Tooltip
         wordTooltip = document.rootVisualElement.Q("WordTooltip");
+
+        ligatureSub = AssetDatabase.LoadAssetAtPath<LigatureSub>(LigatureSubDir);
     }
 
     protected override IEnumerator InteractLogic(PlayerController player)
@@ -113,6 +127,7 @@ public sealed class NpcDialogue : Interactable
         //dialogueLabel.text = entries[index].line;
     }
 
+    // Creates new text labels for each word to allow mouse events to be bound to each word independently
     private IEnumerator TypeLine()
     {
         var textContainer = document.rootVisualElement.Q("TextContainer");
@@ -121,52 +136,95 @@ public sealed class NpcDialogue : Interactable
         string currentLine = entries[index].line;
         int i = 0;
 
+        Font fontToUse = conlangFont;
+
         Label wordLabel = new Label();
         wordLabel.AddToClassList("dialogue-text");
-        wordLabel.style.marginRight = 12;
+        wordLabel.style.marginRight = 16;
         textContainer.Add(wordLabel);
+        wordLabel.style.unityFont = fontToUse;
 
         while (i < currentLine.Length)
         {
             if (currentLine[i] == ' ')
             {
-                string name = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
-                wordLabel.name = name;
-
-                StyleColor orig = wordLabel.style.color;
-
-                wordLabel.RegisterCallback<PointerEnterEvent>(evt =>
+                if (wordLabel.text.Length > 0)
                 {
-                    Label target = (Label)evt.target;
-                    target.style.color = new StyleColor(Color.red);
-                    ShowTooltip(name, evt.position);
-                });
+                    string name = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
+                    wordLabel.name = name;
 
-                wordLabel.RegisterCallback<PointerMoveEvent>(evt =>
+                    StyleColor orig = wordLabel.style.color;
+
+                    wordLabel.RegisterCallback<PointerEnterEvent>(evt =>
+                    {
+                        Label target = (Label)evt.target;
+                        target.style.color = new StyleColor(Color.red);
+                        ShowTooltip(name, evt.position, target.style.unityFontDefinition);
+                    });
+
+                    wordLabel.RegisterCallback<PointerMoveEvent>(evt =>
+                    {
+                        MoveTooltip(evt.position);
+                    });
+
+                    wordLabel.RegisterCallback<PointerLeaveEvent>(evt =>
+                    {
+                        Label target = (Label)evt.target;
+                        target.style.color = orig;
+                        HideTooltip();
+                    });
+
+                    wordLabel.RegisterCallback<DetachFromPanelEvent>(evt =>
+                    {
+                        HideTooltip();
+                    });
+
+                    wordLabel = new Label();
+                    wordLabel.AddToClassList("dialogue-text");
+                    wordLabel.style.marginRight = 16;
+                    textContainer.Add(wordLabel);
+                    wordLabel.style.unityFontDefinition = new StyleFontDefinition(fontToUse);
+                }
+            }
+            else if (currentLine[i] == '<')
+            {
+                if (currentLine.Substring(i, 3) == "<e>")
                 {
-                    MoveTooltip(evt.position);
-                });
-
-                wordLabel.RegisterCallback<PointerLeaveEvent>(evt =>
+                    wordLabel.style.unityFontDefinition = new StyleFontDefinition(englishFont);
+                    fontToUse = englishFont;
+                    i += 2;
+                }
+                else if (currentLine.Substring(i, 3) == "<c>")
                 {
-                    Label target = (Label)evt.target;
-                    target.style.color = orig;
-                    HideTooltip();
-                });
-
-                wordLabel.RegisterCallback<DetachFromPanelEvent>(evt =>
+                    wordLabel.style.unityFontDefinition = new StyleFontDefinition(conlangFont);
+                    fontToUse = conlangFont;
+                    i += 2;
+                }
+                else 
                 {
-                    HideTooltip();
-                });
-
-                wordLabel = new Label();
-                wordLabel.AddToClassList("dialogue-text");
-                wordLabel.style.marginRight = 12;
-                textContainer.Add(wordLabel);
+                    if (fontToUse == conlangFont)
+                    {
+                        processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
+                        wordLabel.text = processor.Translate(wordLabel.text + currentLine[i]);
+                    }
+                    else
+                    {
+                        wordLabel.text += currentLine[i];
+                    }
+                    yield return new WaitForSeconds(textSpeed);
+                }
             }
             else
             {
-                wordLabel.text += currentLine[i];
+                if (fontToUse == conlangFont)
+                {
+                    processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
+                    wordLabel.text = processor.Translate(wordLabel.text + currentLine[i]);
+                }
+                else
+                {
+                    wordLabel.text += currentLine[i];
+                }
                 yield return new WaitForSeconds(textSpeed);
             }
             i++;
@@ -181,7 +239,7 @@ public sealed class NpcDialogue : Interactable
         {
             Label target = (Label)evt.target;
             target.style.color = new StyleColor(Color.red);
-            ShowTooltip(word, evt.position);
+            ShowTooltip(word, evt.position, target.style.unityFontDefinition);
         });
 
         wordLabel.RegisterCallback<PointerMoveEvent>(evt =>
@@ -287,12 +345,14 @@ public sealed class NpcDialogue : Interactable
         nextLinePrompt.transform.scale = Vector3.one;
     }
 
-    private void ShowTooltip(string name, Vector2 mousePosition)
+    private void ShowTooltip(string name, Vector2 mousePosition, StyleFontDefinition font)
     {
         Label word = document.rootVisualElement.Q<Label>("Word");
         Label notes = document.rootVisualElement.Q<Label>("Notes");
 
         word.text = name;
+        word.style.unityFontDefinition = font;
+
         notes.text = GetPlayerNotes(name);
 
         MoveTooltip(mousePosition);
@@ -320,8 +380,13 @@ public sealed class NpcDialogue : Interactable
 
         foreach (DictionaryEntry entry in dictionary.dictionaryList) 
         {
-            if (entry.Word == word) 
+            processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
+            if (processor.Translate(entry.Word) == word) 
             {
+                if (entry.Notes == "")
+                {
+                    return "No Notes Available For This Word";
+                }
                 return entry.Notes;
             }
         }

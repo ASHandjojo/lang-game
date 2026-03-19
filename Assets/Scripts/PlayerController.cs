@@ -82,7 +82,10 @@ public sealed class PlayerController : MonoBehaviour
             string jsonString = File.ReadAllText(emptyPath);
 
             GameState save = JsonUtility.FromJson<GameState>(jsonString);
-            dictionary = save.dictionary;
+            // Once new things are added to saves then set from clean save
+
+            // Get empty dictionary based on what exists in the Internal Dictionary
+            GameState.InitializeEmptyDictionary();
         }
         moveAction     = InputSystem.actions.FindAction("Move");
         interactAction = InputSystem.actions.FindAction("Interact");
