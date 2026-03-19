@@ -36,7 +36,7 @@ public sealed class NpcDialogue : Interactable
     {
         if (inDialogue && entries[index].hasResponse)
         {
-            if (entries[index].responseData.expectedInput == content) // For when the content is equal to the expected
+            if (entries[index].responseData.line == content) // For when the content is equal to the expected
             {
                 return true;
             }
