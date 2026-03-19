@@ -47,7 +47,9 @@
     width: 100%;
     height: auto;
     font-size: 28px;
-    color: rgb(165, 0, 0);
+    color: white;
     padding: 1.25%;
-    -unity-font-definition: url("project://database/Assets/Fonts/Melody%20SDF.asset?fileID=11400000&guid=57f5131e1acbe4483910fe98b9bcb4a1&type=2#Melody SDF");
+    -unity-font-definition: url('/Assets/Fonts/Melody SDF.asset');
+
+    white-space: normal;
 }

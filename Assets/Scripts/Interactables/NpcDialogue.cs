@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.EventSystems.EventTrigger;
 
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
 public sealed class NpcDialogue : Interactable
@@ -48,7 +46,7 @@ public sealed class NpcDialogue : Interactable
     {
         if (inDialogue && entries[index].hasResponse)
         {
-            if (entries[index].responseData.expectedInput == content) // For when the content is equal to the expected
+            if (entries[index].responseData.line == content) // For when the content is equal to the expected
             {
                 return true;
             }

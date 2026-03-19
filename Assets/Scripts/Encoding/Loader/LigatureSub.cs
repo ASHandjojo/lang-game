@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [Serializable]
-public struct CompoundSign
+public struct CompoundSign : ISign
 {
     public string combinedString;
     public int mappedChar;
+
+    public readonly int MappedChar => mappedChar;
 
     // Standard Characters
     public int[] mappedChars;
