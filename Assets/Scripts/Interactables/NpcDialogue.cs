@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.EventSystems.EventTrigger;
 
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
 public sealed class NpcDialogue : Interactable

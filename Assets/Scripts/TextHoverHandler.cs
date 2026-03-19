@@ -1,14 +1,14 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.InputSystem;
-using Mono.Cecil.Cil;
-using UnityEngine.UIElements;
 
-public class TextHoverHandler : MonoBehaviour
+using TMPro;
+
+[DisallowMultipleComponent]
+public sealed class TextHoverHandler : MonoBehaviour
 {
     private TMP_Text _tmpTextBox;
-    private Canvas _canvasToCheck;
-    private Camera _cameraToUse;
+    private Canvas   _canvasToCheck;
+    private Camera   _cameraToUse;
     private RectTransform _textBoxRectTransform;
 
     private int _currentlyActiveLinkedElement;
@@ -19,12 +19,8 @@ public class TextHoverHandler : MonoBehaviour
     public delegate void CloseTooltipEvent();
     public static event CloseTooltipEvent OnCloseTooltipEvent;
 
-    private UIDocument document;
-
-    private void Awake()
+    void Awake()
     {
-        //_tmpTextBox = GetComponent<TMP_Text>();
-        document = GetComponent<UIDocument>();
         _canvasToCheck = GetComponentInParent<Canvas>();
         _textBoxRectTransform = GetComponent<RectTransform>();
 
