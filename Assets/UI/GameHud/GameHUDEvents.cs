@@ -45,7 +45,7 @@ public sealed class GameHUDEvents : UIMenuController
     private const string LigatureSubDir = RootImportDir + "/Loader/Ligature Sub Table.asset";
 
     private LigatureSub ligatureSub;
-    private Processor processor;
+    private PhoneticProcessor processor;
 
     public override IEnumerator Open()
     {

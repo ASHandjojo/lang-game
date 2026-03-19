@@ -38,7 +38,7 @@ public sealed class NpcDialogue : Interactable
     private const string LigatureSubDir = RootImportDir + "/Loader/Ligature Sub Table.asset";
 
     private LigatureSub ligatureSub;
-    private Processor processor;
+    private PhoneticProcessor processor;
 
     public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
 
