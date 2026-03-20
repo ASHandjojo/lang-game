@@ -146,12 +146,12 @@ public struct PhoneticProcessor : IDisposable
 
         // Gets compound data
         NativeList<CompoundTable> compoundTables = compoundPrefixMap[unicodeChar];
+        Debug.Log($"Compound Table Length: {compoundTables.Length}");
         // Iterate through prefixes
         for (int compoundIdx = 0; compoundIdx < compoundTables.Length; compoundIdx++)
         {
             // Iterate through compound sign
             ref readonly CompoundTable compoundTable = ref compoundTables.ElementAt(compoundIdx);
-            bool isEqual  = true;
             int signCount = compoundTable.signData.Length;
 
             // If the current sign position + the sign data count of the compound sign @ compoundIdx is out of bounds, skip;
@@ -160,12 +160,15 @@ public struct PhoneticProcessor : IDisposable
             {
                 continue;
             }
+
             // Does a character-wise comparison over the compound characters.
+            bool isEqual = true;
             for (int elementIdx = 1; elementIdx < signCount && isEqual; elementIdx++)
             {
                 char inputSign   = input[elementIdx];
                 char compareSign = compoundTable.signData[elementIdx];
                 isEqual = isEqual && inputSign == compareSign;
+                Debug.Log($"{(int) inputSign} | {(int) compareSign} | {isEqual}");
             }
 
             if (isEqual)
@@ -174,6 +177,7 @@ public struct PhoneticProcessor : IDisposable
                 maxMatchSize = signCount;
             }
         }
+        Debug.Log($"Max Match Size: {maxMatchSize} | Table: {currentTable.ToString()}");
         compoundTableOut = currentTable;
         return maxMatchSize > 0;
     }

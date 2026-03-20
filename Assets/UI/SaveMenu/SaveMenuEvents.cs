@@ -122,7 +122,7 @@ public sealed class SaveMenuEvents : UIMenuController
 
     void OnLoadClicked(int index)
     {
-        GameState.LoadPlayerData(index);
+        GameState.LoadPlayerData(index, PlayerController.InternalDict);
         MenuToggler.Instance.ClearAllMenus();
     }
 

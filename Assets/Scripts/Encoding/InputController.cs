@@ -50,7 +50,7 @@ public struct KeyboardRow
                 {
                     input.phoneticsStr += text;
                     input.unicodeStr    = processor.Translate(input.phoneticsStr);
-                    Debug.Log($"Unicode Field: {input.unicodeStr}");
+                    Debug.Log($"Phonetics Field: {input.phoneticsStr} | Unicode Field: {input.unicodeStr}");
                     assignCallback?.Invoke(input.unicodeStr);
                 }
             ); // WATCH
@@ -114,7 +114,7 @@ public struct KeyboardRow
 
 public sealed class KeyboardUI : VisualElement
 {
-    private InnerInput inner = new();
+    private readonly InnerInput inner = new();
 
     public string PhoneticsString
     {

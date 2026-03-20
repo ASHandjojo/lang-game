@@ -750,6 +750,7 @@ MonoBehaviour:
   currentInteraction:
     obj: {fileID: 0}
     isInitialized: 0
+  internalDict: {fileID: 11400000, guid: 599cf157494825b4ea3ff390363cf038, type: 2}
 --- !u!1 &1074906769
 GameObject:
   m_ObjectHideFlags: 0
@@ -2450,65 +2451,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d3ac51e7ec2b1448dca9ee644aa0ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1710179958
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1710179959}
-  - component: {fileID: 1710179960}
-  m_Layer: 0
-  m_Name: Canvas
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1710179959
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1710179958}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
---- !u!223 &1710179960
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1710179958}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 1
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
 --- !u!1 &1724572782
 GameObject:
   m_ObjectHideFlags: 0
@@ -3234,7 +3176,7 @@ MonoBehaviour:
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   entries:
   - line:
-      line: lwwhhttcwhccqy
+      line: lwwhhttc
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -3248,7 +3190,7 @@ MonoBehaviour:
       isInitialized: 0
     hasResponse: 1
     responseData:
-      line: "\xAD\xAD\xAD\xAD\xADomh+pct\xE5qwwsyl\u0101rl\xE2\xAB\xABa"
+      line: a
   conlangFont: {fileID: 12800000, guid: ef39abd9056a9d446b1bf89b37383641, type: 3}
   englishFont: {fileID: 12800000, guid: e0afdb4613b19e941a9c5e69c3b88d0f, type: 3}
 --- !u!61 &1988571624
@@ -3519,4 +3461,3 @@ SceneRoots:
   - {fileID: 189602150}
   - {fileID: 518210467}
   - {fileID: 6290737249233252678}
-  - {fileID: 1710179959}

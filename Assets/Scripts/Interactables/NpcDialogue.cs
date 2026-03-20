@@ -28,7 +28,7 @@ public sealed class NpcDialogue : Interactable
 
     private IVisualElementScheduledItem bounceSchedule;
     private float bounceHeight = 30.0f;
-    private float bounceSpeed = 30.0f;
+    private float bounceSpeed  = 30.0f;
     private float bounceStartTime;
 
     public Font conlangFont;
