@@ -15,7 +15,8 @@ public sealed class EncodingEntryDrawer : PropertyDrawer
         Debug.Assert(styleSheet != null);
         element.styleSheets.Add(styleSheet);
 
-        var lineProperty = property.FindPropertyRelative(nameof(EncodingEntry.line));
+        var lineProperty      = property.FindPropertyRelative(nameof(EncodingEntry.line));
+        var phoneticsProperty = property.FindPropertyRelative(nameof(EncodingEntry.phoneticsStr));
         Label lineField  = new("Line");
         lineField.BindProperty(lineProperty);
         lineField.AddToClassList("TranslatedLabel");
@@ -30,8 +31,11 @@ public sealed class EncodingEntryDrawer : PropertyDrawer
         openWindowButton.RegisterCallback(
             (ClickEvent e) =>
             {
+                var lineProperty      = property.FindPropertyRelative(nameof(EncodingEntry.line));
+                var phoneticsProperty = property.FindPropertyRelative(nameof(EncodingEntry.phoneticsStr));
+
                 EncodingEntry entry = (EncodingEntry) property.boxedValue;
-                EditorUI.ShowWindow(entry, lineProperty);
+                EditorUI.ShowWindow(entry, phoneticsProperty, lineProperty);
             }
         );
 

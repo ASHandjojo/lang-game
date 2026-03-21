@@ -3176,21 +3176,25 @@ MonoBehaviour:
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   entries:
   - line:
+      phoneticsStr: 
       line: lwwhhttc
     sound:
       obj: {fileID: 0}
       isInitialized: 0
     hasResponse: 0
     responseData:
+      phoneticsStr: 
       line: 
   - line:
+      phoneticsStr: 
       line: "\u010D\u0110m ip\xF0m \xD1l"
     sound:
       obj: {fileID: 0}
       isInitialized: 0
     hasResponse: 1
     responseData:
-      line: a
+      phoneticsStr: 
+      line: 
   conlangFont: {fileID: 12800000, guid: ef39abd9056a9d446b1bf89b37383641, type: 3}
   englishFont: {fileID: 12800000, guid: e0afdb4613b19e941a9c5e69c3b88d0f, type: 3}
 --- !u!61 &1988571624

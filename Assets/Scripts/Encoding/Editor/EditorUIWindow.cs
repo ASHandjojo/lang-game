@@ -27,7 +27,7 @@ public sealed class EditorUI : EditorWindow
     private KeyboardUI keyboardUI;
     private Label      label;
 
-    private SerializedProperty? prop;
+    private SerializedProperty? phoneticsProp, unicodeProp;
 
     private EncodingEntry? responseData = null;
 
@@ -45,7 +45,7 @@ public sealed class EditorUI : EditorWindow
     /// </summary>
     /// <param name="dialogueEntry"></param>
     [MenuItem("Conlang/Text Editor")]
-    public static void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty prop)
+    public static void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty phoneticsProp, SerializedProperty unicodeProp)
     {
         Debug.Assert(dialogueEntry != null);
 
@@ -53,21 +53,27 @@ public sealed class EditorUI : EditorWindow
         baseWindow.responseData = dialogueEntry;
         baseWindow.label!.text  = baseWindow.responseData!.line;
 
-        baseWindow.prop = prop;
-        baseWindow.keyboardUI.PhoneticsString = baseWindow.responseData!.line;
+        baseWindow.phoneticsProp = phoneticsProp;
+        baseWindow.unicodeProp   = unicodeProp;
+        baseWindow.keyboardUI.PhoneticsString = baseWindow.responseData.phoneticsStr;
     }
 
     private void WriteToWindow(string input)
     {
-        label.text = input;
         if (responseData == null)
         {
             return;
         }
-        prop!.stringValue = input;
+        phoneticsProp!.stringValue = input;
+        unicodeProp!.stringValue   = processor.Translate(input);
 
-        Undo.RecordObject(prop.serializedObject.targetObject, "TextEdit");
-        prop.serializedObject.ApplyModifiedProperties();
+        Undo.RecordObject(phoneticsProp!.serializedObject.targetObject, "TextEdit");
+        Undo.RecordObject(unicodeProp!.serializedObject.targetObject,   "TextEdit");
+
+        phoneticsProp.serializedObject.ApplyModifiedProperties();
+        unicodeProp.serializedObject.ApplyModifiedProperties();
+
+        label.text = unicodeProp!.stringValue;
     }
 
     public void CreateGUI()
@@ -89,7 +95,7 @@ public sealed class EditorUI : EditorWindow
         }
         if (responseData != null)
         {
-            keyboardUI = new KeyboardUI(treeAsset, processor, WriteToWindow, responseData.line);
+            keyboardUI = new KeyboardUI(treeAsset, processor, WriteToWindow, responseData.phoneticsStr);
         }
         else
         {
