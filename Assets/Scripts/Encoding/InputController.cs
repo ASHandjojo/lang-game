@@ -49,7 +49,6 @@ public struct KeyboardRow
                 (ClickEvent e) =>
                 {
                     input.phoneticsStr += text.ToLower();
-                    Debug.Log($"Phonetics Field: {input.phoneticsStr}");
                     assignCallback?.Invoke(input.phoneticsStr);
                 }
             ); // WATCH

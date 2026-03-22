@@ -168,7 +168,6 @@ public struct PhoneticProcessor : IDisposable
                 char inputSign   = input[elementIdx];
                 char compareSign = compoundTable.signData[elementIdx];
                 isEqual = isEqual && inputSign == compareSign;
-                Debug.Log($"{(int) inputSign} | {(int) compareSign} | {isEqual}");
             }
 
             if (isEqual)
@@ -177,7 +176,6 @@ public struct PhoneticProcessor : IDisposable
                 maxMatchSize = signCount;
             }
         }
-        Debug.Log($"Max Match Size: {maxMatchSize} | Table: {currentTable.ToString()}");
         compoundTableOut = currentTable;
         return maxMatchSize > 0;
     }
@@ -225,10 +223,6 @@ public struct PhoneticProcessor : IDisposable
             if (mappedChar != '\u000a')
             {
                 addedChars.AddNoResize(mappedChar);
-            }
-            else
-            {
-                Debug.Log(":)");
             }
         }
         return addedChars;

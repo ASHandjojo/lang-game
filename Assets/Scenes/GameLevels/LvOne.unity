@@ -3193,8 +3193,8 @@ MonoBehaviour:
       isInitialized: 0
     hasResponse: 1
     responseData:
-      phoneticsStr: 
-      line: 
+      phoneticsStr: lwci+aioicc ai
+      line: "lw\xC6\xA2\xAFcc \xA2"
   conlangFont: {fileID: 12800000, guid: ef39abd9056a9d446b1bf89b37383641, type: 3}
   englishFont: {fileID: 12800000, guid: e0afdb4613b19e941a9c5e69c3b88d0f, type: 3}
 --- !u!61 &1988571624
