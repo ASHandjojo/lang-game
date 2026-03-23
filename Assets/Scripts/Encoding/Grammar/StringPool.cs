@@ -44,6 +44,8 @@ internal struct StringPool : IDisposable
         return output;
     }
 
+    public unsafe readonly ReadOnlySpan<ushort> this[int index] => pool.AsReadOnlySpan()[offsets[index]..offsets[index + 1]];
+
     public void Dispose()
     {
         pool.Dispose();

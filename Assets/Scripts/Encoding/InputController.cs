@@ -69,7 +69,6 @@ public struct KeyboardRow
         spacebar.RegisterCallback(
             (ClickEvent e) =>
             {
-                Debug.Log($"New Phonetics Field: {input.phoneticsStr}");
                 input.phoneticsStr += ' ';
                 assignCallback?.Invoke(input.phoneticsStr);
             }

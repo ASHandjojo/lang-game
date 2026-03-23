@@ -10,24 +10,43 @@ using UnityEngine;
 
 using Impl;
 
-[StructLayout(LayoutKind.Sequential)]
+[BurstCompile, StructLayout(LayoutKind.Sequential, Size = 16)]
 public struct WordNode
 {
     [NativeDisableUnsafePtrRestriction]
-    private unsafe char* ptr;
-    private ushort       length;
-    private WordType     type;
+    private unsafe ushort* ptr;
+    private ushort         length;
+    private WordType       type;
 
     public unsafe readonly bool IsValid => ptr != null && length > 0;
 
-    public unsafe WordNode(in ReadOnlySpan<char> span, WordType wordType)
+    [BurstDiscard]
+    public static unsafe WordNode Create(in ReadOnlySpan<char> span, WordType wordType)
     {
         Debug.Assert(!span.IsEmpty);
         Debug.Assert(wordType != WordType.Unknown);
 
-        fixed (char* ptr = span) this.ptr = ptr;
-        type   = wordType;
-        length = unchecked((ushort) span.Length);
+        WordNode node = new()
+        {
+            type   = wordType,
+            length = unchecked((ushort) span.Length)
+        };
+        fixed (char* ptr = span) node.ptr = (ushort*) ptr;
+        return node;
+    }
+
+    public static unsafe WordNode Create(in ReadOnlySpan<ushort> span, WordType wordType)
+    {
+        Debug.Assert(!span.IsEmpty);
+        Debug.Assert(wordType != WordType.Unknown);
+
+        WordNode node = new()
+        {
+            type   = wordType,
+            length = unchecked((ushort) span.Length)
+        };
+        fixed (ushort* ptr = span) node.ptr = ptr;
+        return node;
     }
 
     public static WordNode Unknown => new()
@@ -111,6 +130,11 @@ public struct WordEncoder : IDisposable
         encoder.unicodePool = LexPool.Create<UnicodeStrSelector>(entries, prefixSum, allocator);
         encoder.rawPool     = StringPool.Create<RawPhoneticsSelector>(entries, allocator);
         encoder.englishPool = StringPool.Create<EnglishTransSelector>(entries, allocator);
+
+        for (int i = 0; i < entries.Length; i++)
+        {
+            Debug.Log(new string(encoder.englishPool[i].ConvertChar()));
+        }
         return encoder;
     }
 
@@ -136,9 +160,12 @@ public struct WordEncoder : IDisposable
         int index = 0;
         while (iter.MoveNext())
         {
-            ReadOnlySpan<char> span = iter.Current;
-            nodes[index++] = new WordNode();
+            ReadOnlySpan<ushort> span = iter.Current;
+            Debug.Log(span.ConvertChar().ToString());
+            bool isPresent = unicodePool.IsPresent(span, out int strIndex);
+            nodes[index++] = isPresent ? WordNode.Create(span, wordTypes[strIndex]) : default;
         }
+        Debug.Log($"Count: {index}");
         return nodes;
     }
 

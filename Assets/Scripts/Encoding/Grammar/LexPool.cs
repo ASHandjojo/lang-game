@@ -141,12 +141,12 @@ internal struct LexPool : IDisposable
         {
             int currCharLen  = (lengthOffsets[i + 1] - lengthOffsets[i]) * (i + 1);
             totalCharLength += currCharLen;
-            Debug.Log(lengthOffsets[i]);
 
             charOffsets[i] = value;
             value         += currCharLen;
         }
         charOffsets[^1]   = totalCharLength * sizeof(ushort);
+
         LexPool result = new()
         {
             pool          = new NativeArray<ushort>(totalCharLength,   allocator, NativeArrayOptions.UninitializedMemory),
@@ -197,6 +197,7 @@ internal struct LexPool : IDisposable
 
                     int charLenOffset = charOffsets[lengthIndex];
                     int lexLenOffset  = prefixLocations[lengthIndex] + prefixIndex;
+                    Debug.Log($"Char Len Offset: {charLenOffset}");
 
                     strIndex = charLenOffset + prefixOffsets[lexLenOffset];
                     for (int i = charLenOffset + prefixOffsets[lexLenOffset]; i < charLenOffset + prefixOffsets[lexLenOffset + 1]; i += str.Length, strIndex++)

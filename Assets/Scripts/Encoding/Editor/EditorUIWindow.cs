@@ -73,6 +73,12 @@ public sealed class EditorUI : EditorWindow
         phoneticsProp.serializedObject.ApplyModifiedProperties();
         unicodeProp.serializedObject.ApplyModifiedProperties();
 
+        var words = wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
+        foreach (var word in words)
+        {
+            Debug.Log(word.IsValid);
+        }
+
         label.text = unicodeProp!.stringValue;
     }
 

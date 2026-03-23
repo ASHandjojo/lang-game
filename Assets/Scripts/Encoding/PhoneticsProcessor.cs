@@ -146,7 +146,6 @@ public struct PhoneticProcessor : IDisposable
 
         // Gets compound data
         NativeList<CompoundTable> compoundTables = compoundPrefixMap[unicodeChar];
-        Debug.Log($"Compound Table Length: {compoundTables.Length}");
         // Iterate through prefixes
         for (int compoundIdx = 0; compoundIdx < compoundTables.Length; compoundIdx++)
         {

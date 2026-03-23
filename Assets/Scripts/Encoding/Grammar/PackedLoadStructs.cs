@@ -56,6 +56,11 @@ public struct DictEntryUnmanaged : IDisposable, IComparable<DictEntryUnmanaged>
         offsetSpan[1]  = (byte) dictEntry.rawString.Length;
         offsetSpan[2]  = (byte) (dictEntry.rawString.Length + dictEntry.unicodeString.Length);
 
+        var outputSpan = output.FullSpan;
+        dictEntry.rawString.AsSpan().ConvertU16().CopyTo(output.RawPhoneticsMut);
+        dictEntry.unicodeString.AsSpan().ConvertU16().CopyTo(output.UnicodeStringMut);
+        dictEntry.englishTranslation.AsSpan().ConvertU16().CopyTo(output.EnglishTransMut);
+
         return output;
     }
 

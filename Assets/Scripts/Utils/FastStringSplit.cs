@@ -92,13 +92,14 @@ public struct SplitIterator : IEnumerator<SplitEntry>
         {
             return false;
         }
-        var subSpan = Span[(offset + 1)..];
+        var subSpan = Span[(offset)..];
         for (ushort i = 0; i < subSpan.Length; i++)
         {
             if (subSpan[i] == splitChar)
             {
                 if (i > 0)
                 {
+                    Debug.Log("Base case");
                     offset    += iterOffset;
                     iterOffset = i;
                     return true;
@@ -157,7 +158,12 @@ public static class FastStringExtMethods
     [BurstCompile]
     public static int WordCount(in this ReadOnlySpan<ushort> span, ushort target)
     {
-        int count  = 0;
+        if (Hint.Unlikely(span.IsEmpty))
+        {
+            return 0;
+        }
+
+        int count  = 1;
         int offset = 0, iterOffset = 0;
         for (int i = 0; i < span.Length; i++)
         {
@@ -167,6 +173,7 @@ public static class FastStringExtMethods
                 {
                     offset    += iterOffset;
                     iterOffset = i;
+                    count++;
                 }
                 // NOTE: WATCH
                 else // If zero, this means a region of contiguous splitting characters.
@@ -180,6 +187,7 @@ public static class FastStringExtMethods
                             iterOffset = i;
                         }
                     }
+                    count++;
                 }
             }
         }
