@@ -58,9 +58,15 @@ internal struct LexOffsets : IDisposable
     public readonly Allocator Allocator => (Allocator) allocator;
     public readonly int StrLength       => strLength;
 
+    public unsafe readonly bool IsValid => prefixOffsets != null && length > 0 && strLength > 0;
+
     public static unsafe LexOffsets Create(in ReadOnlySpan<ushort> prefixes, int strLength, Allocator allocator)
     {
         Debug.Assert(strLength > 0);
+        if (Hint.Unlikely(prefixes.IsEmpty))
+        {
+            return default;
+        } 
 
         int minPrefixChar = int.MaxValue, maxPrefixChar = 0;
         for (int i = 0; i < prefixes.Length; i++)
@@ -68,9 +74,15 @@ internal struct LexOffsets : IDisposable
             minPrefixChar = math.min(minPrefixChar, prefixes[i]);
             maxPrefixChar = math.max(maxPrefixChar, prefixes[i]);
         }
-        int offsetLength   = maxPrefixChar - minPrefixChar;
-        int* prefixOffsets = (int*) UnsafeUtility.MallocTracked((offsetLength + 1) * sizeof(ushort), UnsafeUtility.AlignOf<ushort>(), allocator, 0);
-        UnsafeUtility.MemClear(prefixOffsets, (offsetLength + 1) * sizeof(ushort));
+        int offsetLength = maxPrefixChar - minPrefixChar;
+        if (Hint.Unlikely(offsetLength == 0))
+        {
+            return default;
+        }
+        int  prefixLength  = (offsetLength + 1) * sizeof(int);
+        Debug.Log($"Prefix Length: {prefixLength} | Offset Length: {offsetLength}");
+        int* prefixOffsets = (int*) UnsafeUtility.MallocTracked(prefixLength, UnsafeUtility.AlignOf<int>(), allocator, 0);
+        UnsafeUtility.MemClear(prefixOffsets, prefixLength);
         // Histogram Calculation
         for (int i = 0; i < prefixes.Length; i++)
         {
@@ -88,7 +100,7 @@ internal struct LexOffsets : IDisposable
         LexOffsets output = new()
         {
             prefixOffsets = prefixOffsets,
-            allocator     = (byte)   allocator,
+            allocator     = (byte) allocator,
 
             length    = (ushort) offsetLength,
             strLength = (byte)   strLength,
@@ -100,10 +112,44 @@ internal struct LexOffsets : IDisposable
         return output;
     }
 
+    /// <summary>
+    /// Checks whether the prefix character could be in this structure and has entries.
+    /// </summary>
+    /// <param name="prefix"></param>
+    /// <returns></returns>
+    public unsafe readonly bool IsInRange(ushort prefix)
+    {
+        ushort shiftedChar = (ushort) (prefix - minPrefixChar);
+        if (shiftedChar < length)
+        {
+            Debug.Log("Not out of range");
+            int prefixLen = prefixOffsets[shiftedChar + 1] - prefixOffsets[shiftedChar];
+            return prefixLen > 0;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Gets the range of strings that a prefix has in memory. Does not incorporate bounds checking, so only use when you know a character is included.
+    /// </summary>
+    /// <param name="character"></param>
+    /// <returns></returns>
+    public unsafe readonly Range this[ushort prefix]
+    {
+        get
+        {
+            ushort shiftedChar = (ushort) (prefix - minPrefixChar);
+            return new Range(prefixOffsets[shiftedChar], prefixOffsets[shiftedChar + 1]);
+        }
+    }
+
     public unsafe void Dispose()
     {
-        UnsafeUtility.FreeTracked(prefixOffsets, Allocator);
-        prefixOffsets = null;
+        if (Hint.Likely(IsValid))
+        {
+            UnsafeUtility.FreeTracked(prefixOffsets, Allocator);
+            prefixOffsets = null;
+        }
     }
 }
 
@@ -202,37 +248,30 @@ internal struct LexPool : IDisposable
         // Length check
         if (Hint.Likely(MaxStrLength >= str.Length)) // Max length bounds check (the min is 1 implicitly for LexPool)
         {
-            int lengthIndex   = str.Length - 1;
-            int lenBucketSize = lengthOffsets[lengthIndex + 1] - lengthOffsets[lengthIndex];
-            Debug.Log($"Len Bucket Size: {lenBucketSize}");
-            if (Hint.Likely(lenBucketSize > 0)) // If the bucket is not empty
+            int lengthIndex       = str.Length - 1;
+            LexOffsets lexOffsets = this.lexOffsets[lengthIndex];
+
+            ushort prefix = str[0];
+            if (Hint.Likely(lexOffsets.IsInRange(prefix))) // If the bucket is not empty
             {
-                int prefixIndex = str[0] - minPrefixChars[lengthIndex];
-                Debug.Log($"Prefix Index: {prefixIndex} | Prefix Location Extent: {prefixLocations[lengthIndex + 1] - prefixLocations[lengthIndex]}");
-                // Lexicographical bounds check
-                if (Hint.Likely(prefixIndex >= 0 && prefixIndex <= prefixLocations[lengthIndex + 1] - prefixLocations[lengthIndex]))
+                var poolSpan = pool.AsReadOnlySpan();
+
+                int charLenOffset = charOffsets[lengthIndex];
+                Range lexRange    = lexOffsets[prefix];
+
+                strIndex  = lexRange.Start.Value;
+                int start = charLenOffset + (lexRange.Start.Value * str.Length);
+                for (int i = start; strIndex < lexRange.End.Value; i += str.Length, strIndex++)
                 {
-                    var poolSpan = pool.AsReadOnlySpan();
-
-                    int charLenOffset = charOffsets[lengthIndex];
-                    int lexLenOffset  = prefixLocations[lengthIndex] + prefixIndex;
-                    Debug.Log($"Char Len Offset: {lexLenOffset}");
-
-                    strIndex = charLenOffset + prefixOffsets[lexLenOffset];
-                    Debug.Log($"Str: {poolSpan[(charLenOffset + prefixOffsets[lexLenOffset])..(prefixOffsets[lexLenOffset + 1] + charLenOffset)].ConvertChar().ToString()}");
-                    for (int i = charLenOffset + prefixOffsets[lexLenOffset]; i < charLenOffset + prefixOffsets[lexLenOffset + 1]; i += str.Length, strIndex++)
+                    ReadOnlySpan<ushort> rhs = poolSpan[i..(i + str.Length)];
+                    bool isEqual = true;
+                    for (int j = 0; j < rhs.Length && isEqual; j++)
                     {
-                        ReadOnlySpan<ushort> rhs = poolSpan[i..(i + str.Length)];
-                        //Debug.Log(rhs.ConvertChar().ToString());
-                        bool isEqual = true;
-                        for (int j = 0; j < rhs.Length && isEqual; j++)
-                        {
-                            isEqual = str[j] == rhs[j];
-                        }
-                        if (isEqual)
-                        {
-                            return true;
-                        }
+                        isEqual = str[j] == rhs[j];
+                    }
+                    if (isEqual)
+                    {
+                        return true;
                     }
                 }
             }

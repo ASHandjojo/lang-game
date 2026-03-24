@@ -76,7 +76,10 @@ public sealed class EditorUI : EditorWindow
         var words = wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
         foreach (var word in words)
         {
-            Debug.Log(word.IsValid);
+            if (word.IsValid)
+            {
+                Debug.Log(word.WordType.ToFixedString());
+            }
         }
 
         label.text = unicodeProp!.stringValue;

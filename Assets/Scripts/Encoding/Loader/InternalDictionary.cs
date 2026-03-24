@@ -26,6 +26,25 @@ public enum WordType : ushort
     Unknown   = ushort.MaxValue
 }
 
+[BurstCompile]
+public static class WordTypeExtMethods
+{
+    public static FixedString32Bytes ToFixedString(this WordType wordType) => wordType switch
+    {
+        WordType.Noun      => nameof(WordType.Noun),
+        WordType.Adjective => nameof(WordType.Adjective),
+        
+        WordType.Verb   => nameof(WordType.Verb),
+        WordType.Adverb => nameof(WordType.Adverb),
+        WordType.Object => nameof(WordType.Object),
+
+        WordType.Particle     => nameof(WordType.Particle),
+        WordType.Interjection => nameof(WordType.Interjection),
+
+        _ => throw new NotImplementedException()
+    };
+}
+
 [Serializable]
 public struct DictEntry
 {

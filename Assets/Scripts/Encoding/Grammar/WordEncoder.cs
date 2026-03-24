@@ -20,6 +20,13 @@ public struct WordNode
 
     public unsafe readonly bool IsValid => ptr != null && length > 0;
 
+    public readonly WordType WordType => type;
+
+    public static WordNode Unknown => new()
+    {
+        type = WordType.Unknown
+    };
+
     [BurstDiscard]
     public static unsafe WordNode Create(in ReadOnlySpan<char> span, WordType wordType)
     {
@@ -48,11 +55,6 @@ public struct WordNode
         fixed (ushort* ptr = span) node.ptr = ptr;
         return node;
     }
-
-    public static WordNode Unknown => new()
-    {
-        type = WordType.Unknown
-    };
 }
 
 [BurstCompile]
