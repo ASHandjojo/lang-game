@@ -80,7 +80,6 @@ internal struct LexOffsets : IDisposable
             return default;
         }
         int  prefixLength  = (offsetLength + 1) * sizeof(int);
-        Debug.Log($"Prefix Length: {prefixLength} | Offset Length: {offsetLength}");
         int* prefixOffsets = (int*) UnsafeUtility.MallocTracked(prefixLength, UnsafeUtility.AlignOf<int>(), allocator, 0);
         UnsafeUtility.MemClear(prefixOffsets, prefixLength);
         // Histogram Calculation
@@ -258,9 +257,9 @@ internal struct LexPool : IDisposable
                 int charLenOffset = charOffsets[lengthIndex];
                 Range lexRange    = lexOffsets[prefix];
 
-                strIndex  = lexRange.Start.Value;
+                strIndex  = lengthOffsets[lengthIndex] + lexRange.Start.Value;
                 int start = charLenOffset + (lexRange.Start.Value * str.Length);
-                for (int i = start; strIndex < lexRange.End.Value; i += str.Length, strIndex++)
+                for (int i = start; strIndex < lengthOffsets[lengthIndex] + lexRange.End.Value; i += str.Length, strIndex++)
                 {
                     ReadOnlySpan<ushort> rhs = poolSpan[i..(i + str.Length)];
                     bool isEqual = true;

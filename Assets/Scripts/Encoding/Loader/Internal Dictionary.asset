@@ -36,8 +36,8 @@ MonoBehaviour:
     - rawString: grema
       unicodeString: "g\u0110\u0100"
       englishTranslation: thanks
-    - rawString: wapi
-      unicodeString: "wa\xB7"
+    - rawString: wabi
+      unicodeString: "wa\xBC"
       englishTranslation: yes
     - rawString: chie
       unicodeString: "c\xDAe"

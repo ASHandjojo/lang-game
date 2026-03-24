@@ -124,8 +124,6 @@ public struct WordEncoder : IDisposable
             int strLen = entries[i].UnicodeString.Length;
             minLength  = math.min(minLength, strLen);
             maxLength  = math.max(maxLength, strLen);
-
-            encoder.wordTypes[i] = entries[i].WordType;
         }
         var prefixSum = SortEntries(entries, maxLength);
 
@@ -135,7 +133,7 @@ public struct WordEncoder : IDisposable
 
         for (int i = 0; i < entries.Length; i++)
         {
-            Debug.Log(new string(encoder.englishPool[i].ConvertChar()));
+            encoder.wordTypes[i] = entries[i].WordType;
         }
         return encoder;
     }
@@ -165,7 +163,7 @@ public struct WordEncoder : IDisposable
         while (iter.MoveNext())
         {
             ReadOnlySpan<ushort> span = iter.Current;
-            Debug.Log($"Word: {span.ConvertChar().ToString()}");
+
             bool isPresent = unicodePool.IsPresent(span, out int strIndex);
             nodes[index++] = isPresent ? WordNode.Create(span, wordTypes[strIndex]) : default;
         }
