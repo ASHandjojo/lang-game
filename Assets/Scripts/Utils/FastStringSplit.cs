@@ -92,14 +92,13 @@ public struct SplitIterator : IEnumerator<SplitEntry>
         {
             return false;
         }
-        var subSpan = Span[(offset)..];
+        var subSpan = Span[(offset + 1)..];
         for (ushort i = 0; i < subSpan.Length; i++)
         {
             if (subSpan[i] == splitChar)
             {
                 if (i > 0)
                 {
-                    Debug.Log("Base case");
                     offset    += iterOffset;
                     iterOffset = i;
                     return true;

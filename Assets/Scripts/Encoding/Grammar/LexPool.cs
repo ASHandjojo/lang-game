@@ -1,8 +1,10 @@
 using System;
+using System.Runtime.InteropServices;
 
 using Unity.Burst;
 using Unity.Burst.CompilerServices;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 
 using UnityEngine;
@@ -37,6 +39,74 @@ namespace Impl
     }
 }
 
+[BurstCompile, StructLayout(LayoutKind.Sequential, Size = 16)]
+internal struct LexOffsets : IDisposable
+{
+    [NativeDisableParallelForRestriction]
+    private unsafe int* prefixOffsets;
+    private ushort length;
+
+    private ushort minPrefixChar, maxPrefixChar;
+
+    private byte strLength;
+    private byte allocator;
+
+    public readonly int Length           => length;
+    public readonly ushort MinPrefixChar => minPrefixChar;
+    public readonly ushort MaxPrefixChar => maxPrefixChar;
+
+    public readonly Allocator Allocator => (Allocator) allocator;
+    public readonly int StrLength       => strLength;
+
+    public static unsafe LexOffsets Create(in ReadOnlySpan<ushort> prefixes, int strLength, Allocator allocator)
+    {
+        Debug.Assert(strLength > 0);
+
+        int minPrefixChar = int.MaxValue, maxPrefixChar = 0;
+        for (int i = 0; i < prefixes.Length; i++)
+        {
+            minPrefixChar = math.min(minPrefixChar, prefixes[i]);
+            maxPrefixChar = math.max(maxPrefixChar, prefixes[i]);
+        }
+        int offsetLength   = maxPrefixChar - minPrefixChar;
+        int* prefixOffsets = (int*) UnsafeUtility.MallocTracked((offsetLength + 1) * sizeof(ushort), UnsafeUtility.AlignOf<ushort>(), allocator, 0);
+        UnsafeUtility.MemClear(prefixOffsets, (offsetLength + 1) * sizeof(ushort));
+        // Histogram Calculation
+        for (int i = 0; i < prefixes.Length; i++)
+        {
+            prefixOffsets[prefixes[i] - minPrefixChar]++;
+        }
+        // Exclusive Prefix Sum
+        for (int i = 0, value = 0; i < offsetLength; i++)
+        {
+            int temp         = prefixOffsets[i];
+            prefixOffsets[i] = value;
+            value           += temp;
+        }
+        prefixOffsets[offsetLength] = prefixes.Length;
+
+        LexOffsets output = new()
+        {
+            prefixOffsets = prefixOffsets,
+            allocator     = (byte)   allocator,
+
+            length    = (ushort) offsetLength,
+            strLength = (byte)   strLength,
+
+            minPrefixChar = (ushort) minPrefixChar,
+            maxPrefixChar = (ushort) maxPrefixChar
+        };
+
+        return output;
+    }
+
+    public unsafe void Dispose()
+    {
+        UnsafeUtility.FreeTracked(prefixOffsets, Allocator);
+        prefixOffsets = null;
+    }
+}
+
 [BurstCompile]
 internal struct LexPool : IDisposable
 {
@@ -46,12 +116,7 @@ internal struct LexPool : IDisposable
     // Memory Offsets for Length Chunks (Exclusive Prefix Sum)
     private NativeArray<int> charOffsets;
 
-    // For Prefix Lookup (Exclusive prefix sum per length, stored contiguously, offsets are str length agnostic)
-    private NativeArray<int> prefixOffsets;
-    // Gives the proper offsets for each lexicographical prefix sum stored in prefixOffsets
-    private NativeArray<int> prefixLocations;
-    // Gives the minimum shift values for lexicographical lookup
-    private NativeArray<ushort> minPrefixChars;
+    private NativeArray<LexOffsets> lexOffsets;
 
     public readonly bool IsValid => pool.IsCreated && lengthOffsets.IsCreated;
 
@@ -74,66 +139,20 @@ internal struct LexPool : IDisposable
         Debug.Assert(lengthOffsets.Length > 0);
         T selectFunc = new();
 
-        int prefixOffsetLength = 0;
-        NativeArray<int> prefixLocations   = new(lengthOffsets.Length,     allocator);
-        NativeArray<ushort> minPrefixChars = new(lengthOffsets.Length - 1, allocator);
         // Used to cache prefix accesses (this is otherwise cache incineration lol)
-        NativeArray<ushort> prefixChars = new(entries.Length, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
-        // First, find minimums (for shifting) and the sizes of each 
+        NativeArray<ushort> prefixChars    = new(entries.Length, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+        NativeArray<LexOffsets> lexOffsets = new(lengthOffsets.Length - 1, allocator);
         for (int x = 0; x < lengthOffsets.Length - 1; x++)
         {
-            int minPrefixChar = int.MaxValue, maxPrefixChar = 0;
             for (int i = lengthOffsets[x]; i < lengthOffsets[x + 1]; i++)
             {
                 var selectStr  = selectFunc.Select(entries[i]);
-                ushort current = selectStr[0];
-
-                minPrefixChar  = math.min(minPrefixChar, current);
-                maxPrefixChar  = math.max(maxPrefixChar, current);
-
-                prefixChars[i] = current;
+                prefixChars[i] = selectStr[0];
             }
-            if (minPrefixChar != int.MaxValue)
-            {
-                minPrefixChars[x] = (ushort) minPrefixChar;
-                // Added 1 to get last offset :)
-                int prefixExtents   = (maxPrefixChar - minPrefixChar) + 1;
-                prefixOffsetLength += prefixExtents;
-                prefixLocations[x]  = prefixExtents;
-            }
+            var localPrefixes = prefixChars.AsReadOnlySpan()[lengthOffsets[x]..lengthOffsets[x + 1]];
+            lexOffsets[x]     = LexOffsets.Create(localPrefixes, x + 1, allocator);
         }
-        // Compute prefix sum over prefix locations
-        for (int i = 0, value = 0; i < prefixLocations.Length - 1; i++)
-        {
-            int count          = prefixLocations[i];
-            prefixLocations[i] = value;
-            value             += count;
-        }
-        prefixLocations[^1] = prefixOffsetLength;
 
-        NativeArray<int> prefixOffsets = new(prefixOffsetLength, allocator);
-        for (int x = 0; x < lengthOffsets.Length - 1; x++)
-        {
-            int minPrefixChar = minPrefixChars[x];
-            NativeSlice<int> prefixHist = prefixOffsets.Slice(prefixLocations[x], prefixLocations[x + 1] - prefixLocations[x]);
-            // Compute histogram
-            for (int i = lengthOffsets[x]; i < lengthOffsets[x + 1]; i++)
-            {
-                int key = prefixChars[i] - minPrefixChar; // Shifts by min so min equals 0 on index :)
-                prefixHist[key]++;
-            }
-            // Compute prefix sums locally
-            for (int i = 0, value = 0; i < prefixHist.Length - 1; i++)
-            {
-                int count     = prefixHist[i];
-                prefixHist[i] = value;
-                value        += count;
-            }
-            if (Hint.Likely(lengthOffsets[x + 1] - lengthOffsets[x] > 0))
-            {
-                prefixHist[^1] = lengthOffsets[x + 1] - lengthOffsets[x]; // Assign length last
-            }
-        }
         // Calculating total memory usage for string pool
         NativeArray<int> charOffsets = new(lengthOffsets.Length, allocator);
         int totalCharLength = 0;
@@ -145,7 +164,7 @@ internal struct LexPool : IDisposable
             charOffsets[i] = value;
             value         += currCharLen;
         }
-        charOffsets[^1]   = totalCharLength * sizeof(ushort);
+        charOffsets[^1] = totalCharLength * sizeof(ushort);
 
         LexPool result = new()
         {
@@ -153,9 +172,7 @@ internal struct LexPool : IDisposable
             lengthOffsets = new NativeArray<int>(lengthOffsets.Length, allocator, NativeArrayOptions.UninitializedMemory),
             charOffsets   = charOffsets,
 
-            prefixOffsets   = prefixOffsets,
-            prefixLocations = prefixLocations,
-            minPrefixChars  = minPrefixChars,
+            lexOffsets = lexOffsets
         };
         lengthOffsets.CopyTo(result.lengthOffsets);
         // Copies selected string to contiguous pool
@@ -187,22 +204,26 @@ internal struct LexPool : IDisposable
         {
             int lengthIndex   = str.Length - 1;
             int lenBucketSize = lengthOffsets[lengthIndex + 1] - lengthOffsets[lengthIndex];
+            Debug.Log($"Len Bucket Size: {lenBucketSize}");
             if (Hint.Likely(lenBucketSize > 0)) // If the bucket is not empty
             {
                 int prefixIndex = str[0] - minPrefixChars[lengthIndex];
+                Debug.Log($"Prefix Index: {prefixIndex} | Prefix Location Extent: {prefixLocations[lengthIndex + 1] - prefixLocations[lengthIndex]}");
                 // Lexicographical bounds check
-                if (Hint.Likely(prefixIndex >= 0 && prefixIndex >= prefixLocations[lengthIndex + 1] - prefixLocations[lengthIndex]))
+                if (Hint.Likely(prefixIndex >= 0 && prefixIndex <= prefixLocations[lengthIndex + 1] - prefixLocations[lengthIndex]))
                 {
                     var poolSpan = pool.AsReadOnlySpan();
 
                     int charLenOffset = charOffsets[lengthIndex];
                     int lexLenOffset  = prefixLocations[lengthIndex] + prefixIndex;
-                    Debug.Log($"Char Len Offset: {charLenOffset}");
+                    Debug.Log($"Char Len Offset: {lexLenOffset}");
 
                     strIndex = charLenOffset + prefixOffsets[lexLenOffset];
+                    Debug.Log($"Str: {poolSpan[(charLenOffset + prefixOffsets[lexLenOffset])..(prefixOffsets[lexLenOffset + 1] + charLenOffset)].ConvertChar().ToString()}");
                     for (int i = charLenOffset + prefixOffsets[lexLenOffset]; i < charLenOffset + prefixOffsets[lexLenOffset + 1]; i += str.Length, strIndex++)
                     {
                         ReadOnlySpan<ushort> rhs = poolSpan[i..(i + str.Length)];
+                        //Debug.Log(rhs.ConvertChar().ToString());
                         bool isEqual = true;
                         for (int j = 0; j < rhs.Length && isEqual; j++)
                         {
@@ -232,13 +253,11 @@ internal struct LexPool : IDisposable
         charOffsets.Dispose();
         charOffsets = default;
 
-        prefixOffsets.Dispose();
-        prefixOffsets = default;
-
-        prefixLocations.Dispose();
-        prefixLocations = default;
-
-        minPrefixChars.Dispose();
-        minPrefixChars = default;
+        foreach (var lexOffset in lexOffsets)
+        {
+            lexOffset.Dispose();
+        }
+        lexOffsets.Dispose();
+        lexOffsets = default;
     }
 }
