@@ -51,7 +51,7 @@ public struct SplitIterator : IEnumerator<SplitEntry>
     private ushort strLength;
 
     private ushort offset;
-    private ushort iterOffset;
+    private ushort prevOffset;
 
     private ushort splitChar;
 
@@ -64,7 +64,7 @@ public struct SplitIterator : IEnumerator<SplitEntry>
         {
             strLength  = (ushort) span.Length,
             offset     = 0,
-            iterOffset = 0,
+            prevOffset = 0,
             splitChar  = splitChar
         };
 
@@ -79,7 +79,7 @@ public struct SplitIterator : IEnumerator<SplitEntry>
     {
         get
         {
-            return SplitEntry.Create(Span[offset..(offset + iterOffset)]);
+            return SplitEntry.Create(Span[prevOffset..offset]);
         }
     }
 
@@ -92,34 +92,17 @@ public struct SplitIterator : IEnumerator<SplitEntry>
         {
             return false;
         }
-        var subSpan = Span[(offset + 1)..];
-        for (ushort i = 0; i < subSpan.Length; i++)
+        int startIdx = offset == 0 ? 0 : offset + 1;
+        var subSpan  = Span[startIdx..];
+
+        int splitIndex = subSpan.IndexOf(splitChar);
+        if (splitIndex == -1) // If cannot find, stop iterator.
         {
-            if (subSpan[i] == splitChar)
-            {
-                if (i > 0)
-                {
-                    offset    += iterOffset;
-                    iterOffset = i;
-                    return true;
-                }
-                // NOTE: WATCH
-                else // If zero, this means a region of contiguous splitting characters.
-                {
-                    i++;
-                    for (; i < subSpan.Length; i++)
-                    {
-                        if (i != splitChar)
-                        {
-                            offset    += iterOffset;
-                            iterOffset = i;
-                            return MoveNext();
-                        }
-                    }
-                }
-            }
+            return false;
         }
-        return false;
+        prevOffset = (ushort) startIdx;
+        offset     = (ushort) (startIdx + splitIndex);
+        return true;
     }
 
     public void Reset()

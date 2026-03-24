@@ -161,18 +161,14 @@ public struct WordEncoder : IDisposable
         NativeArray<WordNode> nodes = new(wordCount, allocator);
         using SplitIterator iter    = SplitIterator.Create(str, ' ');
 
-        bool isPresent = unicodePool.IsPresent(str, out int strIndex);
-        nodes[0]       = isPresent ? WordNode.Create(str, wordTypes[strIndex]) : default;
-
         int index = 0;
         while (iter.MoveNext())
         {
-            //ReadOnlySpan<ushort> span = iter.Current;
-            //Debug.Log(span.ConvertChar().ToString());
-            //bool isPresent = unicodePool.IsPresent(span, out int strIndex);
-            //nodes[index++] = isPresent ? WordNode.Create(span, wordTypes[strIndex]) : default;
+            ReadOnlySpan<ushort> span = iter.Current;
+            Debug.Log($"Word: {span.ConvertChar().ToString()}");
+            bool isPresent = unicodePool.IsPresent(span, out int strIndex);
+            nodes[index++] = isPresent ? WordNode.Create(span, wordTypes[strIndex]) : default;
         }
-        Debug.Log($"Count: {index}");
         return nodes;
     }
 

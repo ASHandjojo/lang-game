@@ -122,7 +122,6 @@ internal struct LexOffsets : IDisposable
         ushort shiftedChar = (ushort) (prefix - minPrefixChar);
         if (shiftedChar < length)
         {
-            Debug.Log("Not out of range");
             int prefixLen = prefixOffsets[shiftedChar + 1] - prefixOffsets[shiftedChar];
             return prefixLen > 0;
         }
