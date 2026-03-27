@@ -3434,7 +3434,7 @@ PrefabInstance:
     - target: {fileID: 5833617374691732879, guid: d7526bc57ae020b4a8587009a1ee67f1, type: 3}
       propertyPath: settingsMenu
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1724572788}
     - target: {fileID: 5833617374691732879, guid: d7526bc57ae020b4a8587009a1ee67f1, type: 3}
       propertyPath: dictionaryMenu
       value: 
