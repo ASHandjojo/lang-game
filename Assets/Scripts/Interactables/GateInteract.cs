@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
 public sealed class GateInteract : Interactable
@@ -11,11 +12,10 @@ public sealed class GateInteract : Interactable
     private UIDocument document;
     [SerializeField] private UIDocument hudDocument;
     [SerializeField] private SceneLoader sceneLoader;
-
-    // private bool isZoomed;
-    private float timeElapsed;
-
-    private Vector3 cameraPos;
+    [SerializeField] private SceneReference nextScene;
+    [SerializeField] private Animator animator;
+    
+    private float transitionTime = 1.2f;
 
     protected override void Awake()
     {
@@ -37,7 +37,15 @@ public sealed class GateInteract : Interactable
     // Activates next scene loading trigger
     protected override IEnumerator InteractLogic(PlayerController player)
     {
-        sceneLoader.LoadNextLevel();
+        // sceneLoader.LoadNextLevel(nextScene.name);
+        // Play transition animation
+        animator.SetTrigger("NextScene");
+
+        // Wait for animation to finish
+        yield return new WaitForSeconds(transitionTime);
+
+        // Load next Scene
+        SceneManager.LoadScene(nextScene.Name);
         yield return null;
         // yield break;
     }
