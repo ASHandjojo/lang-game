@@ -5,7 +5,7 @@
         <engine:Label text=":aaaaaaaaaaaaaaaaaaaaaaaaaaaaa" name="Input" class="TranslatedLabel" style="flex-wrap: nowrap; height: auto; width: 460px; -unity-font-style: bold; align-self: center;" />
         <engine:VisualElement name="Row1" class="KeyboardRow">
             <engine:Button text="+" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="Plus" class="KeyboardButton" />
-            <engine:Button text="A&#10;" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="A" class="KeyboardButton" />
+            <engine:Button text="A" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="A" class="KeyboardButton" />
             <engine:Button text="I" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="I" class="KeyboardButton" />
             <engine:Button text="O" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="O" class="KeyboardButton" />
             <engine:Button text="U" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="U" class="KeyboardButton" />
@@ -25,7 +25,7 @@
             <engine:Button text="H" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="H" class="KeyboardButton" />
             <engine:Button text="L" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="L" class="KeyboardButton" />
             <engine:Button text="M" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="M" class="KeyboardButton" />
-            <engine:Button text="N&#10;" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="N" class="KeyboardButton" />
+            <engine:Button text="N" parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="N" class="KeyboardButton" />
         </engine:VisualElement>
         <engine:VisualElement name="Row4" class="KeyboardRow">
             <engine:Button text=" " parse-escape-sequences="false" enable-rich-text="true" emoji-fallback-support="true" name="Spacebar" class="KeyboardButton" style="width: 256px; background-image: url(&quot;project://database/Assets/UI/Keyboard/space_bar.png?fileID=2800000&amp;guid=2dfd2824f8389d94b83946f8b02b075c&amp;type=3#space_bar&quot;);" />

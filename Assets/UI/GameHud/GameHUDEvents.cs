@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -39,6 +41,12 @@ public sealed class GameHUDEvents : UIMenuController
     private List<VisualElement> Slots = new List<VisualElement>();
     private int pageNumber = 0;
 
+    private const string RootImportDir = "Assets/Scripts/Encoding";
+    private const string LigatureSubDir = RootImportDir + "/Loader/Ligature Sub Table.asset";
+
+    private LigatureSub ligatureSub;
+    private PhoneticProcessor processor;
+
     public override IEnumerator Open()
     {
         yield return EnterDictionary(dictionary, openImage);
@@ -73,6 +81,8 @@ public sealed class GameHUDEvents : UIMenuController
         settingsButton = selfDocument.rootVisualElement.Q<Button>("SettingsButton");
         settingsButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(settingsComponent));
         settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
+
+        ligatureSub = AssetDatabase.LoadAssetAtPath<LigatureSub>(LigatureSubDir);
 
         dictionaryContainer.visible = false;
         dictionaryContents = dictionarySlots.Instantiate();
@@ -132,10 +142,7 @@ public sealed class GameHUDEvents : UIMenuController
         yield return Fade(dictionary, 1.0f, 0.0f, 0.45f);
         dictionary.style.backgroundImage = new StyleBackground(openImage);
         dictionaryContents.visible = true;
-        foreach (VisualElement slot in Slots)
-        {
-            slot.visible = true;
-        }
+        LoadPage(pageNumber);
         yield return Fade(dictionary, 0.0f, 1.0f, 1.5f);
 
         backButton.SetEnabled(true);  
@@ -251,15 +258,17 @@ public sealed class GameHUDEvents : UIMenuController
             var word = slot.Q<Label>("Word" + ((index% Slots.Count) + 1));
             var notes = slot.Q<TextField>("Notes" + ((index % Slots.Count) + 1));
 
-            word.text = player.dictionary.dictionaryList[index].Word;
+            processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
+            word.text = processor.Translate(player.dictionary.dictionaryList[index].Word);
 
             if (player.dictionary.dictionaryList[index].Notes == "")
             {
+                notes.value = "";
                 notes.textEdition.placeholder = "Notes...";
             }
             else 
             {
-                notes.textEdition.placeholder =  player.dictionary.dictionaryList[index].Notes;
+                notes.value =  player.dictionary.dictionaryList[index].Notes;
             }
             index++;
         } 
@@ -268,7 +277,7 @@ public sealed class GameHUDEvents : UIMenuController
     private void NotesUpdate(string newValue, int index)
     {
         var notes = Slots[index].Q<TextField>("Notes" + (index + 1));
-        notes.textEdition.placeholder = newValue;
+        notes.value = newValue;
 
         PlayerController player = PlayerController.Instance;
         player.dictionary.dictionaryList[(pageNumber * Slots.Count) + index].Notes = newValue;

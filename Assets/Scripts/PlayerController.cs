@@ -34,6 +34,10 @@ public sealed class PlayerController : MonoBehaviour
     [HideInInspector] public PlayerContext context = PlayerContext.Default;
     [HideInInspector] public OptionalComponent<Interactable> currentInteraction;
 
+    [SerializeField] private InternalDictionary internalDict;
+
+    public static InternalDictionary InternalDict => Instance.internalDict;
+
     public static PlayerController Instance { get; private set; }
     public bool CanMove
     {
@@ -71,18 +75,21 @@ public sealed class PlayerController : MonoBehaviour
         playerCollider = GetComponent<Collider2D>();
 
         // For now on start load save slot 1 unless no saves are available
-        string savePath = Path.Combine(Application.persistentDataPath, "PlayerSave1.json");
+        string savePath  = Path.Combine(Application.persistentDataPath, "PlayerSave1.json");
         if (File.Exists(savePath))
         {
-            GameState.LoadPlayerData(1);
+            GameState.LoadPlayerData(1, internalDict);
         }
         else
         {
-            string emptyPath = Path.Combine(Application.dataPath, "Data/PlayerSaveEmpty.json");
+            string emptyPath  = Path.Combine(Application.dataPath, "Data/PlayerSaveEmpty.json");
             string jsonString = File.ReadAllText(emptyPath);
 
             GameState save = JsonUtility.FromJson<GameState>(jsonString);
-            dictionary = save.dictionary;
+            // Once new things are added to saves then set from clean save
+
+            // Get empty dictionary based on what exists in the Internal Dictionary
+            GameState.InitializeEmptyDictionary(internalDict);
         }
         moveAction     = InputSystem.actions.FindAction("Move");
         interactAction = InputSystem.actions.FindAction("Interact");

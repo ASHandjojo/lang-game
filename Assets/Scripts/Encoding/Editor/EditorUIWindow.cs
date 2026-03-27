@@ -1,3 +1,5 @@
+using System;
+
 using Unity.Collections;
 
 using UnityEngine;
@@ -15,14 +17,17 @@ public sealed class EditorUI : EditorWindow
     private const string EncodingImportDir = "Assets/Scripts/Encoding";
     // Ligature sub table also references standard table, kind of a shortcut :)
     private const string LigatureSubDir    = EncodingImportDir + "/Loader/Ligature Sub Table.asset";
+    private const string WordEncoderDir    = EncodingImportDir + "/Loader/Internal Dictionary.asset";
 
     private const string EditorName = "Text Editor";
 
     private PhoneticProcessor processor;
+    private WordEncoder       wordEncoder;
+
     private KeyboardUI keyboardUI;
     private Label      label;
 
-    private SerializedProperty? prop;
+    private SerializedProperty? phoneticsProp, unicodeProp;
 
     private EncodingEntry? responseData = null;
 
@@ -40,7 +45,7 @@ public sealed class EditorUI : EditorWindow
     /// </summary>
     /// <param name="dialogueEntry"></param>
     [MenuItem("Conlang/Text Editor")]
-    public static void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty prop)
+    public static void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty phoneticsProp, SerializedProperty unicodeProp)
     {
         Debug.Assert(dialogueEntry != null);
 
@@ -48,21 +53,36 @@ public sealed class EditorUI : EditorWindow
         baseWindow.responseData = dialogueEntry;
         baseWindow.label!.text  = baseWindow.responseData!.line;
 
-        baseWindow.prop = prop;
-        baseWindow.keyboardUI.PhoneticsString = baseWindow.responseData!.line;
+        baseWindow.phoneticsProp = phoneticsProp;
+        baseWindow.unicodeProp   = unicodeProp;
+        baseWindow.keyboardUI.PhoneticsString = baseWindow.responseData.phoneticsStr;
     }
 
     private void WriteToWindow(string input)
     {
-        label.text = input;
         if (responseData == null)
         {
             return;
         }
-        prop!.stringValue = input;
+        phoneticsProp!.stringValue = input;
+        unicodeProp!.stringValue   = processor.Translate(input);
 
-        Undo.RecordObject(prop.serializedObject.targetObject, "TextEdit");
-        prop.serializedObject.ApplyModifiedProperties();
+        Undo.RecordObject(phoneticsProp!.serializedObject.targetObject, "TextEdit");
+        Undo.RecordObject(unicodeProp!.serializedObject.targetObject,   "TextEdit");
+
+        phoneticsProp.serializedObject.ApplyModifiedProperties();
+        unicodeProp.serializedObject.ApplyModifiedProperties();
+
+        var words = wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
+        foreach (var word in words)
+        {
+            if (word.IsValid)
+            {
+                Debug.Log(word.WordType.ToFixedString());
+            }
+        }
+
+        label.text = unicodeProp!.stringValue;
     }
 
     public void CreateGUI()
@@ -75,14 +95,16 @@ public sealed class EditorUI : EditorWindow
 
         LigatureSub ligatureSub = AssetDatabase.LoadAssetAtPath<LigatureSub>(LigatureSubDir);
         Debug.Assert(ligatureSub != null);
-
+        InternalDictionary internalDict = AssetDatabase.LoadAssetAtPath<InternalDictionary>(WordEncoderDir);
+        Debug.Assert(internalDict != null);
         if (!processor.IsValid)
         {
-            processor = new PhoneticProcessor(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);
+            processor   = new PhoneticProcessor(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);
+            wordEncoder = WordEncoder.Create(internalDict!.entries.Convert(Allocator.Temp), Allocator.Persistent);
         }
         if (responseData != null)
         {
-            keyboardUI = new KeyboardUI(treeAsset, processor, WriteToWindow, responseData.line);
+            keyboardUI = new KeyboardUI(treeAsset, processor, WriteToWindow, responseData.phoneticsStr);
         }
         else
         {
@@ -99,6 +121,7 @@ public sealed class EditorUI : EditorWindow
         if (processor.IsValid)
         {
             processor.Dispose();
+            wordEncoder.Dispose();
         }
     }
 }

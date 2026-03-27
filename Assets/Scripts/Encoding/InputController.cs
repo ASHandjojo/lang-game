@@ -15,9 +15,9 @@ namespace Impl
     public sealed class InnerInput
     {
         public string phoneticsStr = string.Empty; // Raw
-        public string unicodeStr   = string.Empty;
     }
 }
+
 public struct KeyboardRow
 {
     public VisualElement container;
@@ -48,10 +48,8 @@ public struct KeyboardRow
             buttons[i].RegisterCallback(
                 (ClickEvent e) =>
                 {
-                    input.phoneticsStr += text;
-                    input.unicodeStr    = processor.Translate(input.phoneticsStr);
-                    Debug.Log($"Unicode Field: {input.unicodeStr}");
-                    assignCallback?.Invoke(input.unicodeStr);
+                    input.phoneticsStr += text.ToLower();
+                    assignCallback?.Invoke(input.phoneticsStr);
                 }
             ); // WATCH
         }
@@ -71,10 +69,8 @@ public struct KeyboardRow
         spacebar.RegisterCallback(
             (ClickEvent e) =>
             {
-                Debug.Log($"New Phonetics Field: {input.phoneticsStr}");
                 input.phoneticsStr += ' ';
-                input.unicodeStr    = processor.Translate(input.phoneticsStr);
-                assignCallback?.Invoke(input.unicodeStr);
+                assignCallback?.Invoke(input.phoneticsStr);
             }
         );
         backspace.RegisterCallback(
@@ -83,8 +79,7 @@ public struct KeyboardRow
                 if (input.phoneticsStr.Length > 0)
                 {
                     input.phoneticsStr = input.phoneticsStr[..^1];
-                    input.unicodeStr   = processor.Translate(input.phoneticsStr);
-                    assignCallback?.Invoke(input.unicodeStr);
+                    assignCallback?.Invoke(input.phoneticsStr);
                 }
             }
         );
@@ -100,9 +95,8 @@ public struct KeyboardRow
                 Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out Interactable NPC));
                 if (NPC is NpcDialogue)
                 {
-                    input.unicodeStr = processor.Translate(input.phoneticsStr);
-                    (NPC as NpcDialogue).TryCheckInput(input.unicodeStr);
-                    assignCallback?.Invoke(input.unicodeStr);
+                    string unicodeStr = processor.Translate(input.phoneticsStr);
+                    (NPC as NpcDialogue).TryCheckInput(unicodeStr);
                 }
 
                 InputController.Instance.CloseKeyboard();
@@ -114,7 +108,7 @@ public struct KeyboardRow
 
 public sealed class KeyboardUI : VisualElement
 {
-    private InnerInput inner = new();
+    private readonly InnerInput inner = new();
 
     public string PhoneticsString
     {
@@ -122,10 +116,8 @@ public sealed class KeyboardUI : VisualElement
         set
         {
             inner.phoneticsStr = value;
-            inner.unicodeStr   = processor.Translate(value);
         }
     }
-    public string UnicodeString   => inner.unicodeStr;
 
     private PhoneticProcessor processor;
     public KeyboardRow[] rows;
@@ -138,7 +130,6 @@ public sealed class KeyboardUI : VisualElement
     {
         Debug.Assert(phoneticsStr != null);
         inner.phoneticsStr = phoneticsStr;
-        inner.unicodeStr   = processor.Translate(inner.phoneticsStr);
 
         Debug.Assert(layout != null);
         layout.CloneTree(this);
@@ -165,9 +156,7 @@ public sealed class KeyboardUI : VisualElement
     public void ClearStrings()
     {
         inner.phoneticsStr = string.Empty;
-        inner.unicodeStr   = string.Empty;
-
-        assignCallback?.Invoke(inner.unicodeStr);
+        assignCallback?.Invoke(inner.phoneticsStr);
     }
 }
 

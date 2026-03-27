@@ -265,37 +265,6 @@ MonoBehaviour:
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
---- !u!1 &248268833
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 248268835}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &248268835
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248268833}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.33486724, y: -1.9374255, z: -1.0070624}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &256781886 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8479779900751747254, guid: b3cd47b1b7952ff43a303a8f547b423f, type: 3}
@@ -781,6 +750,7 @@ MonoBehaviour:
   currentInteraction:
     obj: {fileID: 0}
     isInitialized: 0
+  internalDict: {fileID: 11400000, guid: 599cf157494825b4ea3ff390363cf038, type: 2}
 --- !u!1 &1074906769
 GameObject:
   m_ObjectHideFlags: 0
@@ -2037,7 +2007,7 @@ Transform:
   m_GameObject: {fileID: 1499353901}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: 0.0517, z: 10}
+  m_LocalPosition: {x: -0.05, y: 0.0517, z: 10}
   m_LocalScale: {x: 1, y: 0.996, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3235,23 +3205,27 @@ MonoBehaviour:
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   entries:
   - line:
-      line: Hi
+      phoneticsStr: 
+      line: lwwhhttc
     sound:
       obj: {fileID: 0}
       isInitialized: 0
     hasResponse: 0
     responseData:
+      phoneticsStr: 
       line: 
   - line:
-      line: Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus
-        ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus
-        duis.
+      phoneticsStr: 
+      line: "\u010D\u0110m ip\xF0m \xD1l"
     sound:
       obj: {fileID: 0}
       isInitialized: 0
     hasResponse: 1
     responseData:
-      line: 
+      phoneticsStr: wapi wapi
+      line: "wa\xB7 wa\xB7"
+  conlangFont: {fileID: 12800000, guid: ef39abd9056a9d446b1bf89b37383641, type: 3}
+  englishFont: {fileID: 12800000, guid: e0afdb4613b19e941a9c5e69c3b88d0f, type: 3}
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3520,4 +3494,3 @@ SceneRoots:
   - {fileID: 189602150}
   - {fileID: 518210467}
   - {fileID: 6290737249233252678}
-  - {fileID: 248268835}

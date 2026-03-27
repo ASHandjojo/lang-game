@@ -151,7 +151,6 @@ public struct PhoneticProcessor : IDisposable
         {
             // Iterate through compound sign
             ref readonly CompoundTable compoundTable = ref compoundTables.ElementAt(compoundIdx);
-            bool isEqual  = true;
             int signCount = compoundTable.signData.Length;
 
             // If the current sign position + the sign data count of the compound sign @ compoundIdx is out of bounds, skip;
@@ -160,7 +159,9 @@ public struct PhoneticProcessor : IDisposable
             {
                 continue;
             }
+
             // Does a character-wise comparison over the compound characters.
+            bool isEqual = true;
             for (int elementIdx = 1; elementIdx < signCount && isEqual; elementIdx++)
             {
                 char inputSign   = input[elementIdx];

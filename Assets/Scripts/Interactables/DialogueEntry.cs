@@ -6,7 +6,8 @@ using UnityEngine.UIElements;
 [Serializable]
 public sealed class EncodingEntry : IEquatable<EncodingEntry>, IEquatable<string>
 {
-    public string line;
+    public string phoneticsStr;
+    public string line; // For unicode
 
     public bool Equals(string rhs)          => line.Equals(rhs);
     public bool Equals(EncodingEntry rhs)   => line == rhs?.line;

@@ -41,20 +41,6 @@
     background-image: url("project://database/Assets/Sprites/Characters/portrait%20-%20henrietta.png?fileID=2800000&guid=f3cb738d53c3a644ba4818b955f202b6&type=3#portrait - henrietta");
 }
 
-.dialogue-text {
-    white-space: normal;
-    font-size: 48px;
-    -unity-font-style: bold;
-    -unity-font-definition: url("project://database/Assets/Fonts/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
-    flex-shrink: 1;
-    -unity-text-align: middle-center;
-    margin-right: 65px;
-    flex-grow: 1;
-    margin-top: 14px;
-    margin-bottom: 14px;
-    margin-left: 14px;
-}
-
 .prompt {
     flex-grow: 0;
     left: 1345px;
@@ -66,4 +52,23 @@
     background-color: rgba(0, 0, 0, 0);
     position: absolute;
     -unity-background-image-tint-color: rgb(132, 61, 66);
+    align-items: stretch;
+    align-self: auto;
+}
+
+.dialogue-text {
+    white-space: normal;
+    font-size: 48px;
+    -unity-font-style: bold;
+    -unity-font-definition: url("project://database/Assets/Fonts/Melody.otf?fileID=12800000&guid=ef39abd9056a9d446b1bf89b37383641&type=3#Melody");
+    flex-shrink: 1;
+    -unity-text-align: middle-center;
+    margin-right: 0;
+    flex-grow: initial;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    align-self: center;
+    align-items: center;
+    color: rgb(27, 27, 27);
 }
