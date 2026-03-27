@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Linq;
-using TMPro;
+
 using Unity.Collections;
-using UnityEditor;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -36,9 +36,6 @@ public sealed class NpcDialogue : Interactable
 
     private const string RootImportDir = "Assets/Scripts/Encoding";
     private const string LigatureSubDir = RootImportDir + "/Loader/Ligature Sub Table.asset";
-
-    private LigatureSub ligatureSub;
-    private PhoneticProcessor processor;
 
     public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
 
@@ -80,8 +77,6 @@ public sealed class NpcDialogue : Interactable
 
         // Set Tooltip
         wordTooltip = document.rootVisualElement.Q("WordTooltip");
-
-        ligatureSub = AssetDatabase.LoadAssetAtPath<LigatureSub>(LigatureSubDir);
     }
 
     protected override IEnumerator InteractLogic(PlayerController player)
@@ -202,8 +197,7 @@ public sealed class NpcDialogue : Interactable
                 {
                     if (fontToUse == conlangFont)
                     {
-                        processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
-                        wordLabel.text = processor.Translate(wordLabel.text + currentLine[i]);
+                        wordLabel.text = LanguageTable.PhoneticProcessor.Translate(wordLabel.text + currentLine[i]);
                     }
                     else
                     {
@@ -216,8 +210,7 @@ public sealed class NpcDialogue : Interactable
             {
                 if (fontToUse == conlangFont)
                 {
-                    processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
-                    wordLabel.text = processor.Translate(wordLabel.text + currentLine[i]);
+                    wordLabel.text = LanguageTable.PhoneticProcessor.Translate(wordLabel.text + currentLine[i]);
                 }
                 else
                 {
@@ -378,8 +371,7 @@ public sealed class NpcDialogue : Interactable
 
         foreach (DictionaryEntry entry in dictionary.dictionaryList) 
         {
-            processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
-            if (processor.Translate(entry.Word) == word) 
+            if (LanguageTable.PhoneticProcessor.Translate(entry.Word) == word) 
             {
                 if (entry.Notes == "")
                 {
