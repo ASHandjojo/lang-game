@@ -1,9 +1,9 @@
-using System.Xml.Linq;
-using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+
+using UnityEditor;
+using UnityEditor.UIElements;
 
 [CustomPropertyDrawer(typeof(SceneReference))]
 internal sealed class SceneReferenceDrawer : PropertyDrawer
@@ -13,12 +13,23 @@ internal sealed class SceneReferenceDrawer : PropertyDrawer
         VisualElement element = new();
 
         var nameValue = property.FindPropertyRelative("name");
+        var pathValue = property.FindPropertyRelative("path");
 
         ObjectField sceneField = new()
         {
             allowSceneObjects = true,
             objectType        = typeof(SceneAsset)
         };
+
+        if (nameValue.stringValue.Length > 0)
+        {
+            SceneAsset asset = AssetDatabase.LoadAssetAtPath<SceneAsset>(pathValue.stringValue);
+            if (asset != null)
+            {
+                sceneField.value = asset;
+            }
+        }
+
         sceneField.RegisterCallback(
             (ChangeEvent<Object> e) =>
             {
@@ -26,6 +37,7 @@ internal sealed class SceneReferenceDrawer : PropertyDrawer
                 if (sceneAsset != null)
                 {
                     nameValue.stringValue = sceneAsset.name;
+                    pathValue.stringValue = AssetDatabase.GetAssetPath(sceneAsset);
                     property.serializedObject.ApplyModifiedProperties();
                 }
             }

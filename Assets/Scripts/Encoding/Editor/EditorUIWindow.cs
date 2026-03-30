@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 using UnityEditor;
-using UnityEditor.UIElements;
 
 #nullable enable
 public sealed class EditorUI : EditorWindow
