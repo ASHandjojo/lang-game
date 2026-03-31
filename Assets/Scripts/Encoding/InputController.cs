@@ -201,9 +201,9 @@ public sealed class InputController : MonoBehaviour
     void Start()
     {
         keyboardUI = new KeyboardUI(keyboardAsset, PhoneticProcessor,
-            (unicodeInput) =>
+            (string phoneticsStr) =>
             {
-                inputField.text = unicodeInput;
+                inputField.text = PhoneticProcessor.Translate(phoneticsStr);
             }
         );
         document.rootVisualElement.Add(keyboardUI);

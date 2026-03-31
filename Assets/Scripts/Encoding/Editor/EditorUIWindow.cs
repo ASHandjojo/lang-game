@@ -71,7 +71,7 @@ public sealed class EditorUI : EditorWindow
             string result = wordEncoder.TryGetEnglish(word, out var englishStr) ?
                 englishStr.ConvertChar().ToString() :
                 WordType.Unknown.ToString();
-            englishOutput += $" {result}";
+            englishOutput += $" {result.Trim(' ', '\r', '\n')}";
         }
         return englishOutput;
     }
