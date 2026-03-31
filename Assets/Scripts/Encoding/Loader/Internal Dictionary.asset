@@ -13,6 +13,204 @@ MonoBehaviour:
   m_Name: Internal Dictionary
   m_EditorClassIdentifier: 
   entries:
+  - wordType: 0
+    entries:
+    - rawString: gukaib
+      unicodeString: "\xC8k\xA2b"
+      englishTranslation: "question\r"
+    - rawString: bigo
+      unicodeString: "\xBC\xC7"
+      englishTranslation: "Person\r"
+    - rawString: keni
+      unicodeString: "ke\u0107"
+      englishTranslation: "Thing\r"
+    - rawString: mifa
+      unicodeString: "\u0102\xE2"
+      englishTranslation: "Event\r"
+    - rawString: rali
+      unicodeString: "\u010F\u010C"
+      englishTranslation: "Place\r"
+    - rawString: ngori
+      unicodeString: "\u0117\u0111"
+      englishTranslation: "Reason\r"
+    - rawString: belu
+      unicodeString: "\xBB\u010E"
+      englishTranslation: "Method\r"
+    - rawString: bithvara
+      unicodeString: "\xBCy\xE7\u010F"
+      englishTranslation: "School\r"
+    - rawString: moi bithva
+      unicodeString: "\u0103i \xBCy\xE7"
+      englishTranslation: "University\r"
+    - rawString: buva
+      unicodeString: "\xBE\xE7"
+      englishTranslation: "Mind\r"
+    - rawString: dahge
+      unicodeString: "\xCE\xDE"
+      englishTranslation: "Time (repetition)\r"
+    - rawString: vesu
+      unicodeString: "\xE8\xF0"
+      englishTranslation: "Time (chronological)\r"
+    - rawString: npakra
+      unicodeString: "n\xB5k\u010F"
+      englishTranslation: "Store\r"
+    - rawString: olikra
+      unicodeString: "o\u010Ck\u010F"
+      englishTranslation: "Grocery\r"
+    - rawString: ihab
+      unicodeString: "i\xD8b"
+      englishTranslation: "Animal\r"
+    - rawString: oliwa
+      unicodeString: "o\u010Cwa"
+      englishTranslation: "Food\r"
+    - rawString: angbo
+      unicodeString: "aq\xBD"
+      englishTranslation: "Street\r"
+    - rawString: porali
+      unicodeString: "\xB8\u010F\u010C"
+      englishTranslation: "Library\r"
+    - rawString: poma
+      unicodeString: "\xB8\u0100"
+      englishTranslation: "Book\r"
+    - rawString: bikilaro
+      unicodeString: "\xBCki\u010A\u0112"
+      englishTranslation: "Anthropology\r"
+    - rawString: gukuwa
+      unicodeString: "\xC8kuwa"
+      englishTranslation: "Identity\r"
+    - rawString: gk
+      unicodeString: gk
+      englishTranslation: "ID\r"
+    - rawString: poiaro
+      unicodeString: "\xB8\xA9\u0112"
+      englishTranslation: "Subject\r"
+    - rawString: guka
+      unicodeString: "\xC8ka"
+      englishTranslation: "Self\r"
+    - rawString: carime
+      unicodeString: "\xBF\u0111\u0101"
+      englishTranslation: "colonizer place\r"
+    - rawString: ralei
+      unicodeString: "\u010F\u010Bi"
+      englishTranslation: "Location\r"
+    - rawString: kaipoma
+      unicodeString: "k\xA2\xB8\u0100"
+      englishTranslation: "Card\r"
+    - rawString: beluruve
+      unicodeString: "\xBB\u010E\u0113\xE8"
+      englishTranslation: "Journey\r"
+    - rawString: kipure
+      unicodeString: "ki\xB9\u0110"
+      englishTranslation: "Ticket\r"
+    - rawString: ameng
+      unicodeString: "a\u0101q"
+      englishTranslation: "Exam\r"
+    - rawString: hgsa
+      unicodeString: "x\xEC"
+      englishTranslation: "Barrier/Wall\r"
+    - rawString: hgaimei
+      unicodeString: "\xDDi\u0101i"
+      englishTranslation: "The Language Barrier\r"
+    - rawString: matemei
+      unicodeString: "\u0100\xCA\u0101i"
+      englishTranslation: "The city you\u2019re in/language name\r"
+    - rawString: dengebuva
+      unicodeString: "\xCF\u0115\xBE\xE7"
+      englishTranslation: "Name of the University\r"
+    - rawString: aifo
+      unicodeString: "\xA2\xE5"
+      englishTranslation: "Language\r"
+    - rawString: aifo matemei
+      unicodeString: "\xA2\xE5 \u0100\xCA\u0101i"
+      englishTranslation: Matemei language
+  - wordType: 1
+    entries:
+    - rawString: moi
+      unicodeString: "\u0103i"
+      englishTranslation: Big
+    - rawString: kai
+      unicodeString: "k\xA2"
+      englishTranslation: "Small\r"
+    - rawString: theia
+      unicodeString: "\xD4\xA9"
+      englishTranslation: "New\r"
+    - rawString: hgoia
+      unicodeString: "\xE0\xA9"
+      englishTranslation: "Old\r"
+    - rawString: mel
+      unicodeString: "\u0101l"
+      englishTranslation: "Good\r"
+    - rawString: bal
+      unicodeString: "\xBAl"
+      englishTranslation: "Bad\r"
+    - rawString: bawai
+      unicodeString: "\xBAw\xA2"
+      englishTranslation: "Single\r"
+    - rawString: salei
+      unicodeString: "\xEC\u010Bi"
+      englishTranslation: "Multiple\r"
+    - rawString: hesola
+      unicodeString: "\xD9\xEF\u010A"
+      englishTranslation: "Right (direction)\r"
+    - rawString: harina
+      unicodeString: "\xD8\u0111\u0105"
+      englishTranslation: "Left (direction)\r"
+    - rawString: ihguna
+      unicodeString: "i\xE1\u0105"
+      englishTranslation: Too Much
+  - wordType: 2
+    entries:
+    - rawString: longe
+      unicodeString: "\u010D\u0115"
+      englishTranslation: Do
+    - rawString: denge
+      unicodeString: "\xCF\u0115"
+      englishTranslation: "Be\r"
+    - rawString: ainge
+      unicodeString: "\xA2\u0115"
+      englishTranslation: "Say\r"
+    - rawString: bulonge
+      unicodeString: "\xBE\u010D\u0115"
+      englishTranslation: "Think\r"
+    - rawString: aigunge
+      unicodeString: "\xA2\xC8\u0115"
+      englishTranslation: "Ask\r"
+    - rawString: theivange
+      unicodeString: "\xD4i\xE7\u0115"
+      englishTranslation: "Learn\r"
+    - rawString: kaiblonge
+      unicodeString: "k\xA2b\u010D\u0115"
+      englishTranslation: "Study\r"
+    - rawString: nugpange
+      unicodeString: "\u0109g\xB5\u0115"
+      englishTranslation: "Buy\r"
+    - rawString: nguwange
+      unicodeString: "\u0118wa\u0115"
+      englishTranslation: "Give\r"
+    - rawString: patunge
+      unicodeString: "\xB5\xCD\u0115"
+      englishTranslation: "Get\r"
+    - rawString: lakiange
+      unicodeString: "\u010Ak\xA9\u0115"
+      englishTranslation: "Meet\r"
+    - rawString: resuvange
+      unicodeString: "\u0110\xF0\xE7\u0115"
+      englishTranslation: "Leave\r"
+    - rawString: gatinange
+      unicodeString: "\xC4\xCB\u0105\u0115"
+      englishTranslation: "Eat\r"
+    - rawString: liwange
+      unicodeString: "\u010Cwa\u0115"
+      englishTranslation: "Want\r"
+    - rawString: ralidenge
+      unicodeString: "\u010F\u010C\xCF\u0115"
+      englishTranslation: "Enter\r"
+    - rawString: dofange
+      unicodeString: "\xD1\xE2\u0115"
+      englishTranslation: "Have\r"
+    - rawString: pabilnge
+      unicodeString: "\xB5\xBCl\u0115"
+      englishTranslation: Have the ability to
   - wordType: 6
     entries:
     - rawString: melaia
@@ -42,3 +240,63 @@ MonoBehaviour:
     - rawString: chie
       unicodeString: "c\xDAe"
       englishTranslation: no
+  - wordType: 7
+    entries:
+    - rawString: bigu
+      unicodeString: "\xBC\xC8"
+      englishTranslation: Who
+    - rawString: kegu
+      unicodeString: "ke\xC8"
+      englishTranslation: "What\r"
+    - rawString: migu
+      unicodeString: "\u0102\xC8"
+      englishTranslation: "When\r"
+    - rawString: ragu
+      unicodeString: "\u010F\xC8"
+      englishTranslation: "Where\r"
+    - rawString: ngogu
+      unicodeString: "\u0117\xC8"
+      englishTranslation: "Why\r"
+    - rawString: begu
+      unicodeString: "\xBB\xC8"
+      englishTranslation: How
+  - wordType: 8
+    entries:
+    - rawString: ib
+      unicodeString: ib
+      englishTranslation: And
+    - rawString: be
+      unicodeString: "\xBB"
+      englishTranslation: "But\r"
+    - rawString: tin
+      unicodeString: "\xCBn"
+      englishTranslation: "So\r"
+    - rawString: bele
+      unicodeString: "\xBB\u010B"
+      englishTranslation: "However\r"
+    - rawString: rab
+      unicodeString: "\u010Fb"
+      englishTranslation: For
+  - wordType: 10
+    entries:
+    - rawString: agu
+      unicodeString: "a\xC8"
+      englishTranslation: First person (singular (i))
+    - rawString: aia
+      unicodeString: "\xA2a"
+      englishTranslation: "First person (plural inclusive)\r"
+    - rawString: ate
+      unicodeString: "a\xCA"
+      englishTranslation: "First person (plural exclusive)\r"
+    - rawString: igu
+      unicodeString: "i\xC8"
+      englishTranslation: "Second person (you)\r"
+    - rawString: inia
+      unicodeString: "i\u0107a"
+      englishTranslation: "Second person plural\r"
+    - rawString: kugu
+      unicodeString: "ku\xC8"
+      englishTranslation: "Third person (singular (not gendered)\r"
+    - rawString: kuia
+      unicodeString: "k\xB3a"
+      englishTranslation: Third person plural

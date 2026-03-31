@@ -161,7 +161,6 @@ public struct WordEncoder : IDisposable
         while (iter.MoveNext())
         {
             ReadOnlySpan<ushort> span = iter.Current;
-            Debug.Log(span.ConvertChar().ToString());
             if (span.IsEmpty)
             {
                 continue;
