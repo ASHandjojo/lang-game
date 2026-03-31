@@ -25,7 +25,7 @@ public sealed class EditorUI : EditorWindow
     private WordEncoder       wordEncoder;
 
     private KeyboardUI keyboardUI;
-    private Label      unicodeLabel, englishLabel;
+    private Label      unicodeLabel, englishLabel, wordTypeLabel;
 
     private SerializedProperty? phoneticsProp, unicodeProp;
 
@@ -58,15 +58,32 @@ public sealed class EditorUI : EditorWindow
         baseWindow.keyboardUI.PhoneticsString = baseWindow.responseData.phoneticsStr;
 
         NativeArray<WordNode> words = baseWindow.wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
+
+        baseWindow.englishLabel!.text  = baseWindow.GetEnglishString(words);
+        baseWindow.wordTypeLabel!.text = baseWindow.GetWordTypeString(words);
+    }
+
+    private string GetEnglishString(in NativeArray<WordNode> words)
+    {
         string englishOutput = string.Empty; // Accumulate Output
         foreach (WordNode word in words)
         {
-            string result = baseWindow.wordEncoder.TryGetEnglish(word, out var englishStr) ?
+            string result = wordEncoder.TryGetEnglish(word, out var englishStr) ?
                 englishStr.ConvertChar().ToString() :
                 WordType.Unknown.ToString();
             englishOutput += $" {result}";
         }
-        baseWindow.englishLabel!.text = englishOutput;
+        return englishOutput;
+    }
+
+    private string GetWordTypeString(in NativeArray<WordNode> words)
+    {
+        string typeOutput = string.Empty; // Accumulate Output
+        foreach (WordNode word in words)
+        {
+            typeOutput += $" {word.WordType.ToString()}";
+        }
+        return typeOutput;
     }
 
     private void WriteToWindow(string input)
@@ -84,18 +101,11 @@ public sealed class EditorUI : EditorWindow
         phoneticsProp.serializedObject.ApplyModifiedProperties();
         unicodeProp.serializedObject.ApplyModifiedProperties();
 
-        unicodeLabel.text = unicodeProp!.stringValue;
-
         NativeArray<WordNode> words = wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
-        string englishOutput        = string.Empty; // Accumulate Output
-        foreach (WordNode word in words)
-        {
-            string result = wordEncoder.TryGetEnglish(word, out var englishStr) ?
-                englishStr.ConvertChar().ToString() :
-                WordType.Unknown.ToString();
-            englishOutput += $" {result}";
-        }
-        englishLabel!.text = englishOutput;
+
+        unicodeLabel!.text  = unicodeProp!.stringValue;
+        englishLabel!.text  = GetEnglishString(words);
+        wordTypeLabel!.text = GetWordTypeString(words);
     }
 
     public void CreateGUI()
@@ -132,8 +142,17 @@ public sealed class EditorUI : EditorWindow
         {
             name = "EnglishTrans"
         };
-        root.Add(englishLabel);
         englishLabel.AddToClassList("StandardFont");
+
+        var keyboardBox = keyboardUI.Q<VisualElement>("KeyboardParent");
+        keyboardBox.Add(englishLabel);
+
+        wordTypeLabel = new()
+        {
+            name = "WordTypes"
+        };
+        wordTypeLabel.AddToClassList("StandardFont");
+        keyboardBox.Add(wordTypeLabel);
     }
 
     public void OnDestroy()
