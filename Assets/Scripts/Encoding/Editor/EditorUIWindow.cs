@@ -157,7 +157,20 @@ public sealed class EditorUI : EditorWindow
         phoneticField.RegisterCallback(
             (ChangeEvent<string> e) =>
             {
-                WriteToWindow(e.newValue);
+                string input = e.newValue;
+                phoneticsProp!.stringValue = input;
+                unicodeProp!.stringValue   = processor.Translate(input);
+
+                keyboardUI.PhoneticsString = responseData!.phoneticsStr;
+
+                phoneticsProp.serializedObject.ApplyModifiedProperties();
+                unicodeProp.serializedObject.ApplyModifiedProperties();
+
+                NativeArray<WordNode> words = wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
+
+                unicodeLabel!.text  = unicodeProp!.stringValue;
+                englishLabel!.text  = GetEnglishString(words);
+                wordTypeLabel!.text = GetWordTypeString(words);
             }
         );
 

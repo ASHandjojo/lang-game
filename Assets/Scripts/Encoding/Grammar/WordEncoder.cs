@@ -46,8 +46,9 @@ public struct WordNode
 
         WordNode node = new()
         {
-            type   = wordType,
-            length = unchecked((ushort) span.Length)
+            type      = wordType,
+            length    = unchecked((ushort) span.Length),
+            wordIndex = wordIndex
         };
         fixed (ushort* ptr = span) node.ptr = ptr;
         return node;
@@ -165,7 +166,6 @@ public struct WordEncoder : IDisposable
             {
                 continue;
             }
-
             bool isPresent = unicodePool.IsPresent(span, out int strIndex);
             nodes[index++] = isPresent ? WordNode.Create(span, wordTypes[strIndex], strIndex) : WordNode.Unknown;
         }

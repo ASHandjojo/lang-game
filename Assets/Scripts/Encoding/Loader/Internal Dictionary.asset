@@ -234,14 +234,17 @@ MonoBehaviour:
     - rawString: grema
       unicodeString: "g\u0110\u0100"
       englishTranslation: thanks
-    - rawString: wapi
-      unicodeString: "wa\xB7"
+    - rawString: wabi
+      unicodeString: "wa\xBC"
       englishTranslation: yes
     - rawString: chie
       unicodeString: "c\xDAe"
       englishTranslation: no
   - wordType: 7
     entries:
+    - rawString: ngogu
+      unicodeString: "\u0117\xC8"
+      englishTranslation: "Why\r"
     - rawString: bigu
       unicodeString: "\xBC\xC8"
       englishTranslation: Who
@@ -254,9 +257,6 @@ MonoBehaviour:
     - rawString: ragu
       unicodeString: "\u010F\xC8"
       englishTranslation: "Where\r"
-    - rawString: ngogu
-      unicodeString: "\u0117\xC8"
-      englishTranslation: "Why\r"
     - rawString: begu
       unicodeString: "\xBB\xC8"
       englishTranslation: How
