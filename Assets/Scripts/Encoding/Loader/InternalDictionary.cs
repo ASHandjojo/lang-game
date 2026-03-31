@@ -41,6 +41,8 @@ public static class WordTypeExtMethods
         WordType.Particle     => nameof(WordType.Particle),
         WordType.Interjection => nameof(WordType.Interjection),
 
+        WordType.Unknown => nameof(WordType.Unknown),
+
         _ => throw new NotImplementedException()
     };
 }

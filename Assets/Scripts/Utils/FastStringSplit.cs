@@ -98,7 +98,9 @@ public struct SplitIterator : IEnumerator<SplitEntry>
         int splitIndex = subSpan.IndexOf(splitChar);
         if (splitIndex == -1) // If cannot find, stop iterator.
         {
-            return false;
+            prevOffset = (ushort) startIdx;
+            offset     = (ushort) (strLength);
+            return true;
         }
         prevOffset = (ushort) startIdx;
         offset     = (ushort) (startIdx + splitIndex);
@@ -138,40 +140,18 @@ public static class FastStringExtMethods
     public unsafe static int CharCount(in this ReadOnlySpan<char> span, char target) => span.ConvertU16().CharCount(target);
 
     [BurstCompile]
-    public static int WordCount(in this ReadOnlySpan<ushort> span, ushort target)
+    public static int WordCount(in this ReadOnlySpan<ushort> str, ushort target)
     {
-        if (Hint.Unlikely(span.IsEmpty))
+        if (Hint.Unlikely(str.IsEmpty))
         {
             return 0;
         }
-
-        int count  = 1;
-        int offset = 0, iterOffset = 0;
-        for (int i = 0; i < span.Length; i++)
+        SplitIterator iter = SplitIterator.Create(str, ' ');
+        int count = 0;
+        while (iter.MoveNext())
         {
-            if (span[i] == target)
-            {
-                if (i > 0)
-                {
-                    offset    += iterOffset;
-                    iterOffset = i;
-                    count++;
-                }
-                // NOTE: WATCH
-                else // If zero, this means a region of contiguous splitting characters.
-                {
-                    i++;
-                    for (; i < span.Length; i++)
-                    {
-                        if (i != target)
-                        {
-                            offset    += iterOffset;
-                            iterOffset = i;
-                        }
-                    }
-                    count++;
-                }
-            }
+            ReadOnlySpan<ushort> span = iter.Current;
+            count += (span.Length > 0 && span[0] != target).CastAsInt32();
         }
         return count;
     }

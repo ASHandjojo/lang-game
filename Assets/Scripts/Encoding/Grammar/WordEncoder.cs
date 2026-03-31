@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 
 using Unity.Burst;
+using Unity.Burst.CompilerServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
@@ -10,6 +11,9 @@ using UnityEngine;
 
 using Impl;
 
+/// <summary>
+/// Gives part of speech to a given Unicode representation of a word (terminal symbol).
+/// </summary>
 [BurstCompile, StructLayout(LayoutKind.Sequential, Size = 16)]
 public struct WordNode
 {
@@ -18,34 +22,27 @@ public struct WordNode
     private ushort         length;
     private WordType       type;
 
-    public unsafe readonly bool IsValid => ptr != null && length > 0;
+    private int wordIndex;
 
-    public readonly WordType WordType => type;
+    public unsafe readonly bool IsValid => ptr != null && length > 0 && wordIndex >= 0;
+    public readonly WordType WordType   => type;
+    public readonly int WordIndex       => wordIndex;
 
     public static WordNode Unknown => new()
     {
-        type = WordType.Unknown
+        type      = WordType.Unknown,
+        wordIndex = -1
     };
 
     [BurstDiscard]
-    public static unsafe WordNode Create(in ReadOnlySpan<char> span, WordType wordType)
+    public static unsafe WordNode Create(in ReadOnlySpan<char> span, WordType wordType, int wordIndex) =>
+        Create(span.ConvertU16(), wordType, wordIndex);
+
+    public static unsafe WordNode Create(in ReadOnlySpan<ushort> span, WordType wordType, int wordIndex)
     {
         Debug.Assert(!span.IsEmpty);
-        Debug.Assert(wordType != WordType.Unknown);
-
-        WordNode node = new()
-        {
-            type   = wordType,
-            length = unchecked((ushort) span.Length)
-        };
-        fixed (char* ptr = span) node.ptr = (ushort*) ptr;
-        return node;
-    }
-
-    public static unsafe WordNode Create(in ReadOnlySpan<ushort> span, WordType wordType)
-    {
-        Debug.Assert(!span.IsEmpty);
-        Debug.Assert(wordType != WordType.Unknown);
+        Debug.Assert(wordType  != WordType.Unknown);
+        Debug.Assert(wordIndex >= 0);
 
         WordNode node = new()
         {
@@ -56,6 +53,7 @@ public struct WordNode
         return node;
     }
 }
+
 
 [BurstCompile]
 public struct WordEncoder : IDisposable
@@ -157,17 +155,33 @@ public struct WordEncoder : IDisposable
         }
 
         NativeArray<WordNode> nodes = new(wordCount, allocator);
-        using SplitIterator iter    = SplitIterator.Create(str, ' ');
+        SplitIterator iter          = SplitIterator.Create(str, ' ');
 
         int index = 0;
         while (iter.MoveNext())
         {
             ReadOnlySpan<ushort> span = iter.Current;
+            Debug.Log(span.ConvertChar().ToString());
+            if (span.IsEmpty)
+            {
+                continue;
+            }
 
             bool isPresent = unicodePool.IsPresent(span, out int strIndex);
-            nodes[index++] = isPresent ? WordNode.Create(span, wordTypes[strIndex]) : default;
+            nodes[index++] = isPresent ? WordNode.Create(span, wordTypes[strIndex], strIndex) : WordNode.Unknown;
         }
         return nodes;
+    }
+
+    public readonly bool TryGetEnglish(in WordNode node, out ReadOnlySpan<ushort> english)
+    {
+        if (Hint.Unlikely(!node.IsValid))
+        {
+            english = default;
+            return false;
+        }
+        english = englishPool[node.WordIndex];
+        return true;
     }
 
     public void Dispose()
