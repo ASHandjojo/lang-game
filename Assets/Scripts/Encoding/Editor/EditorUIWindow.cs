@@ -27,6 +27,8 @@ public sealed class EditorUI : EditorWindow
     private KeyboardUI keyboardUI;
     private Label      unicodeLabel, englishLabel, wordTypeLabel;
 
+    private TextField phoneticField;
+
     private SerializedProperty? phoneticsProp, unicodeProp;
 
     private EncodingEntry? responseData = null;
@@ -61,6 +63,8 @@ public sealed class EditorUI : EditorWindow
 
         baseWindow.englishLabel!.text  = baseWindow.GetEnglishString(words);
         baseWindow.wordTypeLabel!.text = baseWindow.GetWordTypeString(words);
+
+        baseWindow.phoneticField!.SetValueWithoutNotify(phoneticsProp!.stringValue);
     }
 
     private string GetEnglishString(in NativeArray<WordNode> words)
@@ -106,6 +110,8 @@ public sealed class EditorUI : EditorWindow
         unicodeLabel!.text  = unicodeProp!.stringValue;
         englishLabel!.text  = GetEnglishString(words);
         wordTypeLabel!.text = GetWordTypeString(words);
+
+        phoneticField!.SetValueWithoutNotify(phoneticsProp!.stringValue);
     }
 
     public void CreateGUI()
@@ -138,13 +144,29 @@ public sealed class EditorUI : EditorWindow
         unicodeLabel = root.Q<Label>("Input");
         Debug.Assert(unicodeLabel != null);
 
+        var keyboardBox = keyboardUI.Q<VisualElement>("KeyboardParent");
+
+        phoneticField = new("Phonetics")
+        {
+            name = "PhoneticInput"
+        };
+        phoneticField.AddToClassList("StandardFont");
+        phoneticField.style.whiteSpace = WhiteSpace.PreWrap;
+        keyboardBox.Add(phoneticField);
+
+        phoneticField.RegisterCallback(
+            (ChangeEvent<string> e) =>
+            {
+                WriteToWindow(e.newValue);
+            }
+        );
+
         englishLabel = new()
         {
             name = "EnglishTrans"
         };
         englishLabel.AddToClassList("StandardFont");
-
-        var keyboardBox = keyboardUI.Q<VisualElement>("KeyboardParent");
+        englishLabel.style.whiteSpace = WhiteSpace.PreWrap;
         keyboardBox.Add(englishLabel);
 
         wordTypeLabel = new()
@@ -152,6 +174,7 @@ public sealed class EditorUI : EditorWindow
             name = "WordTypes"
         };
         wordTypeLabel.AddToClassList("StandardFont");
+        wordTypeLabel.style.whiteSpace = WhiteSpace.PreWrap;
         keyboardBox.Add(wordTypeLabel);
     }
 
