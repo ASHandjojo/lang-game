@@ -1,0 +1,61 @@
+#ScreenContainer {
+	height: 100%;
+	width: 100%;
+    background-color: rgb(255, 224, 152);
+}
+
+TabView {
+    height: 100%;
+}
+
+/* Styles the strip where tab buttons live */
+.unity-tab-view__header-container {
+    background-color: #00FF00;
+    height: 120px;
+}
+
+.unity-tab__header {
+    height: 100%;
+    width: 100%;
+}
+
+.unity-tab__header-label {
+    height: 100%;
+    width: 100%;
+    font-size: 60;
+}
+
+
+.unity-tab-view__content-container {
+    height: 100%;
+}
+
+Tab {
+    height: 100%;
+}
+
+.unity-tab-view__content-container {
+    height: 100%;
+}
+
+/* Styles the content area of the tabs */
+.unity-tab__content-container {
+    padding: 20px;
+    height: 100%;
+    background-color: #FF0000;
+}
+
+/* Custom classes for your paragraphs */
+.tab-title {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+}
+
+.tab-paragraph {
+    font-size: 14px;
+    color: #BBBBBB;
+    white-space: normal; /* Essential for text wrapping */
+    line-height: 20px;
+}

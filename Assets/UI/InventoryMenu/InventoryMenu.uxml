@@ -1,0 +1,17 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/MainMenu/MainMenuStyles.uss?fileID=7433441132597879392&amp;guid=d59d620128eeb9849ac753915a8fa2d4&amp;type=3#MainMenuStyles" />
+    <Style src="project://database/Assets/UI/InventoryMenu/InventoryStyles.uss?fileID=7433441132597879392&amp;guid=3494da7d9faa64e4b81c434f1aff15c7&amp;type=3#InventoryStyles" />
+    <engine:VisualElement name="ScreenContainer">
+        <engine:TabView view-data-key="TabA">
+            <engine:Tab label="Tab A" name="TabA" view-data-key="TabA">
+                <engine:Label text="Tab A Text" class="tab-title"/>
+            </engine:Tab>
+            <engine:Tab label=" Tab B" name="TabB" view-data-key="TabB">
+                <engine:Label text="Tab B Text" class="tab-title"/>
+            </engine:Tab>
+            <engine:Tab label="Tab C" name="TabC" view-data-key="TabC">
+                <engine:Label text="Tab C Text" class="tab-title"/>
+            </engine:Tab>
+        </engine:TabView>
+    </engine:VisualElement>
+</engine:UXML>

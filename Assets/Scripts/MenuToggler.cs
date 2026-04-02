@@ -21,9 +21,11 @@ public sealed class MenuToggler : MonoBehaviour
 
     private InputAction settingsAction;
     private InputAction dictionaryAction;
+    private InputAction inventoryAction;
 
     [SerializeField] private SettingsMenuEvents settingsMenu;
     [SerializeField] private GameHUDEvents dictionaryMenu;
+    [SerializeField] private InventoryMenuEvents inventoryMenu;
 
     [SerializeField] private BindingIcons bindingIcons;
 
@@ -137,6 +139,7 @@ public sealed class MenuToggler : MonoBehaviour
 
         settingsAction   = InputSystem.actions.FindAction("Settings");
         dictionaryAction = InputSystem.actions.FindAction("Dictionary");
+        inventoryAction = InputSystem.actions.FindAction("Inventory");
 
         playerRB       = PlayerController.Instance.GetComponent<Rigidbody2D>();
         playerCollider = PlayerController.Instance.GetComponent<Collider2D>();
@@ -156,6 +159,10 @@ public sealed class MenuToggler : MonoBehaviour
         if (dictionaryAction.WasPerformedThisFrame())
         {
             HandleMenuButton(dictionaryMenu);
+        }
+        if (inventoryAction.WasPerformedThisFrame())
+        {
+            HandleMenuButton(inventoryMenu);
         }
     }
 
