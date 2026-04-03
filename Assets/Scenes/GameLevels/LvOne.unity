@@ -751,6 +751,7 @@ MonoBehaviour:
     obj: {fileID: 0}
     isInitialized: 0
   internalDict: {fileID: 11400000, guid: 599cf157494825b4ea3ff390363cf038, type: 2}
+  playerJournalSize: 50
 --- !u!1 &1074906769
 GameObject:
   m_ObjectHideFlags: 0
@@ -2339,9 +2340,9 @@ MonoBehaviour:
   closeClip: {fileID: 8300000, guid: fd108821f38ecd942a95778abac0a057, type: 3}
   hoverClip: {fileID: 8300000, guid: c520791ce7781f845bc1fa5a54de960e, type: 3}
   closedImage: {fileID: 2800000, guid: e17c6ea311215de4fb66d7c7f9de7d4d, type: 3}
-  openImage: {fileID: 2800000, guid: 9c812bf860a213d47a524a182b2f1c0e, type: 3}
+  openImage: {fileID: 0}
   settingsDocument: {fileID: 1724572783}
-  dictionarySlots: {fileID: 9197481963319205126, guid: b50215d666cea5045be6ebfdfe102e0f, type: 3}
+  notebookUIDocument: {fileID: 9197481963319205126, guid: b50215d666cea5045be6ebfdfe102e0f, type: 3}
 --- !u!82 &1605222087
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3191,7 +3192,7 @@ MonoBehaviour:
     sound:
       obj: {fileID: 0}
       isInitialized: 0
-    hasResponse: 1
+    hasResponse: 0
     responseData:
       phoneticsStr: wapi wapi
       line: "wa\xB7 wa\xB7"

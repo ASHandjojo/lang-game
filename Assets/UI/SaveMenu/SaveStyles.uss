@@ -52,3 +52,6 @@
     width: 440px;
     height: 120px;
 }
+
+.button {
+}
