@@ -15,7 +15,6 @@ public enum WordType : ushort
 
     Verb    = 2,
     Adverb  = 3,
-    Object  = 4,
 
     Particle = 5,
 
@@ -25,7 +24,7 @@ public enum WordType : ushort
 
     Pronoun = 10,
 
-    TypeCount = 11,
+    TypeCount = 10,
 
     Unknown   = ushort.MaxValue
 }
@@ -40,7 +39,6 @@ public static class WordTypeExtMethods
         
         WordType.Verb   => nameof(WordType.Verb),
         WordType.Adverb => nameof(WordType.Adverb),
-        WordType.Object => nameof(WordType.Object),
 
         WordType.Particle      => nameof(WordType.Particle),
         WordType.Interjection  => nameof(WordType.Interjection),
