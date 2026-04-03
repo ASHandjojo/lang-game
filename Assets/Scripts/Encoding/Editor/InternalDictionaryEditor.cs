@@ -74,14 +74,17 @@ internal sealed class DictEntryDrawer : PropertyDrawer
 [CustomEditor(typeof(InternalDictionary))]
 internal sealed class InternalDictEditor : Editor
 {
-    private static readonly Dictionary<string, WordType> WordTypeDict = new()
+    private static readonly Dictionary<string, WordType> WordTypeDict = new();
+
+    static InternalDictEditor()
     {
-        { nameof(WordType.Noun),      WordType.Noun      },
-        { nameof(WordType.Adjective), WordType.Adjective },
-        { nameof(WordType.Verb),      WordType.Verb      },
-        { nameof(WordType.Adverb),    WordType.Adverb    },
-        { nameof(WordType.Object),    WordType.Object    },
-    };
+        WordType[] wordTypes = (WordType[]) Enum.GetValues(typeof(WordType));
+        string[]   wordNames = Enum.GetNames(typeof(WordType));
+        for (int i = 0; i < wordTypes.Length; i++)
+        {
+            WordTypeDict.Add(wordNames[i].ToLower(), wordTypes[i]);
+        }
+    }
 
     public override VisualElement CreateInspectorGUI()
     {
@@ -127,10 +130,10 @@ internal sealed class InternalDictEditor : Editor
                     Debug.Assert(args.Length == ExpectedArgCount, $"Invalid number of arguments (expected: {ExpectedArgCount})! String: {line}, Arg Count: {args.Length}");
                     DictEntry entry = new()
                     {
-                        rawString          = args[0],
+                        rawString          = args[0].ToLower().Replace("-", ""),
                         englishTranslation = args[2],
                     };
-                    WordType wordType = WordTypeDict[args[1]];
+                    WordType wordType = WordTypeDict[args[1].ToLower()];
                     if (entries.ContainsKey(wordType))
                     {
                         entries[wordType].Add(entry);
@@ -139,6 +142,7 @@ internal sealed class InternalDictEditor : Editor
                     {
                         dict.entries.Add(new DictEntryColumn() { entries = new(), wordType = wordType });
                         entries.Add(dict.entries[^1].wordType, dict.entries[^1].entries);
+                        entries[wordType].Add(entry);
                     }
                 }
                 EditorUtility.SetDirty(dict);

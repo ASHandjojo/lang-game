@@ -15,13 +15,16 @@ public enum WordType : ushort
 
     Verb    = 2,
     Adverb  = 3,
-    Object  = 4,
 
     Particle = 5,
 
-    Interjection = 6,
+    Interjection  = 6,
+    Interrogative = 7,
+    Conjunction   = 8,
 
-    TypeCount = 7,
+    Pronoun = 10,
+
+    TypeCount = 10,
 
     Unknown   = ushort.MaxValue
 }
@@ -36,10 +39,14 @@ public static class WordTypeExtMethods
         
         WordType.Verb   => nameof(WordType.Verb),
         WordType.Adverb => nameof(WordType.Adverb),
-        WordType.Object => nameof(WordType.Object),
 
-        WordType.Particle     => nameof(WordType.Particle),
-        WordType.Interjection => nameof(WordType.Interjection),
+        WordType.Particle      => nameof(WordType.Particle),
+        WordType.Interjection  => nameof(WordType.Interjection),
+        WordType.Interrogative => nameof(WordType.Interrogative),
+
+        WordType.Pronoun => nameof(WordType.Pronoun),
+
+        WordType.Unknown => nameof(WordType.Unknown),
 
         _ => throw new NotImplementedException()
     };

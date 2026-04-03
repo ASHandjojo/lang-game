@@ -176,6 +176,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
+--- !u!95 &133916243 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7929217388321738682, guid: 7ac802ca58cce594a9182934ac5bc7a6, type: 3}
+  m_PrefabInstance: {fileID: 1367662896}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &173549046 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3922667833013045048, guid: 17bb6d27e5ae7174bb123b3470138864, type: 3}
@@ -763,10 +768,10 @@ GameObject:
   - component: {fileID: 1074906774}
   - component: {fileID: 1074906773}
   - component: {fileID: 1074906771}
-  - component: {fileID: 1074906770}
   - component: {fileID: 1074906776}
   - component: {fileID: 1074906778}
   - component: {fileID: 1074906777}
+  - component: {fileID: 1074906779}
   m_Layer: 0
   m_Name: Entrance
   m_TagString: Untagged
@@ -774,24 +779,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1074906770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1074906769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5dfd783e2a003be4385b27e623399957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactionPrompt: {fileID: 1470832120}
-  interactClip: {fileID: 8300000, guid: 49e6681ee88d775489f293846fa8cdf6, type: 3}
-  worldPromptInput: 2
-  hudDocument: {fileID: 1605222084}
-  transitionTime: 1
-  zoomImage: {fileID: 2800000, guid: 1d080e14bfd6e654caffc1bcdc0789b5, type: 3}
 --- !u!61 &1074906771
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -923,7 +910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 5c1a0d1d8d70f3b4a978d3b7a982f136, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 3f12ce37860cd1f4089e12ca9a82c635, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 54f61cebcc8fa1e47bde4d95bac737ef, type: 3}
   m_SortingOrder: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -1037,6 +1024,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d3ac51e7ec2b1448dca9ee644aa0ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1074906779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074906769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 598ffaa4157535245be78867af1f426b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionPrompt: {fileID: 1470832120}
+  interactClip: {fileID: 8300000, guid: 49e6681ee88d775489f293846fa8cdf6, type: 3}
+  worldPromptInput: 2
+  hudDocument: {fileID: 1605222084}
+  npcName: Gate
+  npcImage: {fileID: 0}
+  entries:
+  - line:
+      phoneticsStr: h
+      line: h
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: m
+      line: m
+  - line:
+      phoneticsStr: h
+      line: h
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 1
+    responseData:
+      phoneticsStr: m
+      line: m
+  conlangFont: {fileID: 12800000, guid: ef39abd9056a9d446b1bf89b37383641, type: 3}
+  englishFont: {fileID: 12800000, guid: e0afdb4613b19e941a9c5e69c3b88d0f, type: 3}
+  sceneLoader: {fileID: 1367662897}
+  nextScene:
+    name: TestNextLv
+    path: Assets/Scenes/GameLevels/TestNextLv.unity
+  animator: {fileID: 133916243}
 --- !u!1001 &1133875776
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1827,6 +1860,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ac802ca58cce594a9182934ac5bc7a6, type: 3}
+--- !u!114 &1367662897 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5806594485143702073, guid: 7ac802ca58cce594a9182934ac5bc7a6, type: 3}
+  m_PrefabInstance: {fileID: 1367662896}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cad165c26f3efe46b564f5d156f62ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1417038446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3177,25 +3221,25 @@ MonoBehaviour:
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   entries:
   - line:
-      phoneticsStr: 
-      line: lwwhhttc
+      phoneticsStr: melaia
+      line: "\u0101\u010A\xA9"
     sound:
       obj: {fileID: 0}
       isInitialized: 0
     hasResponse: 0
     responseData:
-      phoneticsStr: 
-      line: 
+      phoneticsStr: ngogu melaia melai
+      line: "\u0117\xC8 \u0101\u010A\xA9 \u0101\u010Ai"
   - line:
       phoneticsStr: 
-      line: "\u010D\u0110m ip\xF0m \xD1l"
+      line: 
     sound:
       obj: {fileID: 0}
       isInitialized: 0
     hasResponse: 0
     responseData:
-      phoneticsStr: wapi wapi
-      line: "wa\xB7 wa\xB7"
+      phoneticsStr: melaia wabi bele chie
+      line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
   conlangFont: {fileID: 12800000, guid: ef39abd9056a9d446b1bf89b37383641, type: 3}
   englishFont: {fileID: 12800000, guid: e0afdb4613b19e941a9c5e69c3b88d0f, type: 3}
 --- !u!61 &1988571624
@@ -3435,7 +3479,7 @@ PrefabInstance:
     - target: {fileID: 5833617374691732879, guid: d7526bc57ae020b4a8587009a1ee67f1, type: 3}
       propertyPath: settingsMenu
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1724572788}
     - target: {fileID: 5833617374691732879, guid: d7526bc57ae020b4a8587009a1ee67f1, type: 3}
       propertyPath: dictionaryMenu
       value: 

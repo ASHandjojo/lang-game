@@ -1,44 +1,38 @@
 using System;
 using System.Collections;
 using System.Linq;
-using TMPro;
+
 using Unity.Collections;
-using UnityEditor;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
-public sealed class NpcDialogue : Interactable
+public class NpcDialogue : Interactable
 {
-    private UIDocument document;
-    [SerializeField] private UIDocument hudDocument;
+    protected UIDocument document;
+    [SerializeField] protected UIDocument hudDocument;
     private bool inDialogue;
 
-    [SerializeField] private string npcName;
-    [SerializeField] private Texture2D npcImage;
-    private int index = 0;
+    [SerializeField] protected string    npcName;
+    [SerializeField] protected Texture2D npcImage;
+    protected int index = 0;
 
     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
-    [SerializeField] private DialogueEntry[] entries;
+    [SerializeField] protected DialogueEntry[] entries;
 
-    private Label dialogueLabel;
-    private float textSpeed;
-    private VisualElement nextLinePrompt;
-    private VisualElement wordTooltip;
+    protected Label dialogueLabel;
+    protected float textSpeed;
+    protected VisualElement nextLinePrompt;
+    protected VisualElement wordTooltip;
 
-    private IVisualElementScheduledItem bounceSchedule;
-    private float bounceHeight = 30.0f;
-    private float bounceSpeed  = 30.0f;
-    private float bounceStartTime;
+    protected IVisualElementScheduledItem bounceSchedule;
+    protected float bounceHeight = 30.0f;
+    protected float bounceSpeed  = 30.0f;
+    protected float bounceStartTime;
 
     public Font conlangFont;
     public Font englishFont;
-
-    private const string RootImportDir = "Assets/Scripts/Encoding";
-    private const string LigatureSubDir = RootImportDir + "/Loader/Ligature Sub Table.asset";
-
-    private LigatureSub ligatureSub;
-    private PhoneticProcessor processor;
 
     public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
 
@@ -74,17 +68,15 @@ public sealed class NpcDialogue : Interactable
         textSpeed = 0.02f;
         nextLinePrompt = document.rootVisualElement.Q("NextLinePrompt");
         document.rootVisualElement.style.visibility = Visibility.Hidden;
-        document.rootVisualElement.style.display = DisplayStyle.None;
+        document.rootVisualElement.style.display    = DisplayStyle.None;
         nextLinePrompt.visible = false;
         inDialogue = false;
 
         // Set Tooltip
         wordTooltip = document.rootVisualElement.Q("WordTooltip");
-
-        ligatureSub = AssetDatabase.LoadAssetAtPath<LigatureSub>(LigatureSubDir);
     }
 
-    protected override IEnumerator InteractLogic(PlayerController player)
+    protected override sealed IEnumerator InteractLogic(PlayerController player)
     {
         if (inDialogue)
         {
@@ -104,15 +96,15 @@ public sealed class NpcDialogue : Interactable
         else
         {
             document.rootVisualElement.style.visibility = Visibility.Visible;
-            document.rootVisualElement.style.display = DisplayStyle.Flex;
+            document.rootVisualElement.style.display    = DisplayStyle.Flex;
 
             hudDocument.rootVisualElement.style.visibility = Visibility.Hidden;
-            hudDocument.rootVisualElement.style.display = DisplayStyle.None;
+            hudDocument.rootVisualElement.style.display    = DisplayStyle.None;
             worldPromptIcon.enabled = false;
 
             // Prevent Movement
             player.CanMove = false;
-            inDialogue = true;
+            inDialogue     = true;
             yield return TypeLine();
         }
     }
@@ -136,7 +128,7 @@ public sealed class NpcDialogue : Interactable
 
         Font fontToUse = conlangFont;
 
-        Label wordLabel = new Label();
+        Label wordLabel = new();
         wordLabel.AddToClassList("dialogue-text");
         wordLabel.style.marginRight = 16;
         textContainer.Add(wordLabel);
@@ -202,8 +194,7 @@ public sealed class NpcDialogue : Interactable
                 {
                     if (fontToUse == conlangFont)
                     {
-                        processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
-                        wordLabel.text = processor.Translate(wordLabel.text + currentLine[i]);
+                        wordLabel.text = LanguageTable.PhoneticProcessor.Translate(wordLabel.text + currentLine[i]);
                     }
                     else
                     {
@@ -216,8 +207,7 @@ public sealed class NpcDialogue : Interactable
             {
                 if (fontToUse == conlangFont)
                 {
-                    processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
-                    wordLabel.text = processor.Translate(wordLabel.text + currentLine[i]);
+                    wordLabel.text = LanguageTable.PhoneticProcessor.Translate(wordLabel.text + currentLine[i]);
                 }
                 else
                 {
@@ -262,13 +252,18 @@ public sealed class NpcDialogue : Interactable
         return result;
     }
 
+    protected virtual IEnumerator OnLast()
+    {
+        yield return null;
+    }
+
     private IEnumerator NextLine()
     {
         if (index < entries.Length - 1)
         {
-            index++;
             var textContainer = document.rootVisualElement.Q("TextContainer");
             textContainer.Clear();
+            index++;
             yield return TypeLine();
 
             if (entries[index].hasResponse)
@@ -299,15 +294,17 @@ public sealed class NpcDialogue : Interactable
 
             // Restore in-game UI
             document.rootVisualElement.style.visibility = Visibility.Hidden;
-            document.rootVisualElement.style.display = DisplayStyle.None;
+            document.rootVisualElement.style.display    = DisplayStyle.None;
 
             hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
-            hudDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+            hudDocument.rootVisualElement.style.display    = DisplayStyle.Flex;
 
             worldPromptIcon.enabled = true;
 
             InputController.Instance.CloseKeyboard();
             PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
+
+            yield return OnLast();
         }
     }
 
@@ -378,8 +375,7 @@ public sealed class NpcDialogue : Interactable
 
         foreach (DictionaryEntry entry in dictionary.dictionaryList) 
         {
-            processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
-            if (processor.Translate(entry.Word) == word) 
+            if (LanguageTable.PhoneticProcessor.Translate(entry.Word) == word) 
             {
                 if (entry.Notes == "")
                 {

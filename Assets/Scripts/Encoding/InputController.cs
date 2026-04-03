@@ -1,11 +1,13 @@
-using Impl;
 using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using UnityEngine.Windows;
+
+using Impl;
 
 namespace Impl
 {
@@ -199,9 +201,9 @@ public sealed class InputController : MonoBehaviour
     void Start()
     {
         keyboardUI = new KeyboardUI(keyboardAsset, PhoneticProcessor,
-            (unicodeInput) =>
+            (string phoneticsStr) =>
             {
-                inputField.text = unicodeInput;
+                inputField.text = PhoneticProcessor.Translate(phoneticsStr);
             }
         );
         document.rootVisualElement.Add(keyboardUI);

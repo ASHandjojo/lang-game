@@ -79,7 +79,7 @@ internal struct LexOffsets : IDisposable
         {
             return default;
         }
-        int  prefixLength  = (offsetLength + 1) * sizeof(int);
+        int  prefixLength  = (offsetLength + 2) * sizeof(int);
         int* prefixOffsets = (int*) UnsafeUtility.MallocTracked(prefixLength, UnsafeUtility.AlignOf<int>(), allocator, 0);
         UnsafeUtility.MemClear(prefixOffsets, prefixLength);
         // Histogram Calculation
@@ -88,13 +88,13 @@ internal struct LexOffsets : IDisposable
             prefixOffsets[prefixes[i] - minPrefixChar]++;
         }
         // Exclusive Prefix Sum
-        for (int i = 0, value = 0; i < offsetLength; i++)
+        for (int i = 0, value = 0; i < offsetLength + 1; i++)
         {
             int temp         = prefixOffsets[i];
             prefixOffsets[i] = value;
             value           += temp;
         }
-        prefixOffsets[offsetLength] = prefixes.Length;
+        prefixOffsets[offsetLength + 1] = prefixes.Length;
 
         LexOffsets output = new()
         {
@@ -119,7 +119,7 @@ internal struct LexOffsets : IDisposable
     public unsafe readonly bool IsInRange(ushort prefix)
     {
         ushort shiftedChar = (ushort) (prefix - minPrefixChar);
-        if (shiftedChar < length)
+        if (shiftedChar <= length)
         {
             int prefixLen = prefixOffsets[shiftedChar + 1] - prefixOffsets[shiftedChar];
             return prefixLen > 0;

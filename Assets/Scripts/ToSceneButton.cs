@@ -33,6 +33,6 @@ public class ToSceneButton : MonoBehaviour
     void ClickSettings()
     {
         SceneManager.LoadScene(scene);
-        //Debug.Log("You have clicked the button!");
+        Debug.Log("You have clicked the button!");
     }
 }
