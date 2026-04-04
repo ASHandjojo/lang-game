@@ -12,7 +12,7 @@ using Impl;
 
 public struct PhoneticProcessor : IDisposable
 {
-    // Made to basically throw all the data into two giant buffers
+    // Made to basically throw all the phonetics into two giant buffers
     private NativeArray<char> standardSignData;
     private NativeArray<char> compoundSignData; // Under Combined String
 
