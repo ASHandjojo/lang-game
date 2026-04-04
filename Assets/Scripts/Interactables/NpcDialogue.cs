@@ -18,7 +18,7 @@ public sealed class NpcDialogue : Interactable
 
     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
     [SerializeField] private DialogueEntry[] entries;
-    [SerializeField] private DialogueTree npcTree;
+    [SerializeField] private DialogueTree npcTree = new DialogueTree();
     
     private bool alreadyIncrDiag = false;
 
@@ -33,16 +33,18 @@ public sealed class NpcDialogue : Interactable
 
     public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
 
+    
+
     public bool TryCheckInput(string content)
     {
         
         if (inDialogue && npcTree.NeedsPlayerInput()) // if we are in dialogue and we need a response from the player
         {
-            int errno = npcTree.DialogueForward(content); // This will increment the dialogue accordingly or return error
+            TraverseStatus errstat = npcTree.DialogueForward(content); // This will increment the dialogue accordingly or return error
             alreadyIncrDiag = true; // make sure to set that we have already progressed the dialogue!
-            if (errno < 0) 
+            if ((errstat & TraverseStatus.Error) == TraverseStatus.Error) 
             {
-                Debug.Log("Error in Moving Dialogue Forward");
+                EchoDialogueError(errstat);
             }
 
             npcTree.TryGetCurrentNode(out var currDiag);
@@ -115,10 +117,10 @@ public sealed class NpcDialogue : Interactable
             player.CanMove = false;
             inDialogue     = true;
 
-            int errno = npcTree.InitializeTree(); // initialize the current dialogue tree!
-            if (errno < 0) // If there is an error initiLizing the tree, take note!
+            TraverseStatus errstat = npcTree.InitializeTree(); // initialize the current dialogue tree!
+            if ((errstat & TraverseStatus.Error) == TraverseStatus.Error) 
             {
-                Debug.Log("Error with NPC Tree Initialize");
+                EchoDialogueError(errstat);
             }
 
             yield return TypeLine();
@@ -210,10 +212,10 @@ public sealed class NpcDialogue : Interactable
         {
             if (!alreadyIncrDiag) // If we haven't already incremented the dialogue, ensure to increment it
             {
-                int err = npcTree.DialogueForward(); // This will increment the dialogue accordingly
-                if (err < 0) // reports if there is an error!
+                TraverseStatus errstat = npcTree.DialogueForward(); // This will increment the dialogue accordingly
+                if ((errstat & TraverseStatus.Error) == TraverseStatus.Error) 
                 {
-                    Debug.Log($"Error in Moving Dialogue Forward | Error: {err}");
+                    EchoDialogueError(errstat);
                 }
             }
             else
@@ -291,5 +293,32 @@ public sealed class NpcDialogue : Interactable
         // Reset position and scale
         nextLinePrompt.style.translate = new Translate(0.0f, 0.0f);
         nextLinePrompt.transform.scale = Vector3.one;
+    }
+
+    private void EchoDialogueError(TraverseStatus errstat)
+    {
+        switch (errstat)
+        {
+            case TraverseStatus.WrongNodeType : 
+                    Debug.Log("Node Type (Text Input vs. No Text Input) Does Not Match Player Action");
+                    break;
+            case TraverseStatus.NotInDialogue:
+                    Debug.Log("Getting Dialogue From Tree Not In Dialogue");
+                    break;
+            case TraverseStatus.GoToNodeOutOfBounds:
+                    Debug.Log("Node Traversing To Is Out Of Bounds");
+                    break;
+            case TraverseStatus.InitializeTreeOutOfBounds:
+                    Debug.Log("Tree Initialization Goes To Out Of Bounds Tree");
+                    break;
+            case TraverseStatus.CurrNodeUndefined:
+                    Debug.Log("Current Dialogue In Tree Is Not Defined");
+                    break;
+            default :
+                    Debug.Log("Error in Moving Dialogue Forward");
+                    break;
+                    
+        };
+        
     }
 }
