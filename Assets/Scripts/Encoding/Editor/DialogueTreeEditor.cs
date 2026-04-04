@@ -19,54 +19,24 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine.Rendering;
 using System.Drawing.Printing;
 
-/*
-[CustomPropertyDrawer(typeof(DictEntry))]
-internal sealed class DictEntryDrawer : PropertyDrawer
-{
-    private const string RootImportDir  = "Assets/Scripts/Encoding";
-    private const string DictEntryUIDir = RootImportDir + "/UI/WordUI.uxml";
-
-    private const string LigatureSubDir = RootImportDir + "/Loader/Ligature Sub Table.asset";
-
-    public override VisualElement CreatePropertyGUI(SerializedProperty property)
-    {
-        VisualTreeAsset treeAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(DictEntryUIDir);
-        Debug.Assert(treeAsset != null);
-        DictEntryElement element = new(treeAsset);
-
-        LigatureSub ligatureSub = AssetDatabase.LoadAssetAtPath<LigatureSub>(LigatureSubDir);
-        Debug.Assert(ligatureSub != null);
-
-        SerializedProperty rawStrProp = property.FindPropertyRelative(nameof(DictEntry.rawString));
-        element.Q<TextField>("RawString").BindProperty(rawStrProp);
-
-        SerializedProperty convStrProp = property.FindPropertyRelative(nameof(DictEntry.unicodeString));
-        element.Q<TextField>("TransString").BindProperty(convStrProp);
-
-        SerializedProperty englishStrProp = property.FindPropertyRelative(nameof(DictEntry.englishTranslation));
-        element.Q<TextField>("EnglishString").BindProperty(englishStrProp);
-
-        SerializedProperty wordTypeProp = property.FindPropertyRelative(nameof(DictEntry.wordType));
-        element.Q<EnumField>("WordType").BindProperty(wordTypeProp);
-
-        element.AssignCallback(ligatureSub);
-        
-        return element;
-    }
-}
-*/
-
 
 [CustomPropertyDrawer(typeof(DialogueTreeList))]
 internal sealed class DialogueTreeListDrawer : PropertyDrawer
 {
+
+    // all 3 of these lists will have the same size!
+
+    // ids represents an id for a node
     private List<int> ids = new List<int>();
 
+    // idxs represents an index for a node
     private List<int> idxs = new List<int>();
+
+    // counts represents whether a node exists at a certain spot (mainly used for deleting unused indices)
     private List<bool> counts = new List<bool>();
 
-    private int time = 0;
-
+    // This function will take in the nodes array as a serialized property and return the index in which
+    // node with id is or -1 if it does not exist
     private int GetIdxFromId(SerializedProperty array, int id)
     {
         int to_return = -1;
@@ -84,6 +54,9 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
         return to_return;
     }
 
+    // This function will check all success ids (outgoing edge) and map the success idx appropriately
+    // It will also check all fail ids (outgoing edge) and map the fail idx appropriately
+    // It will ensure also that every DialogueTreeNode has the correct parent ids and parent idxs array
     private int CheckAndSetNodeIdxs(SerializedProperty array)
     {
         int to_return = -1;
@@ -189,6 +162,61 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
         return to_return;
     }
 
+    public void UpdateWholeArray(SerializedProperty nodes)
+    {
+        for (int j = 0; j < counts.Count; j++)
+        {
+            counts[j] = false;
+        }
+
+        Debug.Log("Called Back");
+        for (int i = 0; i < nodes.arraySize; i++)
+        {
+            SerializedProperty node = nodes.GetArrayElementAtIndex(i);
+            SerializedProperty node_id = node.FindPropertyRelative(nameof(DialogueTreeNode.NodeId));
+            if (ids.Contains(node_id.intValue))
+            {
+                int idx = ids.IndexOf(node_id.intValue);
+                Debug.Log("Ids Size: " + ids.Count + "; Counts Size: " + counts.Count);
+                if (counts[idx] == false)
+                {
+                    counts[idx] = true;
+                } else
+                {         
+                    int random = UnityEngine.Random.Range(0, int.MaxValue);
+                    Debug.Log("New Id " + random + " at Index " + i);
+                    node_id.intValue = random;
+                    ids.Add(random);
+                    counts.Add(true);
+                    idxs.Add(i);
+                }
+                        
+            } else
+            {
+                Debug.Log("Added ID " + node_id.intValue + " at Index " + i);
+                ids.Add(node_id.intValue);
+                counts.Add(true);
+                idxs.Add(i);
+            }
+        }
+
+
+        for (int k = 0; k < counts.Count; k++)
+        {
+            if (counts[k] == false)
+            {
+                Debug.Log("Removed ID");
+                ids.RemoveAt(k);
+                counts.RemoveAt(k);
+                idxs.RemoveAt(k);
+                k--;
+            }
+        }
+
+        CheckAndSetNodeIdxs(nodes);
+                
+    }
+
     public override VisualElement CreatePropertyGUI(SerializedProperty property) 
     {
         Debug.Log("Hi");
@@ -240,88 +268,51 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
         nodesProp.BindProperty(nodes);
         element.Add(nodesProp);
 
+        // This callback will detect a change in the nodes order (either insert, deletion, or rearrange of a new node)
         nodesProp.RegisterCallback((ChangeEvent<UnityEngine.Object> e) =>
         {
-            Debug.Log("Nodes Callback ; Arr Size: " + nodes.arraySize);
+            
             if (counts.Count != nodes.arraySize)
             {
+                Debug.Log("1Nodes Callback ; Arr Size: " + nodes.arraySize);
                 numNodes.intValue = nodes.arraySize;
                 EditorUtility.SetDirty(property.serializedObject.targetObject);
                 property.serializedObject.ApplyModifiedProperties();
+            } else
+            {
+                // This runs a lot but does not update new information!
+                // May want to implement a timer to not update if it calls this again within 2 seconds or something
+                // Couldn't figure out how to make that timer!
+                UpdateWholeArray(nodes);
+                EditorUtility.SetDirty(property.serializedObject.targetObject);
+                property.serializedObject.ApplyModifiedProperties();
+                Debug.Log("2Nodes Callback ; Arr Size: " + nodes.arraySize);
             }
         });
 
+        // This callback detects a change in the set num Nodes property
+        // This will execute a change in either adding a node, or removing a node (ensuring all ids and idxs are 
+        // updated appropriately)
         numNodesProp.RegisterCallback((ChangeEvent<int> e) =>
         {
             //Debug.Log("New E Value num Nodes: " + e.newValue);
-            if (counts.Count != e.newValue)
-            {
-                for (int j = 0; j < counts.Count; j++)
-                {
-                    counts[j] = false;
-                }
-
-                Debug.Log("Called Back");
-                for (int i = 0; i < nodes.arraySize; i++)
-                {
-                    SerializedProperty node = nodes.GetArrayElementAtIndex(i);
-                    SerializedProperty node_id = node.FindPropertyRelative(nameof(DialogueTreeNode.NodeId));
-                    if (ids.Contains(node_id.intValue))
-                    {
-                        int idx = ids.IndexOf(node_id.intValue);
-                        Debug.Log("Ids Size: " + ids.Count + "; Counts Size: " + counts.Count);
-                        if (counts[idx] == false)
-                        {
-                            counts[idx] = true;
-                        } else
-                        {
-                            
-                            int random = UnityEngine.Random.Range(0, int.MaxValue);
-                            Debug.Log("New Id " + random + " at Index " + i);
-                            node_id.intValue = random;
-                            ids.Add(random);
-                            counts.Add(true);
-                            idxs.Add(i);
-                        }
-                        
-                    } else
-                    {
-                        Debug.Log("Added ID " + node_id.intValue + " at Index " + i);
-                        ids.Add(node_id.intValue);
-                        counts.Add(true);
-                        idxs.Add(i);
-                    }
-                }
-
-
-                for (int k = 0; k < counts.Count; k++)
-                {
-                    if (counts[k] == false)
-                    {
-                        Debug.Log("Removed ID");
-                        ids.RemoveAt(k);
-                        counts.RemoveAt(k);
-                        idxs.RemoveAt(k);
-                        k--;
-                    }
-                }
-
-                CheckAndSetNodeIdxs(nodes);
-
-
-                EditorUtility.SetDirty(property.serializedObject.targetObject);
-                property.serializedObject.ApplyModifiedProperties();
+            // if (counts.Count != e.newValue)
+            // {
+            UpdateWholeArray(nodes);
+            EditorUtility.SetDirty(property.serializedObject.targetObject);
+            property.serializedObject.ApplyModifiedProperties();
                 
-            } 
+            // } 
         });
 
         
+        // This ensures to set the value of the current array size 
         numNodes.intValue = nodes.arraySize;
         EditorUtility.SetDirty(property.serializedObject.targetObject);
         property.serializedObject.ApplyModifiedProperties();
 
         
-
+        // This detects a change in the start Id property and will update its underlying index appropriately
         startIdProp.RegisterCallback((ChangeEvent<int> e) =>
         {
             int new_val = e.newValue;
@@ -337,6 +328,7 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
         });
 
         
+
 
 
 
@@ -412,6 +404,7 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
 
         SerializedProperty hasRes = entryp.FindPropertyRelative(nameof(DialogueTreeNode.Entry.hasResponse));
 
+        // This will detect a change in the success id property and update its corresponding index
         succIdProp.RegisterCallback((ChangeEvent<int> e) =>
         {
             //Debug.Log("Array Size: " + parIds.arraySize);
@@ -442,6 +435,7 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
             
         });
 
+        // This will detect a change in the fail/default id property and update its corresponding index
         failIdProp.RegisterCallback((ChangeEvent<int> e) =>
         {
             if (((NodeType)nodeTypeProp.intValue & NodeType.End) != NodeType.End)
@@ -471,6 +465,7 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         });
 
 
+        // This detects a change in the node type property and will hide entries that don't need to be shown!
         nodeTypeProp2.RegisterCallback((ChangeEvent<Enum> e) =>
         {
             NodeType newtype = (NodeType) e.newValue;
@@ -516,73 +511,3 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         
     }
 }
-
-
-/*
-
-[CustomEditor(typeof(DialogueTreeList))]
-internal sealed class DialogueTreeListEditor : Editor
-{
-    private static readonly Dictionary<string, WordType> WordTypeDict = new()
-    {
-        { nameof(WordType.Noun),    WordType.Noun   },
-        { nameof(WordType.Object),  WordType.Object },
-        { nameof(WordType.Verb),    WordType.Verb   },
-    };
-
-    public override VisualElement CreateInspectorGUI()
-    {
-        VisualElement element = new();
-
-        InternalDictionary dict = target as InternalDictionary;
-        serializedObject.Update();
-
-        SerializedProperty arrayProp = serializedObject.FindProperty(nameof(InternalDictionary.entries));
-        PropertyField arrayField     = new(arrayProp);
-        element.Add(arrayField);
-
-        // CSV Importing
-        TextField importField = new("Import CSV")
-        {
-            name      = "ImportField",
-            multiline = true
-        };
-        element.Add(importField);
-
-        Button buttonImport = new()
-        {
-            name = "ImportButton",
-            text = "Import"
-        };
-        buttonImport.clicked += () =>
-        {
-            // Current Structure: [Phonetics, English Translation, Word Type {as str}]
-            const int ExpectedArgCount = 3;
-
-            string importText = importField.text;
-            string[] lines    = importText.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            if (lines.Length > 0)
-            {
-                foreach (string line in lines)
-                {
-                    string[] args = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                    Debug.Assert(args.Length == ExpectedArgCount, $"Invalid number of arguments (expected: {ExpectedArgCount})! String: {line}, Arg Count: {args.Length}");
-                    DictEntry entry = new()
-                    {
-                        rawString          = args[0],
-                        englishTranslation = args[1],
-                        wordType           = WordTypeDict[args[2]]
-                    };
-                    dict.entries.Add(entry);
-                }
-                EditorUtility.SetDirty(dict);
-                serializedObject.ApplyModifiedProperties();
-            }
-        };
-        element.Add(buttonImport);
-
-        return element;
-    }
-}
-*/
-
