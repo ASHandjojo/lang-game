@@ -4,6 +4,7 @@ using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Collections.Generic;
 
 public enum NodeType : uint
 {
@@ -77,7 +78,10 @@ public struct DialogueTreeNode
     // This will hold the id of the next dialogue if the user fials
     [SerializeField] public int FailId; // for editor only basically
 
-    [SerializeField] public Action<int> Function;
+    [SerializeField] public List<int> parentIds; // for editor only basically
+
+    [SerializeField] public List<int> parentIdxs; // for editor only basically
+
 
 
     // This will hold the index of the next dialogue in the list if successful

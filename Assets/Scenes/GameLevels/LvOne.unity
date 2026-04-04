@@ -3208,13 +3208,15 @@ MonoBehaviour:
   npcTree:
     NpcOptions:
     - ConditionalValue: 0
-      startingId: 575028797
-      startIdx: 3
+      startingId: 363648766
+      startIdx: 2
       Nodes:
       - NodeId: 1077245790
         Type: 2
-        SuccId: 363648766
+        SuccId: 1615848925
         FailId: 1077245790
+        parentIds: 5e773540dde54f60fed6ac15279d983386e7e62c
+        parentIdxs: 0000000001000000020000000300000004000000
         SuccIdx: 1
         FailIdx: 0
         Entry:
@@ -3226,10 +3228,12 @@ MonoBehaviour:
           hasResponse: 1
           responseData:
             line: 
-      - NodeId: 363648766
-        Type: 1
+      - NodeId: 1615848925
+        Type: 5
         SuccId: 0
         FailId: 2064454844
+        parentIds: 5e773540dde54f60fed6ac15279d983386e7e62c
+        parentIdxs: 0000000001000000020000000300000004000000
         SuccIdx: 1
         FailIdx: 2
         Entry:
@@ -3241,12 +3245,14 @@ MonoBehaviour:
           hasResponse: 0
           responseData:
             line: 
-      - NodeId: 2064454844
+      - NodeId: 363648766
         Type: 5
         SuccId: 0
-        FailId: 0
+        FailId: 2064454844
+        parentIds: 5e773540dde54f60fed6ac15279d983386e7e62c
+        parentIdxs: 0000000001000000020000000300000004000000
         SuccIdx: 1
-        FailIdx: 0
+        FailIdx: 2
         Entry:
           line:
             line: "+aipcswqrftlmn\xB0\xA8"
@@ -3256,27 +3262,31 @@ MonoBehaviour:
           hasResponse: 0
           responseData:
             line: 
-      - NodeId: 575028797
-        Type: 2
+      - NodeId: 865639719
+        Type: 5
         SuccId: 0
-        FailId: 0
-        SuccIdx: 363648766
-        FailIdx: 1077245790
+        FailId: 2064454844
+        parentIds: 5e773540dde54f60fed6ac15279d983386e7e62c
+        parentIdxs: 0000000001000000020000000300000004000000
+        SuccIdx: 1
+        FailIdx: 2
         Entry:
           line:
             line: "+aipcswqrftlmn\xB0\xA8"
           sound:
             obj: {fileID: 0}
             isInitialized: 0
-          hasResponse: 1
+          hasResponse: 0
           responseData:
             line: 
-      - NodeId: 178022400
+      - NodeId: 753330054
         Type: 2
-        SuccId: 0
-        FailId: 0
-        SuccIdx: 363648766
-        FailIdx: 1077245790
+        SuccId: 1615848925
+        FailId: 865639719
+        parentIds: 5e773540dde54f60fed6ac15279d983386e7e62c
+        parentIdxs: 0000000001000000020000000300000004000000
+        SuccIdx: 1
+        FailIdx: 3
         Entry:
           line:
             line: "+aipcswqrftlmn\xB0\xA8"

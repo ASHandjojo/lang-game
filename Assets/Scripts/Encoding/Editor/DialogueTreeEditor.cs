@@ -16,6 +16,8 @@ using UnityEditor.UIElements;
 using Serialization;
 using UnityEditor.Rendering;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.Rendering;
+using System.Drawing.Printing;
 
 /*
 [CustomPropertyDrawer(typeof(DictEntry))]
@@ -59,7 +61,11 @@ internal sealed class DictEntryDrawer : PropertyDrawer
 internal sealed class DialogueTreeListDrawer : PropertyDrawer
 {
     private List<int> ids = new List<int>();
+
+    private List<int> idxs = new List<int>();
     private List<bool> counts = new List<bool>();
+
+    private int time = 0;
 
     private int GetIdxFromId(SerializedProperty array, int id)
     {
@@ -84,11 +90,14 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
         for (int i = 0; i < array.arraySize; i++)
         {
             SerializedProperty node = array.GetArrayElementAtIndex(i);
+            SerializedProperty node_id = node.FindPropertyRelative(nameof(DialogueTreeNode.NodeId));
             SerializedProperty type = node.FindPropertyRelative(nameof(DialogueTreeNode.Type));
             SerializedProperty succ_id = node.FindPropertyRelative(nameof(DialogueTreeNode.SuccId));
             SerializedProperty succ_idx = node.FindPropertyRelative(nameof(DialogueTreeNode.SuccIdx));
             SerializedProperty fail_id = node.FindPropertyRelative(nameof(DialogueTreeNode.FailId));
             SerializedProperty fail_idx = node.FindPropertyRelative(nameof(DialogueTreeNode.FailIdx));
+
+            // This is for updating the success/fail ids to their indexes
             NodeType this_type = (NodeType) type.intValue;
             bool cond = (this_type & NodeType.Conditional) == NodeType.Conditional;
             if (cond || (this_type == NodeType.Default))
@@ -116,8 +125,67 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
                 }
                 
             }
+
+            // This is for updating the idxs array
+            int node_id_idx = GetIdxFromId(array, node_id.intValue);
+            if (node_id_idx != -1)
+            {
+                Debug.Log("Changed Node Id " + node_id.intValue + " to be at index " + i);
+                idxs[node_id_idx] = i;
+            }
             
         }
+
+        for (int i = 0; i < array.arraySize; i++)
+        {
+            SerializedProperty node = array.GetArrayElementAtIndex(i);
+            SerializedProperty parIds = node.FindPropertyRelative(nameof(DialogueTreeNode.parentIds));
+            SerializedProperty parIdxs = node.FindPropertyRelative(nameof(DialogueTreeNode.parentIdxs));
+            //Debug.Log("Is element an array? " + (parIds.isArray));
+
+            int to_go_to_size = parIds.arraySize;
+            if (ids.Count > to_go_to_size)
+            {
+                to_go_to_size = ids.Count;
+            }
+
+            for (int j = 0; j < to_go_to_size; j++)
+            {
+                if (j < parIds.arraySize && j < ids.Count)
+                {
+                    // element is already allocated and is an element in ids list
+                    SerializedProperty id_val = parIds.GetArrayElementAtIndex(j);
+                    id_val.intValue = ids[j];
+                    SerializedProperty idx_val = parIdxs.GetArrayElementAtIndex(j);
+                    idx_val.intValue = idxs[j];
+                } else if (j >= parIds.arraySize && j < ids.Count)
+                {
+                    // means we have to add a new element to the node array
+                    parIds.InsertArrayElementAtIndex(j);
+                    parIdxs.InsertArrayElementAtIndex(j);
+                    SerializedProperty id_val = parIds.GetArrayElementAtIndex(j);
+                    id_val.intValue = ids[j];
+                    SerializedProperty idx_val = parIdxs.GetArrayElementAtIndex(j);
+                    idx_val.intValue = idxs[j];
+                } else if (j < parIds.arraySize && j >= ids.Count)
+                {
+                    // means we have to destroy the element in the node array
+                    parIds.DeleteArrayElementAtIndex(j);
+                    parIdxs.DeleteArrayElementAtIndex(j);
+                    j--;
+                    to_go_to_size--;
+                } else
+                {
+                    break;
+                }
+            }
+
+
+            
+        }
+
+
+
         return to_return;
     }
 
@@ -149,6 +217,8 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
         startIdxProp.style.visibility = Visibility.Visible;
         startIdxProp.style.display = DisplayStyle.Flex;
         element.Add(startIdxProp);
+
+        
 
 
         SerializedProperty currNode = property.FindPropertyRelative(nameof(DialogueTreeList.CurrNode));
@@ -205,18 +275,21 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
                             counts[idx] = true;
                         } else
                         {
-                            Debug.Log("New Id");
+                            
                             int random = UnityEngine.Random.Range(0, int.MaxValue);
+                            Debug.Log("New Id " + random + " at Index " + i);
                             node_id.intValue = random;
                             ids.Add(random);
                             counts.Add(true);
+                            idxs.Add(i);
                         }
                         
                     } else
                     {
-                        Debug.Log("Added ID");
+                        Debug.Log("Added ID " + node_id.intValue + " at Index " + i);
                         ids.Add(node_id.intValue);
                         counts.Add(true);
+                        idxs.Add(i);
                     }
                 }
 
@@ -228,6 +301,7 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
                         Debug.Log("Removed ID");
                         ids.RemoveAt(k);
                         counts.RemoveAt(k);
+                        idxs.RemoveAt(k);
                         k--;
                     }
                 }
@@ -317,11 +391,17 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         failIdProp.BindProperty(failIdp);
         element.Add(failIdProp);
 
-        SerializedProperty funcp = property.FindPropertyRelative(nameof(DialogueTreeNode.Function));
-        PropertyField funcProp = new(funcp);
-        funcProp.style.visibility = Visibility.Hidden;
-        funcProp.style.display = DisplayStyle.None;
-        element.Add(funcProp);
+        SerializedProperty parIds = property.FindPropertyRelative(nameof(DialogueTreeNode.parentIds));
+        PropertyField parIdsProp = new(parIds);
+        parIdsProp.style.visibility = Visibility.Hidden;
+        parIdsProp.style.display = DisplayStyle.None;
+        element.Add(parIdsProp);
+
+        SerializedProperty parIdxs = property.FindPropertyRelative(nameof(DialogueTreeNode.parentIdxs));
+        PropertyField parIdxsProp = new(parIdxs);
+        parIdxsProp.style.visibility = Visibility.Hidden;
+        parIdxsProp.style.display = DisplayStyle.None;
+        element.Add(parIdxsProp);
 
         
 
@@ -334,12 +414,60 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
 
         succIdProp.RegisterCallback((ChangeEvent<int> e) =>
         {
+            //Debug.Log("Array Size: " + parIds.arraySize);
+            if (((NodeType)nodeTypeProp.intValue & NodeType.Conditional) != 0)
+            {
+                bool found = false;
+                for (int i = 0; i < parIds.arraySize; i++)
+                {
+                    SerializedProperty ele = parIds.GetArrayElementAtIndex(i);
+                    if (ele.intValue == e.newValue)
+                    {
+                        SerializedProperty eleIdx = parIdxs.GetArrayElementAtIndex(i);
+                        // found the id
+                        found = true;
+
+                        // set the index appropriately
+                        succIdxp.intValue = eleIdx.intValue;
+
+                        break;
+                    }
+                }
+
+                Debug.Assert(found, "Error: New Success Id " + e.newValue + " Does Not Exist");
+                EditorUtility.SetDirty(property.serializedObject.targetObject);
+                property.serializedObject.ApplyModifiedProperties();
+            }
+            
             
         });
 
         failIdProp.RegisterCallback((ChangeEvent<int> e) =>
         {
-            
+            if (((NodeType)nodeTypeProp.intValue & NodeType.End) != NodeType.End)
+            {
+                bool found = false;
+                for (int i = 0; i < parIds.arraySize; i++)
+                {
+                    SerializedProperty ele = parIds.GetArrayElementAtIndex(i);
+                    if (ele.intValue == e.newValue)
+                    {
+                        SerializedProperty eleIdx = parIdxs.GetArrayElementAtIndex(i);
+                        // found the id
+                        found = true;
+
+                        // set the index appropriately
+                        failIdxp.intValue = eleIdx.intValue;
+
+                        break;
+                        
+                    }
+                }
+
+                Debug.Assert(found, "Error: New Fail/Default Id " + e.newValue + " Does Not Exist");
+                EditorUtility.SetDirty(property.serializedObject.targetObject);
+                property.serializedObject.ApplyModifiedProperties();
+            }  
         });
 
 
