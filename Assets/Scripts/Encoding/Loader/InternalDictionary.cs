@@ -22,9 +22,10 @@ public enum WordType : ushort
     Interrogative = 7,
     Conjunction   = 8,
 
-    Pronoun = 10,
+    Pronoun     = 10,
+    Preposition = 11,
 
-    TypeCount = 10,
+    TypeCount = 12,
 
     Unknown   = ushort.MaxValue
 }

@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbcb0a22791f0d844b717d6c80fc9a33, type: 3}
+  m_Name: Grammar Rules
+  m_EditorClassIdentifier: 
+  rules:
+  - phraseType: 0
+    rules:
+    - entries:
+      - wordType: 1
+        constituent: 1
+        properties: 6
+      - wordType: 0
+        constituent: 0
+        properties: 1
+      - wordType: 11
+        constituent: 1
+        properties: 6
+  - phraseType: 3
+    rules:
+    - entries:
+      - wordType: 3
+        constituent: 1
+        properties: 2
+      - wordType: 1
+        constituent: 0
+        properties: 1
+  - phraseType: 3
+    rules:
+    - entries:
+      - wordType: 1
+        constituent: 1
+        properties: 2
+      - wordType: 1
+        constituent: 0
+        properties: 1

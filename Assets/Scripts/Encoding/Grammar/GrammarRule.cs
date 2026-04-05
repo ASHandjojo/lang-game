@@ -12,7 +12,7 @@ public enum GrammarProperties : byte
 {
     Required  = 1,
     Optional  = 2,
-    Repeating = 4
+    Repeating = 4 | Optional
 }
 
 [BurstCompile]
