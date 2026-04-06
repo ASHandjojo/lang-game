@@ -46,6 +46,7 @@ public struct KeyboardRow
     {
         for (int i = 0; i < buttons.Length; i++)
         {
+            buttons[i].style.color = Color.black;
             string text = buttons[i].text; // Using text to infer the output
             buttons[i].RegisterCallback(
                 (ClickEvent e) =>
