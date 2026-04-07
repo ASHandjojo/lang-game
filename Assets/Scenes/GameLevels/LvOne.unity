@@ -3208,32 +3208,15 @@ MonoBehaviour:
   npcTree:
     NpcOptions:
     - ConditionalValue: 0
-      startingId: 363648766
-      startIdx: 2
+      startingId: 1733905523
+      startIdx: 0
       Nodes:
-      - NodeId: 1077245790
-        Type: 2
-        SuccId: 1615848925
-        FailId: 1077245790
-        parentIds: 5e773540dde54f60fed6ac15279d983386e7e62c
-        parentIdxs: 0000000001000000020000000300000004000000
-        SuccIdx: 1
-        FailIdx: 0
-        Entry:
-          line:
-            line: "+aipcswqrftlmn\xB0\xA8"
-          sound:
-            obj: {fileID: 0}
-            isInitialized: 0
-          hasResponse: 1
-          responseData:
-            line: 
       - NodeId: 1615848925
         Type: 5
         SuccId: 0
         FailId: 2064454844
-        parentIds: 5e773540dde54f60fed6ac15279d983386e7e62c
-        parentIdxs: 0000000001000000020000000300000004000000
+        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
+        parentIdxs: 000000000100000002000000030000000400000005000000
         SuccIdx: 1
         FailIdx: 2
         Entry:
@@ -3245,13 +3228,13 @@ MonoBehaviour:
           hasResponse: 0
           responseData:
             line: 
-      - NodeId: 363648766
+      - NodeId: 1733905523
         Type: 5
-        SuccId: 0
-        FailId: 2064454844
-        parentIds: 5e773540dde54f60fed6ac15279d983386e7e62c
-        parentIdxs: 0000000001000000020000000300000004000000
-        SuccIdx: 1
+        SuccId: 1615848925
+        FailId: 865639719
+        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
+        parentIdxs: 000000000100000002000000030000000400000005000000
+        SuccIdx: 0
         FailIdx: 2
         Entry:
           line:
@@ -3263,13 +3246,47 @@ MonoBehaviour:
           responseData:
             line: 
       - NodeId: 865639719
+        Type: 1
+        SuccId: 1733905523
+        FailId: 1615848925
+        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
+        parentIdxs: 000000000100000002000000030000000400000005000000
+        SuccIdx: 0
+        FailIdx: 0
+        Entry:
+          line:
+            line: "+aipcswqrftlmn\xB0\xA8"
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 0
+          responseData:
+            line: 
+      - NodeId: 1077245790
+        Type: 2
+        SuccId: 1615848925
+        FailId: 1077245790
+        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
+        parentIdxs: 000000000100000002000000030000000400000005000000
+        SuccIdx: 0
+        FailIdx: 3
+        Entry:
+          line:
+            line: "+aipcswqrftlmn\xB0\xA8"
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 1
+          responseData:
+            line: 
+      - NodeId: 363648766
         Type: 5
-        SuccId: 0
-        FailId: 2064454844
-        parentIds: 5e773540dde54f60fed6ac15279d983386e7e62c
-        parentIdxs: 0000000001000000020000000300000004000000
-        SuccIdx: 1
-        FailIdx: 2
+        SuccId: 1615848925
+        FailId: 1615848925
+        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
+        parentIdxs: 000000000100000002000000030000000400000005000000
+        SuccIdx: 0
+        FailIdx: 0
         Entry:
           line:
             line: "+aipcswqrftlmn\xB0\xA8"
@@ -3283,10 +3300,10 @@ MonoBehaviour:
         Type: 2
         SuccId: 1615848925
         FailId: 865639719
-        parentIds: 5e773540dde54f60fed6ac15279d983386e7e62c
-        parentIdxs: 0000000001000000020000000300000004000000
-        SuccIdx: 1
-        FailIdx: 3
+        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
+        parentIdxs: 000000000100000002000000030000000400000005000000
+        SuccIdx: 0
+        FailIdx: 2
         Entry:
           line:
             line: "+aipcswqrftlmn\xB0\xA8"
@@ -3296,7 +3313,7 @@ MonoBehaviour:
           hasResponse: 1
           responseData:
             line: 
-      NumNodes: 5
+      NumNodes: 6
       CurrNode: 0
 --- !u!61 &1988571624
 BoxCollider2D:

@@ -44,7 +44,11 @@ public struct DialogueTreeList
 
 
     // This will hold all the nodes in the list
-    [SerializeField] public DialogueTreeNode[] Nodes;
+    [SerializeField] public List<DialogueTreeNode> Nodes;
+
+    // // This will hold all the nodes in the list
+    // [SerializeField] public DialogueTreeNode[] Nodes;
+
 
     // This will hold the number of nodes in the list
     [SerializeField] public int NumNodes; // for editor only basically
@@ -94,6 +98,9 @@ public struct DialogueTreeNode
     // This will hold the size of the list if this transition ends the dialogue!
     [SerializeField] public int FailIdx;
 
+    // This will be true if this is vincent talking and false otherwise!
+    [SerializeField] public bool VincentTalking;
+
     // This will hold the actual dialogue entry in this Node!
     [SerializeField] public DialogueEntry Entry;
 }
@@ -138,7 +145,7 @@ public class DialogueTree
         // If the index of the node in the current tree is less than -1, the list is not in use
         Debug.Assert(idx >= 0, "Error: Current Dialogue Tree is not in any current Node");
         // This checks the index to see if it is out of bounds
-        Debug.Assert(idx < NpcOptions[CurrListIdx].Nodes.Length, "Error: Current Dialogue Tree is trying to access a Node that is out of bounds: " + idx.ToString());
+        Debug.Assert(idx < NpcOptions[CurrListIdx].Nodes.Count, "Error: Current Dialogue Tree is trying to access a Node that is out of bounds: " + idx.ToString());
         // This will return the index which will be the exact node being used at the current!
         return idx;
         
@@ -154,6 +161,10 @@ public class DialogueTree
         };
         return index >= 0;
     }
+
+    public bool IsVincentTalking() => TryGetCurrentNode(out var curr) && curr.VincentTalking;
+
+
 
     public bool NeedsPlayerInput() => InDialogueList && TryGetCurrentNode(out var curr) && (curr.Type & NodeType.Conditional) != 0;
 
@@ -266,7 +277,7 @@ public class DialogueTree
         }
 
         CurrListIdx = GetStartIdx;
-        CurrTreeLength = NpcOptions[GetStartIdx].Nodes.Length; // initialize current tree length
+        CurrTreeLength = NpcOptions[GetStartIdx].Nodes.Count; // initialize current tree length
         //Debug.Log("Current Tree Length" + CurrTreeLength);
         if (CurrTreeLength == 0)
         { // if no tree, then return an error
