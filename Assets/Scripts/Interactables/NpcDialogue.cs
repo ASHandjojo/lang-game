@@ -14,6 +14,8 @@ public sealed class NpcDialogue : Interactable
 
     [SerializeField] private string npcName;
     [SerializeField] private Texture2D npcImage;
+    [SerializeField] private Texture2D vincentImage;
+
     //private int index = 0; 
 
     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
@@ -54,6 +56,28 @@ public sealed class NpcDialogue : Interactable
             }
         }
         return false;
+    }
+
+    private void UpdateForVincentTalking()
+    {
+        Debug.Log("Called Vincent Talking");
+        if (npcTree.IsVincentTalking())
+        {
+            Debug.Log("Got Here");
+            document.rootVisualElement.Q("NpcImage").style.backgroundImage = vincentImage;
+            document.rootVisualElement.Q("DialogueBox").style.flexDirection = FlexDirection.Row;
+            document.rootVisualElement.Q("NextLinePrompt").style.left = 1525;
+            document.rootVisualElement.Q<Label>("NpcName").text = "Vincent";
+            document.rootVisualElement.Q("NpcName").style.alignSelf =  Align.FlexStart;
+        } else
+        {
+            document.rootVisualElement.Q("NpcImage").style.backgroundImage = npcImage;
+            document.rootVisualElement.Q("DialogueBox").style.flexDirection = FlexDirection.RowReverse;
+            document.rootVisualElement.Q("NextLinePrompt").style.left = 1345;
+            document.rootVisualElement.Q<Label>("NpcName").text = npcName;
+            document.rootVisualElement.Q("NpcName").style.alignSelf =  Align.FlexEnd;
+        }
+        Debug.Log("Ending Vincent Talking");
     }
 
     protected override void Start()
@@ -123,7 +147,13 @@ public sealed class NpcDialogue : Interactable
                 EchoDialogueError(errstat);
             }
 
+            
+
+            //UpdateForVincentTalking();
+
             yield return TypeLine();
+
+            
 
             if (npcTree.NeedsPlayerInput())
             {
@@ -161,6 +191,7 @@ public sealed class NpcDialogue : Interactable
         // Ensure we are in dialogue before getting the current entry
         if (npcTree.InDialogue() && npcTree.TryGetCurrentEntry(out DialogueEntry currDiag))
         {
+            UpdateForVincentTalking();
             string currentLine = currDiag.line;
             int i = 0;
             while (dialogueLabel.text.Length < currentLine.Length)
@@ -217,12 +248,14 @@ public sealed class NpcDialogue : Interactable
                 {
                     EchoDialogueError(errstat);
                 }
+
             }
             else
             {
                 alreadyIncrDiag = false;
             }
             dialogueLabel.text = "";
+
             yield return TypeLine();
 
             if (npcTree.NeedsPlayerInput())

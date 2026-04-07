@@ -3204,38 +3204,41 @@ MonoBehaviour:
   hudDocument: {fileID: 1605222084}
   npcName: Florence
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
+  vincentImage: {fileID: 2800000, guid: 4d72ad6efe8d642448375a619630dc4a, type: 3}
   entries: []
   npcTree:
     NpcOptions:
     - ConditionalValue: 0
-      startingId: 1733905523
+      startingId: 1615848925
       startIdx: 0
       Nodes:
       - NodeId: 1615848925
-        Type: 5
-        SuccId: 0
-        FailId: 2064454844
-        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
-        parentIdxs: 000000000100000002000000030000000400000005000000
+        Type: 2
+        SuccId: 1733905523
+        FailId: 865639719
+        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
+        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
         SuccIdx: 1
         FailIdx: 2
+        VincentTalking: 0
         Entry:
           line:
             line: "+aipcswqrftlmn\xB0\xA8"
           sound:
             obj: {fileID: 0}
             isInitialized: 0
-          hasResponse: 0
+          hasResponse: 1
           responseData:
             line: 
       - NodeId: 1733905523
         Type: 5
         SuccId: 1615848925
         FailId: 865639719
-        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
-        parentIdxs: 000000000100000002000000030000000400000005000000
+        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
+        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
         SuccIdx: 0
         FailIdx: 2
+        VincentTalking: 1
         Entry:
           line:
             line: "+aipcswqrftlmn\xB0\xA8"
@@ -3249,10 +3252,11 @@ MonoBehaviour:
         Type: 1
         SuccId: 1733905523
         FailId: 1615848925
-        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
-        parentIdxs: 000000000100000002000000030000000400000005000000
+        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
+        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
         SuccIdx: 0
         FailIdx: 0
+        VincentTalking: 1
         Entry:
           line:
             line: "+aipcswqrftlmn\xB0\xA8"
@@ -3266,10 +3270,11 @@ MonoBehaviour:
         Type: 2
         SuccId: 1615848925
         FailId: 1077245790
-        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
-        parentIdxs: 000000000100000002000000030000000400000005000000
+        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
+        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
         SuccIdx: 0
         FailIdx: 3
+        VincentTalking: 0
         Entry:
           line:
             line: "+aipcswqrftlmn\xB0\xA8"
@@ -3279,14 +3284,33 @@ MonoBehaviour:
           hasResponse: 1
           responseData:
             line: 
-      - NodeId: 363648766
+      - NodeId: 753330054
+        Type: 2
+        SuccId: 1615848925
+        FailId: 865639719
+        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
+        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
+        SuccIdx: 0
+        FailIdx: 2
+        VincentTalking: 0
+        Entry:
+          line:
+            line: "+aipcswqrftlmn\xB0\xA8"
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 1
+          responseData:
+            line: 
+      - NodeId: 498317706
         Type: 5
         SuccId: 1615848925
         FailId: 1615848925
-        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
-        parentIdxs: 000000000100000002000000030000000400000005000000
+        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
+        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
         SuccIdx: 0
         FailIdx: 0
+        VincentTalking: 0
         Entry:
           line:
             line: "+aipcswqrftlmn\xB0\xA8"
@@ -3296,24 +3320,43 @@ MonoBehaviour:
           hasResponse: 0
           responseData:
             line: 
-      - NodeId: 753330054
-        Type: 2
+      - NodeId: 187764044
+        Type: 5
         SuccId: 1615848925
-        FailId: 865639719
-        parentIds: dde54f60279d9833734c59675e773540fed6ac1586e7e62c
-        parentIdxs: 000000000100000002000000030000000400000005000000
+        FailId: 1615848925
+        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
+        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
         SuccIdx: 0
-        FailIdx: 2
+        FailIdx: 0
+        VincentTalking: 0
         Entry:
           line:
             line: "+aipcswqrftlmn\xB0\xA8"
           sound:
             obj: {fileID: 0}
             isInitialized: 0
-          hasResponse: 1
+          hasResponse: 0
           responseData:
             line: 
-      NumNodes: 6
+      - NodeId: 363648766
+        Type: 5
+        SuccId: 1615848925
+        FailId: 1615848925
+        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
+        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
+        SuccIdx: 0
+        FailIdx: 0
+        VincentTalking: 0
+        Entry:
+          line:
+            line: "+aipcswqrftlmn\xB0\xA8"
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 0
+          responseData:
+            line: 
+      NumNodes: 8
       CurrNode: 0
 --- !u!61 &1988571624
 BoxCollider2D:
