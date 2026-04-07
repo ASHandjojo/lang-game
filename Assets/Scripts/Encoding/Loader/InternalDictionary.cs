@@ -61,6 +61,12 @@ public struct DictEntry
     public string unicodeString;
     [Tooltip("The English equivalent translation.")]
     public string englishTranslation;
+
+    
+    [Tooltip("List of strong synonyms (exact synonyms).")]
+    public List<string> strongSynonyms;
+    [Tooltip("List of weak synonyms (related words).")]
+    public List<string> weakSynonyms;
 }
 
 [Serializable]
