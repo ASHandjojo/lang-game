@@ -62,8 +62,7 @@ public sealed class EditorUI : EditorWindow
         baseWindow.unicodeProp   = unicodeProp;
         baseWindow.keyboardUI.PhoneticsString = baseWindow.responseData.phoneticsStr;
 
-        string targetStr = unicodeProp!.stringValue;
-        NativeArray<WordNode> words = baseWindow.wordEncoder.Parse(targetStr.AsSpan().ConvertU16(), Allocator.Temp);
+        (var words, var outputStr) = baseWindow.ParseMixed(baseWindow.keyboardUI.PhoneticsString, Allocator.Temp);
 
         baseWindow.englishLabel!.text  = baseWindow.GetEnglishString(words);
         baseWindow.wordTypeLabel!.text = baseWindow.GetWordTypeString(words);
@@ -106,7 +105,6 @@ public sealed class EditorUI : EditorWindow
 
         NativeArray<WordNode> nodes = new(math.max(wordCount - charCount, 0), allocator);
         SplitIterator wordIter      = SplitIterator.Create(input, ' ');
-        Debug.Log($"Word Count: {nodes.Length} | {wordCount}");
 
         StringBuilder builder = new();
         int wordIdx = 0;
@@ -125,16 +123,15 @@ public sealed class EditorUI : EditorWindow
             }
             else
             {
-                builder.Append($"<font=\"Harmony SDF\">{word[1..].ConvertChar().ToString()}</font>");
+                builder.Append($" <font=\"Harmony SDF\">{word[1..].ConvertChar().ToString()}</font>");
             }
         }
-        return (nodes, builder.ToString());
+        return (nodes, builder.ToString().TrimStart());
     }
 
     private void MetaUpdate(string input)
     {
         phoneticsProp!.stringValue = input;
-
 
         (var words, var outputStr) = ParseMixed(input, Allocator.Temp);
 
