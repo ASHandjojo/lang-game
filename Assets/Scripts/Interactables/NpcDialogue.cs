@@ -257,7 +257,11 @@ public class NpcDialogue : Interactable
 
                     string name = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
                     wordLabel.name = name;
-                    MetaHover(wordLabel, wordLabel.style.color);
+                    if (i < currentLine.Length - 1 && currentLine[i + 1] != '<')
+                    {
+                        MetaHover(wordLabel, wordLabel.style.color);
+                    }
+
                 }
             }
             else
@@ -268,10 +272,10 @@ public class NpcDialogue : Interactable
             yield return new WaitForSeconds(textSpeed);
         }
 
-        string word = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
-        wordLabel.name = word;
+        //string word = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
+        //wordLabel.name = word;
 
-        MetaHover(wordLabel, wordLabel.style.color);
+        //MetaHover(wordLabel, wordLabel.style.color);
 
         StartBounce();
     }
