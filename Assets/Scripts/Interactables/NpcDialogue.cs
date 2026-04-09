@@ -7,7 +7,6 @@ using Unity.Collections;
 
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.EventSystems.EventTrigger;
 
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
 public class NpcDialogue : Interactable
@@ -23,7 +22,6 @@ public class NpcDialogue : Interactable
     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
     [SerializeField] protected DialogueEntry[] entries;
 
-    protected Label dialogueLabel;
     protected float textSpeed;
     protected VisualElement nextLinePrompt;
     protected VisualElement wordTooltip;
@@ -32,9 +30,6 @@ public class NpcDialogue : Interactable
     protected float bounceHeight = 30.0f;
     protected float bounceSpeed  = 30.0f;
     protected float bounceStartTime;
-
-    public Font conlangFont;
-    public Font englishFont;
 
     private VisualElement notebookContents;
     private Button notebookButton;
@@ -80,10 +75,6 @@ public class NpcDialogue : Interactable
         // Set name and portrait
         document.rootVisualElement.Q<Label>("NpcName").text = npcName;
         document.rootVisualElement.Q("NpcImage").style.backgroundImage = npcImage;
-
-        //// Make sure text box begins empty
-        //dialogueLabel      = document.rootVisualElement.Q<Label>("DialogueText");
-        //dialogueLabel.text = "";
 
         textSpeed = 0.02f;
         nextLinePrompt = document.rootVisualElement.Q("NextLinePrompt");
@@ -163,7 +154,6 @@ public class NpcDialogue : Interactable
             }
             else
             {
-                // dialogueLabel.text = entries[index].line;
                 StartBounce();
             }
         }
@@ -191,119 +181,13 @@ public class NpcDialogue : Interactable
         //dialogueLabel.text = entries[index].line;
     }
 
-    // Creates new text labels for each word to allow mouse events to be bound to each word independently
-    private IEnumerator TypeLine()
+    private void MetaHover(Label wordLabel, StyleColor orig)
     {
-        var textContainer = document.rootVisualElement.Q("TextContainer");
-        textContainer.Clear();
-
-        string currentLine = entries[index].line;
-        int i = 0;
-
-        Font fontToUse = conlangFont;
-
-        Label wordLabel = new();
-        wordLabel.enableRichText = true;
-        wordLabel.AddToClassList("dialogue-text");
-        wordLabel.style.marginRight = 16;
-        textContainer.Add(wordLabel);
-        wordLabel.style.unityFont = fontToUse;
-
-        while (i < currentLine.Length)
-        {
-            if (currentLine[i] == ' ')
-            {
-                if (wordLabel.text.Length > 0)
-                {
-                    string name = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
-                    wordLabel.name = name;
-
-                    StyleColor orig = wordLabel.style.color;
-
-                    wordLabel.RegisterCallback<PointerEnterEvent>(evt =>
-                    {
-                        Label target = (Label)evt.target;
-                        target.style.color = new StyleColor(Color.red);
-                        ShowTooltip(name, evt.position, target.style.unityFontDefinition);
-                    });
-
-                    wordLabel.RegisterCallback<PointerMoveEvent>(evt =>
-                    {
-                        MoveTooltip(evt.position);
-                    });
-
-                    wordLabel.RegisterCallback<PointerLeaveEvent>(evt =>
-                    {
-                        Label target = (Label)evt.target;
-                        target.style.color = orig;
-                        HideTooltip();
-                    });
-
-                    wordLabel.RegisterCallback<DetachFromPanelEvent>(evt =>
-                    {
-                        HideTooltip();
-                    });
-
-                    wordLabel = new Label();
-                    wordLabel.enableRichText = true;
-                    wordLabel.AddToClassList("dialogue-text");
-                    wordLabel.style.marginRight = 16;
-                    textContainer.Add(wordLabel);
-                    wordLabel.style.unityFontDefinition = new StyleFontDefinition(fontToUse);
-                }
-            }
-            else if (currentLine[i] == '<')
-            {
-                if (currentLine.Substring(i, 3) == "<e>")
-                {
-                    wordLabel.style.unityFontDefinition = new StyleFontDefinition(englishFont);
-                    fontToUse = englishFont;
-                    i += 2;
-                }
-                else if (currentLine.Substring(i, 3) == "<c>")
-                {
-                    wordLabel.style.unityFontDefinition = new StyleFontDefinition(conlangFont);
-                    fontToUse = conlangFont;
-                    i += 2;
-                }
-                else 
-                {
-                    if (fontToUse == conlangFont)
-                    {
-                        wordLabel.text = LanguageTable.PhoneticProcessor.Translate(wordLabel.text + currentLine[i]);
-                    }
-                    else
-                    {
-                        wordLabel.text += currentLine[i];
-                    }
-                    yield return new WaitForSeconds(textSpeed);
-                }
-            }
-            else
-            {
-                if (fontToUse == conlangFont)
-                {
-                    wordLabel.text = LanguageTable.PhoneticProcessor.Translate(wordLabel.text + currentLine[i]);
-                }
-                else
-                {
-                    wordLabel.text += currentLine[i];
-                }
-                yield return new WaitForSeconds(textSpeed);
-            }
-            i++;
-        }
-
-        string word = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
-        wordLabel.name = word;
-
-        StyleColor originalColor = wordLabel.style.color;
-
         wordLabel.RegisterCallback<PointerEnterEvent>(evt =>
         {
-            Label target = (Label)evt.target;
+            Label target = (Label) evt.target;
             target.style.color = new StyleColor(Color.red);
-            ShowTooltip(word, evt.position, target.style.unityFontDefinition);
+            ShowTooltip(name, evt.position, target.style.unityFontDefinition);
         });
 
         wordLabel.RegisterCallback<PointerMoveEvent>(evt =>
@@ -313,10 +197,81 @@ public class NpcDialogue : Interactable
 
         wordLabel.RegisterCallback<PointerLeaveEvent>(evt =>
         {
-            Label target = (Label)evt.target;
-            target.style.color = originalColor;
+            Label target       = (Label) evt.target;
+            target.style.color = orig;
             HideTooltip();
         });
+        wordLabel.RegisterCallback<DetachFromPanelEvent>(evt =>
+        {
+            HideTooltip();
+        });
+    }
+
+    // Creates new text labels for each word to allow mouse events to be bound to each word independently
+    private IEnumerator TypeLine()
+    {
+        var textContainer = document.rootVisualElement.Q("TextContainer");
+        textContainer.Clear();
+
+        Label CreateWordLabel()
+        {
+            Label wordLabel = new()
+            {
+                enableRichText       = true,
+                parseEscapeSequences = true,
+            };
+            wordLabel.AddToClassList("dialogue-text");
+            wordLabel.style.marginRight = 16;
+            textContainer.Add(wordLabel);
+            return wordLabel;
+        }
+
+        string currentLine = entries[index].line;
+        int i = 0;
+
+        Label wordLabel = CreateWordLabel();
+        if (currentLine.Length > 0 && currentLine[0] != '<')
+        {
+            MetaHover(wordLabel, wordLabel.style.color);
+        }
+
+        while (i < currentLine.Length)
+        {
+            if (i < currentLine.Length - 1 && currentLine[i] == '<')
+            {
+                if (wordLabel.text.Length > 0)
+                {
+                    wordLabel = CreateWordLabel();
+                }
+
+                int endIdx      = currentLine[i..].IndexOf("</font>");
+                int tagLength   = "</font>".Length;
+                wordLabel.text += currentLine.Substring(i, endIdx + tagLength);
+                i              += endIdx + tagLength - 1;
+            }
+            else if (currentLine[i] == ' ')
+            {
+                if (wordLabel.text.Length > 0)
+                {
+                    wordLabel = CreateWordLabel();
+
+                    string name = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
+                    wordLabel.name = name;
+                    MetaHover(wordLabel, wordLabel.style.color);
+                }
+            }
+            else
+            {
+                wordLabel.text += currentLine[i];
+            }
+            i++;
+            yield return new WaitForSeconds(textSpeed);
+        }
+
+        string word = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
+        wordLabel.name = word;
+
+        MetaHover(wordLabel, wordLabel.style.color);
 
         StartBounce();
     }
@@ -420,7 +375,7 @@ public class NpcDialogue : Interactable
 
     private void ShowTooltip(string name, Vector2 mousePosition, StyleFontDefinition font)
     {
-        Label word = document.rootVisualElement.Q<Label>("Word");
+        Label word  = document.rootVisualElement.Q<Label>("Word");
         Label notes = document.rootVisualElement.Q<Label>("Notes");
 
         word.text = name;
