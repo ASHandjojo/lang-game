@@ -16,13 +16,13 @@ MonoBehaviour:
   - wordType: 0
     entries:
     - rawString: gucaib
-      unicodeString: "\xC8c\xA2b"
+      unicodeString: "\xC8\xBFib"
       englishTranslation: "question\r"
     - rawString: bigo
       unicodeString: "\xBC\xC7"
       englishTranslation: "Person\r"
     - rawString: ceni
-      unicodeString: "ce\u0107"
+      unicodeString: "\xC0\u0107"
       englishTranslation: "Thing\r"
     - rawString: mifa
       unicodeString: "\u0102\xE2"
@@ -71,12 +71,12 @@ MonoBehaviour:
       englishTranslation: "Library\r"
     - rawString: poma
       unicodeString: "\xB8\u0100"
-      englishTranslation: "Booc\r"
+      englishTranslation: "Book\r"
     - rawString: bicilaro
-      unicodeString: "\xBCci\u010A\u0112"
+      unicodeString: "\xBC\xC1\u010A\u0112"
       englishTranslation: "Anthropology\r"
     - rawString: gucuwa
-      unicodeString: "\xC8cuwa"
+      unicodeString: "\xC8\xC3wa"
       englishTranslation: "Identity\r"
     - rawString: gc
       unicodeString: gc
@@ -85,7 +85,7 @@ MonoBehaviour:
       unicodeString: "\xB8\xA9\u0112"
       englishTranslation: "Subject\r"
     - rawString: guca
-      unicodeString: "\xC8ca"
+      unicodeString: "\xC8\xBF"
       englishTranslation: "Self\r"
     - rawString: carime
       unicodeString: "\xBF\u0111\u0101"
@@ -94,14 +94,14 @@ MonoBehaviour:
       unicodeString: "\u010F\u010Bi"
       englishTranslation: "Location\r"
     - rawString: caipoma
-      unicodeString: "c\xA2\xB8\u0100"
+      unicodeString: "\xBFi\xB8\u0100"
       englishTranslation: "Card\r"
     - rawString: beluruve
       unicodeString: "\xBB\u010E\u0113\xE8"
       englishTranslation: "Journey\r"
     - rawString: cipure
-      unicodeString: "ci\xB9\u0110"
-      englishTranslation: "Ticcet\r"
+      unicodeString: "\xC1\xB9\u0110"
+      englishTranslation: "Ticket\r"
     - rawString: ameng
       unicodeString: "a\u0101q"
       englishTranslation: "Exam\r"
@@ -174,7 +174,7 @@ MonoBehaviour:
       englishTranslation: "Thinc\r"
     - rawString: aigunge
       unicodeString: "\xA2\xC8\u0115"
-      englishTranslation: "Asc\r"
+      englishTranslation: "Ask\r"
     - rawString: theivange
       unicodeString: "\xD4i\xE7\u0115"
       englishTranslation: "Learn\r"

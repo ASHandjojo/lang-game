@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using NUnit.Framework.Constraints;
+
 using Unity.Collections;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
+
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Progress;
 
 [DisallowMultipleComponent]
 public sealed class GameHUDEvents : UIMenuController
@@ -42,7 +40,7 @@ public sealed class GameHUDEvents : UIMenuController
     private Button backPage;
     private Button forwardPage;
 
-    private List<VisualElement> Slots = new List<VisualElement>();
+    private readonly List<VisualElement> Slots = new();
     private int pageNumber = 0;
 
     private TextField journalPage;
@@ -52,7 +50,7 @@ public sealed class GameHUDEvents : UIMenuController
     private const string RootImportDir = "Assets/Scripts/Encoding";
     private const string LigatureSubDir = RootImportDir + "/Loader/Ligature Sub Table.asset";
 
-    private LigatureSub ligatureSub;
+    [SerializeField] private LigatureSub ligatureSub;
     private PhoneticProcessor processor;
 
     public override IEnumerator Open()
@@ -86,8 +84,6 @@ public sealed class GameHUDEvents : UIMenuController
         settingsButton = selfDocument.rootVisualElement.Q<Button>("SettingsButton");
         settingsButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(settingsComponent));
         settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
-
-        ligatureSub = AssetDatabase.LoadAssetAtPath<LigatureSub>(LigatureSubDir);
 
         notebookContainer.visible = false;
         notebookContents = notebookUIDocument.Instantiate();

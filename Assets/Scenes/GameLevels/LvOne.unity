@@ -2385,6 +2385,7 @@ MonoBehaviour:
   openImage: {fileID: 0}
   settingsDocument: {fileID: 1724572783}
   notebookUIDocument: {fileID: 9197481963319205126, guid: b50215d666cea5045be6ebfdfe102e0f, type: 3}
+  ligatureSub: {fileID: 11400000, guid: 77015b68c3111de409d5641b8c8d11d3, type: 2}
 --- !u!82 &1605222087
 AudioSource:
   m_ObjectHideFlags: 0
