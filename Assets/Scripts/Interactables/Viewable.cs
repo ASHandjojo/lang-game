@@ -27,7 +27,7 @@ public sealed class Viewable : Interactable
         soundHandler    = GetComponent<SoundHandler>();
 
         // Initialize UI images, while hiding UI screen until interacted with
-        document.rootVisualElement.Q("ViewImage").style.backgroundImage   = new StyleBackground(zoomImage);
+        document.rootVisualElement.Q("ViewImage").style.backgroundImage = new StyleBackground(zoomImage);
         //document.rootVisualElement.Q("PromptImage").style.backgroundImage = new StyleBackground(keybindIcon);
 
         document.rootVisualElement.style.visibility = Visibility.Hidden;

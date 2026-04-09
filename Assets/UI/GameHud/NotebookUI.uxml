@@ -9,23 +9,23 @@
             <engine:Label text="NoteBook" name="Title" class="headers" style="font-size: 60px; -unity-text-align: upper-center; top: 0; left: auto;" />
         </engine:VisualElement>
         <engine:VisualElement name="DictionarySlot1" style="flex-grow: 1; height: 100%; flex-direction: row; width: 100%; background-image: none; -unity-text-align: middle-left; justify-content: center; align-items: center; display: none;">
-            <engine:Label text="Word" name="Word1" class="hotkey-text TranslatedLabel" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold; color: rgb(165, 0, 0);"/>
+            <engine:Label text="Word" name="Word1" class="hotkey-text ConlangText" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold; color: rgb(165, 0, 0);" />
             <engine:TextField placeholder-text="Notes..." name="Notes1" class="headers" style="width: 50%; font-size: 40px; height: 40%; padding-right: 10%; -unity-font-style: normal;" />
         </engine:VisualElement>
         <engine:VisualElement name="DictionarySlot2" style="flex-grow: 1; height: 100%; flex-direction: row; width: 100%; background-image: none; -unity-text-align: middle-left; justify-content: center; align-items: center; display: none;">
-            <engine:Label text="Word" name="Word2" class="hotkey-text TranslatedLabel" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;"/>
+            <engine:Label text="Word" name="Word2" class="hotkey-text ConlangText" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;" />
             <engine:TextField placeholder-text="Notes..." name="Notes2" class="headers" style="width: 50%; font-size: 40px; height: 40%; padding-right: 10%; -unity-font-style: normal;" />
         </engine:VisualElement>
         <engine:VisualElement name="DictionarySlot3" style="flex-grow: 1; height: 100%; flex-direction: row; width: 100%; background-image: none; -unity-text-align: middle-left; justify-content: center; align-items: center; display: none;">
-            <engine:Label text="Word" name="Word3" class="hotkey-text TranslatedLabel" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;"/>
+            <engine:Label text="Word" name="Word3" class="hotkey-text ConlangText" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;" />
             <engine:TextField placeholder-text="Notes..." name="Notes3" class="headers" style="width: 50%; font-size: 40px; height: 40%; padding-right: 10%; -unity-font-style: normal;" />
         </engine:VisualElement>
         <engine:VisualElement name="DictionarySlot4" style="flex-grow: 1; height: 100%; flex-direction: row; width: 100%; background-image: none; -unity-text-align: middle-left; justify-content: center; align-items: center; display: none;">
-            <engine:Label text="Word" name="Word4" class="hotkey-text TranslatedLabel" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;"/>
+            <engine:Label text="Word" name="Word4" class="hotkey-text ConlangText" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;" />
             <engine:TextField placeholder-text="Notes..." name="Notes4" class="headers" style="width: 50%; font-size: 40px; height: 40%; padding-right: 10%; -unity-font-style: normal;" />
         </engine:VisualElement>
         <engine:VisualElement name="DictionarySlot5" style="flex-grow: 1; height: 100%; flex-direction: row; width: 100%; background-image: none; -unity-text-align: middle-left; justify-content: center; align-items: center; display: none;">
-            <engine:Label text="Word" name="Word5" class="hotkey-text TranslatedLabel" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;"/>
+            <engine:Label text="Word" name="Word5" class="hotkey-text ConlangText" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;" />
             <engine:TextField placeholder-text="Notes..." name="Notes5" class="headers" style="width: 50%; font-size: 40px; height: 40%; padding-right: 10%; -unity-font-style: normal;" />
         </engine:VisualElement>
         <engine:VisualElement name="Journal" style="flex-grow: 0; height: 500%; flex-direction: row; align-content: center; justify-content: center; display: flex;">
