@@ -51,7 +51,8 @@ public sealed class GameHUDEvents : UIMenuController
     private const string LigatureSubDir = RootImportDir + "/Loader/Ligature Sub Table.asset";
 
     [SerializeField] private LigatureSub ligatureSub;
-    private PhoneticProcessor processor;
+    [SerializeField] private StandardSignTable standardSignTable;
+    [SerializeField] private PhoneticProcessor processor;
 
     public override IEnumerator Open()
     {
@@ -315,7 +316,7 @@ public sealed class GameHUDEvents : UIMenuController
             var word = slot.Q<Label>("Word" + ((index % Slots.Count) + 1));
             var notes = slot.Q<TextField>("Notes" + ((index % Slots.Count) + 1));
 
-            processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
+            processor = new(standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
             word.text = processor.Translate(player.dictionary.dictionaryList[index].Word);
 
             if (player.dictionary.dictionaryList[index].Notes == "")

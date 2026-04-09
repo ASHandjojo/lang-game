@@ -95,7 +95,8 @@ public struct KeyboardRow
                     return;
                 }
 #endif
-                Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out Interactable NPC));
+                Interactable NPC = null;
+                Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out NPC));
                 if (NPC is NpcDialogue)
                 {
                     string unicodeStr = processor.Translate(input.phoneticsStr);
