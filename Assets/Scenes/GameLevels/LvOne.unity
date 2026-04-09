@@ -1044,25 +1044,15 @@ MonoBehaviour:
   npcImage: {fileID: 0}
   entries:
   - line:
-      phoneticsStr: h
-      line: h
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 0
-    responseData:
-      phoneticsStr: m
-      line: m
-  - line:
-      phoneticsStr: h
-      line: h
+      phoneticsStr: ?Muin ic+u t+e gu?
+      line: "?M\xB3n igu de \xC8?"
     sound:
       obj: {fileID: 0}
       isInitialized: 0
     hasResponse: 1
     responseData:
-      phoneticsStr: m
-      line: m
+      phoneticsStr: muin ac+u f+insent t+e
+      line: "\u0104in agu vin\xEDnt de"
   sceneLoader: {fileID: 1367662897}
   nextScene:
     name: TestNextLv
@@ -3220,9 +3210,9 @@ MonoBehaviour:
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   entries:
   - line:
-      phoneticsStr: '|What''s |that |shimmery |thing?'
-      line: <font="Harmony SDF">What's</font> <font="Harmony SDF">that</font> <font="Harmony
-        SDF">shimmery</font> <font="Harmony SDF">thing?</font>
+      phoneticsStr: '|Ah, |hi |Vincent!'
+      line: <font="Harmony SDF">Ah,</font> <font="Harmony SDF">hi</font> <font="Harmony
+        SDF">Vincent!</font>
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -3241,6 +3231,244 @@ MonoBehaviour:
     responseData:
       phoneticsStr: melaia wabi bele chie
       line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
+  - line:
+      phoneticsStr: '|You |can |think |of |them |as |security |gates |for |certain
+        |areas |of |the |city.'
+      line: <font="Harmony SDF">You</font> <font="Harmony SDF">can</font> <font="Harmony
+        SDF">think</font> <font="Harmony SDF">of</font> <font="Harmony SDF">them</font>
+        <font="Harmony SDF">as</font> <font="Harmony SDF">security</font> <font="Harmony
+        SDF">gates</font> <font="Harmony SDF">for</font> <font="Harmony SDF">certain</font>
+        <font="Harmony SDF">areas</font> <font="Harmony SDF">of</font> <font="Harmony
+        SDF">the</font> <font="Harmony SDF">city.</font>
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: melaia wabi bele chie
+      line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
+  - line:
+      phoneticsStr: "|If |you |want |to |enter |such |an |area, |you\u2019ll |have
+        |to |be |able |to |correctly |answer |the hgaimei |\u2019s |questions"
+      line: "<font=\"Harmony SDF\">If</font> <font=\"Harmony SDF\">you</font> <font=\"Harmony
+        SDF\">want</font> <font=\"Harmony SDF\">to</font> <font=\"Harmony SDF\">enter</font>
+        <font=\"Harmony SDF\">such</font> <font=\"Harmony SDF\">an</font> <font=\"Harmony
+        SDF\">area,</font> <font=\"Harmony SDF\">you\u2019ll</font> <font=\"Harmony
+        SDF\">have</font> <font=\"Harmony SDF\">to</font> <font=\"Harmony SDF\">be</font>
+        <font=\"Harmony SDF\">able</font> <font=\"Harmony SDF\">to</font> <font=\"Harmony
+        SDF\">correctly</font> <font=\"Harmony SDF\">answer</font> <font=\"Harmony
+        SDF\">the</font> \xDDi\u0101i <font=\"Harmony SDF\">\u2019s</font> <font=\"Harmony
+        SDF\">questions</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: melaia wabi bele chie
+      line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
+  - line:
+      phoneticsStr: "|I\u2019m |frankly |a |bit |surprised |no |one |told |you |this\u2026
+        |They\u2019ve |been |here |for |decades."
+      line: "<font=\"Harmony SDF\">I\u2019m</font> <font=\"Harmony SDF\">frankly</font>
+        <font=\"Harmony SDF\">a</font> <font=\"Harmony SDF\">bit</font> <font=\"Harmony
+        SDF\">surprised</font> <font=\"Harmony SDF\">no</font> <font=\"Harmony SDF\">one</font>
+        <font=\"Harmony SDF\">told</font> <font=\"Harmony SDF\">you</font> <font=\"Harmony
+        SDF\">this\u2026</font> <font=\"Harmony SDF\">They\u2019ve</font> <font=\"Harmony
+        SDF\">been</font> <font=\"Harmony SDF\">here</font> <font=\"Harmony SDF\">for</font>
+        <font=\"Harmony SDF\">decades.</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: melaia wabi bele chie
+      line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
+  - line:
+      phoneticsStr: '|Speaking |of |which, |how |good |are |you |at |speaking aifo
+        matemei |?'
+      line: "<font=\"Harmony SDF\">Speaking</font> <font=\"Harmony SDF\">of</font>
+        <font=\"Harmony SDF\">which,</font> <font=\"Harmony SDF\">how</font> <font=\"Harmony
+        SDF\">good</font> <font=\"Harmony SDF\">are</font> <font=\"Harmony SDF\">you</font>
+        <font=\"Harmony SDF\">at</font> <font=\"Harmony SDF\">speaking</font> \xA2\xE5
+        \u0100\xCA\u0101i <font=\"Harmony SDF\">?</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: melaia wabi bele chie
+      line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
+  - line:
+      phoneticsStr: '|...'
+      line: <font="Harmony SDF">...</font>
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: melaia wabi bele chie
+      line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
+  - line:
+      phoneticsStr: '|You |really |came |to matemei |without |learning |the |language
+        |beforehand?'
+      line: "<font=\"Harmony SDF\">You</font> <font=\"Harmony SDF\">really</font>
+        <font=\"Harmony SDF\">came</font> <font=\"Harmony SDF\">to</font> \u0100\xCA\u0101i
+        <font=\"Harmony SDF\">without</font> <font=\"Harmony SDF\">learning</font>
+        <font=\"Harmony SDF\">the</font> <font=\"Harmony SDF\">language</font> <font=\"Harmony
+        SDF\">beforehand?</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: melaia wabi bele chie
+      line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
+  - line:
+      phoneticsStr: "|Okay. |Why |don\u2019t |we |start |off |with |the |essentials?
+        |The |word |for |\"I\" |is ac+u |. |Can |you |say |that?"
+      line: "<font=\"Harmony SDF\">Okay.</font> <font=\"Harmony SDF\">Why</font>
+        <font=\"Harmony SDF\">don\u2019t</font> <font=\"Harmony SDF\">we</font> <font=\"Harmony
+        SDF\">start</font> <font=\"Harmony SDF\">off</font> <font=\"Harmony SDF\">with</font>
+        <font=\"Harmony SDF\">the</font> <font=\"Harmony SDF\">essentials?</font>
+        <font=\"Harmony SDF\">The</font> <font=\"Harmony SDF\">word</font> <font=\"Harmony
+        SDF\">for</font> <font=\"Harmony SDF\">\"I\"</font> <font=\"Harmony SDF\">is</font>
+        agu <font=\"Harmony SDF\">.</font> <font=\"Harmony SDF\">Can</font> <font=\"Harmony
+        SDF\">you</font> <font=\"Harmony SDF\">say</font> <font=\"Harmony SDF\">that?</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 1
+    responseData:
+      phoneticsStr: ac+u
+      line: agu
+  - line:
+      phoneticsStr: "|Moving |on, |the |word |for |\u201Cyou\u201D |is ic+u |."
+      line: "<font=\"Harmony SDF\">Moving</font> <font=\"Harmony SDF\">on,</font>
+        <font=\"Harmony SDF\">the</font> <font=\"Harmony SDF\">word</font> <font=\"Harmony
+        SDF\">for</font> <font=\"Harmony SDF\">\u201Cyou\u201D</font> <font=\"Harmony
+        SDF\">is</font> igu <font=\"Harmony SDF\">.</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 1
+    responseData:
+      phoneticsStr: ic+u
+      line: igu
+  - line:
+      phoneticsStr: "|Right! |Next, |the |word |for |\u201Cname\u201D |is muin |."
+      line: "<font=\"Harmony SDF\">Right!</font> <font=\"Harmony SDF\">Next,</font>
+        <font=\"Harmony SDF\">the</font> <font=\"Harmony SDF\">word</font> <font=\"Harmony
+        SDF\">for</font> <font=\"Harmony SDF\">\u201Cname\u201D</font> <font=\"Harmony
+        SDF\">is</font> \u0104in <font=\"Harmony SDF\">.</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 1
+    responseData:
+      phoneticsStr: muin
+      line: "\u0104in"
+  - line:
+      phoneticsStr: "|Alright, |let\u2019s |start |putting |things |together."
+      line: "<font=\"Harmony SDF\">Alright,</font> <font=\"Harmony SDF\">let\u2019s</font>
+        <font=\"Harmony SDF\">start</font> <font=\"Harmony SDF\">putting</font> <font=\"Harmony
+        SDF\">things</font> <font=\"Harmony SDF\">together.</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: 
+      line: 
+  - line:
+      phoneticsStr: "|Whenever |you |say |that |something |belongs |to |someone,
+        |you |just |add |be |to |the |end |of |that |person. |For |example, |if |you
+        |wanted |to |say |\u201Cmy |name,\u201D |you |would |say muin ac+up+e |."
+      line: "<font=\"Harmony SDF\">Whenever</font> <font=\"Harmony SDF\">you</font>
+        <font=\"Harmony SDF\">say</font> <font=\"Harmony SDF\">that</font> <font=\"Harmony
+        SDF\">something</font> <font=\"Harmony SDF\">belongs</font> <font=\"Harmony
+        SDF\">to</font> <font=\"Harmony SDF\">someone,</font> <font=\"Harmony SDF\">you</font>
+        <font=\"Harmony SDF\">just</font> <font=\"Harmony SDF\">add</font> <font=\"Harmony
+        SDF\">be</font> <font=\"Harmony SDF\">to</font> <font=\"Harmony SDF\">the</font>
+        <font=\"Harmony SDF\">end</font> <font=\"Harmony SDF\">of</font> <font=\"Harmony
+        SDF\">that</font> <font=\"Harmony SDF\">person.</font> <font=\"Harmony SDF\">For</font>
+        <font=\"Harmony SDF\">example,</font> <font=\"Harmony SDF\">if</font> <font=\"Harmony
+        SDF\">you</font> <font=\"Harmony SDF\">wanted</font> <font=\"Harmony SDF\">to</font>
+        <font=\"Harmony SDF\">say</font> <font=\"Harmony SDF\">\u201Cmy</font> <font=\"Harmony
+        SDF\">name,\u201D</font> <font=\"Harmony SDF\">you</font> <font=\"Harmony
+        SDF\">would</font> <font=\"Harmony SDF\">say</font> \u0104in agube <font=\"Harmony
+        SDF\">.</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 1
+    responseData:
+      phoneticsStr: muin ac+up+e
+      line: "\u0104in agube"
+  - line:
+      phoneticsStr: '|Great. |So |if |you |were |to |introduce |youself, |you |would
+        |say muin ac+up+e f+insent t+e |. '
+      line: "<font=\"Harmony SDF\">Great.</font> <font=\"Harmony SDF\">So</font>
+        <font=\"Harmony SDF\">if</font> <font=\"Harmony SDF\">you</font> <font=\"Harmony
+        SDF\">were</font> <font=\"Harmony SDF\">to</font> <font=\"Harmony SDF\">introduce</font>
+        <font=\"Harmony SDF\">youself,</font> <font=\"Harmony SDF\">you</font> <font=\"Harmony
+        SDF\">would</font> <font=\"Harmony SDF\">say</font> \u0104in agube vin\xEDnt
+        de <font=\"Harmony SDF\">.</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 1
+    responseData:
+      phoneticsStr: muin ac+up+e f+insent t+e
+      line: "\u0104in agube vin\xEDnt de"
+  - line:
+      phoneticsStr: '|All |right, |that |should |be |enough |to |get |you |past |this
+        hgaimei |over |there.'
+      line: "<font=\"Harmony SDF\">All</font> <font=\"Harmony SDF\">right,</font>
+        <font=\"Harmony SDF\">that</font> <font=\"Harmony SDF\">should</font> <font=\"Harmony
+        SDF\">be</font> <font=\"Harmony SDF\">enough</font> <font=\"Harmony SDF\">to</font>
+        <font=\"Harmony SDF\">get</font> <font=\"Harmony SDF\">you</font> <font=\"Harmony
+        SDF\">past</font> <font=\"Harmony SDF\">this</font> \xDDi\u0101i <font=\"Harmony
+        SDF\">over</font> <font=\"Harmony SDF\">there.</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: 
+      line: 
+  - line:
+      phoneticsStr: '|You |seem |clever |enough |to |learn |as |you |go, |even |if
+        |you |forgot |to |learn aifo matemei |ahead |of |time.'
+      line: "<font=\"Harmony SDF\">You</font> <font=\"Harmony SDF\">seem</font> <font=\"Harmony
+        SDF\">clever</font> <font=\"Harmony SDF\">enough</font> <font=\"Harmony SDF\">to</font>
+        <font=\"Harmony SDF\">learn</font> <font=\"Harmony SDF\">as</font> <font=\"Harmony
+        SDF\">you</font> <font=\"Harmony SDF\">go,</font> <font=\"Harmony SDF\">even</font>
+        <font=\"Harmony SDF\">if</font> <font=\"Harmony SDF\">you</font> <font=\"Harmony
+        SDF\">forgot</font> <font=\"Harmony SDF\">to</font> <font=\"Harmony SDF\">learn</font>
+        \xA2\xE5 \u0100\xCA\u0101i <font=\"Harmony SDF\">ahead</font> <font=\"Harmony
+        SDF\">of</font> <font=\"Harmony SDF\">time.</font>"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: 
+      line: 
+  - line:
+      phoneticsStr: "|I\u2019ve |got |mail |to |deliver, |but |I\u2019ll |probably
+        |see |you |around. !Meru!"
+      line: "<font=\"Harmony SDF\">I\u2019ve</font> <font=\"Harmony SDF\">got</font>
+        <font=\"Harmony SDF\">mail</font> <font=\"Harmony SDF\">to</font> <font=\"Harmony
+        SDF\">deliver,</font> <font=\"Harmony SDF\">but</font> <font=\"Harmony SDF\">I\u2019ll</font>
+        <font=\"Harmony SDF\">probably</font> <font=\"Harmony SDF\">see</font> <font=\"Harmony
+        SDF\">you</font> <font=\"Harmony SDF\">around.</font> !Me\u0113!"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: 
+      line: 
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0
