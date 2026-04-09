@@ -3221,8 +3221,8 @@ MonoBehaviour:
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   entries:
   - line:
-      phoneticsStr: melaia
-      line: "\u0101\u010A\xA9"
+      phoneticsStr: '|melaia melaia'
+      line: "<font=\"Harmony SDF\">melaia</font> \u0101\u010A\xA9"
     sound:
       obj: {fileID: 0}
       isInitialized: 0

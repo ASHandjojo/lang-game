@@ -203,6 +203,7 @@ public class NpcDialogue : Interactable
         Font fontToUse = conlangFont;
 
         Label wordLabel = new();
+        wordLabel.enableRichText = true;
         wordLabel.AddToClassList("dialogue-text");
         wordLabel.style.marginRight = 16;
         textContainer.Add(wordLabel);
@@ -244,6 +245,7 @@ public class NpcDialogue : Interactable
                     });
 
                     wordLabel = new Label();
+                    wordLabel.enableRichText = true;
                     wordLabel.AddToClassList("dialogue-text");
                     wordLabel.style.marginRight = 16;
                     textContainer.Add(wordLabel);

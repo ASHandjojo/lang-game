@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using System.Text;
 
 using Unity.Collections;
+using Unity.Mathematics;
 
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -50,16 +52,18 @@ public sealed class EditorUI : EditorWindow
     public static void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty phoneticsProp, SerializedProperty unicodeProp)
     {
         Debug.Assert(dialogueEntry != null);
-
+        // Linking dialogue entry being edited.
         EditorUI baseWindow     = GetWindow<EditorUI>(EditorName, true);
         baseWindow.responseData = dialogueEntry;
-        baseWindow.unicodeLabel!.text  = baseWindow.responseData!.line;
+        // Load from stored to UI (Unicode)
+        baseWindow.unicodeLabel!.text = baseWindow.responseData!.line;
 
         baseWindow.phoneticsProp = phoneticsProp;
         baseWindow.unicodeProp   = unicodeProp;
         baseWindow.keyboardUI.PhoneticsString = baseWindow.responseData.phoneticsStr;
 
-        NativeArray<WordNode> words = baseWindow.wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
+        string targetStr = unicodeProp!.stringValue;
+        NativeArray<WordNode> words = baseWindow.wordEncoder.Parse(targetStr.AsSpan().ConvertU16(), Allocator.Temp);
 
         baseWindow.englishLabel!.text  = baseWindow.GetEnglishString(words);
         baseWindow.wordTypeLabel!.text = baseWindow.GetWordTypeString(words);
@@ -90,14 +94,51 @@ public sealed class EditorUI : EditorWindow
         return typeOutput;
     }
 
-    private void WriteToWindow(string input)
+    private (NativeArray<WordNode>, string) ParseMixed(string input, Allocator allocator = Allocator.Temp)
     {
-        if (responseData == null)
+        const ushort Separator = '|';
+        if (input.Length == 0)
         {
-            return;
+            return (default, string.Empty);
         }
+        int wordCount = input.AsSpan().ConvertU16().WordCount(' ');
+        int charCount = input.AsSpan().ConvertU16().CharCount(Separator);
+
+        NativeArray<WordNode> nodes = new(math.max(wordCount - charCount, 0), allocator);
+        SplitIterator wordIter      = SplitIterator.Create(input, ' ');
+        Debug.Log($"Word Count: {nodes.Length} | {wordCount}");
+
+        StringBuilder builder = new();
+        int wordIdx = 0;
+        while (wordIter.MoveNext())
+        {
+            ReadOnlySpan<ushort> word = wordIter.Current;
+            if (word.IsEmpty)
+            {
+                continue;
+            }
+            if (word[0] != Separator)
+            {
+                string wordConv  = processor.Translate(word.ConvertChar());
+                nodes[wordIdx++] = wordEncoder.ParseSingle(wordConv.AsSpan().ConvertU16());
+                builder.Append($" {wordConv}");
+            }
+            else
+            {
+                builder.Append($"<font=\"Harmony SDF\">{word[1..].ConvertChar().ToString()}</font>");
+            }
+        }
+        return (nodes, builder.ToString());
+    }
+
+    private void MetaUpdate(string input)
+    {
         phoneticsProp!.stringValue = input;
-        unicodeProp!.stringValue   = processor.Translate(input);
+
+
+        (var words, var outputStr) = ParseMixed(input, Allocator.Temp);
+
+        unicodeProp!.stringValue = outputStr;
 
         Undo.RecordObject(phoneticsProp!.serializedObject.targetObject, "TextEdit");
         Undo.RecordObject(unicodeProp!.serializedObject.targetObject,   "TextEdit");
@@ -105,12 +146,22 @@ public sealed class EditorUI : EditorWindow
         phoneticsProp.serializedObject.ApplyModifiedProperties();
         unicodeProp.serializedObject.ApplyModifiedProperties();
 
-        NativeArray<WordNode> words = wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
-
         unicodeLabel!.text  = unicodeProp!.stringValue;
         englishLabel!.text  = GetEnglishString(words);
         wordTypeLabel!.text = GetWordTypeString(words);
+    }
 
+    /// <summary>
+    /// A callback that takes in a phonetic string, writes to disk the new results, and then populates the appropriate Editor UI.
+    /// </summary>
+    /// <param name="input"></param>
+    private void WriteToWindow(string input)
+    {
+        if (responseData == null)
+        {
+            return;
+        }
+        MetaUpdate(input);
         phoneticField!.SetValueWithoutNotify(phoneticsProp!.stringValue);
     }
 
@@ -157,20 +208,8 @@ public sealed class EditorUI : EditorWindow
         phoneticField.RegisterCallback(
             (ChangeEvent<string> e) =>
             {
-                string input = e.newValue;
-                phoneticsProp!.stringValue = input;
-                unicodeProp!.stringValue   = processor.Translate(input);
-
                 keyboardUI.PhoneticsString = responseData!.phoneticsStr;
-
-                phoneticsProp.serializedObject.ApplyModifiedProperties();
-                unicodeProp.serializedObject.ApplyModifiedProperties();
-
-                NativeArray<WordNode> words = wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
-
-                unicodeLabel!.text  = unicodeProp!.stringValue;
-                englishLabel!.text  = GetEnglishString(words);
-                wordTypeLabel!.text = GetWordTypeString(words);
+                MetaUpdate(e.newValue);
             }
         );
 
