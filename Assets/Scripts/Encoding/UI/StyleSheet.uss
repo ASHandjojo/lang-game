@@ -16,7 +16,7 @@
 .StandardFont {
     width: 95%;
     height: auto;
-    -unity-font-definition: url("project://database/Assets/Fonts/Roboto-Regular%20SDF.asset?fileID=11400000&guid=7b6407234864bbf4fb5b64d6dd557bfb&type=2#Roboto-Regular SDF");
+    -unity-font-definition: url("/Assets/Resources/Fonts%20&%20Materials/Roboto-Regular%20SDF.asset");
     font-size: 14px;
     color: white;
     bottom: 0;
@@ -29,7 +29,7 @@
 .Translate {
     width: 95%;
     height: auto;
-    -unity-font-definition: url("project://database/Assets/Fonts/Roboto-Regular%20SDF.asset?fileID=11400000&guid=7b6407234864bbf4fb5b64d6dd557bfb&type=2#Roboto-Regular SDF");
+    -unity-font-definition: url("/Assets/Resources/Fonts%20&%20Materials/Roboto-Regular%20SDF.asset"); 
     font-size: 14px;
     color: white;
     bottom: 0;
@@ -40,7 +40,7 @@
 
 .Translate > .unity-text-field__input {
     font-size: 28px;
-    -unity-font-definition: url("project://database/Assets/Fonts/Melody%20SDF.asset?fileID=11400000&guid=57f5131e1acbe4483910fe98b9bcb4a1&type=2#Melody SDF");
+    -unity-font-definition: url("/Assets/Resources/Fonts%20&%20Materials/Melody%20SDF.asset");
 }
 
 .TranslatedLabel {
@@ -49,7 +49,7 @@
     font-size: 28px;
     color: white;
     padding: 1.25%;
-    -unity-font-definition: url('/Assets/Fonts/Melody SDF.asset');
+    -unity-font-definition: url('/Assets/Resources/Fonts%20&%20Materials/Melody SDF.asset');
 
     white-space: normal;
 }

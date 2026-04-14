@@ -56,6 +56,7 @@ public sealed class PlayerController : MonoBehaviour
 
     // Dictionary
     public Dictionary dictionary { get; set; }
+    public int playerJournalSize = 50;
 
     void Awake()
     {

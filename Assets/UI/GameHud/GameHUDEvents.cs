@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using Unity.Collections;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
+
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Progress;
 
 [DisallowMultipleComponent]
 public sealed class GameHUDEvents : UIMenuController
@@ -25,38 +24,46 @@ public sealed class GameHUDEvents : UIMenuController
     [SerializeField] private UIDocument settingsDocument;
 
     public VisualElement hudContainer;
-    private VisualElement dictionaryContainer;
-    private VisualElement dictionary;
-    [SerializeField] private VisualTreeAsset dictionarySlots;
-    private TemplateContainer dictionaryContents;
+    private VisualElement notebookContainer;
+    private VisualElement notebook;
+    [SerializeField] private VisualTreeAsset notebookUIDocument;
+    private TemplateContainer notebookContents;
 
-    private Button dictionaryButton;
+    private Button notebookButton;
     private Button settingsButton;
 
     private Button backButton;
+    private Button dictionaryButton;
+    private Button journalButton;
+    private Label pageCount;
 
     private Button backPage;
     private Button forwardPage;
 
-    private List<VisualElement> Slots = new List<VisualElement>();
+    private readonly List<VisualElement> Slots = new();
     private int pageNumber = 0;
+
+    private TextField journalPage;
+
+    private bool journalOrDict = true; // true: dictionary, false: journal, will open by default
 
     private const string RootImportDir = "Assets/Scripts/Encoding";
     private const string LigatureSubDir = RootImportDir + "/Loader/Ligature Sub Table.asset";
 
-    private LigatureSub ligatureSub;
-    private PhoneticProcessor processor;
+    [SerializeField] private LigatureSub ligatureSub;
+    [SerializeField] private StandardSignTable standardSignTable;
+    [SerializeField] private PhoneticProcessor processor;
 
     public override IEnumerator Open()
     {
-        yield return EnterDictionary(dictionary, openImage);
+        yield return EnterDictionary(notebook, openImage);
         PlayerController.Instance.context |= PlayerContext.InDictionary;
     }
 
     public override IEnumerator Close() 
     {
         PlayerController.Instance.context &= ~PlayerContext.InDictionary;
-        yield return ExitDictionary(dictionary, closedImage);
+        yield return ExitDictionary(notebook, closedImage);
     }
 
     void Awake()
@@ -66,32 +73,27 @@ public sealed class GameHUDEvents : UIMenuController
 
         hudContainer = selfDocument.rootVisualElement.Q("ScreenContainer");
 
-        dictionaryContainer = selfDocument.rootVisualElement.Q("DictionaryContainer");
-        dictionary = selfDocument.rootVisualElement.Q("Dictionary");
+        notebookContainer = selfDocument.rootVisualElement.Q("NotebookContainer");
+        notebook = selfDocument.rootVisualElement.Q("Notebook");
 
         // Add events to all buttons
-        dictionaryButton = selfDocument.rootVisualElement.Q<Button>("DictionaryButton");
-        dictionaryButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(this));
-        dictionaryButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
-        // Back button for dictionary
-        backButton = selfDocument.rootVisualElement.Q<Button>("BackButton");
-        backButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.ClearAllMenus());
-
+        notebookButton = selfDocument.rootVisualElement.Q<Button>("NotebookButton");
+        notebookButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(this));
+        notebookButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
+       
         var settingsComponent = settingsDocument.gameObject.GetComponent<SettingsMenuEvents>();
         settingsButton = selfDocument.rootVisualElement.Q<Button>("SettingsButton");
         settingsButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.UseMenu(settingsComponent));
         settingsButton.RegisterCallback<MouseEnterEvent>(OnButtonHover);
 
-        ligatureSub = AssetDatabase.LoadAssetAtPath<LigatureSub>(LigatureSubDir);
-
-        dictionaryContainer.visible = false;
-        dictionaryContents = dictionarySlots.Instantiate();
-        dictionary.Add(dictionaryContents);
+        notebookContainer.visible = false;
+        notebookContents = notebookUIDocument.Instantiate();
+        notebookContents.style.flexGrow = 1;
 
         for (int i = 0; i < 5; i++)
         {
             int slotNumber = i + 1;
-            var item = dictionaryContents.Q("DictionarySlot" + slotNumber);
+            var item = notebookContents.Q("DictionarySlot" + slotNumber);
 
             if (item == null)
             {
@@ -108,67 +110,86 @@ public sealed class GameHUDEvents : UIMenuController
             Slots.Add(item);
         }
 
-        LoadPage(pageNumber);
+        journalPage = notebookContents.Q<TextField>("JournalPage");
+        journalPage.RegisterValueChangedCallback(evt =>
+        {
+            PageUpdate(evt.newValue);
+        });
 
-        backPage = selfDocument.rootVisualElement.Q<Button>("BackPage");
+        backPage = notebookContents.Q<Button>("BackPage");
         backPage.RegisterCallback<ClickEvent>((e) => LoadPage(pageNumber - 1));
 
-        forwardPage = selfDocument.rootVisualElement.Q<Button>("ForwardPage");
+        forwardPage = notebookContents.Q<Button>("ForwardPage");
         forwardPage.RegisterCallback<ClickEvent>((e) => LoadPage(pageNumber + 1));
 
-        dictionaryContents.visible = false;
+        // Back button for dictionary
+        backButton = notebookContents.Q<Button>("BackButton");
+        backButton.RegisterCallback<ClickEvent>((e) => MenuToggler.Instance.ClearAllMenus());
+
+        // Toggle to Dictionary
+        dictionaryButton = notebookContents.Q<Button>("DictionaryButton");
+        dictionaryButton.RegisterCallback<ClickEvent>((e) => ToggleJournalDictionary(true));
+
+        // Toggle to Journal
+        journalButton = notebookContents.Q<Button>("JournalButton");
+        journalButton.RegisterCallback<ClickEvent>((e) => ToggleJournalDictionary(false));
+
+        pageCount = notebookContents.Q<Label>("PageCount");
+
+        notebookContents.visible = false;
         foreach (VisualElement slot in Slots) 
         {
             slot.visible = false;
         }
+
+        ToggleJournalDictionary(journalOrDict);
     }
 
     //public void OpenSettings(ClickEvent e) => OpenSettings();
 
-    private IEnumerator EnterDictionary(VisualElement dictionary, Texture2D closedImage)
+    private IEnumerator EnterDictionary(VisualElement notebook, Texture2D closedImage)
     {
-        dictionaryContainer.style.backgroundColor = new StyleColor(new Color(0.08f, 0.08f, 0.08f, 0.8f));
+        notebookContainer.style.backgroundColor = new StyleColor(new Color(0.08f, 0.08f, 0.08f, 0.8f));
         // Disable box collider to prevent interactions & freeze position to prevent movement
         //DisableWorldActions();
         
         // Enable Dictionary elements, Disable HUD
-        dictionaryContainer.visible = true;
+        notebookContainer.visible = true;
         hudContainer.visible        = false;
 
         // Enter the screen
         sh.PlaySoundUI(openClip);
-        yield return Translate(dictionary, backButton, -1500.0f, -350.0f, 1.0f);
+        yield return Translate(notebook, -1500.0f, -350.0f, 1.0f);
         // Play transition animations
-        yield return Fade(dictionary, 1.0f, 0.0f, 0.45f);
-        dictionary.style.backgroundImage = new StyleBackground(openImage);
-        dictionaryContents.visible = true;
+        yield return Fade(notebook, 1.0f, 0.0f, 0.45f);
+        notebook.style.backgroundImage = new StyleBackground(openImage);
+        notebookContainer.Remove(notebook);
+        notebookContainer.Add(notebookContents);
+        notebookContents.visible = true;
         LoadPage(pageNumber);
-        yield return Fade(dictionary, 0.0f, 1.0f, 1.5f);
-
-        backButton.SetEnabled(true);  
+        yield return Fade(notebookContents, 0.0f, 1.0f, 1.5f);
     }
 
-    private IEnumerator ExitDictionary(VisualElement dictionary, Texture2D closedImage)
+    private IEnumerator ExitDictionary(VisualElement notebook, Texture2D closedImage)
     {
-        backButton.SetEnabled(false);
-
         // Play transition animations
         sh.PlaySoundUI(closeClip);
-        yield return Fade(dictionary, 1.0f, 0.0f, 0.45f);
-        dictionaryContents.visible = false;
+        yield return Fade(notebookContents, 1.0f, 0.0f, 0.45f);
+        notebookContainer.Remove(notebookContents);
+        notebookContainer.Add(notebook);
         foreach (VisualElement slot in Slots)
         {
             slot.visible = false;
         }
-        dictionary.style.backgroundImage = new StyleBackground(closedImage);
-        yield return Fade(dictionary, 0.0f, 1.0f, 1.5f);
+        notebook.style.backgroundImage = new StyleBackground(closedImage);
+        yield return Fade(notebook, 0.0f, 1.0f, 1.5f);
 
         // Leave the screen
-        yield return Translate(dictionary, backButton, -350f, -1500f, 1f);
+        yield return Translate(notebook, -350f, -1500f, 1f);
 
         // Disable Dictionary elements, Re-enable HUD
-        dictionaryContainer.style.backgroundColor = new StyleColor(new Color(0.8f, 0.8f, 0.8f, 0f));
-        dictionaryContainer.visible = false;
+        notebookContainer.style.backgroundColor = new StyleColor(new Color(0.8f, 0.8f, 0.8f, 0f));
+        notebookContainer.visible = false;
         hudContainer.visible        = true;
         
         // Restore movement, Re-enable box collider, listen for menu keys
@@ -192,7 +213,7 @@ public sealed class GameHUDEvents : UIMenuController
     }
 
     // Translate the left style property of a visual element and button
-    private IEnumerator Translate(VisualElement dict, Button btn, float start, float end, float duration)
+    private IEnumerator Translate(VisualElement dict, float start, float end, float duration)
     {
         float buttonStart;
         float buttonEnd;
@@ -217,14 +238,38 @@ public sealed class GameHUDEvents : UIMenuController
             float easedButton     = Mathf.SmoothStep(buttonStart, buttonEnd, t);
 
             dict.style.left = easedDictionary;
-            btn.style.left  = easedButton;
             timeElapsed    += Time.deltaTime;
 
             yield return null;
         }
 
         dict.style.left = end;
-        btn.style.left  = buttonEnd;
+    }
+
+    private void ToggleJournalDictionary(bool mode) {
+        journalOrDict = mode;
+
+        if (journalOrDict) // Toggle to Dictionary
+        {
+            journalPage.style.display = DisplayStyle.None;
+            journalPage.parent.style.display = DisplayStyle.None;
+
+            foreach (VisualElement slot in Slots)
+            {
+                slot.style.display = DisplayStyle.Flex;
+            }
+        }
+        else // Toggle to Journal
+        {
+            foreach (VisualElement slot in Slots)
+            {
+                slot.style.display = DisplayStyle.None;
+            }
+            journalPage.style.display = DisplayStyle.Flex;
+            journalPage.parent.style.display = DisplayStyle.Flex;
+        }
+
+        LoadPage(0);
     }
 
     private void LoadPage(int pageNum)
@@ -234,18 +279,31 @@ public sealed class GameHUDEvents : UIMenuController
             return;
         }
 
+        if (journalOrDict)
+        {
+            LoadDictPage(pageNum);
+        }
+        else 
+        {
+            LoadJournalPage(pageNum);
+        }
+    }
+
+    private void LoadDictPage(int pageNum)
+    {
         PlayerController player = PlayerController.Instance;
         if (pageNum > (int)player.dictionary.dictionaryList.Length / Slots.Count)
         {
             return;
         }
 
+        pageCount.text = (pageNum + 1) + "/" + (((int)player.dictionary.dictionaryList.Length / Slots.Count) + 1);
 
         int index = pageNum * Slots.Count;
 
         pageNumber = pageNum;
 
-        foreach (VisualElement slot in Slots) 
+        foreach (VisualElement slot in Slots)
         {
             if (index >= player.dictionary.dictionaryList.Length)
             {
@@ -255,10 +313,10 @@ public sealed class GameHUDEvents : UIMenuController
 
             slot.visible = true;
 
-            var word = slot.Q<Label>("Word" + ((index% Slots.Count) + 1));
+            var word = slot.Q<Label>("Word" + ((index % Slots.Count) + 1));
             var notes = slot.Q<TextField>("Notes" + ((index % Slots.Count) + 1));
 
-            processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
+            processor = new(standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
             word.text = processor.Translate(player.dictionary.dictionaryList[index].Word);
 
             if (player.dictionary.dictionaryList[index].Notes == "")
@@ -266,12 +324,27 @@ public sealed class GameHUDEvents : UIMenuController
                 notes.value = "";
                 notes.textEdition.placeholder = "Notes...";
             }
-            else 
+            else
             {
-                notes.value =  player.dictionary.dictionaryList[index].Notes;
+                notes.value = player.dictionary.dictionaryList[index].Notes;
             }
             index++;
-        } 
+        }
+    }
+
+    private void LoadJournalPage(int pageNum)
+    {
+        PlayerController player = PlayerController.Instance;
+        if (pageNum > player.dictionary.journalPages.Length) 
+        {
+            return;
+        }
+
+        pageCount.text = (pageNum + 1) + "/" + (player.playerJournalSize);
+
+        pageNumber = pageNum;
+
+        journalPage.value = player.dictionary.journalPages[pageNum].Content;
     }
 
     private void NotesUpdate(string newValue, int index)
@@ -281,6 +354,14 @@ public sealed class GameHUDEvents : UIMenuController
 
         PlayerController player = PlayerController.Instance;
         player.dictionary.dictionaryList[(pageNumber * Slots.Count) + index].Notes = newValue;
+    }
+
+    private void PageUpdate(string newValue)
+    {
+        journalPage.value = newValue;
+
+        PlayerController player = PlayerController.Instance;
+        player.dictionary.journalPages[pageNumber].Content = newValue;
     }
 
     private void OnButtonHover(MouseEnterEvent e)

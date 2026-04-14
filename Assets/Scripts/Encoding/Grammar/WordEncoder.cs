@@ -143,6 +143,12 @@ public struct WordEncoder : IDisposable
         return true;
     }
 
+    public readonly WordNode ParseSingle(in ReadOnlySpan<ushort> str)
+    {
+        bool isPresent = unicodePool.IsPresent(str, out int strIndex);
+        return isPresent ? WordNode.Create(str, wordTypes[strIndex], strIndex) : WordNode.Unknown;
+    }
+
     public readonly NativeArray<WordNode> Parse(in ReadOnlySpan<ushort> str, Allocator allocator)
     {
         if (str.IsEmpty) // Short-circuit if empty
@@ -166,8 +172,7 @@ public struct WordEncoder : IDisposable
             {
                 continue;
             }
-            bool isPresent = unicodePool.IsPresent(span, out int strIndex);
-            nodes[index++] = isPresent ? WordNode.Create(span, wordTypes[strIndex], strIndex) : WordNode.Unknown;
+            nodes[index++] = ParseSingle(span);
         }
         return nodes;
     }
