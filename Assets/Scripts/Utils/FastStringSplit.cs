@@ -88,7 +88,7 @@ public struct SplitIterator : IEnumerator<SplitEntry>
 
     public bool MoveNext()
     {
-        if (Hint.Unlikely(offset >= strLength - 1))
+        if (Hint.Unlikely(offset >= strLength))
         {
             return false;
         }
@@ -174,7 +174,7 @@ public struct MultiSplitIterator : IEnumerator<SplitEntry>
 
     public bool MoveNext()
     {
-        if (Hint.Unlikely(offset >= strLength - 1))
+        if (Hint.Unlikely(offset >= strLength))
         {
             return false;
         }

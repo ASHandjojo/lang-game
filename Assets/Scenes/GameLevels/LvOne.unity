@@ -1044,8 +1044,9 @@ MonoBehaviour:
   npcImage: {fileID: 0}
   entries:
   - line:
-      phoneticsStr: h
-      line: h
+      phoneticsStr: g
+      line: g
+      literal: g
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -1053,9 +1054,11 @@ MonoBehaviour:
     responseData:
       phoneticsStr: m
       line: m
+      literal: 
   - line:
       phoneticsStr: h
       line: h
+      literal: h
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -1063,6 +1066,7 @@ MonoBehaviour:
     responseData:
       phoneticsStr: m
       line: m
+      literal: 
   sceneLoader: {fileID: 1367662897}
   nextScene:
     name: TestNextLv
@@ -3222,7 +3226,9 @@ MonoBehaviour:
   entries:
   - line:
       phoneticsStr: '|What''s |that |shimmery |thing?'
-      line: '|What''s|that|shimmery|thing?'
+      line: '|What''s |that |shimmery |thing?'
+      literal: <font="Harmony SDF">What's</font> <font="Harmony SDF">that</font>
+        <font="Harmony SDF">shimmery</font> <font="Harmony SDF">thing?</font>
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -3230,9 +3236,12 @@ MonoBehaviour:
     responseData:
       phoneticsStr: ngogu melaia melai
       line: "\u0117\xC8 \u0101\u010A\xA9 \u0101\u010Ai"
+      literal: 
   - line:
       phoneticsStr: '|Oh, |that''s |a hgaimei'
-      line: "|Oh,|that's|a\xDDi\u0101i"
+      line: "|Oh, |that's |a \xDDi\u0101i"
+      literal: "<font=\"Harmony SDF\">Oh,</font> <font=\"Harmony SDF\">that's</font>
+        <font=\"Harmony SDF\">a</font> \xDDi\u0101i"
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -3240,6 +3249,7 @@ MonoBehaviour:
     responseData:
       phoneticsStr: melaia wabi bele chie
       line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
+      literal: 
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0

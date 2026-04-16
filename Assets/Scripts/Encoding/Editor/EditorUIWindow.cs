@@ -30,7 +30,7 @@ public sealed class EditorUI : EditorWindow
 
     private TextField phoneticField;
 
-    private SerializedProperty? phoneticsProp, unicodeProp;
+    private SerializedProperty? phoneticsProp, unicodeProp, literalProp;
 
     private EncodingEntry? responseData = null;
 
@@ -48,21 +48,23 @@ public sealed class EditorUI : EditorWindow
     /// </summary>
     /// <param name="dialogueEntry"></param>
     [MenuItem("Conlang/Text Editor")]
-    public static unsafe void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty phoneticsProp, SerializedProperty unicodeProp)
+    public static unsafe void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty phoneticsProp, SerializedProperty unicodeProp, SerializedProperty literalProp)
     {
         Debug.Assert(dialogueEntry != null);
         // Linking dialogue entry being edited.
         EditorUI baseWindow     = GetWindow<EditorUI>(EditorName, true);
         baseWindow.responseData = dialogueEntry;
-        // Load from stored to UI (Unicode)
 
-        baseWindow.phoneticsProp              = phoneticsProp;
-        baseWindow.unicodeProp                = unicodeProp;
+        baseWindow.phoneticsProp = phoneticsProp;
+        baseWindow.unicodeProp   = unicodeProp;
+        baseWindow.literalProp   = literalProp;
+
         baseWindow.keyboardUI.PhoneticsString = dialogueEntry!.phoneticsStr;
 
         var mixedRes = baseWindow.wordEncoder.ParseMixed(baseWindow.keyboardUI.PhoneticsString.AsSpan().ConvertU16(), baseWindow.processor, Allocator.Temp);
 
         ReadOnlySpan<char> displayRes  = new(mixedRes.displayOutput.GetUnsafeReadOnlyPtr(), mixedRes.displayOutput.Length);
+
         baseWindow.unicodeLabel!.text  = new string(displayRes);
         baseWindow.englishLabel!.text  = baseWindow.GetEnglishString(mixedRes.words);
         baseWindow.wordTypeLabel!.text = baseWindow.GetWordTypeString(mixedRes.words);
@@ -98,17 +100,28 @@ public sealed class EditorUI : EditorWindow
         phoneticsProp!.stringValue = input;
 
         var mixedRes = wordEncoder.ParseMixed(input.AsSpan().ConvertU16(), processor, Allocator.Temp);
+        if (!mixedRes.IsValid)
+        {
+            unicodeLabel!.text  = string.Empty;
+            englishLabel!.text  = string.Empty;
+            wordTypeLabel!.text = string.Empty;
+            return;
+        }
 
         ReadOnlySpan<char> unicodeRes = new(mixedRes.unicodeOutput.GetUnsafeReadOnlyPtr(), mixedRes.unicodeOutput.Length);
         unicodeProp!.stringValue      = new string(unicodeRes);
 
+        ReadOnlySpan<char> displayRes = new(mixedRes.displayOutput.GetUnsafeReadOnlyPtr(), mixedRes.displayOutput.Length);
+        literalProp!.stringValue      = new string(displayRes);
+
         Undo.RecordObject(phoneticsProp!.serializedObject.targetObject, "TextEdit");
         Undo.RecordObject(unicodeProp!.serializedObject.targetObject,   "TextEdit");
+        Undo.RecordObject(literalProp!.serializedObject.targetObject,   "LiteralEdit");
 
         phoneticsProp.serializedObject.ApplyModifiedProperties();
         unicodeProp.serializedObject.ApplyModifiedProperties();
+        literalProp.serializedObject.ApplyModifiedProperties();
 
-        ReadOnlySpan<char> displayRes = new(mixedRes.displayOutput.GetUnsafeReadOnlyPtr(), mixedRes.displayOutput.Length);
         unicodeLabel!.text  = new string(displayRes);
         englishLabel!.text  = GetEnglishString(mixedRes.words);
         wordTypeLabel!.text = GetWordTypeString(mixedRes.words);

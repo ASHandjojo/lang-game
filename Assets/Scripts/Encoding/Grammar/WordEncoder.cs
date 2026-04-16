@@ -66,6 +66,8 @@ namespace Impl
         // Should be used to display from keyboard. Is formatted.
         public NativeList<ushort> displayOutput;
 
+        public readonly bool IsValid => words.IsCreated && unicodeOutput.IsCreated && displayOutput.IsCreated;
+
         public ParseMixedResult(in NativeArray<WordNode> words, in NativeList<ushort> unicodeOutput, in NativeList<ushort> displayOutput)
         {
             Debug.Assert(words.IsCreated);
@@ -226,7 +228,7 @@ public struct WordEncoder : IDisposable
 
         NativeList<ushort> unicodeOutput = new(phoneticsStr.Length, allocator);
         NativeList<ushort> displayOutput = new(phoneticsStr.Length, allocator);
-        int wordIdx = 0;
+        int wordIdx = 0, nodeIdx = 0;
         while (wordIter.MoveNext())
         {
             ReadOnlySpan<ushort> word = wordIter.Current;
@@ -234,6 +236,7 @@ public struct WordEncoder : IDisposable
             {
                 continue;
             }
+
             if (wordIdx > 0)
             {
                 displayOutput.Add(' ');
@@ -246,7 +249,7 @@ public struct WordEncoder : IDisposable
                 // Display
                 var convSpan = new ReadOnlySpan<ushort>(wordConv.Ptr, wordConv.Length);
 
-                nodes[wordIdx++] = ParseSingle(convSpan);
+                nodes[nodeIdx++] = ParseSingle(convSpan);
                 displayOutput.AddRange(wordConv.Ptr, wordConv.Length);
             }
             else
@@ -257,13 +260,11 @@ public struct WordEncoder : IDisposable
                 ReadOnlySpan<ushort> lhsTag = "<font=\"Harmony SDF\">".AsSpan().ConvertU16();
                 ReadOnlySpan<ushort> rhsTag = "</font>".AsSpan().ConvertU16();
 
-                int totalSize = lhsTag.Length + word.Length + rhsTag.Length - 1;
-                displayOutput.Resize(displayOutput.Length + totalSize, NativeArrayOptions.ClearMemory);
-
                 fixed (ushort* lhsPtr  = lhsTag) { displayOutput.AddRange(lhsPtr,      lhsTag.Length);   }
                 fixed (ushort* wordPtr = word)   { displayOutput.AddRange(wordPtr + 1, word.Length - 1); }
                 fixed (ushort* rhsPtr  = rhsTag) { displayOutput.AddRange(rhsPtr,      rhsTag.Length);   }
             }
+            wordIdx++;
         }
         return new ParseMixedResult(nodes, unicodeOutput, displayOutput);
     }

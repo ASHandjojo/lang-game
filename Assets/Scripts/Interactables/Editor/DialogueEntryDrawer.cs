@@ -10,7 +10,7 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
 {
     private const string EncodingImportDir = "Assets/Scripts/Encoding";
     // Ligature sub table also references standard table, kind of a shortcut :)
-    private const string LigatureSubDir = EncodingImportDir + "/Loader/Ligature Sub Table.asset";
+    private const string LigatureSubDir    = EncodingImportDir + "/Loader/Ligature Sub Table.asset";
 
     public override VisualElement CreatePropertyGUI(SerializedProperty property)
     {
