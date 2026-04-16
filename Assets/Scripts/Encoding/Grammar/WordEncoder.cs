@@ -260,9 +260,9 @@ public struct WordEncoder : IDisposable
                 int totalSize = lhsTag.Length + word.Length + rhsTag.Length - 1;
                 displayOutput.Resize(displayOutput.Length + totalSize, NativeArrayOptions.ClearMemory);
 
-                fixed (ushort* lhsPtr  = lhsTag) { displayOutput.AddRangeNoResize(lhsPtr,      lhsTag.Length); }
-                fixed (ushort* wordPtr = word)   { displayOutput.AddRangeNoResize(wordPtr + 1, word.Length);   }
-                fixed (ushort* rhsPtr  = rhsTag) { displayOutput.AddRangeNoResize(rhsPtr,      rhsTag.Length); }
+                fixed (ushort* lhsPtr  = lhsTag) { displayOutput.AddRange(lhsPtr,      lhsTag.Length);   }
+                fixed (ushort* wordPtr = word)   { displayOutput.AddRange(wordPtr + 1, word.Length - 1); }
+                fixed (ushort* rhsPtr  = rhsTag) { displayOutput.AddRange(rhsPtr,      rhsTag.Length);   }
             }
         }
         return new ParseMixedResult(nodes, unicodeOutput, displayOutput);

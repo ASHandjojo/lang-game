@@ -3222,8 +3222,7 @@ MonoBehaviour:
   entries:
   - line:
       phoneticsStr: '|What''s |that |shimmery |thing?'
-      line: <font="Harmony SDF">What's</font> <font="Harmony SDF">that</font> <font="Harmony
-        SDF">shimmery</font> <font="Harmony SDF">thing?</font>
+      line: '|What''s|that|shimmery|thing?'
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -3233,8 +3232,7 @@ MonoBehaviour:
       line: "\u0117\xC8 \u0101\u010A\xA9 \u0101\u010Ai"
   - line:
       phoneticsStr: '|Oh, |that''s |a hgaimei'
-      line: "<font=\"Harmony SDF\">Oh,</font> <font=\"Harmony SDF\">that's</font>
-        <font=\"Harmony SDF\">a</font> \xDDi\u0101i"
+      line: "|Oh,|that's|a\xDDi\u0101i"
     sound:
       obj: {fileID: 0}
       isInitialized: 0
