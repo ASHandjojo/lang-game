@@ -3,35 +3,62 @@ using UnityEngine.UIElements;
 
 public sealed class DialogueBox : VisualElement
 {
+    public struct DictionaryData
+    {
+        public Label dictWords;
+        public Label dictNotes;
+    }
+
+    public struct CharacterData
+    {
+        public string    name;
+        public Texture2D image;
+    }
+
     private float textSpeed;
 
-    private VisualElement wordTooltip;
+    private DictionaryData dictData;
+    private CharacterData  charData;
 
-    private Label   dictWords, dictNotes;
+    private Label         npcName;
+    private VisualElement npcImage;
+
+    private VisualElement wordTooltip;
     private WordBox hoverPrefab, noHoverPrefab;
 
     private StyleColor originalColor;
 
-    public DialogueBox(VisualTreeAsset asset, Label dictWords, Label dictNotes)
+    public DialogueBox(VisualTreeAsset asset, in DictionaryData dictData, in CharacterData charData)
     {
         Debug.Assert(asset != null);
+        asset.CloneTree(this);
 
-        Debug.Assert(dictWords != null);
-        Debug.Assert(dictNotes != null);
+        Debug.Assert(dictData.dictWords != null);
+        Debug.Assert(dictData.dictNotes != null);
 
-        this.dictWords = dictWords;
-        this.dictNotes = dictNotes;
+        this.dictData = dictData;
+        this.charData = charData;
+
+        npcName  = this.Q<Label>("NpcName");
+        npcImage = this.Q<VisualElement>("NpcImage");
+        Debug.Assert(npcName  != null);
+        Debug.Assert(npcImage != null);
+
+        npcName.text                   = charData.name;
+        npcImage.style.backgroundImage = charData.image;
 
         wordTooltip   = this.Q("WordTooltip");
         hoverPrefab   = new WordBox(asset, MetaHover());
         noHoverPrefab = new WordBox(asset);
+
+        originalColor = style.color;
     }
 
     private ToolTipProperties MetaHover() => new()
     {
         onPointerEnter = (evt) =>
         {
-            Label target = (Label)evt.target;
+            Label target       = (Label) evt.target;
             target.style.color = new StyleColor(Color.red);
             ShowTooltip(name, evt.position, target.style.unityFontDefinition);
         },
@@ -67,10 +94,10 @@ public sealed class DialogueBox : VisualElement
 
     private void ShowTooltip(string name, Vector2 mousePosition, StyleFontDefinition font)
     {
-        dictWords.text = name;
-        dictWords.style.unityFontDefinition = font;
+        dictData.dictWords.text = name;
+        dictData.dictWords.style.unityFontDefinition = font;
 
-        dictNotes.text = GetPlayerNotes(name);
+        dictData.dictNotes.text = GetPlayerNotes(name);
 
         MoveTooltip(mousePosition);
         wordTooltip.style.display = DisplayStyle.Flex;
