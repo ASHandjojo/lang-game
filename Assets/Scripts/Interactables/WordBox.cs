@@ -13,11 +13,8 @@ public struct ToolTipProperties
 
 public sealed class WordBox : Label
 {
-    private WordBox(VisualTreeAsset asset, ToolTipProperties? toolTipProps)
+    private WordBox(ToolTipProperties? toolTipProps)
     {
-        Debug.Assert(asset != null);
-        asset.CloneTree(this);
-
         enableRichText       = true;
         parseEscapeSequences = true;
         AddToClassList("dialogue-text");
@@ -32,7 +29,6 @@ public sealed class WordBox : Label
         }
     }
 
-    public WordBox(VisualTreeAsset asset) : this(asset, null) {}
-    public WordBox(VisualTreeAsset asset, in ToolTipProperties props) :
-        this(asset, new ToolTipProperties?(props)) { }
+    public WordBox() : this(null) {}
+    public WordBox(in ToolTipProperties props) : this(new ToolTipProperties?(props)) { }
 }

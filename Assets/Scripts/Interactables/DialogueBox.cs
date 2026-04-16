@@ -19,10 +19,10 @@ public sealed class DialogueBox : VisualElement
         public Texture2D image;
     }
 
-    private float textSpeed;
+    private float textSpeed    = 0.02f;
     private float bounceHeight = 30.0f;
     private float bounceSpeed  = 30.0f;
-    protected IVisualElementScheduledItem bounceSchedule;
+    private IVisualElementScheduledItem bounceSchedule;
 
     private DictionaryData dictData;
 
@@ -30,7 +30,6 @@ public sealed class DialogueBox : VisualElement
     private VisualElement npcImage;
 
     private VisualElement textContainer, wordTooltip, nextLinePrompt;
-    private WordBox hoverPrefab, noHoverPrefab;
 
     private StyleColor originalColor;
 
@@ -59,16 +58,51 @@ public sealed class DialogueBox : VisualElement
         Debug.Assert(textContainer  != null);
         Debug.Assert(nextLinePrompt != null);
 
-        hoverPrefab   = new WordBox(asset, MetaHover());
-        noHoverPrefab = new WordBox(asset);
-
         originalColor = style.color;
     }
 
-    // Iteration Methods
-    public void Display(in DialogueEntry entry)
-    {
+    public void ClearDisplay() => textContainer.Clear();
 
+    // Iteration Methods
+    public IEnumerator Display(DialogueEntry entry)
+    {
+        string uniStr = entry.line.line;
+        int wordCount = uniStr.AsSpan().ConvertU16().WordCount(' ');
+        if (wordCount == 0)
+        {
+            yield return null;
+        }
+        StartBounce(Time.time);
+
+        var splitIter = SplitIterator.Create(uniStr.AsSpan().ConvertU16(), ' ');
+        while (splitIter.MoveNext())
+        {
+            ReadOnlySpan<char> span = splitIter.Current;
+            if (span.Length == 0 || span[0] == ' ')
+            {
+                continue;
+            }
+            int startIndex  = (span[0] == '|').CastAsInt32();
+            Label wordLabel = span[0] != '|' ? new WordBox(MetaHover()) : new WordBox();
+            wordLabel.style.marginRight = 16;
+
+            textContainer.Add(wordLabel);
+            // English
+            if (span[0] == '|')
+            {
+                wordLabel.text += "<font=\"Melody SDF\">";
+            }
+            for (int i = startIndex; i < span.Length; i++)
+            {
+                wordLabel.text += span[i];
+            }
+            if (span[0] == '|')
+            {
+                wordLabel.text += "</font>";
+            }
+            yield return new WaitForSeconds(textSpeed);
+        }
+        StopBounce();
     }
 
     // Animation Methods
