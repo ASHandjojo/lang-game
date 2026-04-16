@@ -397,7 +397,7 @@ public class NpcDialogue : Interactable
         float offsetY = 12f;
 
         wordTooltip.style.left = mousePosition.x + offsetX;
-        wordTooltip.style.top = mousePosition.y + offsetY;
+        wordTooltip.style.top  = mousePosition.y + offsetY;
     }
 
     private void HideTooltip()
@@ -408,7 +408,7 @@ public class NpcDialogue : Interactable
     private string GetPlayerNotes(string word)
     {
         PlayerController player = PlayerController.Instance;
-        Dictionary dictionary = player.dictionary;
+        Dictionary dictionary   = player.dictionary;
 
         foreach (DictionaryEntry entry in dictionary.dictionaryList) 
         {
