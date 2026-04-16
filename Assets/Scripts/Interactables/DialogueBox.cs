@@ -77,30 +77,31 @@ public sealed class DialogueBox : VisualElement
         var splitIter = SplitIterator.Create(uniStr.AsSpan().ConvertU16(), ' ');
         while (splitIter.MoveNext())
         {
-            ReadOnlySpan<char> span = splitIter.Current;
-            if (span.Length == 0 || span[0] == ' ')
+            string word = new(splitIter.Current);
+            if (word.Length == 0 || word[0] == ' ')
             {
                 continue;
             }
-            int startIndex  = (span[0] == '|').CastAsInt32();
-            Label wordLabel = span[0] != '|' ? new WordBox(MetaHover()) : new WordBox();
+            int startIndex  = (word[0] == '|').CastAsInt32();
+            Label wordLabel = word[0] != '|' ? new WordBox(MetaHover()) : new WordBox();
             wordLabel.style.marginRight = 16;
 
             textContainer.Add(wordLabel);
             // English
-            if (span[0] == '|')
+            if (word[0] == '|')
             {
                 wordLabel.text += "<font=\"Melody SDF\">";
             }
-            for (int i = startIndex; i < span.Length; i++)
+            for (int i = startIndex; i < word.Length; i++)
             {
-                wordLabel.text += span[i];
+                wordLabel.text += word[i];
+                yield return new WaitForSeconds(textSpeed);
             }
-            if (span[0] == '|')
+            if (word[0] == '|')
             {
                 wordLabel.text += "</font>";
             }
-            yield return new WaitForSeconds(textSpeed);
+            wordLabel.text += ' ';
         }
         StopBounce();
     }
