@@ -261,7 +261,6 @@ public class NpcDialogue : Interactable
                     {
                         MetaHover(wordLabel, wordLabel.style.color);
                     }
-
                 }
             }
             else
@@ -283,7 +282,7 @@ public class NpcDialogue : Interactable
     private string RemovePunctuationLinq(string input)
     {
         // Filters the string, keeping only characters that are not punctuation
-        var result = new string(input.Where(c => !Char.IsPunctuation(c)).ToArray());
+        var result = new string(input.Where(c => !char.IsPunctuation(c)).ToArray());
         return result;
     }
 
