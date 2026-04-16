@@ -51,7 +51,7 @@ public class NpcDialogue : Interactable
 
     public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
 
-    public bool TryCheckInput(string content)
+    public bool TryCheckInput(string content, bool decrement = true)
     {
         if (inDialogue && entries[index].hasResponse)
         {
@@ -59,7 +59,7 @@ public class NpcDialogue : Interactable
             {
                 return true;
             }
-            else // Otherwise, when it is invalid. This is temporary, incomplete logic handling.
+            else if (decrement) // Otherwise, when it is invalid. This is temporary, incomplete logic handling.
             {
                 index--;
             }
@@ -297,9 +297,6 @@ public class NpcDialogue : Interactable
         if (index < entries.Length - 1)
         {
             var textContainer = document.rootVisualElement.Q("TextContainer");
-            textContainer.Clear();
-            index++;
-            yield return TypeLine();
 
             if (entries[index].hasResponse)
             {
@@ -312,11 +309,22 @@ public class NpcDialogue : Interactable
             {
                 InputController.Instance.CloseKeyboard();
                 PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
+                textContainer.Clear();
             }
+            index++;
+            yield return TypeLine();
         }
         else
         {
             StopBounce();
+
+            if (entries[index].hasResponse)
+            {
+                PlayerController.Instance.context |= PlayerContext.PlayerInput;
+                InputController.Instance.OpenKeyboard();
+
+                yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0);
+            }
 
             index = 0;
             var textContainer = document.rootVisualElement.Q("TextContainer");
