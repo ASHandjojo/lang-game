@@ -117,7 +117,7 @@ public sealed class EditorUI : EditorWindow
             }
             if (word[0] != Separator)
             {
-                string wordConv  = processor.Translate(word.ConvertChar());
+                string wordConv  = processor.TranslateManaged(word.ConvertChar());
                 nodes[wordIdx++] = wordEncoder.ParseSingle(wordConv.AsSpan().ConvertU16());
                 builder.Append($" {wordConv}");
             }
@@ -176,7 +176,7 @@ public sealed class EditorUI : EditorWindow
         Debug.Assert(internalDict != null);
         if (!processor.IsValid)
         {
-            processor   = new PhoneticProcessor(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);
+            processor   = PhoneticProcessor.Create(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);
             wordEncoder = WordEncoder.Create(internalDict!.entries.Convert(Allocator.Temp), Allocator.Persistent);
         }
         if (responseData != null)

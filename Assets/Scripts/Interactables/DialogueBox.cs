@@ -110,7 +110,7 @@ public sealed class DialogueBox : VisualElement
 
         foreach (DictionaryEntry entry in dictionary.dictionaryList)
         {
-            if (LanguageTable.PhoneticProcessor.Translate(entry.Word) == word)
+            if (LanguageTable.PhoneticProcessor.TranslateManaged(entry.Word) == word)
             {
                 if (entry.Notes.Length == 0)
                 {

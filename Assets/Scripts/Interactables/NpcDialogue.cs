@@ -411,7 +411,7 @@ public class NpcDialogue : Interactable
 
         foreach (DictionaryEntry entry in dictionary.dictionaryList) 
         {
-            if (LanguageTable.PhoneticProcessor.Translate(entry.Word) == word) 
+            if (LanguageTable.PhoneticProcessor.TranslateManaged(entry.Word) == word) 
             {
                 if (entry.Notes == "")
                 {
@@ -508,7 +508,7 @@ public class NpcDialogue : Interactable
             var word = slot.Q<Label>("Word" + ((index % Slots.Count) + 1));
             var notes = slot.Q<TextField>("Notes" + ((index % Slots.Count) + 1));
 
-            word.text = LanguageTable.PhoneticProcessor.Translate(player.dictionary.dictionaryList[index].Word);
+            word.text = LanguageTable.PhoneticProcessor.TranslateManaged(player.dictionary.dictionaryList[index].Word);
 
             if (player.dictionary.dictionaryList[index].Notes == "")
             {

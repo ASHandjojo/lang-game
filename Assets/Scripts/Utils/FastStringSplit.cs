@@ -259,7 +259,7 @@ public static class FastStringExtMethods
     [BurstCompile]
     public static int WordCount(in this ReadOnlySpan<ushort> str, in ReadOnlySpan<ushort> splitChars)
     {
-        if (Hint.Unlikely(str.IsEmpty))
+        if (Hint.Unlikely(str.IsEmpty || splitChars.IsEmpty))
         {
             return 0;
         }

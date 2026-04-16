@@ -49,7 +49,7 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         responseDataField.RegisterCallback(
             (ChangeEvent<string> e) =>
             {
-                PhoneticProcessor processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
+                PhoneticProcessor processor = PhoneticProcessor.Create(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
                 property.serializedObject.ApplyModifiedProperties();
             }
         );

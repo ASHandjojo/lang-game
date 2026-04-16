@@ -33,11 +33,12 @@ public sealed class LanguageTable : MonoBehaviour
         DontDestroyOnLoad(this);
         Instance = this;
 
-        processor = new PhoneticProcessor(StandardSigns, CompoundSigns, Allocator.Persistent);
+        processor = PhoneticProcessor.Create(StandardSigns, CompoundSigns, Allocator.Persistent);
     }
 
     void OnDestroy()
     {
         processor.Dispose();
+        processor = default;
     }
 }
