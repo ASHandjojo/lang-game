@@ -13,6 +13,7 @@ public sealed class DialogueBox : VisualElement
         public Label dictNotes;
     }
 
+    [Serializable]
     public struct CharacterData
     {
         public string    name;
@@ -33,15 +34,15 @@ public sealed class DialogueBox : VisualElement
 
     private StyleColor originalColor;
 
-    public DialogueBox(VisualTreeAsset asset, in DictionaryData dictData, in CharacterData charData)
+    public DialogueBox(VisualTreeAsset asset, in CharacterData charData)
     {
         Debug.Assert(asset != null);
         asset.CloneTree(this);
 
-        Debug.Assert(dictData.dictWords != null);
-        Debug.Assert(dictData.dictNotes != null);
+        //Debug.Assert(dictData.dictWords != null);
+        //Debug.Assert(dictData.dictNotes != null);
 
-        this.dictData = dictData;
+        //this.dictData = dictData;
 
         npcName  = this.Q<Label>("NpcName");
         npcImage = this.Q<VisualElement>("NpcImage");
@@ -74,6 +75,7 @@ public sealed class DialogueBox : VisualElement
         }
         StartBounce(Time.time);
 
+        int wordIndex = 0;
         var splitIter = SplitIterator.Create(uniStr.AsSpan().ConvertU16(), ' ');
         while (splitIter.MoveNext())
         {
@@ -84,13 +86,14 @@ public sealed class DialogueBox : VisualElement
             }
             int startIndex  = (word[0] == '|').CastAsInt32();
             Label wordLabel = word[0] != '|' ? new WordBox(MetaHover()) : new WordBox();
+            wordLabel.name = $"Word{wordIndex}";
             wordLabel.style.marginRight = 16;
 
             textContainer.Add(wordLabel);
             // English
             if (word[0] == '|')
             {
-                wordLabel.text += "<font=\"Melody SDF\">";
+                wordLabel.text += "<font=\"Harmony SDF\">";
             }
             for (int i = startIndex; i < word.Length; i++)
             {

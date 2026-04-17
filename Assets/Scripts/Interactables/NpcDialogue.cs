@@ -8,6 +8,8 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+using static DialogueBox;
+
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
 public class NpcDialogue : Interactable
 {
@@ -15,21 +17,15 @@ public class NpcDialogue : Interactable
     [SerializeField] protected UIDocument hudDocument;
     private bool inDialogue;
 
-    [SerializeField] protected string    npcName;
-    [SerializeField] protected Texture2D npcImage;
+    [SerializeField] protected CharacterData characterData;
+
+    [SerializeField] protected VisualTreeAsset dialogueTreeAsset;
+    protected DialogueBox dialogueBox;
+
     protected int index = 0;
 
     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
     [SerializeField] protected DialogueEntry[] entries;
-
-    protected float textSpeed;
-    protected VisualElement nextLinePrompt;
-    protected VisualElement wordTooltip;
-
-    protected IVisualElementScheduledItem bounceSchedule;
-    protected float bounceHeight = 30.0f;
-    protected float bounceSpeed  = 30.0f;
-    protected float bounceStartTime;
 
     private VisualElement notebookContents;
     private Button notebookButton;
@@ -71,20 +67,17 @@ public class NpcDialogue : Interactable
     {
         base.Start();
         document = GetComponent<UIDocument>();
+        Debug.Assert(dialogueTreeAsset != null);
 
-        // Set name and portrait
-        document.rootVisualElement.Q<Label>("NpcName").text = npcName;
-        document.rootVisualElement.Q("NpcImage").style.backgroundImage = npcImage;
+        dialogueBox = new DialogueBox(dialogueTreeAsset, characterData);
+        document.rootVisualElement.Add(dialogueBox);
 
-        textSpeed = 0.02f;
-        nextLinePrompt = document.rootVisualElement.Q("NextLinePrompt");
+        Label word  = document.rootVisualElement.Q<Label>("Word");
+        Label notes = document.rootVisualElement.Q<Label>("Notes");
+
         document.rootVisualElement.style.visibility = Visibility.Hidden;
         document.rootVisualElement.style.display    = DisplayStyle.None;
-        nextLinePrompt.visible = false;
         inDialogue = false;
-
-        // Set Tooltip
-        wordTooltip = document.rootVisualElement.Q("WordTooltip");
 
         // Setup Notebook
         notebookButton = document.rootVisualElement.Q<Button>("NotebookButton");
@@ -103,11 +96,11 @@ public class NpcDialogue : Interactable
                 continue;
             }
 
-            var notes = item.Q<TextField>("Notes" + slotNumber);
+            var notesRow = item.Q<TextField>("Notes" + slotNumber);
             notes.RegisterValueChangedCallback(evt => {
                 NotesUpdate(evt.newValue, slotNumber - 1);
             });
-            notes.isDelayed = true;
+            notesRow.isDelayed = true;
 
             Slots.Add(item);
         }
@@ -146,16 +139,7 @@ public class NpcDialogue : Interactable
         if (inDialogue)
         {
             // Interact key pressed when dialogue line is finished -> to next line/end dialogue
-            var textContainer = document.rootVisualElement.Q("TextContainer");
-            if (textContainer.childCount > 0)
-            {
-                StopBounce();
-                yield return NextLine();
-            }
-            else
-            {
-                StartBounce();
-            }
+            yield return NextLine();
         }
         else
         {
@@ -169,7 +153,7 @@ public class NpcDialogue : Interactable
             // Prevent Movement
             player.CanMove = false;
             inDialogue     = true;
-            yield return TypeLine();
+            yield return NextLine();
         }
     }
 
@@ -181,111 +165,6 @@ public class NpcDialogue : Interactable
         //dialogueLabel.text = entries[index].line;
     }
 
-    private void MetaHover(Label wordLabel, StyleColor orig)
-    {
-        wordLabel.RegisterCallback<PointerEnterEvent>(evt =>
-        {
-            Label target = (Label) evt.target;
-            target.style.color = new StyleColor(Color.red);
-            ShowTooltip(name, evt.position, target.style.unityFontDefinition);
-        });
-
-        wordLabel.RegisterCallback<PointerMoveEvent>(evt =>
-        {
-            MoveTooltip(evt.position);
-        });
-
-        wordLabel.RegisterCallback<PointerLeaveEvent>(evt =>
-        {
-            Label target       = (Label) evt.target;
-            target.style.color = orig;
-            HideTooltip();
-        });
-        wordLabel.RegisterCallback<DetachFromPanelEvent>(evt =>
-        {
-            HideTooltip();
-        });
-    }
-
-    // Creates new text labels for each word to allow mouse events to be bound to each word independently
-    private IEnumerator TypeLine()
-    {
-        var textContainer = document.rootVisualElement.Q("TextContainer");
-        textContainer.Clear();
-
-        Label CreateWordLabel()
-        {
-            Label wordLabel = new()
-            {
-                enableRichText       = true,
-                parseEscapeSequences = true,
-            };
-            wordLabel.AddToClassList("dialogue-text");
-            wordLabel.style.marginRight = 16;
-            textContainer.Add(wordLabel);
-            return wordLabel;
-        }
-
-        string currentLine = entries[index].line;
-        int i = 0;
-
-        Label wordLabel = CreateWordLabel();
-        if (currentLine.Length > 0 && currentLine[0] != '<')
-        {
-            MetaHover(wordLabel, wordLabel.style.color);
-        }
-
-        while (i < currentLine.Length)
-        {
-            if (i < currentLine.Length - 1 && currentLine[i] == '<')
-            {
-                if (wordLabel.text.Length > 0)
-                {
-                    wordLabel = CreateWordLabel();
-                }
-
-                int endIdx      = currentLine[i..].IndexOf("</font>");
-                int tagLength   = "</font>".Length;
-                wordLabel.text += currentLine.Substring(i, endIdx + tagLength);
-                i              += endIdx + tagLength - 1;
-            }
-            else if (currentLine[i] == ' ')
-            {
-                if (wordLabel.text.Length > 0)
-                {
-                    wordLabel = CreateWordLabel();
-
-                    string name = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
-                    wordLabel.name = name;
-                    if (i < currentLine.Length - 1 && currentLine[i + 1] != '<')
-                    {
-                        MetaHover(wordLabel, wordLabel.style.color);
-                    }
-                }
-            }
-            else
-            {
-                wordLabel.text += currentLine[i];
-            }
-            i++;
-            yield return new WaitForSeconds(textSpeed);
-        }
-
-        //string word = RemovePunctuationLinq(wordLabel.text.ToLower().Trim());
-        //wordLabel.name = word;
-
-        //MetaHover(wordLabel, wordLabel.style.color);
-
-        StartBounce();
-    }
-
-    private string RemovePunctuationLinq(string input)
-    {
-        // Filters the string, keeping only characters that are not punctuation
-        var result = new string(input.Where(c => !char.IsPunctuation(c)).ToArray());
-        return result;
-    }
-
     protected virtual IEnumerator OnLast()
     {
         yield return null;
@@ -293,13 +172,10 @@ public class NpcDialogue : Interactable
 
     private IEnumerator NextLine()
     {
-        if (index < entries.Length - 1)
+        if (index < entries.Length)
         {
-            var textContainer = document.rootVisualElement.Q("TextContainer");
-            textContainer.Clear();
-            index++;
-            yield return TypeLine();
-
+            dialogueBox.ClearDisplay();
+            yield return dialogueBox.Display(entries[index]); // NOTE
             if (entries[index].hasResponse)
             {
                 PlayerController.Instance.context |= PlayerContext.PlayerInput;
@@ -312,17 +188,10 @@ public class NpcDialogue : Interactable
                 InputController.Instance.CloseKeyboard();
                 PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
             }
+            index++;
         }
         else
         {
-            StopBounce();
-
-            index = 0;
-            var textContainer = document.rootVisualElement.Q("TextContainer");
-            textContainer.Clear();
-            inDialogue = false;
-            nextLinePrompt.visible = false;
-
             // Restore Movement
             PlayerController.Instance.CanMove = true;
 
@@ -339,89 +208,8 @@ public class NpcDialogue : Interactable
 
             InputController.Instance.CloseKeyboard();
             PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
-
             yield return OnLast();
         }
-    }
-
-    // Animates the prompt for informing the player that the current line is finished
-    private void StartBounce()
-    {
-        nextLinePrompt.visible = true;
-        bounceStartTime = Time.time;
-
-        bounceSchedule = nextLinePrompt.schedule.Execute(() =>
-        {
-            // Animate up and down movement
-            float t = Time.time - bounceStartTime;
-
-            float yOffset = Mathf.PingPong(t * bounceSpeed, bounceHeight);
-            nextLinePrompt.style.translate = new Translate(0.0f, yOffset);
-
-            // Animate size increase-decrease
-            float normalizedT = yOffset / bounceHeight;
-            float scaleFactor = Mathf.Lerp(1.3f, 1.0f, normalizedT);
-            // float scaleFactor = Mathf.Lerp(0.7f, 1.3f, normalizedT);
-            nextLinePrompt.transform.scale = new Vector3(scaleFactor, scaleFactor, 1.0f);
-        }).Every(16);
-    }
-
-    private void StopBounce()
-    {
-        nextLinePrompt.visible = false;
-        bounceSchedule?.Pause();
-
-        // Reset position and scale
-        nextLinePrompt.style.translate = new Translate(0.0f, 0.0f);
-        nextLinePrompt.transform.scale = Vector3.one;
-    }
-
-    private void ShowTooltip(string name, Vector2 mousePosition, StyleFontDefinition font)
-    {
-        Label word  = document.rootVisualElement.Q<Label>("Word");
-        Label notes = document.rootVisualElement.Q<Label>("Notes");
-
-        word.text = name;
-        word.style.unityFontDefinition = font;
-
-        notes.text = GetPlayerNotes(name);
-
-        MoveTooltip(mousePosition);
-        wordTooltip.style.display = DisplayStyle.Flex;
-    }
-
-    private void MoveTooltip(Vector2 mousePosition)
-    {
-        float offsetX = 12f;
-        float offsetY = 12f;
-
-        wordTooltip.style.left = mousePosition.x + offsetX;
-        wordTooltip.style.top  = mousePosition.y + offsetY;
-    }
-
-    private void HideTooltip()
-    {
-        wordTooltip.style.display = DisplayStyle.None;
-    }
-
-    private string GetPlayerNotes(string word)
-    {
-        PlayerController player = PlayerController.Instance;
-        Dictionary dictionary   = player.dictionary;
-
-        foreach (DictionaryEntry entry in dictionary.dictionaryList) 
-        {
-            if (LanguageTable.PhoneticProcessor.TranslateManaged(entry.Word) == word) 
-            {
-                if (entry.Notes == "")
-                {
-                    return "No Notes Available For This Word";
-                }
-                return entry.Notes;
-            }
-        }
-
-        return "No Notes Available For This Word";
     }
 
     private void ToggleNotebook()
@@ -443,7 +231,7 @@ public class NpcDialogue : Interactable
 
         if (journalOrDict) // Toggle to Dictionary
         {
-            journalPage.style.display = DisplayStyle.None;
+            journalPage.style.display        = DisplayStyle.None;
             journalPage.parent.style.display = DisplayStyle.None;
 
             foreach (VisualElement slot in Slots)
@@ -457,7 +245,7 @@ public class NpcDialogue : Interactable
             {
                 slot.style.display = DisplayStyle.None;
             }
-            journalPage.style.display = DisplayStyle.Flex;
+            journalPage.style.display        = DisplayStyle.Flex;
             journalPage.parent.style.display = DisplayStyle.Flex;
         }
 
@@ -505,7 +293,7 @@ public class NpcDialogue : Interactable
 
             slot.visible = true;
 
-            var word = slot.Q<Label>("Word" + ((index % Slots.Count) + 1));
+            var word  = slot.Q<Label>("Word" + ((index % Slots.Count) + 1));
             var notes = slot.Q<TextField>("Notes" + ((index % Slots.Count) + 1));
 
             word.text = LanguageTable.PhoneticProcessor.TranslateManaged(player.dictionary.dictionaryList[index].Word);
