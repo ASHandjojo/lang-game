@@ -1,0 +1,43 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/SettingsMenu/SettingsStyles.uss?fileID=7433441132597879392&amp;guid=183042a5c782ff6498ee751526cafc95&amp;type=3#SettingsStyles" />
+    <Style src="project://database/Assets/UI/GameHud/InGame.uss?fileID=7433441132597879392&amp;guid=dd2b906b7c2acb14aa1334c009b6b1ec&amp;type=3#InGame" />
+    <Style src="project://database/Assets/UI/MainMenu/MainMenuStyles.uss?fileID=7433441132597879392&amp;guid=d59d620128eeb9849ac753915a8fa2d4&amp;type=3#MainMenuStyles" />
+    <engine:VisualElement name="Notebook" style="flex-grow: 1; background-color: rgb(255, 224, 152); width: 100%; height: 100%; align-content: auto; position: relative; min-width: 100%; min-height: 100%;">
+        <engine:VisualElement name="NotebookTop" style="flex-grow: 1; flex-direction: row; height: 100%; align-items: center;">
+            <engine:Button text="Journal" name="JournalButton" enable-rich-text="false" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" enabled="true" class="button" style="align-self: center; left: auto; width: 350px; height: 72px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-bottom: 0; margin-top: 40px; opacity: 1; margin-left: 2.5%; -unity-background-image-tint-color: rgb(255, 255, 255);" />
+            <engine:Button text="Dictionary" name="DictionaryButton" enable-rich-text="true" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" enabled="true" class="button" style="align-self: center; left: auto; width: 350px; height: 72px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-bottom: 0; margin-top: 40px; opacity: 1; border-left-width: 1px; margin-right: 2%; margin-left: 1%;" />
+            <engine:Label text="NoteBook" name="Title" class="headers" style="font-size: 60px; -unity-text-align: upper-center; top: 0; left: auto;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="DictionarySlot1" style="flex-grow: 1; height: 100%; flex-direction: row; width: 100%; background-image: none; -unity-text-align: middle-left; justify-content: center; align-items: center; display: none;">
+            <engine:Label text="Word" name="Word1" class="hotkey-text ConlangText" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold; color: rgb(165, 0, 0);" />
+            <engine:TextField placeholder-text="Notes..." name="Notes1" class="headers" style="width: 50%; font-size: 40px; height: 40%; padding-right: 10%; -unity-font-style: normal;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="DictionarySlot2" style="flex-grow: 1; height: 100%; flex-direction: row; width: 100%; background-image: none; -unity-text-align: middle-left; justify-content: center; align-items: center; display: none;">
+            <engine:Label text="Word" name="Word2" class="hotkey-text ConlangText" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;" />
+            <engine:TextField placeholder-text="Notes..." name="Notes2" class="headers" style="width: 50%; font-size: 40px; height: 40%; padding-right: 10%; -unity-font-style: normal;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="DictionarySlot3" style="flex-grow: 1; height: 100%; flex-direction: row; width: 100%; background-image: none; -unity-text-align: middle-left; justify-content: center; align-items: center; display: none;">
+            <engine:Label text="Word" name="Word3" class="hotkey-text ConlangText" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;" />
+            <engine:TextField placeholder-text="Notes..." name="Notes3" class="headers" style="width: 50%; font-size: 40px; height: 40%; padding-right: 10%; -unity-font-style: normal;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="DictionarySlot4" style="flex-grow: 1; height: 100%; flex-direction: row; width: 100%; background-image: none; -unity-text-align: middle-left; justify-content: center; align-items: center; display: none;">
+            <engine:Label text="Word" name="Word4" class="hotkey-text ConlangText" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;" />
+            <engine:TextField placeholder-text="Notes..." name="Notes4" class="headers" style="width: 50%; font-size: 40px; height: 40%; padding-right: 10%; -unity-font-style: normal;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="DictionarySlot5" style="flex-grow: 1; height: 100%; flex-direction: row; width: 100%; background-image: none; -unity-text-align: middle-left; justify-content: center; align-items: center; display: none;">
+            <engine:Label text="Word" name="Word5" class="hotkey-text ConlangText" style="-unity-text-align: lower-center; height: 40%; width: 50%; font-size: 40px; padding-bottom: 1%; -unity-font-style: bold;" />
+            <engine:TextField placeholder-text="Notes..." name="Notes5" class="headers" style="width: 50%; font-size: 40px; height: 40%; padding-right: 10%; -unity-font-style: normal;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="Journal" style="flex-grow: 0; height: 500%; flex-direction: row; align-content: center; justify-content: center; display: flex;">
+            <engine:TextField emoji-fallback-support="true" vertical-scroller-visibility="Auto" multiline="true" hide-placeholder-on-focus="false" name="JournalPage" style="flex-grow: 0; width: 80%; align-content: flex-start; align-self: center; justify-content: flex-start; height: 90%; background-color: rgba(255, 255, 255, 0); -unity-text-align: upper-left; white-space: pre-wrap; font-size: 40px; color: rgb(27, 27, 27); display: flex;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="NotebookBottom" style="flex-grow: 1; background-size: 100% 100%; background-color: rgb(255, 224, 152); height: 110%; width: 100%; flex-direction: row; align-content: center; justify-content: center;">
+            <engine:Button name="BackPage" class="button" style="width: 7%; height: 100px; background-image: url(&quot;project://database/Assets/UI/Images/Game%20HUD/UMBackButton.png?fileID=2800000&amp;guid=f56e3ad6aff3b5f49b6c280af4acf703&amp;type=3#UMBackButton&quot;); background-size: 100% 100%; background-color: rgb(255, 252, 244); align-self: auto; margin-left: 4px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; margin-right: 20%;" />
+            <engine:VisualElement style="flex-grow: 0;">
+                <engine:Label text="0/0" name="PageCount" emoji-fallback-support="false" class="headers" style="-unity-text-align: upper-center; font-size: 40px;" />
+                <engine:Button text="Back&#10;" name="BackButton" enable-rich-text="false" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" enabled="true" class="button" style="align-self: center; left: auto; width: 350px; height: 72px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-bottom: 0; margin-top: 40px; opacity: 1;" />
+            </engine:VisualElement>
+            <engine:Button name="ForwardPage" class="button" style="width: 7%; height: 100px; background-image: url(&quot;project://database/Assets/UI/Images/Game%20HUD/UMForwardButton.png?fileID=2800000&amp;guid=79803b126e90f754a9ec24fbdd663497&amp;type=3#UMForwardButton&quot;); background-size: 100% 100%; background-color: rgb(255, 252, 244); align-self: auto; margin-left: 20%; border-left-color: rgb(255, 252, 244); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

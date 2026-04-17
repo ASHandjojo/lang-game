@@ -1,20 +1,55 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
+using Unity.Burst;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public enum WordType : int
+public enum WordType : ushort
 {
-    Noun      = 1,
-    Adjective = 2,
+    Noun      = 0,
+    Adjective = 1,
 
-    Verb    = 4,
-    Adverb  = 8 | Verb,
+    Verb    = 2,
+    Adverb  = 3,
 
-    Object  = 32,
+    Particle = 5,
+
+    Interjection  = 6,
+    Interrogative = 7,
+    Conjunction   = 8,
+
+    Pronoun = 10,
+
+    TypeCount = 10,
+
+    Unknown   = ushort.MaxValue
+}
+
+[BurstCompile]
+public static class WordTypeExtMethods
+{
+    public static FixedString32Bytes ToFixedString(this WordType wordType) => wordType switch
+    {
+        WordType.Noun      => nameof(WordType.Noun),
+        WordType.Adjective => nameof(WordType.Adjective),
+        
+        WordType.Verb   => nameof(WordType.Verb),
+        WordType.Adverb => nameof(WordType.Adverb),
+
+        WordType.Particle      => nameof(WordType.Particle),
+        WordType.Interjection  => nameof(WordType.Interjection),
+        WordType.Interrogative => nameof(WordType.Interrogative),
+
+        WordType.Pronoun => nameof(WordType.Pronoun),
+
+        WordType.Unknown => nameof(WordType.Unknown),
+
+        _ => throw new NotImplementedException()
+    };
 }
 
 [Serializable]
@@ -26,12 +61,17 @@ public struct DictEntry
     public string unicodeString;
     [Tooltip("The English equivalent translation.")]
     public string englishTranslation;
+}
 
-    public WordType wordType;
+[Serializable]
+public struct DictEntryColumn
+{
+    public WordType        wordType;
+    public List<DictEntry> entries;
 }
 
 [CreateAssetMenu(menuName = "Linguistics/Internal Dictionary")]
 public sealed class InternalDictionary : ScriptableObject
 {
-    public List<DictEntry> entries;
+    public List<DictEntryColumn> entries;
 }

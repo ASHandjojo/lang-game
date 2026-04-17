@@ -1,6 +1,6 @@
 .button:hover {
     background-image: url("project://database/Assets/UI/Images/Main%20Menu/MMButtonBg.png?fileID=2800000&guid=db4b4ba7f4e456441a766a153444defe&type=3#MMButtonBg");
-    -unity-font-definition: url("project://database/Assets/Fonts/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
+    -unity-font-definition: url("project://database/Assets/Resources/Fonts%20&%20Materials/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
     font-size: 300%;
     color: rgb(255, 255, 255);
     -unity-font-style: bold;
@@ -33,7 +33,7 @@
     width: 440px;
     height: 120px;
     background-image: url("project://database/Assets/UI/Images/Main%20Menu/MMButtonBg.png?fileID=2800000&guid=db4b4ba7f4e456441a766a153444defe&type=3#MMButtonBg");
-    -unity-font-definition: url("project://database/Assets/Fonts/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
+    -unity-font-definition: url("project://database/Assets/Resources/Fonts%20&%20Materials/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
     font-size: 250%;
     color: rgb(255, 255, 255);
     -unity-font-style: bold;
@@ -46,7 +46,7 @@
     width: 440px;
     height: 120px;
     background-image: url("project://database/Assets/UI/Images/Main%20Menu/MMButtonBg.png?fileID=2800000&guid=db4b4ba7f4e456441a766a153444defe&type=3#MMButtonBg");
-    -unity-font-definition: url("project://database/Assets/Fonts/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
+    -unity-font-definition: url("project://database/Assets/Resources/Fonts%20&%20Materials/Harmony.otf?fileID=12800000&guid=e0afdb4613b19e941a9c5e69c3b88d0f&type=3#Harmony");
     font-size: 300%;
     color: rgb(255, 255, 255);
     -unity-font-style: bold;

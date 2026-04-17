@@ -1,6 +1,6 @@
 using System;
-
 using System.Collections.Generic;
+using System.Linq;
 
 using Unity.Collections;
 
@@ -65,9 +65,6 @@ internal sealed class DictEntryDrawer : PropertyDrawer
         SerializedProperty englishStrProp = property.FindPropertyRelative(nameof(DictEntry.englishTranslation));
         element.Q<TextField>("EnglishString").BindProperty(englishStrProp);
 
-        SerializedProperty wordTypeProp = property.FindPropertyRelative(nameof(DictEntry.wordType));
-        element.Q<EnumField>("WordType").BindProperty(wordTypeProp);
-
         element.AssignCallback(ligatureSub);
         
         return element;
@@ -77,12 +74,17 @@ internal sealed class DictEntryDrawer : PropertyDrawer
 [CustomEditor(typeof(InternalDictionary))]
 internal sealed class InternalDictEditor : Editor
 {
-    private static readonly Dictionary<string, WordType> WordTypeDict = new()
+    private static readonly Dictionary<string, WordType> WordTypeDict = new();
+
+    static InternalDictEditor()
     {
-        { nameof(WordType.Noun),    WordType.Noun   },
-        { nameof(WordType.Object),  WordType.Object },
-        { nameof(WordType.Verb),    WordType.Verb   },
-    };
+        WordType[] wordTypes = (WordType[]) Enum.GetValues(typeof(WordType));
+        string[]   wordNames = Enum.GetNames(typeof(WordType));
+        for (int i = 0; i < wordTypes.Length; i++)
+        {
+            WordTypeDict.Add(wordNames[i].ToLower(), wordTypes[i]);
+        }
+    }
 
     public override VisualElement CreateInspectorGUI()
     {
@@ -117,17 +119,31 @@ internal sealed class InternalDictEditor : Editor
             string[] lines    = importText.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length > 0)
             {
+                Dictionary<WordType, List<DictEntry>> entries = new();
+                for (int i = 0; i < dict.entries.Count; i++)
+                {
+                    entries.Add(dict.entries[i].wordType, dict.entries[i].entries);
+                }
                 foreach (string line in lines)
                 {
                     string[] args = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
                     Debug.Assert(args.Length == ExpectedArgCount, $"Invalid number of arguments (expected: {ExpectedArgCount})! String: {line}, Arg Count: {args.Length}");
                     DictEntry entry = new()
                     {
-                        rawString          = args[0],
-                        englishTranslation = args[1],
-                        wordType           = WordTypeDict[args[2]]
+                        rawString          = args[0].ToLower().Replace("-", ""),
+                        englishTranslation = args[2],
                     };
-                    dict.entries.Add(entry);
+                    WordType wordType = WordTypeDict[args[1].ToLower()];
+                    if (entries.ContainsKey(wordType))
+                    {
+                        entries[wordType].Add(entry);
+                    }
+                    else
+                    {
+                        dict.entries.Add(new DictEntryColumn() { entries = new(), wordType = wordType });
+                        entries.Add(dict.entries[^1].wordType, dict.entries[^1].entries);
+                        entries[wordType].Add(entry);
+                    }
                 }
                 EditorUtility.SetDirty(dict);
                 serializedObject.ApplyModifiedProperties();

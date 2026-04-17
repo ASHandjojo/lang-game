@@ -151,7 +151,6 @@ public struct PhoneticProcessor : IDisposable
         {
             // Iterate through compound sign
             ref readonly CompoundTable compoundTable = ref compoundTables.ElementAt(compoundIdx);
-            bool isEqual  = true;
             int signCount = compoundTable.signData.Length;
 
             // If the current sign position + the sign data count of the compound sign @ compoundIdx is out of bounds, skip;
@@ -160,7 +159,9 @@ public struct PhoneticProcessor : IDisposable
             {
                 continue;
             }
+
             // Does a character-wise comparison over the compound characters.
+            bool isEqual = true;
             for (int elementIdx = 1; elementIdx < signCount && isEqual; elementIdx++)
             {
                 char inputSign   = input[elementIdx];
@@ -178,21 +179,22 @@ public struct PhoneticProcessor : IDisposable
         return maxMatchSize > 0;
     }
 
-    /// <summary>
-    /// Translates a delimited string of phonetics characters into their corresponding Unicode.
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns>A string with all valid phonetics converted to the specified mapped Unicode characters..</returns>
-    public readonly string Translate(string input)
+    public readonly string Translate(in ReadOnlySpan<char> span)
     {
-        // Converts to span (much faster)
-        ReadOnlySpan<char> span = input.ToLower();
         unsafe
         {
             UnsafeList<char> compoundPass = CompoundPass(span);
             return new string(compoundPass.Ptr, 0, compoundPass.Length);
         }
     }
+
+
+    /// <summary>
+    /// Translates a delimited string of phonetics characters into their corresponding Unicode.
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns>A string with all valid phonetics converted to the specified mapped Unicode characters..</returns>
+    public readonly string Translate(string input) => Translate(input.AsSpan());
 
     private readonly UnsafeList<char> CompoundPass(in ReadOnlySpan<char> span)
     {

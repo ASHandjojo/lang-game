@@ -176,6 +176,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 075e9c7cdf5d8f74da91022d60106606, type: 3}
+--- !u!95 &133916243 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7929217388321738682, guid: 7ac802ca58cce594a9182934ac5bc7a6, type: 3}
+  m_PrefabInstance: {fileID: 1367662896}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &173549046 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3922667833013045048, guid: 17bb6d27e5ae7174bb123b3470138864, type: 3}
@@ -265,37 +270,6 @@ MonoBehaviour:
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
---- !u!1 &248268833
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 248268835}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &248268835
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248268833}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.33486724, y: -1.9374255, z: -1.0070624}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &256781886 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8479779900751747254, guid: b3cd47b1b7952ff43a303a8f547b423f, type: 3}
@@ -781,6 +755,8 @@ MonoBehaviour:
   currentInteraction:
     obj: {fileID: 0}
     isInitialized: 0
+  internalDict: {fileID: 11400000, guid: 599cf157494825b4ea3ff390363cf038, type: 2}
+  playerJournalSize: 50
 --- !u!1 &1074906769
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,10 +768,10 @@ GameObject:
   - component: {fileID: 1074906774}
   - component: {fileID: 1074906773}
   - component: {fileID: 1074906771}
-  - component: {fileID: 1074906770}
   - component: {fileID: 1074906776}
   - component: {fileID: 1074906778}
   - component: {fileID: 1074906777}
+  - component: {fileID: 1074906779}
   m_Layer: 0
   m_Name: Entrance
   m_TagString: Untagged
@@ -803,24 +779,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1074906770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1074906769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5dfd783e2a003be4385b27e623399957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactionPrompt: {fileID: 1470832120}
-  interactClip: {fileID: 8300000, guid: 49e6681ee88d775489f293846fa8cdf6, type: 3}
-  worldPromptInput: 2
-  hudDocument: {fileID: 1605222084}
-  transitionTime: 1
-  zoomImage: {fileID: 2800000, guid: 1d080e14bfd6e654caffc1bcdc0789b5, type: 3}
 --- !u!61 &1074906771
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -952,7 +910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 5c1a0d1d8d70f3b4a978d3b7a982f136, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 3f12ce37860cd1f4089e12ca9a82c635, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 54f61cebcc8fa1e47bde4d95bac737ef, type: 3}
   m_SortingOrder: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -1066,6 +1024,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d3ac51e7ec2b1448dca9ee644aa0ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1074906779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074906769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 598ffaa4157535245be78867af1f426b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionPrompt: {fileID: 1470832120}
+  interactClip: {fileID: 8300000, guid: 49e6681ee88d775489f293846fa8cdf6, type: 3}
+  worldPromptInput: 2
+  hudDocument: {fileID: 1605222084}
+  npcName: Gate
+  npcImage: {fileID: 0}
+  vincentImage: {fileID: 0}
+  entries:
+  - line:
+      phoneticsStr: h
+      line: h
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: m
+      line: m
+  - line:
+      phoneticsStr: h
+      line: h
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 1
+    responseData:
+      phoneticsStr: m
+      line: m
+  npcTree:
+    NpcOptions: []
+  sceneLoader: {fileID: 1367662897}
+  nextScene:
+    name: TestNextLv
+    path: Assets/Scenes/GameLevels/TestNextLv.unity
+  animator: {fileID: 133916243}
 --- !u!1001 &1133875776
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1856,6 +1861,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ac802ca58cce594a9182934ac5bc7a6, type: 3}
+--- !u!114 &1367662897 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5806594485143702073, guid: 7ac802ca58cce594a9182934ac5bc7a6, type: 3}
+  m_PrefabInstance: {fileID: 1367662896}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cad165c26f3efe46b564f5d156f62ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1417038446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2008,7 +2024,7 @@ Transform:
   m_GameObject: {fileID: 1499353901}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: 0.0517, z: 10}
+  m_LocalPosition: {x: -0.05, y: 0.0517, z: 10}
   m_LocalScale: {x: 1, y: 0.996, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2369,9 +2385,11 @@ MonoBehaviour:
   closeClip: {fileID: 8300000, guid: fd108821f38ecd942a95778abac0a057, type: 3}
   hoverClip: {fileID: 8300000, guid: c520791ce7781f845bc1fa5a54de960e, type: 3}
   closedImage: {fileID: 2800000, guid: e17c6ea311215de4fb66d7c7f9de7d4d, type: 3}
-  openImage: {fileID: 2800000, guid: 9c812bf860a213d47a524a182b2f1c0e, type: 3}
+  openImage: {fileID: 0}
   settingsDocument: {fileID: 1724572783}
-  dictionarySlots: {fileID: 9197481963319205126, guid: b50215d666cea5045be6ebfdfe102e0f, type: 3}
+  notebookUIDocument: {fileID: 9197481963319205126, guid: b50215d666cea5045be6ebfdfe102e0f, type: 3}
+  ligatureSub: {fileID: 11400000, guid: 77015b68c3111de409d5641b8c8d11d3, type: 2}
+  standardSignTable: {fileID: 11400000, guid: 98165f17bdca7944ab0a9394d0e5bafd, type: 2}
 --- !u!82 &1605222087
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3205,158 +3223,78 @@ MonoBehaviour:
   npcName: Florence
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   vincentImage: {fileID: 2800000, guid: 4d72ad6efe8d642448375a619630dc4a, type: 3}
-  entries: []
+  entries:
+  - line:
+      phoneticsStr: '|What''s |that |shimmery |thing?'
+      line: <font="Harmony SDF">What's</font> <font="Harmony SDF">that</font> <font="Harmony
+        SDF">shimmery</font> <font="Harmony SDF">thing?</font>
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: ngogu melaia melai
+      line: "\u0117\xC8 \u0101\u010A\xA9 \u0101\u010Ai"
+  - line:
+      phoneticsStr: '|Oh, |that''s |a hgaimei'
+      line: "<font=\"Harmony SDF\">Oh,</font> <font=\"Harmony SDF\">that's</font>
+        <font=\"Harmony SDF\">a</font> \xDDi\u0101i"
+    sound:
+      obj: {fileID: 0}
+      isInitialized: 0
+    hasResponse: 0
+    responseData:
+      phoneticsStr: melaia wabi bele chie
+      line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
   npcTree:
     NpcOptions:
     - ConditionalValue: 0
-      startingId: 1615848925
+      startingId: 0
       startIdx: 0
       Nodes:
-      - NodeId: 1615848925
-        Type: 2
-        SuccId: 1733905523
-        FailId: 865639719
-        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
-        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
-        SuccIdx: 1
-        FailIdx: 2
-        VincentTalking: 0
-        Entry:
-          line:
-            line: "+aipcswqrftlmn\xB0\xA8"
-          sound:
-            obj: {fileID: 0}
-            isInitialized: 0
-          hasResponse: 1
-          responseData:
-            line: 
-      - NodeId: 1733905523
-        Type: 5
-        SuccId: 1615848925
-        FailId: 865639719
-        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
-        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
+      - NodeId: 0
+        Type: 0
+        SuccId: 0
+        FailId: 213649854
+        parentIds: 00000000be09bc0c
+        parentIdxs: 0000000001000000
         SuccIdx: 0
-        FailIdx: 2
+        FailIdx: 1
         VincentTalking: 1
         Entry:
           line:
-            line: "+aipcswqrftlmn\xB0\xA8"
+            phoneticsStr: 'What''s '
+            line: "W\xD8t's"
           sound:
             obj: {fileID: 0}
             isInitialized: 0
           hasResponse: 0
           responseData:
+            phoneticsStr: 
             line: 
-      - NodeId: 865639719
-        Type: 1
-        SuccId: 1733905523
-        FailId: 1615848925
-        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
-        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
-        SuccIdx: 0
-        FailIdx: 0
-        VincentTalking: 1
-        Entry:
-          line:
-            line: "+aipcswqrftlmn\xB0\xA8"
-          sound:
-            obj: {fileID: 0}
-            isInitialized: 0
-          hasResponse: 0
-          responseData:
-            line: 
-      - NodeId: 1077245790
-        Type: 2
-        SuccId: 1615848925
-        FailId: 1077245790
-        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
-        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
-        SuccIdx: 0
-        FailIdx: 3
-        VincentTalking: 0
-        Entry:
-          line:
-            line: "+aipcswqrftlmn\xB0\xA8"
-          sound:
-            obj: {fileID: 0}
-            isInitialized: 0
-          hasResponse: 1
-          responseData:
-            line: 
-      - NodeId: 753330054
-        Type: 2
-        SuccId: 1615848925
-        FailId: 865639719
-        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
-        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
-        SuccIdx: 0
-        FailIdx: 2
-        VincentTalking: 0
-        Entry:
-          line:
-            line: "+aipcswqrftlmn\xB0\xA8"
-          sound:
-            obj: {fileID: 0}
-            isInitialized: 0
-          hasResponse: 1
-          responseData:
-            line: 
-      - NodeId: 498317706
+      - NodeId: 213649854
         Type: 5
-        SuccId: 1615848925
-        FailId: 1615848925
-        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
-        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
+        SuccId: 0
+        FailId: 0
+        parentIds: 00000000be09bc0c
+        parentIdxs: 0000000001000000
         SuccIdx: 0
         FailIdx: 0
         VincentTalking: 0
         Entry:
           line:
-            line: "+aipcswqrftlmn\xB0\xA8"
+            phoneticsStr: '|I |Can''t |Understand |You |Go |Home |:('
+            line: <font="Harmony SDF">I</font> <font="Harmony SDF">Can't</font> <font="Harmony
+              SDF">Understand</font> <font="Harmony SDF">You</font> <font="Harmony
+              SDF">Go</font> <font="Harmony SDF">Home</font> <font="Harmony SDF">:(</font>
           sound:
             obj: {fileID: 0}
             isInitialized: 0
           hasResponse: 0
           responseData:
+            phoneticsStr: 
             line: 
-      - NodeId: 187764044
-        Type: 5
-        SuccId: 1615848925
-        FailId: 1615848925
-        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
-        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
-        SuccIdx: 0
-        FailIdx: 0
-        VincentTalking: 0
-        Entry:
-          line:
-            line: "+aipcswqrftlmn\xB0\xA8"
-          sound:
-            obj: {fileID: 0}
-            isInitialized: 0
-          hasResponse: 0
-          responseData:
-            line: 
-      - NodeId: 363648766
-        Type: 5
-        SuccId: 1615848925
-        FailId: 1615848925
-        parentIds: dde54f60734c5967279d98335e77354086e7e62c8ab9b31d4c0d310bfed6ac15
-        parentIdxs: 0000000001000000020000000300000004000000050000000600000007000000
-        SuccIdx: 0
-        FailIdx: 0
-        VincentTalking: 0
-        Entry:
-          line:
-            line: "+aipcswqrftlmn\xB0\xA8"
-          sound:
-            obj: {fileID: 0}
-            isInitialized: 0
-          hasResponse: 0
-          responseData:
-            line: 
-      NumNodes: 8
+      NumNodes: 2
       CurrNode: 0
 --- !u!61 &1988571624
 BoxCollider2D:
@@ -3595,7 +3533,7 @@ PrefabInstance:
     - target: {fileID: 5833617374691732879, guid: d7526bc57ae020b4a8587009a1ee67f1, type: 3}
       propertyPath: settingsMenu
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1724572788}
     - target: {fileID: 5833617374691732879, guid: d7526bc57ae020b4a8587009a1ee67f1, type: 3}
       propertyPath: dictionaryMenu
       value: 
@@ -3626,4 +3564,3 @@ SceneRoots:
   - {fileID: 189602150}
   - {fileID: 518210467}
   - {fileID: 6290737249233252678}
-  - {fileID: 248268835}
