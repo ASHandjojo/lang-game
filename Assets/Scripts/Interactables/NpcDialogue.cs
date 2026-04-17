@@ -72,6 +72,8 @@ public class NpcDialogue : Interactable
         dialogueBox = new DialogueBox(dialogueTreeAsset, characterData);
         document.rootVisualElement.Add(dialogueBox);
 
+        document.rootVisualElement.style.justifyContent = Justify.FlexEnd;
+
         Label word  = document.rootVisualElement.Q<Label>("Word");
         Label notes = document.rootVisualElement.Q<Label>("Notes");
 
@@ -194,6 +196,9 @@ public class NpcDialogue : Interactable
         }
         else
         {
+            index = 0;
+            // NOTE: This WILL have to be moved/replaced w/ Dialogue Tree. Same with OnLast
+            inDialogue = false;
             // Restore Movement
             PlayerController.Instance.CanMove = true;
 
@@ -210,7 +215,7 @@ public class NpcDialogue : Interactable
 
             InputController.Instance.CloseKeyboard();
             PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
-            yield return OnLast();
+            yield return OnLast(); // NOTE: This WILL have to be moved/replaced w/ Dialogue Tree. Same with OnLast
         }
     }
 
