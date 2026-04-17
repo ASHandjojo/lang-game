@@ -62,6 +62,8 @@ public sealed class DialogueBox : VisualElement
         originalColor = style.color;
     }
 
+    public void SetDictionaryData(in DictionaryData data) => dictData = data;
+
     public void ClearDisplay() => textContainer.Clear();
 
     // Iteration Methods

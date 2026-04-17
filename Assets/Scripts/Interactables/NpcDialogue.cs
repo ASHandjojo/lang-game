@@ -75,6 +75,8 @@ public class NpcDialogue : Interactable
         Label word  = document.rootVisualElement.Q<Label>("Word");
         Label notes = document.rootVisualElement.Q<Label>("Notes");
 
+        dialogueBox.SetDictionaryData(new DictionaryData() { dictWords = word, dictNotes = notes });
+
         document.rootVisualElement.style.visibility = Visibility.Hidden;
         document.rootVisualElement.style.display    = DisplayStyle.None;
         inDialogue = false;
