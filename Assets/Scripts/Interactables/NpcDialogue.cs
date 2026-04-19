@@ -500,6 +500,9 @@ public class NpcDialogue : Interactable
             case TraverseStatus.CurrNodeUndefined:
                     Debug.Log("Current Dialogue In Tree Is Not Defined");
                     break;
+            case TraverseStatus.NextNodeUndefined:
+                    Debug.Log("Next Dialogue is Undefined (Affects Checkpoints)");
+                    break;
             default :
                     Debug.Log("Error in Moving Dialogue Forward");
                     break;

@@ -26,6 +26,7 @@ public enum TraverseStatus : uint
     CurrNodeUndefined = 32 | Error,
     GoToNodeOutOfBounds = 64 | Error,
     InitializeTreeOutOfBounds = 128 | Error,
+    NextNodeUndefined = 256 | Error
 }
 
 
@@ -100,6 +101,9 @@ public struct DialogueTreeNode
 
     // This will be true if this is vincent talking and false otherwise!
     [SerializeField] public bool VincentTalking;
+
+    // This will be true if this is vincent talking and false otherwise!
+    [SerializeField] public bool CheckPointNode;
 
     // This will hold the actual dialogue entry in this Node!
     [SerializeField] public DialogueEntry Entry;
@@ -187,6 +191,7 @@ public class DialogueTree
     //          - returns WrongNodeType if useTest does not match testing or dialogue type
     //          - returns NotInDialogue if the player is not in any dialogue tree (use tree initializer function) 
     //          - returns CurrNodeUndefined if the current node is not defined
+    //          - returns NextNodeUndefined if the next node is not defined
     //          - returns GoToNodeOutOfBounds if the node to go to is out of bounds
     //          - returns () ...
     // testing is the string to test against and useTest specifies whether we should check against a string 
@@ -231,6 +236,16 @@ public class DialogueTree
         }
 
         NpcOptions[CurrListIdx].CurrNode = to_go_to; // If index is valid, then we will set this as our index
+        bool nextNode = TryGetCurrentNode(out DialogueTreeNode next);
+        if (!nextNode)
+        {
+            return TraverseStatus.NextNodeUndefined;
+        }
+        if (next.CheckPointNode)
+        {
+            NpcOptions[CurrListIdx].startIdx = to_go_to;
+        }
+
         return TraverseStatus.Successful;  // return that you went to a next node   
     }
 

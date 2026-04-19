@@ -436,6 +436,10 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         PropertyField vincTalkProp = new(vincTalk);
         element.Add(vincTalkProp);
 
+        SerializedProperty check = property.FindPropertyRelative(nameof(DialogueTreeNode.CheckPointNode));
+        PropertyField checkProp = new(check);
+        element.Add(checkProp);
+
         
 
 
