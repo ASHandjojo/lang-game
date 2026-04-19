@@ -9,11 +9,11 @@ using System.Collections.Generic;
 public enum NodeType : uint
 {
     Default     = 1,
-    Conditional = 2,
+    PlayerInput = 2,
     // New node type added to be the end node (will only end at an end node)
     End         = 4  | Default,
-    Binary      = 8  | Conditional,
-    Multiheaded = 16 | Conditional
+    Binary      = 8  | PlayerInput,
+    Multiheaded = 16 | PlayerInput
 }
 
 public enum TraverseStatus : uint
@@ -170,7 +170,7 @@ public class DialogueTree
 
 
 
-    public bool NeedsPlayerInput() => InDialogueList && TryGetCurrentNode(out var curr) && (curr.Type & NodeType.Conditional) != 0;
+    public bool NeedsPlayerInput() => InDialogueList && TryGetCurrentNode(out var curr) && (curr.Type & NodeType.PlayerInput) != 0;
 
     // This will return the current entry of dialogue that will be said
     // or it will return null if there was an error
@@ -209,7 +209,7 @@ public class DialogueTree
             return TraverseStatus.CurrNodeUndefined;
         }
 
-        if (useTest ^ (curr.Type & NodeType.Conditional) != 0) // XOR op
+        if (useTest ^ (curr.Type & NodeType.PlayerInput) != 0) // XOR op
         {
             return TraverseStatus.WrongNodeType;
         }

@@ -74,7 +74,7 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
 
             // This is for updating the success/fail ids to their indexes
             NodeType this_type = (NodeType) type.intValue;
-            bool cond = (this_type & NodeType.Conditional) == NodeType.Conditional;
+            bool cond = (this_type & NodeType.PlayerInput) == NodeType.PlayerInput;
             if (cond || (this_type == NodeType.Default))
             {
                 if (cond) {
@@ -453,7 +453,7 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         succIdProp.RegisterCallback((ChangeEvent<int> e) =>
         {
             //Debug.Log("Array Size: " + parIds.arraySize);
-            if (((NodeType)nodeTypeProp.intValue & NodeType.Conditional) != 0)
+            if (((NodeType)nodeTypeProp.intValue & NodeType.PlayerInput) != 0)
             {
                 bool found = false;
                 for (int i = 0; i < parIds.arraySize; i++)
