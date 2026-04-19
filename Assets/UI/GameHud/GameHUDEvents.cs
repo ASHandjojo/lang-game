@@ -316,8 +316,8 @@ public sealed class GameHUDEvents : UIMenuController
             var word = slot.Q<Label>("Word" + ((index % Slots.Count) + 1));
             var notes = slot.Q<TextField>("Notes" + ((index % Slots.Count) + 1));
 
-            processor = new(standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
-            word.text = processor.Translate(player.dictionary.dictionaryList[index].Word);
+            processor = PhoneticProcessor.Create(standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
+            word.text = processor.TranslateManaged(player.dictionary.dictionaryList[index].Word);
 
             if (player.dictionary.dictionaryList[index].Notes == "")
             {

@@ -1,8 +1,7 @@
 using System;
-using System.Linq;
-using System.Text;
 
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 
 using UnityEngine;
@@ -31,7 +30,7 @@ public sealed class EditorUI : EditorWindow
 
     private TextField phoneticField;
 
-    private SerializedProperty? phoneticsProp, unicodeProp;
+    private SerializedProperty? phoneticsProp, unicodeProp, literalProp;
 
     private EncodingEntry? responseData = null;
 
@@ -49,23 +48,26 @@ public sealed class EditorUI : EditorWindow
     /// </summary>
     /// <param name="dialogueEntry"></param>
     [MenuItem("Conlang/Text Editor")]
-    public static void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty phoneticsProp, SerializedProperty unicodeProp)
+    public static unsafe void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty phoneticsProp, SerializedProperty unicodeProp, SerializedProperty literalProp)
     {
         Debug.Assert(dialogueEntry != null);
         // Linking dialogue entry being edited.
         EditorUI baseWindow     = GetWindow<EditorUI>(EditorName, true);
         baseWindow.responseData = dialogueEntry;
-        // Load from stored to UI (Unicode)
-        baseWindow.unicodeLabel!.text = baseWindow.responseData!.line;
 
         baseWindow.phoneticsProp = phoneticsProp;
         baseWindow.unicodeProp   = unicodeProp;
-        baseWindow.keyboardUI.PhoneticsString = baseWindow.responseData.phoneticsStr;
+        baseWindow.literalProp   = literalProp;
 
-        (var words, var outputStr) = baseWindow.ParseMixed(baseWindow.keyboardUI.PhoneticsString, Allocator.Temp);
+        baseWindow.keyboardUI.PhoneticsString = dialogueEntry!.phoneticsStr;
 
-        baseWindow.englishLabel!.text  = baseWindow.GetEnglishString(words);
-        baseWindow.wordTypeLabel!.text = baseWindow.GetWordTypeString(words);
+        var mixedRes = baseWindow.wordEncoder.ParseMixed(baseWindow.keyboardUI.PhoneticsString.AsSpan().ConvertU16(), baseWindow.processor, Allocator.Temp);
+
+        ReadOnlySpan<char> displayRes  = new(mixedRes.displayOutput.GetUnsafeReadOnlyPtr(), mixedRes.displayOutput.Length);
+
+        baseWindow.unicodeLabel!.text  = new string(displayRes);
+        baseWindow.englishLabel!.text  = baseWindow.GetEnglishString(mixedRes.words);
+        baseWindow.wordTypeLabel!.text = baseWindow.GetWordTypeString(mixedRes.words);
 
         baseWindow.phoneticField!.SetValueWithoutNotify(phoneticsProp!.stringValue);
     }
@@ -93,59 +95,36 @@ public sealed class EditorUI : EditorWindow
         return typeOutput;
     }
 
-    private (NativeArray<WordNode>, string) ParseMixed(string input, Allocator allocator = Allocator.Temp)
-    {
-        const ushort Separator = '|';
-        if (input.Length == 0)
-        {
-            return (default, string.Empty);
-        }
-        int wordCount = input.AsSpan().ConvertU16().WordCount(' ');
-        int charCount = input.AsSpan().ConvertU16().CharCount(Separator);
-
-        NativeArray<WordNode> nodes = new(math.max(wordCount - charCount, 0), allocator);
-        SplitIterator wordIter      = SplitIterator.Create(input, ' ');
-
-        StringBuilder builder = new();
-        int wordIdx = 0;
-        while (wordIter.MoveNext())
-        {
-            ReadOnlySpan<ushort> word = wordIter.Current;
-            if (word.IsEmpty)
-            {
-                continue;
-            }
-            if (word[0] != Separator)
-            {
-                string wordConv  = processor.Translate(word.ConvertChar());
-                nodes[wordIdx++] = wordEncoder.ParseSingle(wordConv.AsSpan().ConvertU16());
-                builder.Append($" {wordConv}");
-            }
-            else
-            {
-                builder.Append($" <font=\"Harmony SDF\">{word[1..].ConvertChar().ToString()}</font>");
-            }
-        }
-        return (nodes, builder.ToString().TrimStart());
-    }
-
-    private void MetaUpdate(string input)
+    private unsafe void MetaUpdate(string input)
     {
         phoneticsProp!.stringValue = input;
 
-        (var words, var outputStr) = ParseMixed(input, Allocator.Temp);
+        var mixedRes = wordEncoder.ParseMixed(input.AsSpan().ConvertU16(), processor, Allocator.Temp);
+        if (!mixedRes.IsValid)
+        {
+            unicodeLabel!.text  = string.Empty;
+            englishLabel!.text  = string.Empty;
+            wordTypeLabel!.text = string.Empty;
+            return;
+        }
 
-        unicodeProp!.stringValue = outputStr;
+        ReadOnlySpan<char> unicodeRes = new(mixedRes.unicodeOutput.GetUnsafeReadOnlyPtr(), mixedRes.unicodeOutput.Length);
+        unicodeProp!.stringValue      = new string(unicodeRes);
+
+        ReadOnlySpan<char> displayRes = new(mixedRes.displayOutput.GetUnsafeReadOnlyPtr(), mixedRes.displayOutput.Length);
+        literalProp!.stringValue      = new string(displayRes);
 
         Undo.RecordObject(phoneticsProp!.serializedObject.targetObject, "TextEdit");
         Undo.RecordObject(unicodeProp!.serializedObject.targetObject,   "TextEdit");
+        Undo.RecordObject(literalProp!.serializedObject.targetObject,   "LiteralEdit");
 
         phoneticsProp.serializedObject.ApplyModifiedProperties();
         unicodeProp.serializedObject.ApplyModifiedProperties();
+        literalProp.serializedObject.ApplyModifiedProperties();
 
-        unicodeLabel!.text  = unicodeProp!.stringValue;
-        englishLabel!.text  = GetEnglishString(words);
-        wordTypeLabel!.text = GetWordTypeString(words);
+        unicodeLabel!.text  = new string(displayRes);
+        englishLabel!.text  = GetEnglishString(mixedRes.words);
+        wordTypeLabel!.text = GetWordTypeString(mixedRes.words);
     }
 
     /// <summary>
@@ -176,7 +155,7 @@ public sealed class EditorUI : EditorWindow
         Debug.Assert(internalDict != null);
         if (!processor.IsValid)
         {
-            processor   = new PhoneticProcessor(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);
+            processor   = PhoneticProcessor.Create(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);
             wordEncoder = WordEncoder.Create(internalDict!.entries.Convert(Allocator.Temp), Allocator.Persistent);
         }
         if (responseData != null)
