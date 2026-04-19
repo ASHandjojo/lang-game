@@ -16,7 +16,7 @@ public sealed class BuildingInteract : NpcDialogue
 
     protected override IEnumerator OnLast()
     {
-        sceneLoader.LoadNextLevel(nextScene.name);
+        sceneLoader.LoadNextLevel(nextScene.Name);
         yield break;
     }
 }

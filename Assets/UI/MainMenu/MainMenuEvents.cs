@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument), typeof(SoundHandler))]
@@ -11,6 +13,8 @@ public sealed class MainMenuEvents : MonoBehaviour
     private Button startButton;
     private Button settingsButton;
     private Button exitButton;
+
+    [SerializeField] private SceneReference firstLevelScene;
 
     private List<Button> buttonList;
 
@@ -48,7 +52,7 @@ public sealed class MainMenuEvents : MonoBehaviour
         settingsButton.SetEnabled(false);
         exitButton.SetEnabled(false);
 
-        sl.LoadNextLevel();
+        sl.LoadNextLevel(firstLevelScene.Name);
     }
 
     // Switch between menus

@@ -186,6 +186,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   otherDocument: {fileID: 1181049599}
+  firstLevelScene:
+    name: LvOne
+    path: Assets/Scenes/GameLevels/LvOne.unity
   hoverClip: {fileID: 8300000, guid: 83167905238c1f540b72936c019e6809, type: 3}
   selectionClip: {fileID: 8300000, guid: 6eef3ad492586934990852bc54efdcb8, type: 3}
 --- !u!114 &629883311
