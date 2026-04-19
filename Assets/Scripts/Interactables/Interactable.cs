@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(Collider))]
 public abstract class Interactable : MonoBehaviour
 {
     [SerializeField] protected GameObject interactionPrompt;
@@ -16,14 +16,14 @@ public abstract class Interactable : MonoBehaviour
     protected OptionalComponent<SoundHandler> soundHandler;
     protected SpriteRenderer worldPromptIcon;
 
-    protected Collider2D interactCollider;
-    public Collider2D InteractCollider => interactCollider;
+    protected Collider interactCollider;
+    public Collider InteractCollider => interactCollider;
 
     public virtual PlayerContext TargetContext { get => PlayerContext.Interacting; }
 
     protected virtual void Awake()
     {
-        interactCollider = GetComponent<Collider2D>();
+        interactCollider = GetComponent<Collider>();
         Debug.Assert(interactCollider.isTrigger);
 
         Debug.Assert((TargetContext & PlayerContext.Interacting) != 0,
@@ -53,7 +53,7 @@ public abstract class Interactable : MonoBehaviour
     protected abstract IEnumerator InteractLogic(PlayerController player);
 
     // Know when Player has entered trigger area => Show prompt & listen for interact key
-    private void OnTriggerEnter2D(Collider2D collider)
+    private void OnTriggerEnter(Collider collider)
     {
         if (collider.CompareTag("Player"))
         {
@@ -62,7 +62,7 @@ public abstract class Interactable : MonoBehaviour
     }
 
     // Get rid of Interact key pop-up and stop listening for interaction when Player is not close
-    private void OnTriggerExit2D(Collider2D collider)
+    private void OnTriggerExit(Collider collider)
     {
         if (collider.CompareTag("Player"))
         {

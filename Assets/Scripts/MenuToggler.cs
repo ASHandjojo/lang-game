@@ -34,8 +34,8 @@ public sealed class MenuToggler : MonoBehaviour
     public bool IsTransitioning { get; private set; } = false;
 
     // For caching
-    private Rigidbody2D playerRB;
-    private Collider2D  playerCollider;
+    private Rigidbody playerRB;
+    private Collider  playerCollider;
 
     public void UseMenu(UIMenuController menu)
     {
@@ -140,8 +140,8 @@ public sealed class MenuToggler : MonoBehaviour
 
         if (PlayerController.Instance != null)
         {
-            playerRB       = PlayerController.Instance.GetComponent<Rigidbody2D>();
-            playerCollider = PlayerController.Instance.GetComponent<Collider2D>();
+            playerRB       = PlayerController.Instance.GetComponent<Rigidbody>();
+            playerCollider = PlayerController.Instance.GetComponent<Collider>();
         }
     }
 
@@ -178,14 +178,14 @@ public sealed class MenuToggler : MonoBehaviour
     // Disable box collider to prevent further interaction & freeze position to prevent movement
     private void DisableWorldActions()
     {
-        playerRB.constraints  |= RigidbodyConstraints2D.FreezePositionX;
+        playerRB.constraints  |= RigidbodyConstraints.FreezePositionX;
         playerCollider.enabled = false;
     }
 
     // Restore movement & Re-enable box collider
     private void EnableWorldActions()
     {
-        playerRB.constraints  &= ~RigidbodyConstraints2D.FreezePositionX;
+        playerRB.constraints  &= ~RigidbodyConstraints.FreezePositionX;
         playerCollider.enabled = true;
     }
 }

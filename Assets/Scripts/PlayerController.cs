@@ -15,15 +15,15 @@ public enum PlayerContext : int
     InDictionary = 16
 }
 
-[RequireComponent(typeof(SpriteRenderer), typeof(Collider2D), typeof(Rigidbody2D)),
+[RequireComponent(typeof(SpriteRenderer), typeof(Collider), typeof(Rigidbody)),
     RequireComponent(typeof(Animator))]
 public sealed class PlayerController : MonoBehaviour
 {
     [SerializeField] private float movementSpeed = 2.0f;
 
     private Animator anim;
-    private Rigidbody2D rb;
-    private Collider2D playerCollider;
+    private Rigidbody rb;
+    private Collider playerCollider;
 
     private InputAction moveAction;
     private InputAction interactAction;
@@ -70,10 +70,10 @@ public sealed class PlayerController : MonoBehaviour
         DontDestroyOnLoad(this);
         Instance = this;
 
-        rb   = GetComponent<Rigidbody2D>();
+        rb   = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
 
-        playerCollider = GetComponent<Collider2D>();
+        playerCollider = GetComponent<Collider>();
 
         // For now on start load save slot 1 unless no saves are available
         string savePath  = Path.Combine(Application.persistentDataPath, "PlayerSave1.json");
@@ -117,7 +117,7 @@ public sealed class PlayerController : MonoBehaviour
             {
                 Debug.Log(interactable.InteractCollider);
                 Debug.Log(playerCollider);
-                if (interactable.InteractCollider.IsTouching(playerCollider))
+                if (interactable.InteractCollider.bounds.Intersects(playerCollider.bounds))
                 {
                     StartCoroutine(interactable.Interact(this));
                     break;

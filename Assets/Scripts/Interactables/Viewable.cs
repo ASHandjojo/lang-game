@@ -100,7 +100,7 @@ public sealed class Viewable : Interactable
     IEnumerator CamDetransition(Camera mainCamera, PlayerController player)
     {
         // Disable box collider to prevent further interaction & position to prevent movement
-        player.GetComponent<BoxCollider2D>().enabled = false;
+        player.GetComponent<BoxCollider>().enabled = false;
 
         Vector3 startPos = mainCamera.transform.position;
         Vector3 endPos   = cameraPos;
@@ -126,11 +126,11 @@ public sealed class Viewable : Interactable
         mainCamera.GetComponent<Camera_Movement>().enabled = true;
 
         // Restore movement
-        Rigidbody2D rb  = player.GetComponent<Rigidbody2D>();
-        rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        Rigidbody rb  = player.GetComponent<Rigidbody>();
+        rb.constraints &= ~RigidbodyConstraints.FreezePositionX;
 
         // Re-enable box collider to restore interaction
-        player.GetComponent<BoxCollider2D>().enabled = true;
+        player.GetComponent<BoxCollider>().enabled = true;
         worldPromptIcon.enabled = true;
 
         hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
