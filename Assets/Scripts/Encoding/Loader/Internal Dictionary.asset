@@ -15,14 +15,14 @@ MonoBehaviour:
   entries:
   - wordType: 0
     entries:
-    - rawString: gukaib
-      unicodeString: "\xC8k\xA2b"
+    - rawString: gucaib
+      unicodeString: "\xC8\xBFib"
       englishTranslation: "question\r"
     - rawString: bigo
       unicodeString: "\xBC\xC7"
       englishTranslation: "Person\r"
-    - rawString: keni
-      unicodeString: "ke\u0107"
+    - rawString: ceni
+      unicodeString: "\xC0\u0107"
       englishTranslation: "Thing\r"
     - rawString: mifa
       unicodeString: "\u0102\xE2"
@@ -51,11 +51,11 @@ MonoBehaviour:
     - rawString: vesu
       unicodeString: "\xE8\xF0"
       englishTranslation: "Time (chronological)\r"
-    - rawString: npakra
-      unicodeString: "n\xB5k\u010F"
+    - rawString: npacra
+      unicodeString: "n\xB5c\u010F"
       englishTranslation: "Store\r"
-    - rawString: olikra
-      unicodeString: "o\u010Ck\u010F"
+    - rawString: olicra
+      unicodeString: "o\u010Cc\u010F"
       englishTranslation: "Grocery\r"
     - rawString: ihab
       unicodeString: "i\xD8b"
@@ -72,20 +72,20 @@ MonoBehaviour:
     - rawString: poma
       unicodeString: "\xB8\u0100"
       englishTranslation: "Book\r"
-    - rawString: bikilaro
-      unicodeString: "\xBCki\u010A\u0112"
+    - rawString: bicilaro
+      unicodeString: "\xBC\xC1\u010A\u0112"
       englishTranslation: "Anthropology\r"
-    - rawString: gukuwa
-      unicodeString: "\xC8kuwa"
+    - rawString: gucuwa
+      unicodeString: "\xC8\xC3wa"
       englishTranslation: "Identity\r"
-    - rawString: gk
-      unicodeString: gk
+    - rawString: gc
+      unicodeString: gc
       englishTranslation: "ID\r"
     - rawString: poiaro
       unicodeString: "\xB8\xA9\u0112"
       englishTranslation: "Subject\r"
-    - rawString: guka
-      unicodeString: "\xC8ka"
+    - rawString: guca
+      unicodeString: "\xC8\xBF"
       englishTranslation: "Self\r"
     - rawString: carime
       unicodeString: "\xBF\u0111\u0101"
@@ -93,14 +93,14 @@ MonoBehaviour:
     - rawString: ralei
       unicodeString: "\u010F\u010Bi"
       englishTranslation: "Location\r"
-    - rawString: kaipoma
-      unicodeString: "k\xA2\xB8\u0100"
+    - rawString: caipoma
+      unicodeString: "\xBFi\xB8\u0100"
       englishTranslation: "Card\r"
     - rawString: beluruve
       unicodeString: "\xBB\u010E\u0113\xE8"
       englishTranslation: "Journey\r"
-    - rawString: kipure
-      unicodeString: "ki\xB9\u0110"
+    - rawString: cipure
+      unicodeString: "\xC1\xB9\u0110"
       englishTranslation: "Ticket\r"
     - rawString: ameng
       unicodeString: "a\u0101q"
@@ -128,8 +128,8 @@ MonoBehaviour:
     - rawString: moi
       unicodeString: "\u0103i"
       englishTranslation: Big
-    - rawString: kai
-      unicodeString: "k\xA2"
+    - rawString: cai
+      unicodeString: "c\xA2"
       englishTranslation: "Small\r"
     - rawString: theia
       unicodeString: "\xD4\xA9"
@@ -171,15 +171,15 @@ MonoBehaviour:
       englishTranslation: "Say\r"
     - rawString: bulonge
       unicodeString: "\xBE\u010D\u0115"
-      englishTranslation: "Think\r"
+      englishTranslation: "Thinc\r"
     - rawString: aigunge
       unicodeString: "\xA2\xC8\u0115"
       englishTranslation: "Ask\r"
     - rawString: theivange
       unicodeString: "\xD4i\xE7\u0115"
       englishTranslation: "Learn\r"
-    - rawString: kaiblonge
-      unicodeString: "k\xA2b\u010D\u0115"
+    - rawString: caiblonge
+      unicodeString: "c\xA2b\u010D\u0115"
       englishTranslation: "Study\r"
     - rawString: nugpange
       unicodeString: "\u0109g\xB5\u0115"
@@ -190,8 +190,8 @@ MonoBehaviour:
     - rawString: patunge
       unicodeString: "\xB5\xCD\u0115"
       englishTranslation: "Get\r"
-    - rawString: lakiange
-      unicodeString: "\u010Ak\xA9\u0115"
+    - rawString: laciange
+      unicodeString: "\u010Ac\xA9\u0115"
       englishTranslation: "Meet\r"
     - rawString: resuvange
       unicodeString: "\u0110\xF0\xE7\u0115"
@@ -230,10 +230,10 @@ MonoBehaviour:
       englishTranslation: welcome
     - rawString: gurema
       unicodeString: "\xC8\u0110\u0100"
-      englishTranslation: thank you
+      englishTranslation: thanc you
     - rawString: grema
       unicodeString: "g\u0110\u0100"
-      englishTranslation: thanks
+      englishTranslation: thancs
     - rawString: wabi
       unicodeString: "wa\xBC"
       englishTranslation: yes
@@ -248,8 +248,8 @@ MonoBehaviour:
     - rawString: bigu
       unicodeString: "\xBC\xC8"
       englishTranslation: Who
-    - rawString: kegu
-      unicodeString: "ke\xC8"
+    - rawString: cegu
+      unicodeString: "ce\xC8"
       englishTranslation: "What\r"
     - rawString: migu
       unicodeString: "\u0102\xC8"
@@ -294,9 +294,9 @@ MonoBehaviour:
     - rawString: inia
       unicodeString: "i\u0107a"
       englishTranslation: "Second person plural\r"
-    - rawString: kugu
-      unicodeString: "ku\xC8"
+    - rawString: cugu
+      unicodeString: "cu\xC8"
       englishTranslation: "Third person (singular (not gendered)\r"
-    - rawString: kuia
-      unicodeString: "k\xB3a"
+    - rawString: cuia
+      unicodeString: "c\xB3a"
       englishTranslation: Third person plural

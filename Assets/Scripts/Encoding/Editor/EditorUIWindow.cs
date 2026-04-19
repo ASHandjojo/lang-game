@@ -1,7 +1,8 @@
 using System;
-using System.Linq;
 
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
 
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -29,7 +30,7 @@ public sealed class EditorUI : EditorWindow
 
     private TextField phoneticField;
 
-    private SerializedProperty? phoneticsProp, unicodeProp;
+    private SerializedProperty? phoneticsProp, unicodeProp, literalProp;
 
     private EncodingEntry? responseData = null;
 
@@ -47,22 +48,26 @@ public sealed class EditorUI : EditorWindow
     /// </summary>
     /// <param name="dialogueEntry"></param>
     [MenuItem("Conlang/Text Editor")]
-    public static void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty phoneticsProp, SerializedProperty unicodeProp)
+    public static unsafe void ShowWindow(in EncodingEntry dialogueEntry, SerializedProperty phoneticsProp, SerializedProperty unicodeProp, SerializedProperty literalProp)
     {
         Debug.Assert(dialogueEntry != null);
-
+        // Linking dialogue entry being edited.
         EditorUI baseWindow     = GetWindow<EditorUI>(EditorName, true);
         baseWindow.responseData = dialogueEntry;
-        baseWindow.unicodeLabel!.text  = baseWindow.responseData!.line;
 
         baseWindow.phoneticsProp = phoneticsProp;
         baseWindow.unicodeProp   = unicodeProp;
-        baseWindow.keyboardUI.PhoneticsString = baseWindow.responseData.phoneticsStr;
+        baseWindow.literalProp   = literalProp;
 
-        NativeArray<WordNode> words = baseWindow.wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
+        baseWindow.keyboardUI.PhoneticsString = dialogueEntry!.phoneticsStr;
 
-        baseWindow.englishLabel!.text  = baseWindow.GetEnglishString(words);
-        baseWindow.wordTypeLabel!.text = baseWindow.GetWordTypeString(words);
+        var mixedRes = baseWindow.wordEncoder.ParseMixed(baseWindow.keyboardUI.PhoneticsString.AsSpan().ConvertU16(), baseWindow.processor, Allocator.Temp);
+
+        ReadOnlySpan<char> displayRes  = new(mixedRes.displayOutput.GetUnsafeReadOnlyPtr(), mixedRes.displayOutput.Length);
+
+        baseWindow.unicodeLabel!.text  = new string(displayRes);
+        baseWindow.englishLabel!.text  = baseWindow.GetEnglishString(mixedRes.words);
+        baseWindow.wordTypeLabel!.text = baseWindow.GetWordTypeString(mixedRes.words);
 
         baseWindow.phoneticField!.SetValueWithoutNotify(phoneticsProp!.stringValue);
     }
@@ -90,27 +95,49 @@ public sealed class EditorUI : EditorWindow
         return typeOutput;
     }
 
+    private unsafe void MetaUpdate(string input)
+    {
+        phoneticsProp!.stringValue = input;
+
+        var mixedRes = wordEncoder.ParseMixed(input.AsSpan().ConvertU16(), processor, Allocator.Temp);
+        if (!mixedRes.IsValid)
+        {
+            unicodeLabel!.text  = string.Empty;
+            englishLabel!.text  = string.Empty;
+            wordTypeLabel!.text = string.Empty;
+            return;
+        }
+
+        ReadOnlySpan<char> unicodeRes = new(mixedRes.unicodeOutput.GetUnsafeReadOnlyPtr(), mixedRes.unicodeOutput.Length);
+        unicodeProp!.stringValue      = new string(unicodeRes);
+
+        ReadOnlySpan<char> displayRes = new(mixedRes.displayOutput.GetUnsafeReadOnlyPtr(), mixedRes.displayOutput.Length);
+        literalProp!.stringValue      = new string(displayRes);
+
+        Undo.RecordObject(phoneticsProp!.serializedObject.targetObject, "TextEdit");
+        Undo.RecordObject(unicodeProp!.serializedObject.targetObject,   "TextEdit");
+        Undo.RecordObject(literalProp!.serializedObject.targetObject,   "LiteralEdit");
+
+        phoneticsProp.serializedObject.ApplyModifiedProperties();
+        unicodeProp.serializedObject.ApplyModifiedProperties();
+        literalProp.serializedObject.ApplyModifiedProperties();
+
+        unicodeLabel!.text  = new string(displayRes);
+        englishLabel!.text  = GetEnglishString(mixedRes.words);
+        wordTypeLabel!.text = GetWordTypeString(mixedRes.words);
+    }
+
+    /// <summary>
+    /// A callback that takes in a phonetic string, writes to disk the new results, and then populates the appropriate Editor UI.
+    /// </summary>
+    /// <param name="input"></param>
     private void WriteToWindow(string input)
     {
         if (responseData == null)
         {
             return;
         }
-        phoneticsProp!.stringValue = input;
-        unicodeProp!.stringValue   = processor.Translate(input);
-
-        Undo.RecordObject(phoneticsProp!.serializedObject.targetObject, "TextEdit");
-        Undo.RecordObject(unicodeProp!.serializedObject.targetObject,   "TextEdit");
-
-        phoneticsProp.serializedObject.ApplyModifiedProperties();
-        unicodeProp.serializedObject.ApplyModifiedProperties();
-
-        NativeArray<WordNode> words = wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
-
-        unicodeLabel!.text  = unicodeProp!.stringValue;
-        englishLabel!.text  = GetEnglishString(words);
-        wordTypeLabel!.text = GetWordTypeString(words);
-
+        MetaUpdate(input);
         phoneticField!.SetValueWithoutNotify(phoneticsProp!.stringValue);
     }
 
@@ -128,7 +155,7 @@ public sealed class EditorUI : EditorWindow
         Debug.Assert(internalDict != null);
         if (!processor.IsValid)
         {
-            processor   = new PhoneticProcessor(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);
+            processor   = PhoneticProcessor.Create(ligatureSub!.standardSignTable.entries, ligatureSub.entries, Allocator.Persistent);
             wordEncoder = WordEncoder.Create(internalDict!.entries.Convert(Allocator.Temp), Allocator.Persistent);
         }
         if (responseData != null)
@@ -157,20 +184,8 @@ public sealed class EditorUI : EditorWindow
         phoneticField.RegisterCallback(
             (ChangeEvent<string> e) =>
             {
-                string input = e.newValue;
-                phoneticsProp!.stringValue = input;
-                unicodeProp!.stringValue   = processor.Translate(input);
-
                 keyboardUI.PhoneticsString = responseData!.phoneticsStr;
-
-                phoneticsProp.serializedObject.ApplyModifiedProperties();
-                unicodeProp.serializedObject.ApplyModifiedProperties();
-
-                NativeArray<WordNode> words = wordEncoder.Parse(unicodeProp!.stringValue.AsSpan().ConvertU16(), Allocator.Temp);
-
-                unicodeLabel!.text  = unicodeProp!.stringValue;
-                englishLabel!.text  = GetEnglishString(words);
-                wordTypeLabel!.text = GetWordTypeString(words);
+                MetaUpdate(e.newValue);
             }
         );
 

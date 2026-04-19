@@ -756,6 +756,7 @@ MonoBehaviour:
     obj: {fileID: 0}
     isInitialized: 0
   internalDict: {fileID: 11400000, guid: 599cf157494825b4ea3ff390363cf038, type: 2}
+  playerJournalSize: 50
 --- !u!1 &1074906769
 GameObject:
   m_ObjectHideFlags: 0
@@ -909,7 +910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 5c1a0d1d8d70f3b4a978d3b7a982f136, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 54f61cebcc8fa1e47bde4d95bac737ef, type: 3}
+  sourceAsset: {fileID: 0}
   m_SortingOrder: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -1039,12 +1040,15 @@ MonoBehaviour:
   interactClip: {fileID: 8300000, guid: 49e6681ee88d775489f293846fa8cdf6, type: 3}
   worldPromptInput: 2
   hudDocument: {fileID: 1605222084}
-  npcName: Gate
-  npcImage: {fileID: 0}
+  characterData:
+    name: 
+    image: {fileID: 0}
+  dialogueTreeAsset: {fileID: 9197481963319205126, guid: 54f61cebcc8fa1e47bde4d95bac737ef, type: 3}
   entries:
   - line:
-      phoneticsStr: h
-      line: h
+      phoneticsStr: g
+      line: g
+      literal: g
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -1052,9 +1056,11 @@ MonoBehaviour:
     responseData:
       phoneticsStr: m
       line: m
+      literal: 
   - line:
       phoneticsStr: h
       line: h
+      literal: h
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -1062,8 +1068,7 @@ MonoBehaviour:
     responseData:
       phoneticsStr: m
       line: m
-  conlangFont: {fileID: 12800000, guid: ef39abd9056a9d446b1bf89b37383641, type: 3}
-  englishFont: {fileID: 12800000, guid: e0afdb4613b19e941a9c5e69c3b88d0f, type: 3}
+      literal: m
   sceneLoader: {fileID: 1367662897}
   nextScene:
     name: TestNextLv
@@ -2383,9 +2388,11 @@ MonoBehaviour:
   closeClip: {fileID: 8300000, guid: fd108821f38ecd942a95778abac0a057, type: 3}
   hoverClip: {fileID: 8300000, guid: c520791ce7781f845bc1fa5a54de960e, type: 3}
   closedImage: {fileID: 2800000, guid: e17c6ea311215de4fb66d7c7f9de7d4d, type: 3}
-  openImage: {fileID: 2800000, guid: 9c812bf860a213d47a524a182b2f1c0e, type: 3}
+  openImage: {fileID: 0}
   settingsDocument: {fileID: 1724572783}
-  dictionarySlots: {fileID: 9197481963319205126, guid: b50215d666cea5045be6ebfdfe102e0f, type: 3}
+  notebookUIDocument: {fileID: 9197481963319205126, guid: b50215d666cea5045be6ebfdfe102e0f, type: 3}
+  ligatureSub: {fileID: 11400000, guid: 77015b68c3111de409d5641b8c8d11d3, type: 2}
+  standardSignTable: {fileID: 11400000, guid: 98165f17bdca7944ab0a9394d0e5bafd, type: 2}
 --- !u!82 &1605222087
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3195,7 +3202,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 5c1a0d1d8d70f3b4a978d3b7a982f136, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 54f61cebcc8fa1e47bde4d95bac737ef, type: 3}
+  sourceAsset: {fileID: 0}
   m_SortingOrder: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -3216,12 +3223,16 @@ MonoBehaviour:
   interactClip: {fileID: 0}
   worldPromptInput: 2
   hudDocument: {fileID: 1605222084}
-  npcName: Florence
-  npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
+  characterData:
+    name: Florence
+    image: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
+  dialogueTreeAsset: {fileID: 9197481963319205126, guid: 54f61cebcc8fa1e47bde4d95bac737ef, type: 3}
   entries:
   - line:
-      phoneticsStr: melaia
-      line: "\u0101\u010A\xA9"
+      phoneticsStr: '|What''s |that |shimmery |thing?'
+      line: '|What''s |that |shimmery |thing?'
+      literal: <font="Harmony SDF">What's</font> <font="Harmony SDF">that</font>
+        <font="Harmony SDF">shimmery</font> <font="Harmony SDF">thing?</font>
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -3229,18 +3240,20 @@ MonoBehaviour:
     responseData:
       phoneticsStr: ngogu melaia melai
       line: "\u0117\xC8 \u0101\u010A\xA9 \u0101\u010Ai"
+      literal: 
   - line:
-      phoneticsStr: 
-      line: 
+      phoneticsStr: '|Oh, |that''s |a hgaimei'
+      line: "|Oh, |that's |a \xDDi\u0101i"
+      literal: "<font=\"Harmony SDF\">Oh,</font> <font=\"Harmony SDF\">that's</font>
+        <font=\"Harmony SDF\">a</font> \xDDi\u0101i"
     sound:
       obj: {fileID: 0}
       isInitialized: 0
-    hasResponse: 1
+    hasResponse: 0
     responseData:
       phoneticsStr: melaia wabi bele chie
       line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
-  conlangFont: {fileID: 12800000, guid: ef39abd9056a9d446b1bf89b37383641, type: 3}
-  englishFont: {fileID: 12800000, guid: e0afdb4613b19e941a9c5e69c3b88d0f, type: 3}
+      literal: 
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0
