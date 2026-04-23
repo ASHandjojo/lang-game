@@ -37,7 +37,7 @@ public sealed class MenuToggler : MonoBehaviour
     private Rigidbody2D playerRB;
     private Collider2D  playerCollider;
 
-        public void UseMenu(UIMenuController menu)
+    public void UseMenu(UIMenuController menu)
     {
         StartCoroutine(UseMenuCoroutine(menu));
     }
@@ -138,8 +138,11 @@ public sealed class MenuToggler : MonoBehaviour
         settingsAction   = InputSystem.actions.FindAction("Settings");
         dictionaryAction = InputSystem.actions.FindAction("Dictionary");
 
-        playerRB       = PlayerController.Instance.GetComponent<Rigidbody2D>();
-        playerCollider = PlayerController.Instance.GetComponent<Collider2D>();
+        if (PlayerController.Instance != null)
+        {
+            playerRB       = PlayerController.Instance.GetComponent<Rigidbody2D>();
+            playerCollider = PlayerController.Instance.GetComponent<Collider2D>();
+        }
     }
 
     void Update()

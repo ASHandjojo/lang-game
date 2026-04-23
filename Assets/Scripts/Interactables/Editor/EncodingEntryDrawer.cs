@@ -15,7 +15,7 @@ public sealed class EncodingEntryDrawer : PropertyDrawer
         Debug.Assert(styleSheet != null);
         element.styleSheets.Add(styleSheet);
 
-        var lineProperty      = property.FindPropertyRelative(nameof(EncodingEntry.line));
+        var lineProperty      = property.FindPropertyRelative(nameof(EncodingEntry.literal));
         var phoneticsProperty = property.FindPropertyRelative(nameof(EncodingEntry.phoneticsStr));
         Label lineField  = new("Line");
         lineField.BindProperty(lineProperty);
@@ -33,9 +33,10 @@ public sealed class EncodingEntryDrawer : PropertyDrawer
             {
                 var lineProperty      = property.FindPropertyRelative(nameof(EncodingEntry.line));
                 var phoneticsProperty = property.FindPropertyRelative(nameof(EncodingEntry.phoneticsStr));
+                var literalProperty   = property.FindPropertyRelative(nameof(EncodingEntry.literal));
 
                 EncodingEntry entry = (EncodingEntry) property.boxedValue;
-                EditorUI.ShowWindow(entry, phoneticsProperty, lineProperty);
+                EditorUI.ShowWindow(entry, phoneticsProperty, lineProperty, literalProperty);
             }
         );
 

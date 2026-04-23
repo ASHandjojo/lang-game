@@ -55,6 +55,42 @@ public struct WordNode
     }
 }
 
+namespace Impl
+{
+    [BurstCompile]
+    public struct ParseMixedResult : IDisposable
+    {
+        public NativeArray<WordNode> words;
+        // Should be used to write to disk.
+        public NativeList<ushort> unicodeOutput;
+        // Should be used to display from keyboard. Is formatted.
+        public NativeList<ushort> displayOutput;
+
+        public readonly bool IsValid => words.IsCreated && unicodeOutput.IsCreated && displayOutput.IsCreated;
+
+        public ParseMixedResult(in NativeArray<WordNode> words, in NativeList<ushort> unicodeOutput, in NativeList<ushort> displayOutput)
+        {
+            Debug.Assert(words.IsCreated);
+            Debug.Assert(unicodeOutput.IsCreated);
+            Debug.Assert(displayOutput.IsCreated);
+
+            this.words         = words;
+            this.unicodeOutput = unicodeOutput;
+            this.displayOutput = displayOutput;
+        }
+
+        public void Dispose()
+        {
+            words.Dispose();
+            words = default;
+
+            unicodeOutput.Dispose();
+            unicodeOutput = default;
+            displayOutput.Dispose();
+            displayOutput = default;
+        }
+    }
+}
 
 [BurstCompile]
 public struct WordEncoder : IDisposable
@@ -143,6 +179,12 @@ public struct WordEncoder : IDisposable
         return true;
     }
 
+    public readonly WordNode ParseSingle(in ReadOnlySpan<ushort> str)
+    {
+        bool isPresent = unicodePool.IsPresent(str, out int strIndex);
+        return isPresent ? WordNode.Create(str, wordTypes[strIndex], strIndex) : WordNode.Unknown;
+    }
+
     public readonly NativeArray<WordNode> Parse(in ReadOnlySpan<ushort> str, Allocator allocator)
     {
         if (str.IsEmpty) // Short-circuit if empty
@@ -166,10 +208,65 @@ public struct WordEncoder : IDisposable
             {
                 continue;
             }
-            bool isPresent = unicodePool.IsPresent(span, out int strIndex);
-            nodes[index++] = isPresent ? WordNode.Create(span, wordTypes[strIndex], strIndex) : WordNode.Unknown;
+            nodes[index++] = ParseSingle(span);
         }
         return nodes;
+    }
+
+    public unsafe readonly ParseMixedResult ParseMixed(in ReadOnlySpan<ushort> phoneticsStr, in PhoneticProcessor processor, Allocator allocator, ushort engSeparator = '|')
+    {
+        const ushort WordSeparator = ' ';
+        if (phoneticsStr.Length == 0)
+        {
+            return default;
+        }
+        int wordCount = phoneticsStr.WordCount(WordSeparator);
+        int charCount = phoneticsStr.CharCount(engSeparator);
+
+        NativeArray<WordNode> nodes = new(math.max(wordCount - charCount, 0), allocator);
+        SplitIterator wordIter      = SplitIterator.Create(phoneticsStr, WordSeparator);
+
+        NativeList<ushort> unicodeOutput = new(phoneticsStr.Length, allocator);
+        NativeList<ushort> displayOutput = new(phoneticsStr.Length, allocator);
+        int wordIdx = 0, nodeIdx = 0;
+        while (wordIter.MoveNext())
+        {
+            ReadOnlySpan<ushort> word = wordIter.Current;
+            if (word.IsEmpty)
+            {
+                continue;
+            }
+
+            if (wordIdx > 0)
+            {
+                displayOutput.Add(' ');
+                unicodeOutput.Add(' ');
+            }
+            if (word[0] != engSeparator)
+            {
+                var wordConv = processor.Translate(word, Allocator.Temp);
+                unicodeOutput.AddRange(wordConv.Ptr, wordConv.Length);
+                // Display
+                var convSpan = new ReadOnlySpan<ushort>(wordConv.Ptr, wordConv.Length);
+
+                nodes[nodeIdx++] = ParseSingle(convSpan);
+                displayOutput.AddRange(wordConv.Ptr, wordConv.Length);
+            }
+            else
+            {
+                fixed (ushort* wordPtr = word) { unicodeOutput.AddRange(wordPtr, word.Length); }
+                // Display
+                // NOTE: WATCH STRING LITERAL CONV FOR BURST CORRECTNESS
+                ReadOnlySpan<ushort> lhsTag = "<font=\"Harmony SDF\">".AsSpan().ConvertU16();
+                ReadOnlySpan<ushort> rhsTag = "</font>".AsSpan().ConvertU16();
+
+                fixed (ushort* lhsPtr  = lhsTag) { displayOutput.AddRange(lhsPtr,      lhsTag.Length);   }
+                fixed (ushort* wordPtr = word)   { displayOutput.AddRange(wordPtr + 1, word.Length - 1); }
+                fixed (ushort* rhsPtr  = rhsTag) { displayOutput.AddRange(rhsPtr,      rhsTag.Length);   }
+            }
+            wordIdx++;
+        }
+        return new ParseMixedResult(nodes, unicodeOutput, displayOutput);
     }
 
     public readonly bool TryGetEnglish(in WordNode node, out ReadOnlySpan<ushort> english)

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using JetBrains.Annotations;
 using UnityEngine;
 
 [Serializable]
@@ -58,6 +58,16 @@ public sealed class GameState
     {
         PlayerController player = PlayerController.Instance;
 
+        JournalPage[] playerPages;
+        if (player.dictionary.journalPages == null)
+        {
+            playerPages = new JournalPage[player.playerJournalSize];
+        }
+        else
+        {
+            playerPages = player.dictionary.journalPages;
+        }
+
         int entryCount = internalDictionary.entries.Select(x => x.entries.Count()).Sum();
         DictionaryEntry[] entries = new DictionaryEntry[entryCount];
 
@@ -73,7 +83,8 @@ public sealed class GameState
 
         Dictionary dict = new()
         {
-            dictionaryList = entries
+            dictionaryList = entries,
+            journalPages = playerPages
         };
         player.dictionary = dict;
     }
@@ -83,17 +94,19 @@ public sealed class GameState
     // update to reflect this
     public static void AlignPlayerDictWithInternal(InternalDictionary internalDictionary)
     {
+        PlayerController player = PlayerController.Instance;
+
         Dictionary<string, string> playerMap = new();
 
-        foreach (DictionaryEntry entry in PlayerController.Instance.dictionary.dictionaryList)
+        foreach (DictionaryEntry entry in player.dictionary.dictionaryList)
         {
             playerMap.Add(entry.Word, entry.Notes);
         }
 
         InitializeEmptyDictionary(internalDictionary);
-        for (int i = 0; i < PlayerController.Instance.dictionary.dictionaryList.Length; i++)
+        for (int i = 0; i < player.dictionary.dictionaryList.Length; i++)
         {
-            playerMap.TryGetValue(PlayerController.Instance.dictionary.dictionaryList[i].Word, out PlayerController.Instance.dictionary.dictionaryList[i].Notes);
+            playerMap.TryGetValue(player.dictionary.dictionaryList[i].Word, out PlayerController.Instance.dictionary.dictionaryList[i].Notes);
         }
     }
 }
@@ -106,8 +119,15 @@ public struct DictionaryEntry
 }
 
 [Serializable]
+public struct JournalPage
+{
+    public string Content;
+}
+
+[Serializable]
 public struct Dictionary
 {
     public DictionaryEntry[] dictionaryList;
+    public JournalPage[]     journalPages;
 }
 

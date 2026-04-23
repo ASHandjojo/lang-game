@@ -95,10 +95,11 @@ public struct KeyboardRow
                     return;
                 }
 #endif
-                Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out Interactable NPC));
+                Interactable NPC = null;
+                Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out NPC));
                 if (NPC is NpcDialogue)
                 {
-                    string unicodeStr = processor.Translate(input.phoneticsStr);
+                    string unicodeStr = processor.TranslateManaged(input.phoneticsStr);
                     (NPC as NpcDialogue).TryCheckInput(unicodeStr);
                 }
 
@@ -204,7 +205,7 @@ public sealed class InputController : MonoBehaviour
         keyboardUI = new KeyboardUI(keyboardAsset, PhoneticProcessor,
             (string phoneticsStr) =>
             {
-                inputField.text = PhoneticProcessor.Translate(phoneticsStr);
+                inputField.text = PhoneticProcessor.TranslateManaged(phoneticsStr);
             }
         );
         document.rootVisualElement.Add(keyboardUI);
