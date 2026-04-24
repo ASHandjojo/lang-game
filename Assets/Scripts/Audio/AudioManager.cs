@@ -8,6 +8,9 @@ public class AudioManager : MonoBehaviour
 {
     private List<EventInstance> eventInstances;
     private List<StudioEventEmitter> eventEmitters;
+
+    private EventInstance ambienceEventInstance;
+    private EventInstance musicEventInstance;
     public static AudioManager instance { get; private set; }
 
     private void Awake()
@@ -22,9 +25,21 @@ public class AudioManager : MonoBehaviour
         eventEmitters = new List<StudioEventEmitter>();
     }
 
+    private void Start()
+    {
+        // Ambience begins when scene is created
+        // InitializeAmbience(FMODEvents.instance.ambience);
+        InitializeMusic(FMODEvents.instance.testBGM);
+    }
+
     public void PlayOneShot(EventReference sound, Vector3 worldPos)
     {
         RuntimeManager.PlayOneShot(sound, worldPos);
+    }
+
+    public void SetMusic(BGMValue musicValue)
+    {
+        musicEventInstance.setParameterByName("BGMValue", (float) musicValue);
     }
 
     public EventInstance CreateEventInstance(EventReference eventReference)
@@ -34,9 +49,21 @@ public class AudioManager : MonoBehaviour
         return eventInstance;
     }
 
+    private void InitializeAmbience(EventReference ambienceEventReference)  // Only needs to be called by AudioManager
+    {
+        ambienceEventInstance = CreateEventInstance(ambienceEventReference);
+        ambienceEventInstance.start();
+    }
+
+    private void InitializeMusic(EventReference musicEventReference)  // Only needs to be called by AudioManager
+    {
+        musicEventInstance = CreateEventInstance(musicEventReference);
+        musicEventInstance.start();
+    }
+
     public StudioEventEmitter InitializeEventEmitter(EventReference eventReference, GameObject emitterGameObject)
     {
-        StudioEventEmitter emitter = emitterGameObject.GetComponent<StudioEventEmitter>();
+        StudioEventEmitter emitter = emitterGameObject.GetComponent<StudioEventEmitter>();     // Assumes game object already has Event Emitter attached
         emitter.EventReference = eventReference;
         eventEmitters.Add(emitter);
         return emitter;

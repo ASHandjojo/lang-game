@@ -12,11 +12,10 @@ public class SoundEmitter : MonoBehaviour
     {
         interactAction = InputSystem.actions.FindAction("Interact");
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Update()
     {
         bool useInteractKey = interactAction.WasPerformedThisFrame();
-        // Triggers once the moment the Space bar is pressed down
+        // Triggers once the moment "K" key is pressed down
         if (useInteractKey)
         {
             Debug.Log("Sound played");
