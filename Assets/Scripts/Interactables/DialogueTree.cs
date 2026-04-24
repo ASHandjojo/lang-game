@@ -12,8 +12,8 @@ public enum NodeType : uint
     PlayerInput = 2,
     // New node type added to be the end node (will only end at an end node)
     End         = 4  | Default,
-    Binary      = 8  | PlayerInput,
-    Multiheaded = 16 | PlayerInput
+    BinaryConlang      = 8  | PlayerInput,
+    MultiheadedConlang = 16 | PlayerInput
 }
 
 public enum TraverseStatus : uint
