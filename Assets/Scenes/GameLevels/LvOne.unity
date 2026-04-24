@@ -3261,6 +3261,7 @@ MonoBehaviour:
         SuccIdx: 0
         FailIdx: 1
         VincentTalking: 1
+        CheckPointNode: 1
         Entry:
           line:
             phoneticsStr: 'What''s '
@@ -3281,6 +3282,7 @@ MonoBehaviour:
         SuccIdx: 0
         FailIdx: 0
         VincentTalking: 0
+        CheckPointNode: 1
         Entry:
           line:
             phoneticsStr: '|I |Can''t |Understand |You |Go |Home |:('

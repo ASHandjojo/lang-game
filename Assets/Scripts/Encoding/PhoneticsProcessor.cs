@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
@@ -10,11 +11,12 @@ using UnityEngine;
 
 using Impl;
 
+[BurstCompile]
 public struct PhoneticProcessor : IDisposable
 {
-    // Made to basically throw all the phonetics into two giant buffers
-    private NativeArray<char> standardSignData;
-    private NativeArray<char> compoundSignData; // Under Combined String
+    // Made to basically throw all the data into two giant buffers
+    private NativeArray<ushort> standardSignData;
+    private NativeArray<ushort> compoundSignData; // Under Combined String
 
     // Ranges into contiguous memory (basically, using pooled strings)
     private NativeArray<SignData> standardData;
@@ -23,10 +25,12 @@ public struct PhoneticProcessor : IDisposable
     // Nested structure, contains a mapping between the first unicode character in a...
     // Compound sign to all of the characters & the index to compound data
     [NativeDisableContainerSafetyRestriction]
-    private NativeHashMap<char, NativeList<CompoundTable>> compoundPrefixMap;
+    private NativeHashMap<ushort, NativeList<CompoundTable>> compoundPrefixMap;
 
-    public PhoneticProcessor(in ReadOnlySpan<StandardSign> standardSigns, in ReadOnlySpan<CompoundSign> compoundSigns, Allocator allocator)
+    public static PhoneticProcessor Create(in ReadOnlySpan<StandardSign> standardSigns, in ReadOnlySpan<CompoundSign> compoundSigns, Allocator allocator)
     {
+        PhoneticProcessor output = new();
+
         StandardSign[] standardSignSort = ProcessorExtMethods.Sort(standardSigns);
         CompoundSign[] compoundSignSort = ProcessorExtMethods.Sort(compoundSigns);
 
@@ -46,19 +50,21 @@ public struct PhoneticProcessor : IDisposable
         }
 
         // Initializing structures
-        standardSignData = new NativeArray<char>(standardStrLength, allocator);
-        compoundSignData = new NativeArray<char>(compoundStrLength, allocator);
+        output.standardSignData = new NativeArray<ushort>(standardStrLength, allocator);
+        output.compoundSignData = new NativeArray<ushort>(compoundStrLength, allocator);
 
-        standardData = new NativeArray<SignData>(standardSigns.Length, allocator);
-        compoundData = new NativeArray<SignData>(compoundSigns.Length, allocator);
+        output.standardData = new NativeArray<SignData>(standardSigns.Length, allocator);
+        output.compoundData = new NativeArray<SignData>(compoundSigns.Length, allocator);
 
-        compoundPrefixMap = new NativeHashMap<char, NativeList<CompoundTable>>(compoundSigns.Length, allocator);
+        output.compoundPrefixMap = new NativeHashMap<ushort, NativeList<CompoundTable>>(compoundSigns.Length, allocator);
 
-        Span<char> standardSpan = standardSignData.AsSpan();
-        Span<char> compoundSpan = compoundSignData.AsSpan();
+        Span<ushort> standardSpan = output.standardSignData.AsSpan();
+        Span<ushort> compoundSpan = output.compoundSignData.AsSpan();
 
-        InitStandardSigns(standardSpan, standardSignSort);
-        InitCompoundSigns(compoundSpan, compoundSignSort, allocator);
+        output.InitStandardSigns(standardSpan, standardSignSort);
+        output.InitCompoundSigns(compoundSpan, compoundSignSort, allocator);
+
+        return output;
     }
 
     public readonly bool IsValid => standardSignData.IsCreated && compoundSignData.IsCreated &&
@@ -69,18 +75,19 @@ public struct PhoneticProcessor : IDisposable
     /// </summary>
     /// <param name="standardSpan"></param>
     /// <param name="standardSigns"></param>
-    private void InitStandardSigns(in Span<char> standardSpan, in ReadOnlySpan<StandardSign> standardSigns)
+    [BurstDiscard]
+    private void InitStandardSigns(in Span<ushort> standardSpan, in ReadOnlySpan<StandardSign> standardSigns)
     {
         int standardOffset = 0;
         for (int i = 0; i < standardSigns.Length; i++)
         {
-            ref readonly StandardSign sign = ref standardSigns[i];
-            ReadOnlySpan<char> phoneticStr = sign.phonetics;
+            ref readonly StandardSign sign   = ref standardSigns[i];
+            ReadOnlySpan<ushort> phoneticStr = sign.phonetics.AsSpan().ConvertU16();
 
             Range range = standardOffset..(standardOffset + phoneticStr.Length);
             phoneticStr.CopyTo(standardSpan[range]);
 
-            standardData[i] = new SignData(range, (char) sign.mappedChar);
+            standardData[i] = new SignData(range, (ushort) sign.mappedChar);
             standardOffset += phoneticStr.Length;
         }
     }
@@ -90,13 +97,14 @@ public struct PhoneticProcessor : IDisposable
     /// </summary>
     /// <param name="compoundSpan"></param>
     /// <param name="compoundSigns"></param>
-    private void InitCompoundSigns(in Span<char> compoundSpan, in ReadOnlySpan<CompoundSign> compoundSigns, Allocator allocator)
+    [BurstDiscard]
+    private void InitCompoundSigns(in Span<ushort> compoundSpan, in ReadOnlySpan<CompoundSign> compoundSigns, Allocator allocator)
     {
         int compoundOffset = 0;
         for (int i = 0; i < compoundSigns.Length; i++)
         {
-            ref readonly CompoundSign sign = ref compoundSigns[i];
-            ReadOnlySpan<char> phoneticStr = sign.combinedString;
+            ref readonly CompoundSign sign   = ref compoundSigns[i];
+            ReadOnlySpan<ushort> phoneticStr = sign.combinedString.AsSpan().ConvertU16();
 
             Range range = compoundOffset..(compoundOffset + phoneticStr.Length);
             phoneticStr.CopyTo(compoundSpan[range]);
@@ -138,7 +146,7 @@ public struct PhoneticProcessor : IDisposable
     /// <param name="ranges"></param>
     /// <param name="compoundTableOut"></param>
     /// <returns>Whether there is a compound present.</returns>
-    private readonly bool TryGetCompound(char unicodeChar, in ReadOnlySpan<char> input, out CompoundTable compoundTableOut)
+    private readonly bool TryGetCompound(ushort unicodeChar, in ReadOnlySpan<ushort> input, out CompoundTable compoundTableOut)
     {
         // Target should want to find the *longest* compound match
         int maxMatchSize = 0;
@@ -164,8 +172,8 @@ public struct PhoneticProcessor : IDisposable
             bool isEqual = true;
             for (int elementIdx = 1; elementIdx < signCount && isEqual; elementIdx++)
             {
-                char inputSign   = input[elementIdx];
-                char compareSign = compoundTable.signData[elementIdx];
+                ushort inputSign   = input[elementIdx];
+                ushort compareSign = compoundTable.signData[elementIdx];
                 isEqual = isEqual && inputSign == compareSign;
             }
 
@@ -179,12 +187,15 @@ public struct PhoneticProcessor : IDisposable
         return maxMatchSize > 0;
     }
 
-    public readonly string Translate(in ReadOnlySpan<char> span)
+    public readonly UnsafeList<ushort> Translate(in ReadOnlySpan<ushort> span, Allocator allocator) => CompoundPass(span, allocator);
+
+    [BurstDiscard]
+    public readonly string TranslateManaged(in ReadOnlySpan<char> span)
     {
         unsafe
         {
-            UnsafeList<char> compoundPass = CompoundPass(span);
-            return new string(compoundPass.Ptr, 0, compoundPass.Length);
+            UnsafeList<ushort> compoundPass = CompoundPass(span.ConvertU16(), Allocator.Temp);
+            return new string((char*) compoundPass.Ptr, 0, compoundPass.Length);
         }
     }
 
@@ -194,15 +205,16 @@ public struct PhoneticProcessor : IDisposable
     /// </summary>
     /// <param name="input"></param>
     /// <returns>A string with all valid phonetics converted to the specified mapped Unicode characters..</returns>
-    public readonly string Translate(string input) => Translate(input.AsSpan());
+    [BurstDiscard]
+    public readonly string TranslateManaged(string input) => TranslateManaged(input.AsSpan());
 
-    private readonly UnsafeList<char> CompoundPass(in ReadOnlySpan<char> span)
+    private readonly UnsafeList<ushort> CompoundPass(in ReadOnlySpan<ushort> span, Allocator allocator)
     {
         // Deliberate probable overestimate of size
-        UnsafeList<char> addedChars = new(initialCapacity: span.Length, Allocator.Temp);
+        UnsafeList<ushort> addedChars = new(initialCapacity: span.Length, allocator);
         for (int i = 0; i < span.Length; i++)
         {
-            char mappedChar = span[i];
+            ushort mappedChar = span[i];
             // Continues (skips current iter) if it is an invalid character
             // (This shouldn't happen with the on-screen keyboard)
             bool hasCompound = compoundPrefixMap.ContainsKey(mappedChar);

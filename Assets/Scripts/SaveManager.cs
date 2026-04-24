@@ -128,6 +128,6 @@ public struct JournalPage
 public struct Dictionary
 {
     public DictionaryEntry[] dictionaryList;
-    public JournalPage[] journalPages;
+    public JournalPage[]     journalPages;
 }
 
