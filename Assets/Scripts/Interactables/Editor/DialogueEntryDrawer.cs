@@ -26,19 +26,16 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         // Input Line
         SerializedProperty lineProperty = property.FindPropertyRelative(nameof(DialogueEntry.line));
         PropertyField lineField         = new(lineProperty);
-        lineField.BindProperty(lineProperty);
         element.Add(lineField);
 
         // Sound
         SerializedProperty soundClipProperty = property.FindPropertyRelative(nameof(DialogueEntry.sound));
         PropertyField soundClipField         = new(soundClipProperty);
-        soundClipField.BindProperty(soundClipProperty);
         element.Add(soundClipField);
 
         // Response Data
         SerializedProperty responseDataProperty = property.FindPropertyRelative(nameof(DialogueEntry.responseData));
         PropertyField responseDataField = new(responseDataProperty);
-        responseDataField.BindProperty(responseDataProperty);
         responseDataField.AddToClassList("Translate");
 
         // Has Response

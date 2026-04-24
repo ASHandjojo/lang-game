@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering.Universal.ShaderGraph;
 using System.Linq;
 
 using Unity.Collections;
@@ -23,9 +24,17 @@ public class NpcDialogue : Interactable
     protected DialogueBox dialogueBox;
 
     protected int index = 0;
+    [SerializeField] private string npcName;
+    [SerializeField] private Texture2D npcImage;
+    [SerializeField] private Texture2D vincentImage;
+
+    //private int index = 0; 
 
     [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
-    [SerializeField] protected DialogueEntry[] entries;
+    [SerializeField] private DialogueEntry[] entries;
+    [SerializeField] private DialogueTree npcTree = new DialogueTree();
+
+    private bool alreadyIncrDiag = true;
 
     private VisualElement notebookContents;
     private Button notebookButton;
@@ -47,21 +56,50 @@ public class NpcDialogue : Interactable
 
     public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
 
+    
+
     public bool TryCheckInput(string content)
     {
-        if (inDialogue && entries[index].hasResponse)
+        
+        if (inDialogue && npcTree.NeedsPlayerInput()) // if we are in dialogue and we need a response from the player
         {
-            if (entries[index].responseData.line == content) // For when the content is equal to the expected
+            TraverseStatus errstat = npcTree.DialogueForward(content); // This will increment the dialogue accordingly or return error
+            alreadyIncrDiag = true; // make sure to set that we have already progressed the dialogue!
+            if ((errstat & TraverseStatus.Error) == TraverseStatus.Error) 
+            {
+                EchoDialogueError(errstat);
+            }
+
+            npcTree.TryGetCurrentNode(out var currDiag);
+            if (currDiag.Entry.responseData.line == content) // For when the content is equal to the expected
             {
                 return true;
-            }
-            else // Otherwise, when it is invalid. This is temporary, incomplete logic handling.
-            {
-                index--;
             }
         }
         return false;
     }
+
+    // private void UpdateForVincentTalking()
+    // {
+    //     Debug.Log("Called Vincent Talking");
+    //     if (npcTree.IsVincentTalking())
+    //     {
+    //         Debug.Log("Got Here");
+    //         document.rootVisualElement.Q("NpcImage").style.backgroundImage = vincentImage;
+    //         document.rootVisualElement.Q("DialogueBox").style.flexDirection = FlexDirection.Row;
+    //         document.rootVisualElement.Q("NextLinePrompt").style.left = 1525;
+    //         document.rootVisualElement.Q<Label>("NpcName").text = "Vincent";
+    //         document.rootVisualElement.Q("NpcName").style.alignSelf =  Align.FlexStart;
+    //     } else
+    //     {
+    //         document.rootVisualElement.Q("NpcImage").style.backgroundImage = npcImage;
+    //         document.rootVisualElement.Q("DialogueBox").style.flexDirection = FlexDirection.RowReverse;
+    //         document.rootVisualElement.Q("NextLinePrompt").style.left = 1345;
+    //         document.rootVisualElement.Q<Label>("NpcName").text = npcName;
+    //         document.rootVisualElement.Q("NpcName").style.alignSelf =  Align.FlexEnd;
+    //     }
+    //     Debug.Log("Ending Vincent Talking");
+    // }
 
     protected override void Start()
     {
@@ -139,10 +177,12 @@ public class NpcDialogue : Interactable
     }
 
     protected override sealed IEnumerator InteractLogic(PlayerController player)
-    {
+    { // This one needs help
         if (inDialogue)
         {
+            //Debug.Log("Interact Logic Called");
             // Interact key pressed when dialogue line is finished -> to next line/end dialogue
+            
             yield return NextLine();
         }
         else
@@ -157,6 +197,19 @@ public class NpcDialogue : Interactable
             // Prevent Movement
             player.CanMove = false;
             inDialogue     = true;
+
+            TraverseStatus errstat = npcTree.InitializeTree(); // initialize the current dialogue tree!
+            if ((errstat & TraverseStatus.Error) == TraverseStatus.Error) 
+            {
+                EchoDialogueError(errstat);
+            }
+
+            alreadyIncrDiag = true;
+
+            
+
+            //UpdateForVincentTalking();
+
             yield return NextLine();
         }
     }
@@ -166,58 +219,137 @@ public class NpcDialogue : Interactable
     /// </summary>
     public void Advance()
     {
-        //dialogueLabel.text = entries[index].line;
+        if (npcTree.InDialogue() && npcTree.TryGetCurrentEntry(out DialogueEntry currDiag))
+        {
+            //
+        }
+        else
+        {
+            EndDialogue();
+        }
+        
     }
 
-    protected virtual IEnumerator OnLast()
+     protected virtual IEnumerator OnLast()
     {
         yield return null;
     }
 
+
+
+    private IEnumerator EndDialogue() // This will be a function that is called when the Dialogue has ended!
+    {
+        inDialogue             = false;
+
+        // Restore Movement
+        PlayerController.Instance.CanMove = true;
+
+        // Restore in-game UI
+        document.rootVisualElement.Q<VisualElement>("NotebookBox").style.display = DisplayStyle.None; 
+
+        document.rootVisualElement.style.visibility = Visibility.Hidden;
+        document.rootVisualElement.style.display    = DisplayStyle.None;
+
+        hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
+        hudDocument.rootVisualElement.style.display    = DisplayStyle.Flex;
+
+        worldPromptIcon.enabled = true;
+
+        InputController.Instance.CloseKeyboard();
+        PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
+
+        yield return OnLast(); // NOTE: This WILL have to be moved/replaced w/ Dialogue Tree. Same with OnLast
+    }
+
+   
+
     private IEnumerator NextLine()
     {
-        if (index < entries.Length)
+        //Debug.Log("Next Line Called");
+        if (!npcTree.InDialogue()) // If we are currently not in dialogue, end it!
         {
-            dialogueBox.ClearDisplay();
-            yield return dialogueBox.Display(entries[index]); // NOTE
-            if (entries[index].hasResponse)
-            {
-                PlayerController.Instance.context |= PlayerContext.PlayerInput;
-                InputController.Instance.OpenKeyboard();
-
-                yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0);
-            }
-            else
-            {
-                InputController.Instance.CloseKeyboard();
-                PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
-            }
-            index++;
+            yield return EndDialogue();
         }
         else
         {
-            index = 0;
-            // NOTE: This WILL have to be moved/replaced w/ Dialogue Tree. Same with OnLast
-            inDialogue = false;
-            // Restore Movement
-            PlayerController.Instance.CanMove = true;
+            // if (!alreadyIncrDiag) // If we haven't already incremented the dialogue, ensure to increment it
+            // {
+            //     TraverseStatus errstat = npcTree.DialogueForward(); // This will increment the dialogue accordingly
+            //     if ((errstat & TraverseStatus.Error) == TraverseStatus.Error) 
+            //     {
+            //         EchoDialogueError(errstat);
+            //     }
 
-            // Restore in-game UI
-            document.rootVisualElement.Q<VisualElement>("NotebookBox").style.display = DisplayStyle.None;
+            // }
+            // else
+            // {
+            //     alreadyIncrDiag = false;
+            // }
+            bool ret = npcTree.TryGetCurrentEntry(out var currEntry);
+            
+            
 
-            document.rootVisualElement.style.visibility = Visibility.Hidden;
-            document.rootVisualElement.style.display    = DisplayStyle.None;
+            if (npcTree.NeedsPlayerInput())
+            {
+                PlayerController.Instance.context |= PlayerContext.PlayerInput;
+                InputController.Instance.OpenKeyboard();
+                
+                yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0); 
+            } else
+            {
+                InputController.Instance.CloseKeyboard();
+                PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
+                
+                dialogueBox.ClearDisplay(); 
+                yield return dialogueBox.Display(currEntry);
 
-            hudDocument.rootVisualElement.style.visibility = Visibility.Visible;
-            hudDocument.rootVisualElement.style.display    = DisplayStyle.Flex;
-
-            worldPromptIcon.enabled = true;
-
-            InputController.Instance.CloseKeyboard();
-            PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
-            yield return OnLast(); // NOTE: This WILL have to be moved/replaced w/ Dialogue Tree. Same with OnLast
+                TraverseStatus errstat = npcTree.DialogueForward(); // This will increment the dialogue accordingly
+                if ((errstat & TraverseStatus.Error) == TraverseStatus.Error) 
+                {
+                    EchoDialogueError(errstat);
+                }
+            }          
         }
     }
+
+    
+
+
+
+
+    private void EchoDialogueError(TraverseStatus errstat)
+    {
+        switch (errstat)
+        {
+            case TraverseStatus.WrongNodeType : 
+                    Debug.Log("Node Type (Text Input vs. No Text Input) Does Not Match Player Action");
+                    break;
+            case TraverseStatus.NotInDialogue:
+                    Debug.Log("Getting Dialogue From Tree Not In Dialogue");
+                    break;
+            case TraverseStatus.GoToNodeOutOfBounds:
+                    Debug.Log("Node Traversing To Is Out Of Bounds");
+                    break;
+            case TraverseStatus.InitializeTreeOutOfBounds:
+                    Debug.Log("Tree Initialization Goes To Out Of Bounds Tree");
+                    break;
+            case TraverseStatus.CurrNodeUndefined:
+                    Debug.Log("Current Dialogue In Tree Is Not Defined");
+                    break;
+            case TraverseStatus.NextNodeUndefined:
+                    Debug.Log("Next Dialogue is Undefined (Affects Checkpoints)");
+                    break;
+            default :
+                    Debug.Log("Error in Moving Dialogue Forward");
+                    break;
+                    
+        };
+    }
+        
+ 
+
+
+
 
     private void ToggleNotebook()
     {

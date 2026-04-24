@@ -1044,11 +1044,14 @@ MonoBehaviour:
     name: 
     image: {fileID: 0}
   dialogueTreeAsset: {fileID: 9197481963319205126, guid: 54f61cebcc8fa1e47bde4d95bac737ef, type: 3}
+  npcName: Gate
+  npcImage: {fileID: 0}
+  vincentImage: {fileID: 0}
   entries:
   - line:
-      phoneticsStr: g
-      line: g
-      literal: g
+      phoneticsStr: h
+      line: h
+      literal: 
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -1060,7 +1063,7 @@ MonoBehaviour:
   - line:
       phoneticsStr: h
       line: h
-      literal: h
+      literal: 
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -1068,7 +1071,9 @@ MonoBehaviour:
     responseData:
       phoneticsStr: m
       line: m
-      literal: m
+      literal: 
+  npcTree:
+    NpcOptions: []
   sceneLoader: {fileID: 1367662897}
   nextScene:
     name: TestNextLv
@@ -3224,15 +3229,18 @@ MonoBehaviour:
   worldPromptInput: 2
   hudDocument: {fileID: 1605222084}
   characterData:
-    name: Florence
-    image: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
+    name: 
+    image: {fileID: 0}
   dialogueTreeAsset: {fileID: 9197481963319205126, guid: 54f61cebcc8fa1e47bde4d95bac737ef, type: 3}
+  npcName: Florence
+  npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
+  vincentImage: {fileID: 2800000, guid: 4d72ad6efe8d642448375a619630dc4a, type: 3}
   entries:
   - line:
       phoneticsStr: '|What''s |that |shimmery |thing?'
-      line: '|What''s |that |shimmery |thing?'
-      literal: <font="Harmony SDF">What's</font> <font="Harmony SDF">that</font>
-        <font="Harmony SDF">shimmery</font> <font="Harmony SDF">thing?</font>
+      line: <font="Harmony SDF">What's</font> <font="Harmony SDF">that</font> <font="Harmony
+        SDF">shimmery</font> <font="Harmony SDF">thing?</font>
+      literal: 
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -3243,9 +3251,9 @@ MonoBehaviour:
       literal: 
   - line:
       phoneticsStr: '|Oh, |that''s |a hgaimei'
-      line: "|Oh, |that's |a \xDDi\u0101i"
-      literal: "<font=\"Harmony SDF\">Oh,</font> <font=\"Harmony SDF\">that's</font>
+      line: "<font=\"Harmony SDF\">Oh,</font> <font=\"Harmony SDF\">that's</font>
         <font=\"Harmony SDF\">a</font> \xDDi\u0101i"
+      literal: 
     sound:
       obj: {fileID: 0}
       isInitialized: 0
@@ -3254,6 +3262,63 @@ MonoBehaviour:
       phoneticsStr: melaia wabi bele chie
       line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
       literal: 
+  npcTree:
+    NpcOptions:
+    - ConditionalValue: 0
+      startingId: 0
+      startIdx: 0
+      Nodes:
+      - NodeId: 0
+        Type: 0
+        SuccId: 0
+        FailId: 213649854
+        parentIds: 00000000be09bc0c
+        parentIdxs: 0000000001000000
+        SuccIdx: 0
+        FailIdx: 1
+        VincentTalking: 1
+        CheckPointNode: 1
+        Entry:
+          line:
+            phoneticsStr: 'What''s '
+            line: "W\xD8t's"
+            literal: "W\xD8t's"
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 0
+          responseData:
+            phoneticsStr: 
+            line: 
+            literal: 
+      - NodeId: 213649854
+        Type: 5
+        SuccId: 0
+        FailId: 0
+        parentIds: 00000000be09bc0c
+        parentIdxs: 0000000001000000
+        SuccIdx: 0
+        FailIdx: 0
+        VincentTalking: 0
+        CheckPointNode: 1
+        Entry:
+          line:
+            phoneticsStr: '|I |Can''t |Understand |You |Go |Home |:('
+            line: '|I |Can''t |Understand |You |Go |Home |:('
+            literal: <font="Harmony SDF">I</font> <font="Harmony SDF">Can't</font>
+              <font="Harmony SDF">Understand</font> <font="Harmony SDF">You</font>
+              <font="Harmony SDF">Go</font> <font="Harmony SDF">Home</font> <font="Harmony
+              SDF">:(</font>
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 0
+          responseData:
+            phoneticsStr: 
+            line: 
+            literal: 
+      NumNodes: 2
+      CurrNode: 0
 --- !u!61 &1988571624
 BoxCollider2D:
   m_ObjectHideFlags: 0
