@@ -36,6 +36,8 @@ public sealed class PlayerController : MonoBehaviour
 
     [SerializeField] private InternalDictionary internalDict;
 
+    public bool TopDown = false;
+
     public static InternalDictionary InternalDict => Instance.internalDict;
 
     public static PlayerController Instance { get; private set; }
@@ -92,7 +94,15 @@ public sealed class PlayerController : MonoBehaviour
             // Get empty dictionary based on what exists in the Internal Dictionary
             GameState.InitializeEmptyDictionary(internalDict);
         }
-        moveAction     = InputSystem.actions.FindAction("Move");
+
+        if (TopDown)
+        {
+            moveAction = InputSystem.actions.FindActionMap("TopDown").FindAction("Move");
+        }
+        else
+        {
+            moveAction = InputSystem.actions.FindAction("Move");
+        }
         interactAction = InputSystem.actions.FindAction("Interact");
     }
 
@@ -162,6 +172,15 @@ public sealed class PlayerController : MonoBehaviour
         {
             movementDirection = new Vector2(0.0f, 0.0f);
             anim.SetFloat("horizontal", Mathf.Abs(movementDirection.x));
+        }
+
+        if (moveValue.y > 0) // Up movement
+        {
+            movementDirection = movementDirection + new Vector2(0.0f, 1.0f);
+        }
+        else if (moveValue.y < 0) // Down movement
+        {
+            movementDirection = movementDirection + new Vector2(0.0f, -1.0f);
         }
     }
 
