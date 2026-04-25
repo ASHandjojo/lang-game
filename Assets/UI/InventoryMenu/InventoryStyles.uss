@@ -1,61 +1,109 @@
-#ScreenContainer {
-	height: 100%;
-	width: 100%;
+.main {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(255, 224, 152);
+    flex-direction: column;
+
+    border-color: rgb(108, 44, 44);
+    border-width: 7px;
+}
+
+.tab-selector {
+    flex-grow: 1;
+    max-height: 300px;
+    wdith: 100%;
+    flex-direction: row;
+
+    background-color: rgb(108, 44, 44);
+}
+
+.tab-selector__item-container {
+    min-width: 300px;
+    padding: 15px;
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.tab-selector__icon {
+    max-width: 100px;
+    flex-grow: 1;
+    -unity-background-scale-mode: scale-to-fit;
+    margin-right: 15px;
+}
+
+.tab-selector__item-container > Label {
+    font-size: 30px;
+    -unity-font-style: bold;
+    color: rgb(255, 224, 152);
+    -unity-text-align: middle-left;
+}
+
+.tab-selector__item-container--selected {
     background-color: rgb(255, 224, 152);
 }
 
-TabView {
+.tab-selector__item-container--selected > Label {
+    color: rgb(108, 44, 44);
+}
+
+.tab-content {
+    padding:50px;
     height: 100%;
+    flex-grow: 1;
+    background-color: rgb(255, 224, 152);
+    flex-direction: row;
 }
 
-/* Styles the strip where tab buttons live */
-.unity-tab-view__header-container {
-    background-color: #00FF00;
-    height: 120px;
+.item-selector {
+    /* padding-top: 15px;
+    padding-bottom: 15px; */
+    max-width: 100px;
+    justify-content: center;
 }
 
-.unity-tab__header {
-    height: 100%;
-    width: 100%;
+.item-selector__items-container {
+    flex-grow: 1;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.unity-tab__header-label {
-    height: 100%;
-    width: 100%;
-    font-size: 60;
+.item-selector__item-icon {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    flex-grow: 1;
+
+    /* border-color: rgb(108, 44, 44);
+    border-width: 5px; */
 }
 
-
-.unity-tab-view__content-container {
-    height: 100%;
+.item-selector__item-icon--selected {
+    /* border-color: rgb(108, 44, 44);
+    border-width: 5px; */
 }
 
-Tab {
-    height: 100%;
+.item-hero-image {
+    flex-grow: 1;
+    margin-left: 50px;
+    margin-right: 50px;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
-.unity-tab-view__content-container {
-    height: 100%;
+.item-right-content {
+    flex-grow: 1;
+    max-width: 50%;
+    justify-content: space-between;
 }
 
-/* Styles the content area of the tabs */
-.unity-tab__content-container {
-    padding: 20px;
-    height: 100%;
-    background-color: #FF0000;
-}
-
-/* Custom classes for your paragraphs */
-.tab-title {
-    font-size: 20px;
+.item-text__heading {
+    font-size: 36px;
     -unity-font-style: bold;
-    color: #FFFFFF;
+    color: #000000;
     margin-bottom: 10px;
 }
 
-.tab-paragraph {
-    font-size: 14px;
-    color: #BBBBBB;
-    white-space: normal; /* Essential for text wrapping */
-    line-height: 20px;
+.item-text__description {
+    font-size: 24px;
+    white-space: normal; /* wrapping */
+    color: #000000;
+    -unity-text-align: upper-left;
 }
