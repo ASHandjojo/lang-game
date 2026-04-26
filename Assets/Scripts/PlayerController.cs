@@ -37,6 +37,7 @@ public sealed class PlayerController : MonoBehaviour
     [SerializeField] private InternalDictionary internalDict;
 
     public static InternalDictionary InternalDict => Instance.internalDict;
+    public Inventory PlayerInventory { get; private set; }
 
     public static PlayerController Instance { get; private set; }
     public bool CanMove
@@ -93,11 +94,12 @@ public sealed class PlayerController : MonoBehaviour
         }
         moveAction     = InputSystem.actions.FindAction("Move");
         interactAction = InputSystem.actions.FindAction("Interact");
+
+        PlayerInventory = new();
     }
 
     private void Start()
     {
-
     }
 
     void Update()

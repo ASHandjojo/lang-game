@@ -14,21 +14,23 @@
         </engine:VisualElement>
         <engine:VisualElement class="tab-content">
             <engine:VisualElement class="item-selector">
-                <engine:Button text="Up" />
+                <engine:Button class='item-selector__scroll-button item-selector__prev-button'/>
                 <engine:VisualElement class="item-selector__items-container">
-                    <engine:Button class="item-selector__item-icon" style="background-image: url(&quot;project://database/Assets/Sprites/UI/Keys/a_light.png&quot;);" />
+                    <!-- <engine:Button class="item-selector__item-icon" style="background-image: url(&quot;project://database/Assets/Sprites/UI/Keys/a_light.png&quot;);" /> -->
                     <engine:Button class="item-selector__item-icon" style="background-image: url(&quot;project://database/Assets/Sprites/UI/Keys/a_light.png&quot;);" />
                     <engine:Button class="item-selector__item-icon item-selector__item-icon--selected" style="background-image: url(&quot;project://database/Assets/Sprites/UI/Keys/a_light.png&quot;);" />
                     <engine:Button class="item-selector__item-icon" style="background-image: url(&quot;project://database/Assets/Sprites/UI/Keys/a_light.png&quot;);" />
-                    <engine:Button class="item-selector__item-icon" style="background-image: url(&quot;project://database/Assets/Sprites/UI/Keys/a_light.png&quot;);" />
+                    <!-- <engine:Button class="item-selector__item-icon" style="background-image: url(&quot;project://database/Assets/Sprites/UI/Keys/a_light.png&quot;);" /> -->
                 </engine:VisualElement>
-                <engine:Button text="Down" />
+                <engine:Button class='item-selector__scroll-button item-selector__next-button'/>
             </engine:VisualElement>
-            <engine:VisualElement class='item-hero-image' style="background-image: url(&quot;project://database/Assets/Sprites/UI/Keys/a_light.png&quot;);" />
+            <engine:VisualElement class='item-hero-image-container'>
+                <engine:VisualElement class='item-hero-image' style="background-image: url(&quot;project://database/Assets/Sprites/UI/Keys/a_light.png&quot;);" />
+            </engine:VisualElement>
             <engine:VisualElement class='item-right-content'>
                 <engine:VisualElement class='item-text'>
                     <engine:Label class='item-text__heading' text="Item Name"/>
-                    <engine:Label class='item-text__description' text="Item Description Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lobortis enim vel ornare lobortis. Integer id nisl dui. In auctor est a libero tincidunt, in dictum elit porttitor. Sed eu bibendum ligula. Nulla cursus tincidunt est at aliquet. Donec interdum dapibus imperdiet. Ut facilisis dapibus tincidunt."/>
+                    <engine:Label class='item-text__description' text="Item Description Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lobortis enim vel ornare lobortis. Integer id nisl dui. In auctor est a libero tincidunt, in dictum elit porttitor. Sed eu bibendum ligula. Nulla cursus tincidunt est at aliquet."/>
                 </engine:VisualElement>
                 <engine:Button class='item-text__use-button' text="Use"/>
             </engine:VisualElement>
