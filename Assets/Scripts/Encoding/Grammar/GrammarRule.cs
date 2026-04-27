@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 
 using Unity.Burst;
+using Unity.Burst.CompilerServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
@@ -54,6 +55,7 @@ public struct RuleEntry : IEquatable<RuleEntry>
 public struct PhraseRuleManaged
 {
     public RuleEntry[] entries;
+    public int headIndex;
 
     public readonly bool IsValid()
     {
@@ -88,19 +90,24 @@ public struct PhraseRule : IEquatable<PhraseRule>, IDisposable
     // S => NP * VP
     [NativeDisableContainerSafetyRestriction]
     private NativeArray<RuleEntry> entries;
+    private int headIndex;
     private int hash; // Precomputes hash, as it is immutable
 
-    public PhraseRule(in ReadOnlySpan<RuleEntry> entriesIn, Allocator allocator)
+    public PhraseRule(in ReadOnlySpan<RuleEntry> entriesIn, int headIndex, Allocator allocator)
     {
         Debug.Assert(entriesIn.Length > 0);
         entries = new NativeArray<RuleEntry>(entriesIn.Length, allocator);
-
-        hash = entries[0].GetHashCode();
+        hash    = entries[0].GetHashCode();
         for (int i = 1; i < entriesIn.Length; i++)
         {
             hash = HashCode.Combine(hash, entriesIn[i].GetHashCode());
         }
+
+        Debug.Assert(headIndex >= 0 && headIndex < entriesIn.Length);
+        this.headIndex = headIndex;
     }
+
+    public readonly RuleEntry Head => entries[headIndex];
 
     [BurstDiscard]
     public override readonly bool Equals(object rhs) => rhs is PhraseRule entry && Equals(entry);
@@ -113,7 +120,8 @@ public struct PhraseRule : IEquatable<PhraseRule>, IDisposable
         entries.Dispose();
         entries = default;
 
-        hash = ~0;
+        headIndex = -1;
+        hash      = ~0;
     }
 }
 
@@ -158,8 +166,6 @@ public struct Memoizer : IDisposable
         }
         return false;
     }
-
-    public readonly bool 
 
     public void Dispose()
     {
