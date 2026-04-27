@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 
 using UnityEngine;
 
@@ -38,7 +39,15 @@ public struct RuleEntry : IEquatable<RuleEntry>
     public ConstituentType   constituent; // This determines whether the rule entry is a word or phrase
     public GrammarProperties properties;
 
-    public readonly bool Equals(RuleEntry rhs) => constituent == rhs.constituent && properties == rhs.properties;
+    [BurstDiscard]
+    public override readonly bool Equals(object rhs) => rhs is RuleEntry entry && Equals(rhs);
+    public readonly bool Equals(RuleEntry rhs)       => wordType == rhs.wordType && constituent == rhs.constituent && properties == rhs.properties;
+
+    public unsafe override readonly int GetHashCode()
+    {
+        RuleEntry copy = this;
+        return *(int*) &copy;
+    }
 }
 
 [Serializable]
@@ -73,8 +82,99 @@ public struct PhraseRulesManaged
 }
 
 [BurstCompile]
-public struct PhraseRule
+public struct PhraseRule : IEquatable<PhraseRule>, IDisposable
 {
-    // S => N * VP
+    // S => N  * VP
     // S => NP * VP
+    [NativeDisableContainerSafetyRestriction]
+    private NativeArray<RuleEntry> entries;
+    private int hash; // Precomputes hash, as it is immutable
+
+    public PhraseRule(in ReadOnlySpan<RuleEntry> entriesIn, Allocator allocator)
+    {
+        Debug.Assert(entriesIn.Length > 0);
+        entries = new NativeArray<RuleEntry>(entriesIn.Length, allocator);
+
+        hash = entries[0].GetHashCode();
+        for (int i = 1; i < entriesIn.Length; i++)
+        {
+            hash = HashCode.Combine(hash, entriesIn[i].GetHashCode());
+        }
+    }
+
+    [BurstDiscard]
+    public override readonly bool Equals(object rhs) => rhs is PhraseRule entry && Equals(entry);
+    public readonly bool Equals(PhraseRule rhs)      => hash == rhs.hash;
+
+    public override readonly int GetHashCode() => hash;
+
+    public void Dispose()
+    {
+        entries.Dispose();
+        entries = default;
+
+        hash = ~0;
+    }
+}
+
+[BurstCompile]
+public struct MemoValue
+{
+    public int position;
+    public int matchNum;
+
+    public MemoValue(int position)
+    {
+        this.position = position;
+        matchNum      = 0;
+    }
+}
+
+[BurstCompile]
+public struct Memoizer : IDisposable
+{
+    private NativeParallelMultiHashMap<PhraseRule, MemoValue> rules;
+
+    public Memoizer(Allocator allocator)
+    {
+        rules = new NativeParallelMultiHashMap<PhraseRule, MemoValue>(8, allocator);
+    }
+
+    public readonly bool TryGetCached(in PhraseRule rule, int position)
+    {
+        if (rules.TryGetFirstValue(rule, out MemoValue keyFirst, out var iterator))
+        {
+            if (keyFirst.position == position)
+            {
+                return true;
+            }
+            while (rules.TryGetNextValue(out MemoValue key, ref iterator))
+            {
+                if (key.position == position)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public readonly bool 
+
+    public void Dispose()
+    {
+        rules.Dispose();
+        rules = default;
+    }
+}
+
+[BurstCompile]
+public struct Parser
+{
+    public NativeArray<WordNode> nodes;
+
+    public void Complete()
+    {
+
+    }
 }
