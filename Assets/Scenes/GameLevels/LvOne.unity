@@ -3249,7 +3249,7 @@ MonoBehaviour:
     sound:
       obj: {fileID: 0}
       isInitialized: 0
-    hasResponse: 0
+    hasResponse: 1
     responseData:
       phoneticsStr: melaia wabi bele chie
       line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
