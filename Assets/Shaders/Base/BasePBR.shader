@@ -11,12 +11,15 @@ Shader "Custom/BasePBR"
         _Saturation ("Saturation", float) = 1.0
         _Value      ("Value",      float) = 1.0 
 
+        _UV_Scale ("UV Scale", float) = 1.0
+
         _IOR ("Index of Refraction", float) = 1.0
     }
     SubShader
     {
         Pass
         {
+            Cull Off
             ZWrite On
             ZTest LEqual
 
@@ -52,6 +55,8 @@ Shader "Custom/BasePBR"
             CBUFFER_START(UnityPerMaterial)
             float _IOR;
             float _Hue, _Saturation, _Value;
+
+            float _UV_Scale;
             CBUFFER_END
 
             struct FragmentOutput
@@ -67,7 +72,7 @@ Shader "Custom/BasePBR"
                 FragmentOutput output;
                 UNITY_SETUP_INSTANCE_ID(input);
 
-                float2 scaledUV = input.UV * 3.0f;
+                float2 scaledUV = input.UV * _UV_Scale;
 
                 DiffuseData diffuseData;
                 diffuseData.baseColor = _BaseColor.Sample(sampler_trilinear_aniso16_repeat_BaseColor, scaledUV).rgb;
@@ -92,7 +97,7 @@ Shader "Custom/BasePBR"
                 output.RGB = CalculateDirect(baseData, data, diffuseData, specularData);
 
                 output.RGB += CalculateIndirect(baseData, diffuseData, aoFac);
-                output.RGB *= max(MainLightRealtimeShadow(input.shadowCoords), 0.5f);
+                output.RGB *= max(MainLightRealtimeShadow(input.shadowCoords), 0.1f);
                 //output.RGB = light.distanceAttenuation;
                 return output;
             }

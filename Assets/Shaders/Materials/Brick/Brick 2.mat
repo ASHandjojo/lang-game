@@ -63,8 +63,9 @@ Material:
     m_Floats:
     - _EnableExternalAlpha: 0
     - _Hue: 0.55
-    - _IOR: 1.5
-    - _Saturation: 1
+    - _IOR: 2.16
+    - _Saturation: 0.95
+    - _UV_Scale: 4
     - _Value: 1
     - _ZWrite: 0
     m_Colors:
