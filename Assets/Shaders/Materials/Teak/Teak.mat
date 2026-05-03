@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Wood
+  m_Name: Teak
   m_Shader: {fileID: 4800000, guid: 73040e5e5e05c664bbf614e4b996978a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -64,7 +64,7 @@ Material:
     - _EnableExternalAlpha: 0
     - _Hue: 0.5
     - _IOR: 1.99
-    - _Saturation: 1
+    - _Saturation: 0.98
     - _UV_Scale: 1
     - _Value: 0.15
     - _ZWrite: 0
