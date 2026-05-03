@@ -65,7 +65,7 @@ Material:
     - _Hue: 0.55
     - _IOR: 2.16
     - _Saturation: 0.95
-    - _UV_Scale: 4
+    - _UV_Scale: 3
     - _Value: 1
     - _ZWrite: 0
     m_Colors:
