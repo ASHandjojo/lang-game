@@ -187,6 +187,26 @@ public class DialogueTree
 
     public bool IsPlayerChoice() => TryGetCurrentNode(out var curr) && (curr.Type == NodeType.MultiheadedChoose);
 
+    public bool TryGetDropDownNode(out List<EncodingEntry> entries)
+    {
+        int index = AssertGetNodeIndex(); // gets the index or less than 0 if there is an error
+        if (IsPlayerChoice())
+        {
+            entries = index switch
+            {
+                < 0 => default,
+                >= 0 => NpcOptions[CurrListIdx].Nodes[index].toCheckToGo
+            };
+        } else
+        {
+            entries = default;
+            return false;
+        }
+        return index >= 0;
+
+    
+    }
+
 
 
     public bool NeedsPlayerInput() => InDialogueList && TryGetCurrentNode(out var curr) && (curr.Type & NodeType.PlayerInput) != 0;

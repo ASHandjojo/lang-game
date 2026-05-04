@@ -718,6 +718,22 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
                 toCheckToGoProp.style.display = DisplayStyle.None;
                 finalize.style.visibility = Visibility.Hidden;
                 finalize.style.display = DisplayStyle.None;
+                
+            }
+
+            if ((newtype & NodeType.PlayerInput) != 0)
+            {
+                checkProp.style.visibility = Visibility.Hidden;
+                checkProp.style.display = DisplayStyle.None;
+                vincTalkProp.style.visibility = Visibility.Hidden;
+                vincTalkProp.style.display = DisplayStyle.None;
+            } else
+            {
+                checkProp.style.visibility = Visibility.Visible;
+                checkProp.style.display = DisplayStyle.Flex;
+                vincTalkProp.style.visibility = Visibility.Visible;
+                vincTalkProp.style.display = DisplayStyle.Flex;
+                
             }
 
             
