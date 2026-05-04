@@ -45,6 +45,8 @@ public class NpcDialogue : Interactable
     private Button backPage;
     private Button forwardPage;
 
+    private VisualElement keyboardBox;
+
     private List<VisualElement> Slots = new List<VisualElement>();
     private int pageNumber = 0;
 
@@ -105,6 +107,7 @@ public class NpcDialogue : Interactable
         Debug.Assert(dialogueTreeAsset != null);
 
         dialogueBox = new DialogueBox(dialogueTreeAsset, characterData);
+        dialogueBox.style.flexGrow = 1;
         document.rootVisualElement.Add(dialogueBox);
 
         document.rootVisualElement.style.justifyContent = Justify.FlexEnd;
@@ -124,7 +127,7 @@ public class NpcDialogue : Interactable
 
         notebookContents = document.rootVisualElement.Q<VisualElement>("Notebook");
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 3; i++)
         {
             int slotNumber = i + 1;
             var item = notebookContents.Q("DictionarySlot" + slotNumber);
@@ -171,6 +174,9 @@ public class NpcDialogue : Interactable
         pageCount = notebookContents.Q<Label>("PageCount");
 
         ToggleJournalDictionary(journalOrDict);
+
+        keyboardBox = dialogueBox.Q("KeyBoard");
+        keyboardBox.Add(InputController.Instance.keyboardUI);
     }
 
     protected override sealed IEnumerator InteractLogic(PlayerController player)
@@ -289,12 +295,14 @@ public class NpcDialogue : Interactable
             {
                 PlayerController.Instance.context |= PlayerContext.PlayerInput;
                 InputController.Instance.OpenKeyboard();
+                keyboardBox.style.display = DisplayStyle.Flex;
 
                 
                 yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0); 
             } else
             {
                 InputController.Instance.CloseKeyboard();
+                keyboardBox.style.display = DisplayStyle.None;
                 PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
                 
                 dialogueBox.ClearDisplay(); 

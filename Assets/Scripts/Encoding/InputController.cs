@@ -168,7 +168,7 @@ public sealed class KeyboardUI : VisualElement
 public sealed class InputController : MonoBehaviour
 {
     [SerializeField] private VisualTreeAsset keyboardAsset;
-    private KeyboardUI keyboardUI;
+    public KeyboardUI keyboardUI;
     private UIDocument document;
 
     private Label inputField;
@@ -222,7 +222,6 @@ public sealed class InputController : MonoBehaviour
         keyboardUI.style.visibility = Visibility.Visible;
         keyboardUI.style.display    = DisplayStyle.Flex;
 
-        keyboardUI.parent.BringToFront();
     }
 
     public void CloseKeyboard()
