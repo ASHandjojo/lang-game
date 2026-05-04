@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 
+// note for cameras: orthographic for 3d map to look 2d
+// follow character vs overlook entire map?
+
 [DisallowMultipleComponent, RequireComponent(typeof(UIDocument))]
 public sealed class BuildingInteract : NpcDialogue
 {
