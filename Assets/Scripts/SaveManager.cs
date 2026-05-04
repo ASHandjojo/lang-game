@@ -28,7 +28,7 @@ public sealed class GameState
         GameState save = JsonUtility.FromJson<GameState>(jsonString);
 
         player.dictionary = save.dictionary;
-        AlignPlayerDictWithInternal(internalDictionary);
+        //AlignPlayerDictWithInternal(internalDictionary);
 
         player.transform.position = save.position;
     }
@@ -68,18 +68,7 @@ public sealed class GameState
             playerPages = player.dictionary.journalPages;
         }
 
-        int entryCount = internalDictionary.entries.Select(x => x.entries.Count()).Sum();
-        DictionaryEntry[] entries = new DictionaryEntry[entryCount];
-
-        for (int i = 0, linearIdx = 0; i < internalDictionary.entries.Count(); i++)
-        {
-            DictEntryColumn column = internalDictionary.entries[i];
-            for (int j = 0; j < column.entries.Count; j++, linearIdx++)
-            {
-                entries[linearIdx].Word  = column.entries[j].unicodeString;
-                entries[linearIdx].Notes = string.Empty;
-            }
-        }
+        DictionaryEntry[] entries = new DictionaryEntry[0];
 
         Dictionary dict = new()
         {
@@ -89,10 +78,29 @@ public sealed class GameState
         player.dictionary = dict;
     }
 
-    // Aligns the player's dictionary with the internal dictionary
+    //Aligns the player's dictionary with the internal dictionary
     // If new words have been added to the internal dictionary the player's saves will
     // update to reflect this
-    public static void AlignPlayerDictWithInternal(InternalDictionary internalDictionary)
+    //public static void AlignPlayerDictWithInternal(InternalDictionary internalDictionary)
+    //{
+    //    PlayerController player = PlayerController.Instance;
+
+    //    Dictionary<string, string> playerMap = new();
+
+    //    foreach (DictionaryEntry entry in player.dictionary.dictionaryList)
+    //    {
+    //        playerMap.Add(entry.Word, entry.Notes);
+    //    }
+
+    //    InitializeEmptyDictionary(internalDictionary);
+    //    for (int i = 0; i < player.dictionary.dictionaryList.Length; i++)
+    //    {
+    //        playerMap.TryGetValue(player.dictionary.dictionaryList[i].Word, out PlayerController.Instance.dictionary.dictionaryList[i].Notes);
+    //    }
+    //}
+
+    // Add new word to the player dictionary at a checkpoint
+    public static void AddWordsToDict(string[] newWords)
     {
         PlayerController player = PlayerController.Instance;
 
@@ -103,11 +111,29 @@ public sealed class GameState
             playerMap.Add(entry.Word, entry.Notes);
         }
 
-        InitializeEmptyDictionary(internalDictionary);
-        for (int i = 0; i < player.dictionary.dictionaryList.Length; i++)
+        List<DictionaryEntry> wordsToAdd = new();
+
+        for (int i = 0; i < newWords.Count(); i++)
         {
-            playerMap.TryGetValue(player.dictionary.dictionaryList[i].Word, out PlayerController.Instance.dictionary.dictionaryList[i].Notes);
+            if (!playerMap.ContainsKey(newWords[i]))
+            {
+                DictionaryEntry entry = new()
+                {
+                    Word = newWords[i],
+                    Notes = string.Empty
+                };
+
+                wordsToAdd.Add(entry);
+                playerMap.Add(entry.Word, entry.Notes);
+            }
         }
+
+        Dictionary dict = new()
+        {
+            dictionaryList = player.dictionary.dictionaryList.Concat(wordsToAdd.ToArray()).ToArray(),
+            journalPages = player.dictionary.journalPages
+        };
+        player.dictionary = dict;
     }
 }
 

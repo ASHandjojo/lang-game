@@ -34,6 +34,8 @@ public sealed class DialogueBox : VisualElement
 
     private StyleColor originalColor;
 
+    public List<string> words = new();
+
     public DialogueBox(VisualTreeAsset asset, in CharacterData charData)
     {
         Debug.Assert(asset != null);
@@ -97,6 +99,10 @@ public sealed class DialogueBox : VisualElement
             {
                 wordLabel.text += "<font=\"Harmony SDF\">";
             }
+            else
+            {
+                words.Add(word);
+            }
             for (int i = startIndex; i < word.Length; i++)
             {
                 wordLabel.text += word[i];
@@ -108,6 +114,9 @@ public sealed class DialogueBox : VisualElement
             }
             wordLabel.text += ' ';
         }
+        // Add Dictionary words
+        GameState.AddWordsToDict(words.ToArray());
+
         StopBounce();
     }
 

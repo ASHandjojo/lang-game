@@ -104,7 +104,7 @@ public class NpcDialogue : Interactable
             }
 
             var notesRow = item.Q<TextField>("Notes" + slotNumber);
-            notes.RegisterValueChangedCallback(evt => {
+            notesRow.RegisterValueChangedCallback(evt => {
                 NotesUpdate(evt.newValue, slotNumber - 1);
             });
             notesRow.isDelayed = true;
@@ -163,6 +163,7 @@ public class NpcDialogue : Interactable
             // Prevent Movement
             player.CanMove = false;
             inDialogue     = true;
+
             yield return NextLine();
         }
     }
@@ -232,6 +233,7 @@ public class NpcDialogue : Interactable
         VisualElement notebookBox = document.rootVisualElement.Q<VisualElement>("NotebookBox");
         if (notebookBox.style.display == DisplayStyle.None)
         {
+            LoadPage(pageNumber);
             notebookBox.style.display = DisplayStyle.Flex;
         }
         else
@@ -343,11 +345,15 @@ public class NpcDialogue : Interactable
 
     private void NotesUpdate(string newValue, int index)
     {
-        var notes = Slots[index].Q<TextField>("Notes" + (index + 1));
-        notes.value = newValue;
-
         PlayerController player = PlayerController.Instance;
-        player.dictionary.dictionaryList[(pageNumber * Slots.Count) + index].Notes = newValue;
+
+        if ((pageNumber * Slots.Count) + index < player.dictionary.dictionaryList.Length)
+        {
+            var notes = Slots[index].Q<TextField>("Notes" + (index + 1));
+            notes.value = newValue;
+
+            player.dictionary.dictionaryList[(pageNumber * Slots.Count) + index].Notes = newValue;
+        }
     }
 
     private void PageUpdate(string newValue)
