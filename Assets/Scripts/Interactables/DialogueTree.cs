@@ -199,6 +199,19 @@ public class DialogueTree
         return false;
     }
 
+    // This will reset the state of the tree (like as if it got to the last node)
+    // but only if it is currently in dialogue!
+    public void EndDialogue()
+    {
+        if (InDialogueList)
+        {
+            NpcOptions[CurrListIdx].CurrNode = -1;
+            InDialogueList = false;
+            CurrListIdx = -1;
+        }
+        
+    }
+
     // The function will return Successful if it has successfully incremented to the next dialogue
     // The function will return IsAtEnd if it has successfully incremented to the end of the dialogue
     // The function will return a number < 0 if it has unsuccessfully incremented to the en
