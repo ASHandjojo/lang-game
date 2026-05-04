@@ -15,7 +15,10 @@ public enum NodeType : uint
     // New node type added to be the end node (will only end at an end node)
     End         = 8  | Default,
     BinaryConlang      = 16  | PlayerInput,
-    MultiheadedConlang = 32 | Multiheaded | PlayerInput
+    MultiheadedConlang = 32 | Multiheaded | PlayerInput,
+
+    MultiheadedChoose = 64 | Multiheaded
+
 }
 
 public enum TraverseStatus : uint
@@ -181,6 +184,8 @@ public class DialogueTree
     }
 
     public bool IsVincentTalking() => TryGetCurrentNode(out var curr) && curr.VincentTalking;
+
+    public bool IsPlayerChoice() => TryGetCurrentNode(out var curr) && (curr.Type == NodeType.MultiheadedChoose);
 
 
 

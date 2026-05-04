@@ -290,9 +290,6 @@ public class NpcDialogue : Interactable
                 PlayerController.Instance.context |= PlayerContext.PlayerInput;
                 InputController.Instance.OpenKeyboard();
 
-                dialogueBox.ClearDisplay();
-                yield return dialogueBox.Display(currEntry);
-
                 
                 yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0); 
             } else

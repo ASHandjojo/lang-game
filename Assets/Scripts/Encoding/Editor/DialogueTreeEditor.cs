@@ -705,6 +705,8 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
                 toGoToIdxsProp.style.display = DisplayStyle.Flex;
                 toCheckToGoProp.style.visibility = Visibility.Visible;
                 toCheckToGoProp.style.display = DisplayStyle.Flex;
+                finalize.style.visibility = Visibility.Visible;
+                finalize.style.display = DisplayStyle.Flex;
             } else
             {
                 // hide list of ids
@@ -714,6 +716,8 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
                 toGoToIdxsProp.style.display = DisplayStyle.None;
                 toCheckToGoProp.style.visibility = Visibility.Hidden;
                 toCheckToGoProp.style.display = DisplayStyle.None;
+                finalize.style.visibility = Visibility.Hidden;
+                finalize.style.display = DisplayStyle.None;
             }
 
             
