@@ -287,7 +287,7 @@ public class NpcDialogue : Interactable
             //     alreadyIncrDiag = false;
             // }
             bool ret = npcTree.TryGetCurrentEntry(out var currEntry);
-            Debug.Log("Here is ret: " + ret);
+            //Debug.Log("Here is ret: " + ret);
             
             
 

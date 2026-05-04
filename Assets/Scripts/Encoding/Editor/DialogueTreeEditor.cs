@@ -38,7 +38,7 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
     // counts represents whether a node exists at a certain spot (mainly used for deleting unused indices)
     private List<bool> counts = new List<bool>();
 
-    private bool verbose = false;
+    private bool verbose = true;
 
     // This function will take in the nodes array as a serialized property and return the index in which
     // node with id is or -1 if it does not exist
@@ -727,6 +727,8 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
                 checkProp.style.display = DisplayStyle.None;
                 vincTalkProp.style.visibility = Visibility.Hidden;
                 vincTalkProp.style.display = DisplayStyle.None;
+                check.boolValue = false;
+                vincTalk.boolValue = false;
             } else
             {
                 checkProp.style.visibility = Visibility.Visible;
