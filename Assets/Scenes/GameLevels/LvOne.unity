@@ -3229,8 +3229,8 @@ MonoBehaviour:
   worldPromptInput: 2
   hudDocument: {fileID: 1605222084}
   characterData:
-    name: 
-    image: {fileID: 0}
+    name: Florence
+    image: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   dialogueTreeAsset: {fileID: 9197481963319205126, guid: 54f61cebcc8fa1e47bde4d95bac737ef, type: 3}
   npcName: Florence
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
@@ -3269,46 +3269,34 @@ MonoBehaviour:
       startIdx: 0
       Nodes:
       - NodeId: 0
-        Type: 0
-        SuccId: 0
-        FailId: 213649854
-        parentIds: 00000000be09bc0c
-        parentIdxs: 0000000001000000
-        SuccIdx: 0
-        FailIdx: 1
-        VincentTalking: 1
-        CheckPointNode: 1
-        Entry:
-          line:
-            phoneticsStr: 'What''s '
-            line: "W\xD8t's"
-            literal: "W\xD8t's"
-          sound:
-            obj: {fileID: 0}
-            isInitialized: 0
-          hasResponse: 0
-          responseData:
-            phoneticsStr: 
-            line: 
-            literal: 
-      - NodeId: 213649854
-        Type: 5
+        Type: 38
         SuccId: 0
         FailId: 0
-        parentIds: 00000000be09bc0c
-        parentIdxs: 0000000001000000
+        parentIds: 00000000f5f32a6d96f51968
+        parentIdxs: 000000000100000002000000
+        toGoToIds: 0000000096f51968f5f32a6d
+        toGoToIdxs: 000000000200000001000000
+        toCheckToGo:
+        - phoneticsStr: ++++
+          line: ++++
+          literal: ++++
+        - phoneticsStr: aaaa
+          line: aaaa
+          literal: aaaa
+        - phoneticsStr: eeee
+          line: eeee
+          literal: eeee
         SuccIdx: 0
         FailIdx: 0
         VincentTalking: 0
         CheckPointNode: 1
         Entry:
           line:
-            phoneticsStr: '|I |Can''t |Understand |You |Go |Home |:('
-            line: '|I |Can''t |Understand |You |Go |Home |:('
-            literal: <font="Harmony SDF">I</font> <font="Harmony SDF">Can't</font>
-              <font="Harmony SDF">Understand</font> <font="Harmony SDF">You</font>
-              <font="Harmony SDF">Go</font> <font="Harmony SDF">Home</font> <font="Harmony
-              SDF">:(</font>
+            phoneticsStr: '|Guess |What |I |am |about |to |say?'
+            line: '|Guess |What |I |am |about |to |say?'
+            literal: <font="Harmony SDF">Guess</font> <font="Harmony SDF">What</font>
+              <font="Harmony SDF">I</font> <font="Harmony SDF">am</font> <font="Harmony
+              SDF">about</font> <font="Harmony SDF">to</font> <font="Harmony SDF">say?</font>
           sound:
             obj: {fileID: 0}
             isInitialized: 0
@@ -3317,7 +3305,59 @@ MonoBehaviour:
             phoneticsStr: 
             line: 
             literal: 
-      NumNodes: 2
+      - NodeId: 1831531509
+        Type: 9
+        SuccId: 0
+        FailId: 0
+        parentIds: 00000000f5f32a6d96f51968
+        parentIdxs: 000000000100000002000000
+        toGoToIds: 
+        toGoToIdxs: 
+        toCheckToGo: []
+        SuccIdx: 0
+        FailIdx: 0
+        VincentTalking: 0
+        CheckPointNode: 0
+        Entry:
+          line:
+            phoneticsStr: '|Good |Job!'
+            line: '|Good |Job!'
+            literal: <font="Harmony SDF">Good</font> <font="Harmony SDF">Job!</font>
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 0
+          responseData:
+            phoneticsStr: 
+            line: 
+            literal: 
+      - NodeId: 1746531734
+        Type: 9
+        SuccId: 0
+        FailId: 0
+        parentIds: 00000000f5f32a6d96f51968
+        parentIdxs: 000000000100000002000000
+        toGoToIds: 
+        toGoToIdxs: 
+        toCheckToGo: []
+        SuccIdx: 0
+        FailIdx: 0
+        VincentTalking: 0
+        CheckPointNode: 0
+        Entry:
+          line:
+            phoneticsStr: aaaa
+            line: aaaa
+            literal: aaaa
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 0
+          responseData:
+            phoneticsStr: 
+            line: 
+            literal: 
+      NumNodes: 3
       CurrNode: 0
 --- !u!61 &1988571624
 BoxCollider2D:

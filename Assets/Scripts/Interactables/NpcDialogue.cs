@@ -34,8 +34,6 @@ public class NpcDialogue : Interactable
     [SerializeField] private DialogueEntry[] entries;
     [SerializeField] private DialogueTree npcTree = new DialogueTree();
 
-    private bool alreadyIncrDiag = true;
-
     private VisualElement notebookContents;
     private Button notebookButton;
 
@@ -64,7 +62,6 @@ public class NpcDialogue : Interactable
         if (inDialogue && npcTree.NeedsPlayerInput()) // if we are in dialogue and we need a response from the player
         {
             TraverseStatus errstat = npcTree.DialogueForward(content); // This will increment the dialogue accordingly or return error
-            alreadyIncrDiag = true; // make sure to set that we have already progressed the dialogue!
             if ((errstat & TraverseStatus.Error) == TraverseStatus.Error) 
             {
                 EchoDialogueError(errstat);
@@ -204,8 +201,6 @@ public class NpcDialogue : Interactable
                 EchoDialogueError(errstat);
             }
 
-            alreadyIncrDiag = true;
-
             
 
             //UpdateForVincentTalking();
@@ -286,6 +281,7 @@ public class NpcDialogue : Interactable
             //     alreadyIncrDiag = false;
             // }
             bool ret = npcTree.TryGetCurrentEntry(out var currEntry);
+            Debug.Log("Here is ret: " + ret);
             
             
 
@@ -293,6 +289,10 @@ public class NpcDialogue : Interactable
             {
                 PlayerController.Instance.context |= PlayerContext.PlayerInput;
                 InputController.Instance.OpenKeyboard();
+
+                dialogueBox.ClearDisplay();
+                yield return dialogueBox.Display(currEntry);
+
                 
                 yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0); 
             } else

@@ -6,14 +6,16 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 
+
 public enum NodeType : uint
 {
     Default     = 1,
     PlayerInput = 2,
+    Multiheaded = 4,
     // New node type added to be the end node (will only end at an end node)
-    End         = 4  | Default,
-    BinaryConlang      = 8  | PlayerInput,
-    MultiheadedConlang = 16 | PlayerInput
+    End         = 8  | Default,
+    BinaryConlang      = 16  | PlayerInput,
+    MultiheadedConlang = 32 | Multiheaded | PlayerInput
 }
 
 public enum TraverseStatus : uint
@@ -26,7 +28,8 @@ public enum TraverseStatus : uint
     CurrNodeUndefined = 32 | Error,
     GoToNodeOutOfBounds = 64 | Error,
     InitializeTreeOutOfBounds = 128 | Error,
-    NextNodeUndefined = 256 | Error
+    NextNodeUndefined = 256 | Error,
+    ToGoToAndToCheckDoNotMatch = 512 | Error
 }
 
 
@@ -86,6 +89,17 @@ public struct DialogueTreeNode
     [SerializeField] public List<int> parentIds; // for editor only basically
 
     [SerializeField] public List<int> parentIdxs; // for editor only basically
+
+
+// added to try to make multiheaded nodes
+// toGoToIds should be of size 1 less than toCheckToGo!
+    [SerializeField] public List<int> toGoToIds; // for editor only basically
+
+    [SerializeField] public List<int> toGoToIdxs; 
+
+    [SerializeField] public List<EncodingEntry> toCheckToGo; // for editor only basically
+
+
 
 
 
@@ -193,6 +207,8 @@ public class DialogueTree
     //          - returns CurrNodeUndefined if the current node is not defined
     //          - returns NextNodeUndefined if the next node is not defined
     //          - returns GoToNodeOutOfBounds if the node to go to is out of bounds
+    //          - returns ToGoToAndToCheckDoNotMatch if the node is mutliheaded and the size of toGoToIdxs 
+    //                                               and toCheckToGo are not the same!
     //          - returns () ...
     // testing is the string to test against and useTest specifies whether we should check against a string 
     // or ignore the string
@@ -215,10 +231,26 @@ public class DialogueTree
         }
 
         int to_go_to = curr.FailIdx; // by default goes to failure
-        if (useTest && (testing == curr.Entry.responseData.line))
+        if (useTest && ((curr.Type & NodeType.Multiheaded) == 0) && (testing == curr.Entry.responseData.line))
         { // if we are using the string and the string matches the expected data!
             //Debug.Log("Testing string was same as data");
            to_go_to = curr.SuccIdx;
+        } else if (useTest && ((curr.Type & NodeType.Multiheaded) != 0))
+        {
+            // /multiheaded logic!
+            if (curr.toGoToIdxs.Count != curr.toCheckToGo.Count)
+            {
+                return TraverseStatus.ToGoToAndToCheckDoNotMatch;
+            }
+            int i = 0;
+            for (i = 0; i < curr.toCheckToGo.Count; i++)
+            {
+                if (testing == curr.toCheckToGo[i])
+                {
+                    to_go_to = curr.toGoToIdxs[i];
+                    break;
+                }
+            }
         }
 
         if (curr.Type == NodeType.End)
