@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Teak_roughness_0: 4157801498501711307
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

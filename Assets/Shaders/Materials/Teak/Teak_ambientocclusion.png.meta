@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Teak_ambientocclusion_0: -9005703702170663956
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

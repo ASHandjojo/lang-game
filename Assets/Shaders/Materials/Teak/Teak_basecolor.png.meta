@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Teak_basecolor_0: -5418042226696437313
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
