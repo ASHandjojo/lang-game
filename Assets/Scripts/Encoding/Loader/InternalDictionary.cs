@@ -8,7 +8,7 @@ using Unity.Collections.LowLevel.Unsafe;
 
 using UnityEngine;
 
-public enum WordType : ushort
+public enum WordType : byte
 {
     Noun      = 0,
     Adjective = 1,
@@ -27,7 +27,7 @@ public enum WordType : ushort
 
     TypeCount = 12,
 
-    Unknown   = ushort.MaxValue
+    Unknown   = byte.MaxValue
 }
 
 [BurstCompile]

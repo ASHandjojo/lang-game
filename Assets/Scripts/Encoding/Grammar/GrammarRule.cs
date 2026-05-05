@@ -36,17 +36,6 @@ public enum ConstituentType : byte
     Phrase = 1,
 }
 
-[BurstCompile]
-public struct PhraseNode : IDisposable
-{
-
-
-    public void Dispose()
-    {
-
-    }
-}
-
 [Serializable, BurstCompile, StructLayout(LayoutKind.Sequential, Size = 4)]
 public struct RuleEntry : IEquatable<RuleEntry>
 {
