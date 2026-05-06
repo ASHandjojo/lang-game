@@ -129,12 +129,6 @@ public struct WordEncoder : IDisposable
         return encoder;
     }
 
-    private readonly bool TryFind(in ReadOnlySpan<ushort> str, out WordNode node)
-    {
-        node = default;
-        return true;
-    }
-
     public readonly WordNode ParseSingle(in ReadOnlySpan<ushort> str)
     {
         bool isPresent = unicodePool.IsPresent(str, out int strIndex);

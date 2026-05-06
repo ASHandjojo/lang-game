@@ -25,6 +25,7 @@ MonoBehaviour:
       - wordType: 11
         constituent: 1
         properties: 6
+      headIndex: 1
   - phraseType: 3
     rules:
     - entries:
@@ -34,12 +35,4 @@ MonoBehaviour:
       - wordType: 1
         constituent: 0
         properties: 1
-  - phraseType: 3
-    rules:
-    - entries:
-      - wordType: 1
-        constituent: 1
-        properties: 2
-      - wordType: 1
-        constituent: 0
-        properties: 1
+      headIndex: 1

@@ -295,8 +295,8 @@ MonoBehaviour:
       unicodeString: "i\u0107a"
       englishTranslation: "Second person plural\r"
     - rawString: cugu
-      unicodeString: "cu\xC8"
+      unicodeString: "\xC3\xC8"
       englishTranslation: "Third person (singular (not gendered)\r"
     - rawString: cuia
-      unicodeString: "c\xB3a"
+      unicodeString: "\xC3\xA9"
       englishTranslation: Third person plural
