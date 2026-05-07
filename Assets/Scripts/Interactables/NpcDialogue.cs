@@ -302,6 +302,9 @@ public class NpcDialogue : Interactable
             // {
             //     alreadyIncrDiag = false;
             // }
+
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.dialogueForwardSFX, PlayerController.Instance.transform.position);
+
             bool ret = npcTree.TryGetCurrentEntry(out var currEntry);
             //Debug.Log("Here is ret: " + ret);
             
@@ -377,10 +380,12 @@ public class NpcDialogue : Interactable
         VisualElement notebookBox = document.rootVisualElement.Q<VisualElement>("NotebookBox");
         if (notebookBox.style.display == DisplayStyle.None)
         {
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.dictionaryOpenSFX, PlayerController.Instance.transform.position);
             notebookBox.style.display = DisplayStyle.Flex;
         }
         else
         {
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.dictionaryCloseSFX, PlayerController.Instance.transform.position);
             notebookBox.style.display = DisplayStyle.None;
         }
     }
