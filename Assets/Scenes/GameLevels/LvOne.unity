@@ -3251,11 +3251,11 @@ MonoBehaviour:
       startIdx: 0
       Nodes:
       - NodeId: 0
-        Type: 38
+        Type: 18
         SuccId: 0
         FailId: 0
-        parentIds: 00000000f5f32a6d96f51968
-        parentIdxs: 000000000100000002000000
+        parentIds: 00000000f5f32a6d
+        parentIdxs: 0000000001000000
         toGoToIds: 0000000096f51968f5f32a6d
         toGoToIdxs: 000000000200000001000000
         toCheckToGo:
@@ -3291,8 +3291,8 @@ MonoBehaviour:
         Type: 9
         SuccId: 0
         FailId: 0
-        parentIds: 00000000f5f32a6d96f51968
-        parentIdxs: 000000000100000002000000
+        parentIds: 00000000f5f32a6d
+        parentIdxs: 0000000001000000
         toGoToIds: 
         toGoToIdxs: 
         toCheckToGo: []
@@ -3313,33 +3313,7 @@ MonoBehaviour:
             phoneticsStr: 
             line: 
             literal: 
-      - NodeId: 1746531734
-        Type: 9
-        SuccId: 0
-        FailId: 0
-        parentIds: 00000000f5f32a6d96f51968
-        parentIdxs: 000000000100000002000000
-        toGoToIds: 
-        toGoToIdxs: 
-        toCheckToGo: []
-        SuccIdx: 0
-        FailIdx: 0
-        VincentTalking: 0
-        CheckPointNode: 0
-        Entry:
-          line:
-            phoneticsStr: aaaa
-            line: aaaa
-            literal: aaaa
-          sound:
-            obj: {fileID: 0}
-            isInitialized: 0
-          hasResponse: 0
-          responseData:
-            phoneticsStr: 
-            line: 
-            literal: 
-      NumNodes: 3
+      NumNodes: 2
       CurrNode: 0
 --- !u!212 &1988571625
 SpriteRenderer:

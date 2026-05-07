@@ -33,40 +33,6 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         PropertyField soundClipField         = new(soundClipProperty);
         element.Add(soundClipField);
 
-        // Response Data
-        SerializedProperty responseDataProperty = property.FindPropertyRelative(nameof(DialogueEntry.responseData));
-        PropertyField responseDataField = new(responseDataProperty);
-        responseDataField.AddToClassList("Translate");
-
-        // Has Response
-        SerializedProperty hasResponseProperty = property.FindPropertyRelative(nameof(DialogueEntry.hasResponse));
-        Toggle hasResponseToggle = new("Has Response");
-        hasResponseToggle.BindProperty(hasResponseProperty);
-
-        responseDataField.RegisterCallback(
-            (ChangeEvent<string> e) =>
-            {
-                PhoneticProcessor processor = PhoneticProcessor.Create(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
-                property.serializedObject.ApplyModifiedProperties();
-            }
-        );
-
-        // Adding Callback for Response Toggle
-        hasResponseToggle.RegisterCallback(
-            (ChangeEvent<bool> e) =>
-            {
-                Visibility visiblityState = e.newValue ? Visibility.Visible : Visibility.Hidden;
-                DisplayStyle displayStyle = e.newValue ? DisplayStyle.Flex  : DisplayStyle.None;
-
-                responseDataField.style.visibility = visiblityState;
-                responseDataField.style.display    = displayStyle;
-            }
-        );
-        responseDataField.style.visibility = hasResponseProperty.boolValue ? Visibility.Visible : Visibility.Hidden;
-
-        element.Add(hasResponseToggle);
-        element.Add(responseDataField);
-
         return element;
     }
 }

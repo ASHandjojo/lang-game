@@ -15,7 +15,7 @@ public sealed class SceneOptions : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(position, new Vector3(5.0f, 5.0f, 5.0f));
+        Gizmos.DrawWireCube(position, new Vector3(2.0f, 2.0f, 2.0f));
     }
 
     void Start()
