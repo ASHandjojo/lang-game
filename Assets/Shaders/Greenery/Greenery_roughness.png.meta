@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Greenery_roughness_0: 6737467896315176560
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

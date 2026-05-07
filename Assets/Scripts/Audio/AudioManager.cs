@@ -29,7 +29,7 @@ public class AudioManager : MonoBehaviour
     {
         // Ambience begins when scene is created
         // InitializeAmbience(FMODEvents.instance.ambience);
-        InitializeMusic(FMODEvents.instance.testBGM);
+        InitializeMusic(FMODEvents.instance.trainBGM);
     }
 
     public void PlayOneShot(EventReference sound, Vector3 worldPos)

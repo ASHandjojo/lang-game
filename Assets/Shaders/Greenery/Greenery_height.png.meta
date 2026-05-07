@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Greenery_height_0: -6829285132752456147
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
