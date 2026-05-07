@@ -43,7 +43,23 @@ public sealed class PlayerController : MonoBehaviour
     public MovementType MovementType
     {
         get => movementType;
-        set => movementType = value;
+        set
+        {
+            anim.SetLayerWeight(anim.GetLayerIndex("Side Scroll"), value == MovementType.SideScroll ? 1.0f : 0.0f);
+            anim.SetLayerWeight(anim.GetLayerIndex("Top Down"),    value == MovementType.TopDown    ? 1.0f : 0.0f);
+
+            if (value == MovementType.SideScroll)
+            {
+                InputSystem.actions.FindActionMap("SideScrolling").Enable();
+                InputSystem.actions.FindActionMap("TopDown").Disable();
+            }
+            else
+            {
+                InputSystem.actions.FindActionMap("TopDown").Enable();
+                InputSystem.actions.FindActionMap("SideScrolling").Disable();
+            }
+            movementType = value;
+        }
     }
 
     [HideInInspector] public PlayerContext context = PlayerContext.Default;
@@ -193,12 +209,16 @@ public sealed class PlayerController : MonoBehaviour
             movementDirection = movementDirection + new Vector2(0.0f, -1.0f);
             anim.SetFloat("vertical", Mathf.Abs(movementDirection.y));
         }
+        else
+        {
+            anim.SetFloat("vertical", Mathf.Abs(movementDirection.y));
+        }
     }
 
 
     void FixedUpdate()
     {
-        rb.linearVelocity = movementDirection * movementSpeed;
+        rb.linearVelocity = new Vector3(movementDirection.x, 0.0f, movementDirection.y) * movementSpeed;
     }
 
     void Flip()

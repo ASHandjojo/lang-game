@@ -2656,6 +2656,10 @@ PrefabInstance:
       propertyPath: m_Size.z
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1527362836742324026, guid: b3cd47b1b7952ff43a303a8f547b423f, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 3748387681933907150, guid: b3cd47b1b7952ff43a303a8f547b423f, type: 3}
       propertyPath: anim
       value: 
@@ -3282,7 +3286,7 @@ MonoBehaviour:
           sound:
             obj: {fileID: 0}
             isInitialized: 0
-          hasResponse: 0
+          hasResponse: 1
           responseData:
             phoneticsStr: 
             line: 
