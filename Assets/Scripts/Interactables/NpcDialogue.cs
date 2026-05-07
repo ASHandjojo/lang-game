@@ -154,18 +154,34 @@ public class NpcDialogue : Interactable
         });
 
         backPage = notebookContents.Q<Button>("BackPage");
-        backPage.RegisterCallback<ClickEvent>((e) => LoadPage(pageNumber - 1));
+        backPage.RegisterCallback<ClickEvent>((e) =>
+            {
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.pageTurnSFX, PlayerController.Instance.transform.position);
+                LoadPage(pageNumber - 1);
+            });
 
         forwardPage = notebookContents.Q<Button>("ForwardPage");
-        forwardPage.RegisterCallback<ClickEvent>((e) => LoadPage(pageNumber + 1));
+        forwardPage.RegisterCallback<ClickEvent>((e) =>
+            {
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.pageTurnSFX, PlayerController.Instance.transform.position);
+                LoadPage(pageNumber + 1);
+            });
 
         // Back button for dictionary
         backButton = notebookContents.Q<Button>("BackButton");
-        backButton.RegisterCallback<ClickEvent>((e) => ToggleNotebook());
+        backButton.RegisterCallback<ClickEvent>((e) =>
+            {
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.pageTurnSFX, PlayerController.Instance.transform.position);
+                ToggleNotebook();
+            });
 
         // Toggle to Dictionary
         dictionaryButton = notebookContents.Q<Button>("DictionaryButton");
-        dictionaryButton.RegisterCallback<ClickEvent>((e) => ToggleJournalDictionary(true));
+        dictionaryButton.RegisterCallback<ClickEvent>((e) =>
+            {
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.pageTurnSFX, PlayerController.Instance.transform.position);
+                ToggleJournalDictionary(true);
+            });
 
         // Toggle to Journal
         journalButton = notebookContents.Q<Button>("JournalButton");
