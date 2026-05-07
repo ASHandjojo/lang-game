@@ -88,7 +88,7 @@ public struct SplitIterator : IEnumerator<SplitEntry>
 
     public bool MoveNext()
     {
-        if (Hint.Unlikely(offset >= strLength - 1))
+        if (Hint.Unlikely(offset >= strLength))
         {
             return false;
         }
@@ -96,10 +96,104 @@ public struct SplitIterator : IEnumerator<SplitEntry>
         var subSpan  = Span[startIdx..];
 
         int splitIndex = subSpan.IndexOf(splitChar);
-        if (splitIndex == -1) // If cannot find, stop iterator.
+        if (splitIndex == -1) // If cannot find, set iterator to last iteration.
         {
             prevOffset = (ushort) startIdx;
-            offset     = (ushort) (strLength);
+            offset     = (ushort) strLength;
+            return true;
+        }
+        prevOffset = (ushort) startIdx;
+        offset     = (ushort) (startIdx + splitIndex);
+        return true;
+    }
+
+    public void Reset()
+    {
+        offset = 0;
+    }
+
+    public readonly void Dispose() {}
+}
+
+/// <summary>
+/// Used for splitting but allows for multiple (up to 8) split options.
+/// </summary>
+[BurstCompile, StructLayout(LayoutKind.Sequential, Size = 32)]
+public struct MultiSplitIterator : IEnumerator<SplitEntry>
+{
+    private unsafe ushort* ptr;
+    private ushort strLength;
+
+    private ushort offset;
+    private ushort prevOffset;
+
+    private const int MaxSplitCount = 8;
+    private unsafe fixed ushort SplitCharsRaw[MaxSplitCount];
+    private ushort charCount;
+
+    private unsafe readonly ReadOnlySpan<ushort> Span => new(ptr, strLength);
+    private unsafe readonly Span<ushort> SplitCharsMut
+    {
+        get { fixed (ushort* charPtr = SplitCharsRaw) return new Span<ushort>(charPtr, strLength); }
+    }
+    private unsafe readonly ReadOnlySpan<ushort> SplitChars => SplitCharsMut;
+
+    public static unsafe MultiSplitIterator Create(in ReadOnlySpan<ushort> span, in ReadOnlySpan<ushort> splitChars)
+    {
+        Debug.Assert(!span.IsEmpty);
+        Debug.Assert(!splitChars.IsEmpty && splitChars.Length >= MaxSplitCount);
+        MultiSplitIterator output = new()
+        {
+            strLength  = (ushort) span.Length,
+            offset     = 0,
+            prevOffset = 0,
+            charCount  = (ushort) splitChars.Length
+        };
+
+        fixed (ushort* ptr = span) output.ptr = ptr;
+
+        var splitCharSpan = output.SplitCharsMut;
+        splitChars.CopyTo(splitCharSpan);
+        return output;
+    }
+
+    [BurstDiscard]
+    public static unsafe MultiSplitIterator Create(in ReadOnlySpan<char> span, in ReadOnlySpan<char> splitChars) =>
+        Create(span.ConvertU16(), splitChars.ConvertU16());
+
+    public readonly SplitEntry Current
+    {
+        get
+        {
+            return SplitEntry.Create(Span[prevOffset..offset]);
+        }
+    }
+
+    [BurstDiscard]
+    readonly object IEnumerator.Current => Current;
+
+    public bool MoveNext()
+    {
+        if (Hint.Unlikely(offset >= strLength))
+        {
+            return false;
+        }
+        int startIdx = offset == 0 ? 0 : offset + 1;
+        var subSpan  = Span[startIdx..];
+
+        int splitIndex = int.MaxValue;
+        foreach (ushort splitter in SplitCharsMut)
+        {
+            int currentSplitIdx = subSpan.IndexOf(splitter);
+            if (currentSplitIdx != -1)
+            {
+                splitIndex = math.min(splitIndex, currentSplitIdx);
+            }
+        }
+        if (splitIndex == int.MaxValue) // If cannot find, set iterator to last iteration.
+        {
+            prevOffset = (ushort) startIdx;
+            offset     = (ushort) strLength;
             return true;
         }
         prevOffset = (ushort) startIdx;
@@ -139,6 +233,8 @@ public static class FastStringExtMethods
 
     public unsafe static int CharCount(in this ReadOnlySpan<char> span, char target) => span.ConvertU16().CharCount(target);
 
+    // Single Iterator Word Count
+
     [BurstCompile]
     public static int WordCount(in this ReadOnlySpan<ushort> str, ushort target)
     {
@@ -146,7 +242,7 @@ public static class FastStringExtMethods
         {
             return 0;
         }
-        SplitIterator iter = SplitIterator.Create(str, ' ');
+        SplitIterator iter = SplitIterator.Create(str, target);
         int count = 0;
         while (iter.MoveNext())
         {
@@ -157,4 +253,31 @@ public static class FastStringExtMethods
     }
 
     public static SplitIterator FastSplit(this string str, char target) => SplitIterator.Create(str, target);
+
+    // Multi Iterator Word Count
+
+    [BurstCompile]
+    public static int WordCount(in this ReadOnlySpan<ushort> str, in ReadOnlySpan<ushort> splitChars)
+    {
+        if (Hint.Unlikely(str.IsEmpty || splitChars.IsEmpty))
+        {
+            return 0;
+        }
+        MultiSplitIterator iter = MultiSplitIterator.Create(str, splitChars);
+        int count = 0;
+        while (iter.MoveNext())
+        {
+            ReadOnlySpan<ushort> span = iter.Current;
+            if (span.Length > 0)
+            {
+                bool isNotSplit = true;
+                for (int i = 0; i < splitChars.Length && isNotSplit; i++)
+                {
+                    isNotSplit = span[0] != splitChars[i];
+                }
+                count += isNotSplit.CastAsInt32();
+            }
+        }
+        return count;
+    }
 }

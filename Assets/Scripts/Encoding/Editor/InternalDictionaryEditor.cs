@@ -32,8 +32,8 @@ public sealed class DictEntryElement : VisualElement
         rawStringField.RegisterCallback(
             (ChangeEvent<string> e) =>
             {
-                PhoneticProcessor processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
-                unicodeStrField.value       = processor.Translate(e.newValue);
+                PhoneticProcessor processor = PhoneticProcessor.Create(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
+                unicodeStrField.value       = processor.TranslateManaged(e.newValue);
             }
         );
     }

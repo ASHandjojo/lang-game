@@ -10,7 +10,7 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
 {
     private const string EncodingImportDir = "Assets/Scripts/Encoding";
     // Ligature sub table also references standard table, kind of a shortcut :)
-    private const string LigatureSubDir = EncodingImportDir + "/Loader/Ligature Sub Table.asset";
+    private const string LigatureSubDir    = EncodingImportDir + "/Loader/Ligature Sub Table.asset";
 
     public override VisualElement CreatePropertyGUI(SerializedProperty property)
     {
@@ -26,19 +26,16 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         // Input Line
         SerializedProperty lineProperty = property.FindPropertyRelative(nameof(DialogueEntry.line));
         PropertyField lineField         = new(lineProperty);
-        lineField.BindProperty(lineProperty);
         element.Add(lineField);
 
         // Sound
         SerializedProperty soundClipProperty = property.FindPropertyRelative(nameof(DialogueEntry.sound));
         PropertyField soundClipField         = new(soundClipProperty);
-        soundClipField.BindProperty(soundClipProperty);
         element.Add(soundClipField);
 
         // Response Data
         SerializedProperty responseDataProperty = property.FindPropertyRelative(nameof(DialogueEntry.responseData));
         PropertyField responseDataField = new(responseDataProperty);
-        responseDataField.BindProperty(responseDataProperty);
         responseDataField.AddToClassList("Translate");
 
         // Has Response
@@ -49,7 +46,7 @@ public sealed class DialogueEntryDrawer : PropertyDrawer
         responseDataField.RegisterCallback(
             (ChangeEvent<string> e) =>
             {
-                PhoneticProcessor processor = new(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
+                PhoneticProcessor processor = PhoneticProcessor.Create(ligatureSub.standardSignTable.entries, ligatureSub.entries, Allocator.Temp);
                 property.serializedObject.ApplyModifiedProperties();
             }
         );

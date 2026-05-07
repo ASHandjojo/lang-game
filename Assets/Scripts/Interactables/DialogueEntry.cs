@@ -9,6 +9,8 @@ public sealed class EncodingEntry : IEquatable<EncodingEntry>, IEquatable<string
     public string phoneticsStr;
     public string line; // For unicode
 
+    public string literal;
+
     public bool Equals(string rhs)          => line.Equals(rhs);
     public bool Equals(EncodingEntry rhs)   => line == rhs?.line;
     public override bool Equals(object obj) => obj is EncodingEntry rhs && Equals(rhs);

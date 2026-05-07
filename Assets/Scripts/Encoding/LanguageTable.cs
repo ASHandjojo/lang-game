@@ -17,8 +17,8 @@ public sealed class LanguageTable : MonoBehaviour
 
     private static LanguageTable Instance { get; set; }
 
-    public static ReadOnlySpan<StandardSign> StandardSigns => Instance.signTable.entries;
-    public static ReadOnlySpan<CompoundSign> CompoundSigns => Instance.ligatureSub.entries;
+    public static ReadOnlySpan<StandardSign> StandardSigns         => Instance.signTable.entries;
+    public static ReadOnlySpan<CompoundSign> CompoundSigns         => Instance.ligatureSub.entries;
     public static ref readonly PhoneticProcessor PhoneticProcessor => ref Instance.processor;
 
     void Awake()
@@ -33,11 +33,12 @@ public sealed class LanguageTable : MonoBehaviour
         DontDestroyOnLoad(this);
         Instance = this;
 
-        processor = new PhoneticProcessor(StandardSigns, CompoundSigns, Allocator.Persistent);
+        processor = PhoneticProcessor.Create(StandardSigns, CompoundSigns, Allocator.Persistent);
     }
 
     void OnDestroy()
     {
         processor.Dispose();
+        processor = default;
     }
 }

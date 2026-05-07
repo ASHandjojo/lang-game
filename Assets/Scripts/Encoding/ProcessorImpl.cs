@@ -2,24 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Unity.Burst;
 using Unity.Collections;
+using Unity.Mathematics;
 
 using UnityEngine;
 
 namespace Impl
 {
+    [BurstCompile]
     public struct SignData
     {
-        public Range range;
-        public char  unicodeChar;
+        public Range  range;
+        public ushort unicodeChar;
 
-        public SignData(in Range range, char unicodeChar)
+        public SignData(in Range range, ushort unicodeChar)
         {
             this.range       = range;
             this.unicodeChar = unicodeChar;
         }
     }
 
+    [BurstCompile]
     public struct CompoundTable : IEquatable<CompoundTable>
     {
         /// <summary>
@@ -28,13 +32,14 @@ namespace Impl
         public struct Phonetics : IEquatable<Phonetics>
         {
             private const int MaxCompoundSize = 4;
-            private unsafe fixed char Data[MaxCompoundSize];
+
+            private unsafe fixed ushort Data[MaxCompoundSize];
             private readonly ushort length;
 
-            public unsafe Phonetics(in ReadOnlySpan<char> phonetics)
+            public unsafe Phonetics(in ReadOnlySpan<ushort> phonetics)
             {
                 Debug.Assert(phonetics.Length > 0 && phonetics.Length <= MaxCompoundSize);
-                length = (byte) phonetics.Length;
+                length = (ushort) phonetics.Length;
 
                 for (int i = 0; i < length; i++)
                 {
@@ -45,27 +50,27 @@ namespace Impl
             public unsafe Phonetics(in ReadOnlySpan<int> phonetics)
             {
                 Debug.Assert(phonetics.Length > 0);
-                length = (byte) phonetics.Length;
+                length = (ushort) phonetics.Length;
 
                 for (int i = 0; i < length; i++)
                 {
-                    Data[i] = (char) phonetics[i];
+                    Data[i] = (ushort) phonetics[i];
                 }
             }
 
             public readonly int Length => length;
 
-            public unsafe readonly ReadOnlySpan<char> CompoundSpan
+            public unsafe readonly ReadOnlySpan<ushort> CompoundSpan
             {
-                get { fixed (char* ptr = Data) return new ReadOnlySpan<char>(ptr, length); }
+                get { fixed (ushort* ptr = Data) return new ReadOnlySpan<ushort>(ptr, length); }
             }
 
-            public unsafe ref readonly char this[int index]
+            public unsafe ref readonly ushort this[int index]
             {
                 get => ref Data[index];
             }
 
-            public readonly bool Equals(Phonetics other) => length == other.length && CompoundSpan.SequenceEqual(other.CompoundSpan);
+            public readonly bool Equals(Phonetics rhs) => length == rhs.length && CompoundSpan.SequenceEqual(rhs.CompoundSpan);
         }
 
         public Phonetics signData;
@@ -73,7 +78,7 @@ namespace Impl
 
         public CompoundTable(in CompoundSign sign, int index) : this(sign.mappedChars, index) { }
 
-        public CompoundTable(int[] mappedChars, int compoundIndex)
+        public CompoundTable(in ReadOnlySpan<int> mappedChars, int compoundIndex)
         {
             Debug.Assert(mappedChars.Length > 1);
             signData = new Phonetics(mappedChars);
@@ -83,6 +88,7 @@ namespace Impl
 
         public readonly bool Equals(CompoundTable other) => compoundIndex == other.compoundIndex && signData.Equals(other.signData);
 
+        [BurstDiscard]
         public override readonly string ToString()
         {
             string output = $"Compound Index: {compoundIndex}\n";
@@ -95,6 +101,7 @@ namespace Impl
         }
     }
 
+    [BurstCompile]
     public static class PhoneticsSortingMethods
     {
         /// <summary>
@@ -109,8 +116,8 @@ namespace Impl
             int min = span[0].signData.Length, max = span[0].signData.Length;
             for (int i = 0; i < span.Length; i++)
             {
-                min = Math.Min(min, span[i].signData.Length);
-                max = Math.Max(max, span[i].signData.Length);
+                min = math.min(min, span[i].signData.Length);
+                max = math.max(max, span[i].signData.Length);
             }
 
             int extent = max - min;
