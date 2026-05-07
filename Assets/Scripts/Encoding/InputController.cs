@@ -51,6 +51,7 @@ public struct KeyboardRow
             buttons[i].RegisterCallback(
                 (ClickEvent e) =>
                 {
+                    AudioManager.instance.PlayOneShot(FMODEvents.instance.keyboardSFX, PlayerController.Instance.transform.position);
                     input.phoneticsStr += text.ToLower();
                     assignCallback?.Invoke(input.phoneticsStr);
                 }
@@ -72,6 +73,7 @@ public struct KeyboardRow
         spacebar.RegisterCallback(
             (ClickEvent e) =>
             {
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.keyboardSFX, PlayerController.Instance.transform.position);
                 input.phoneticsStr += ' ';
                 assignCallback?.Invoke(input.phoneticsStr);
             }
@@ -81,6 +83,7 @@ public struct KeyboardRow
             {
                 if (input.phoneticsStr.Length > 0)
                 {
+                    AudioManager.instance.PlayOneShot(FMODEvents.instance.keyboardSFX, PlayerController.Instance.transform.position);
                     input.phoneticsStr = input.phoneticsStr[..^1];
                     assignCallback?.Invoke(input.phoneticsStr);
                 }
@@ -97,6 +100,7 @@ public struct KeyboardRow
 #endif
                 Interactable NPC = null;
                 Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out NPC));
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.keyboardSFX, PlayerController.Instance.transform.position);
                 if (NPC is NpcDialogue)
                 {
                     string unicodeStr = processor.TranslateManaged(input.phoneticsStr);
