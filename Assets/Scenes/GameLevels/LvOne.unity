@@ -3289,7 +3289,7 @@ MonoBehaviour:
         SuccIdx: 0
         FailIdx: 0
         VincentTalking: 0
-        CheckPointNode: 1
+        CheckPointNode: 0
         Entry:
           line:
             phoneticsStr: '|Guess |What |I |am |about |to |say?'
