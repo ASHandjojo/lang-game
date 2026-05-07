@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 
 using Unity.Burst;
@@ -87,4 +86,80 @@ public struct PhraseRulesManaged
     /// </summary>
     public WordType phraseType;
     public PhraseRuleManaged[] rules;
+}
+
+[BurstCompile, StructLayout(LayoutKind.Sequential, Size = 16)]
+public struct PhraseRulesUnmanaged : IDisposable
+{
+    private unsafe byte* data;
+
+    private WordType phraseType;
+    private byte     length;
+    private ushort   prefixSumOffset;
+
+    private Allocator allocator;
+
+    public unsafe readonly bool IsValid => data != null && length > 0 && prefixSumOffset > 0;
+
+    private unsafe readonly Span<int> PrefixMut      => new(data, length + 1);
+    private unsafe readonly Span<RuleEntry> RulesMut => new(data + prefixSumOffset, PrefixMut[^1]);
+
+    private unsafe readonly Span<RuleEntry> GetRulesMut(int index)
+    {
+        var prefix = PrefixMut;
+        return RulesMut[prefix[index]..prefix[index + 1]];
+    }
+
+    public unsafe readonly ReadOnlySpan<RuleEntry> GetRules(int index) => GetRulesMut(index);
+
+    [BurstDiscard]
+    public static unsafe PhraseRulesUnmanaged Create(WordType phraseType, in ReadOnlySpan<PhraseRuleManaged> rules, Allocator allocator)
+    {
+        Debug.Assert(phraseType != WordType.Unknown && phraseType != WordType.TypeCount);
+        Debug.Assert(rules.Length > 0);
+
+        int prefixSumBytes = (rules.Length + 1) * sizeof(int);
+        PhraseRulesUnmanaged output = new()
+        {
+            phraseType      = phraseType,
+            length          = (byte)   rules.Length,
+            prefixSumOffset = (ushort) prefixSumBytes
+        };
+        int ruleEntryCount = 0;
+        foreach (PhraseRuleManaged rule in rules)
+        {
+            Debug.Assert(rule.entries.Length > 0);
+            ruleEntryCount += rule.entries.Length;
+        }
+        int ruleEntryBytes = ruleEntryCount * sizeof(RuleEntry);
+
+        output.data   = (byte*) UnsafeUtility.MallocTracked(prefixSumBytes + ruleEntryBytes, UnsafeUtility.AlignOf<RuleEntry>(), allocator, 0);
+        var prefixMut = output.PrefixMut;
+        // Calculating prefix sum
+        for (int i = 0, value = 0; i < rules.Length; i++)
+        {
+            prefixMut[i] = value;
+            value       += rules[i].entries.Length;
+        }
+        prefixMut[^1] = ruleEntryCount;
+
+        // Init rules
+        for (int i = 0; i < rules.Length; i++)
+        {
+            var ruleSpan = output.GetRulesMut(i);
+            rules[i].entries.CopyTo(ruleSpan);
+        }
+
+        return output;
+    }
+
+    public unsafe void Dispose()
+    {
+        UnsafeUtility.FreeTracked(data, allocator);
+        data      = null;
+        allocator = default;
+
+        length          = 0;
+        prefixSumOffset = 0;
+    }
 }
