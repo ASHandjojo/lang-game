@@ -129,7 +129,7 @@ MonoBehaviour:
       unicodeString: "\u0103i"
       englishTranslation: Big
     - rawString: cai
-      unicodeString: "c\xA2"
+      unicodeString: "\xBFi"
       englishTranslation: "Small\r"
     - rawString: theia
       unicodeString: "\xD4\xA9"

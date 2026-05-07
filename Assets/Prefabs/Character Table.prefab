@@ -46,3 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   signTable: {fileID: 11400000, guid: 98165f17bdca7944ab0a9394d0e5bafd, type: 2}
   ligatureSub: {fileID: 11400000, guid: 77015b68c3111de409d5641b8c8d11d3, type: 2}
+  grammarRules: {fileID: 11400000, guid: 7fc83555ae3b8d34c890b844a8e12f78, type: 2}

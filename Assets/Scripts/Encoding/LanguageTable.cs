@@ -11,9 +11,12 @@ using UnityEngine.UIElements;
 public sealed class LanguageTable : MonoBehaviour
 {
     [SerializeField] private StandardSignTable signTable;
-    [SerializeField] private LigatureSub ligatureSub;
+    [SerializeField] private LigatureSub       ligatureSub;
+    [SerializeField] private GrammarRuleSO     grammarRules;
 
     private PhoneticProcessor processor;
+    // NOTE: May be temp location
+    private NativeArray<PhraseRulesUnmanaged> phraseRules;
 
     private static LanguageTable Instance { get; set; }
 
@@ -33,12 +36,25 @@ public sealed class LanguageTable : MonoBehaviour
         DontDestroyOnLoad(this);
         Instance = this;
 
-        processor = PhoneticProcessor.Create(StandardSigns, CompoundSigns, Allocator.Persistent);
+        processor   = PhoneticProcessor.Create(StandardSigns, CompoundSigns, Allocator.Persistent);
+        phraseRules = new NativeArray<PhraseRulesUnmanaged>(grammarRules.Rules.Length, Allocator.Persistent);
+
+        for (int i = 0; i < phraseRules.Length; i++)
+        {
+            phraseRules[i] = PhraseRulesUnmanaged.Create(grammarRules.Rules[i].phraseType, grammarRules.Rules[i].rules, Allocator.Persistent);
+        }
     }
 
     void OnDestroy()
     {
         processor.Dispose();
         processor = default;
+
+        for (int i = 0; i < phraseRules.Length; i++)
+        {
+            phraseRules[i].Dispose();
+        }
+        phraseRules.Dispose();
+        phraseRules = default;
     }
 }

@@ -96,13 +96,17 @@ public struct PhraseRulesUnmanaged : IDisposable
     private WordType phraseType;
     private byte     length;
     private ushort   prefixSumOffset;
+    private ushort   headIndexOffset;
 
-    private Allocator allocator;
+    private ushort allocator;
+
+    public readonly WordType PhraseType => phraseType;
 
     public unsafe readonly bool IsValid => data != null && length > 0 && prefixSumOffset > 0;
 
     private unsafe readonly Span<int> PrefixMut      => new(data, length + 1);
-    private unsafe readonly Span<RuleEntry> RulesMut => new(data + prefixSumOffset, PrefixMut[^1]);
+    private unsafe readonly Span<int> HeadIndicesMut => new(data + prefixSumOffset, length);
+    private unsafe readonly Span<RuleEntry> RulesMut => new(data + headIndexOffset, PrefixMut[^1]);
 
     private unsafe readonly Span<RuleEntry> GetRulesMut(int index)
     {
@@ -117,13 +121,18 @@ public struct PhraseRulesUnmanaged : IDisposable
     {
         Debug.Assert(phraseType != WordType.Unknown && phraseType != WordType.TypeCount);
         Debug.Assert(rules.Length > 0);
-
         int prefixSumBytes = (rules.Length + 1) * sizeof(int);
+        int headIndexBytes = rules.Length * sizeof(int);
+
         PhraseRulesUnmanaged output = new()
         {
             phraseType      = phraseType,
             length          = (byte)   rules.Length,
-            prefixSumOffset = (ushort) prefixSumBytes
+
+            prefixSumOffset = (ushort) prefixSumBytes,
+            headIndexOffset = (ushort) (prefixSumBytes + headIndexBytes),
+
+            allocator = (ushort) allocator
         };
         int ruleEntryCount = 0;
         foreach (PhraseRuleManaged rule in rules)
@@ -133,8 +142,9 @@ public struct PhraseRulesUnmanaged : IDisposable
         }
         int ruleEntryBytes = ruleEntryCount * sizeof(RuleEntry);
 
-        output.data   = (byte*) UnsafeUtility.MallocTracked(prefixSumBytes + ruleEntryBytes, UnsafeUtility.AlignOf<RuleEntry>(), allocator, 0);
-        var prefixMut = output.PrefixMut;
+        int totalBytes = prefixSumBytes + ruleEntryBytes + headIndexBytes;
+        output.data    = (byte*) UnsafeUtility.MallocTracked(totalBytes, UnsafeUtility.AlignOf<RuleEntry>(), allocator, 0);
+        var prefixMut  = output.PrefixMut;
         // Calculating prefix sum
         for (int i = 0, value = 0; i < rules.Length; i++)
         {
@@ -143,11 +153,14 @@ public struct PhraseRulesUnmanaged : IDisposable
         }
         prefixMut[^1] = ruleEntryCount;
 
+        var headIndices = output.HeadIndicesMut;
         // Init rules
         for (int i = 0; i < rules.Length; i++)
         {
             var ruleSpan = output.GetRulesMut(i);
             rules[i].entries.CopyTo(ruleSpan);
+
+            headIndices[i] = rules[i].headIndex;
         }
 
         return output;
@@ -155,7 +168,7 @@ public struct PhraseRulesUnmanaged : IDisposable
 
     public unsafe void Dispose()
     {
-        UnsafeUtility.FreeTracked(data, allocator);
+        UnsafeUtility.FreeTracked(data, (Allocator) allocator);
         data      = null;
         allocator = default;
 
