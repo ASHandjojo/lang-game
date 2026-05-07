@@ -408,12 +408,13 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         SerializedProperty toGoToIds = property.FindPropertyRelative(nameof(DialogueTreeNode.toGoToIds));
         PropertyField toGoToIdsProp  = new();
         toGoToIdsProp.BindProperty(toGoToIds);
-        //element.Add(toGoToIdsProp);
+        element.Add(toGoToIdsProp);
 
         SerializedProperty toGoToIdxs = property.FindPropertyRelative(nameof(DialogueTreeNode.toGoToIdxs));
-        PropertyField toGoToIdxsProp = new();
-        toGoToIdxsProp.enabledSelf = false;
+        PropertyField toGoToIdxsProp  = new();
+        toGoToIdxsProp.enabledSelf    = false;
         toGoToIdxsProp.BindProperty(toGoToIdxs);
+        //element.Add(toGoToIdxsProp);
 
         SerializedProperty toCheckToGo = property.FindPropertyRelative(nameof(DialogueTreeNode.toCheckToGo));
         PropertyField toCheckToGoProp = new();
