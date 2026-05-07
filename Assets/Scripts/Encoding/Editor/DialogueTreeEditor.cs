@@ -1,27 +1,11 @@
-
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-
 
 using UnityEngine;
 using UnityEngine.UIElements;
 
 using UnityEditor;
 using UnityEditor.UIElements;
-
-using Serialization;
-using UnityEditor.Rendering;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine.Rendering;
-using System.Drawing.Printing;
-using System.Xml;
-//using System.Diagnostics;
-using System.Data;
-
 
 [CustomPropertyDrawer(typeof(DialogueTreeList))]
 internal sealed class DialogueTreeListDrawer : PropertyDrawer
@@ -439,14 +423,14 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         // succIdxProp.style.visibility = Visibility.Hidden;
         // succIdxProp.style.display = DisplayStyle.None;
         succIdxProp.enabledSelf = false;
-        element.Add(succIdxProp);
+        //element.Add(succIdxProp);
 
         SerializedProperty failIdxp = property.FindPropertyRelative(nameof(DialogueTreeNode.FailIdx));
         PropertyField failIdxProp = new(failIdxp);
         // failIdxProp.style.visibility = Visibility.Hidden;
         // failIdxProp.style.display = DisplayStyle.None;
         failIdxProp.enabledSelf = false;
-        element.Add(failIdxProp);
+        //element.Add(failIdxProp);
 
         SerializedProperty succIdp = property.FindPropertyRelative(nameof(DialogueTreeNode.SuccId));
         IntegerField succIdProp = new();
@@ -463,19 +447,18 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         SerializedProperty toGoToIds = property.FindPropertyRelative(nameof(DialogueTreeNode.toGoToIds));
         PropertyField toGoToIdsProp = new();
         toGoToIdsProp.BindProperty(toGoToIds);
-        element.Add(toGoToIdsProp);
-
+        //element.Add(toGoToIdsProp);
 
         SerializedProperty toGoToIdxs = property.FindPropertyRelative(nameof(DialogueTreeNode.toGoToIdxs));
         PropertyField toGoToIdxsProp = new();
         toGoToIdxsProp.enabledSelf = false;
         toGoToIdxsProp.BindProperty(toGoToIdxs);
-        element.Add(toGoToIdxsProp);
+        //element.Add(toGoToIdxsProp);
 
         SerializedProperty toCheckToGo = property.FindPropertyRelative(nameof(DialogueTreeNode.toCheckToGo));
         PropertyField toCheckToGoProp = new();
         toCheckToGoProp.BindProperty(toCheckToGo);
-        element.Add(toCheckToGoProp);
+        //element.Add(toCheckToGoProp);
 
         
 
@@ -500,7 +483,6 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         };
         finalize.clicked += () =>
         {
-            
             if (toGoToIds.arraySize != toCheckToGo.arraySize)
             {
                 // modify toGoToIdxs to be better
@@ -511,13 +493,13 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
                         toCheckToGo.InsertArrayElementAtIndex(toCheckToGo.arraySize); 
                     }
                     
-                } else
+                }
+                else
                 {
                     while (toCheckToGo.arraySize > toGoToIds.arraySize)
                     {
                         toCheckToGo.DeleteArrayElementAtIndex(toCheckToGo.arraySize - 1);   
                     }
-                    
                 }
 
                 EditorUtility.SetDirty(property.serializedObject.targetObject);
@@ -533,7 +515,8 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
                         toGoToIdxs.InsertArrayElementAtIndex(toGoToIdxs.arraySize); 
                     }
                     
-                } else
+                }
+                else
                 {
                     while (toGoToIdxs.arraySize > toGoToIds.arraySize)
                     {
@@ -584,9 +567,6 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         PropertyField checkProp = new(check);
         element.Add(checkProp);
 
-        
-
-
         SerializedProperty entryp = property.FindPropertyRelative(nameof(DialogueTreeNode.Entry));
         PropertyField entryProp = new(entryp);
         element.Add(entryProp);
@@ -597,31 +577,24 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         succIdProp.RegisterCallback((ChangeEvent<int> e) =>
         {
             //Debug.Log("Array Size: " + parIds.arraySize);
-            if (((NodeType)nodeTypeProp.intValue & NodeType.PlayerInput) != 0)
+            if (((NodeType) nodeTypeProp.intValue & NodeType.PlayerInput) != 0)
             {
-                bool found = false;
-                for (int i = 0; i < parIds.arraySize; i++)
+                bool isFound = false;
+                for (int i = 0; i < parIds.arraySize && !isFound; i++)
                 {
                     SerializedProperty ele = parIds.GetArrayElementAtIndex(i);
                     if (ele.intValue == e.newValue)
                     {
                         SerializedProperty eleIdx = parIdxs.GetArrayElementAtIndex(i);
-                        // found the id
-                        found = true;
-
-                        // set the index appropriately
-                        succIdxp.intValue = eleIdx.intValue;
-
-                        break;
+                        succIdxp.intValue         = eleIdx.intValue;
+                        isFound = true;
                     }
                 }
 
-                Debug.Assert(found, "Error: New Success Id " + e.newValue + " Does Not Exist + Node Type is " + nodeTypeProp.intValue);
+                Debug.Assert(isFound, "Error: New Success Id " + e.newValue + " Does Not Exist + Node Type is " + nodeTypeProp.intValue);
                 EditorUtility.SetDirty(property.serializedObject.targetObject);
                 property.serializedObject.ApplyModifiedProperties();
             }
-            
-            
         });
 
         // This will detect a change in the fail/default id property and update its corresponding index
@@ -653,19 +626,15 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
             }  
         });
 
-
-
-
         // This detects a change in the node type property and will hide entries that don't need to be shown!
         nodeTypeProp2.RegisterCallback((ChangeEvent<Enum> e) =>
         {
             //Debug.Log("Bye");
             NodeType newtype = (NodeType) e.newValue;
             Visibility visibilityState1 = Visibility.Visible;
-            DisplayStyle displayStyle1 = DisplayStyle.Flex;
+            DisplayStyle displayStyle1  = DisplayStyle.Flex;
             Visibility visibilityState2 = Visibility.Visible;
-            DisplayStyle displayStyle2 = DisplayStyle.Flex;
-            //Debug.Log("EnumType: " + nodeTypeProp.intValue);
+            DisplayStyle displayStyle2  = DisplayStyle.Flex;
             if (newtype == NodeType.Default || newtype == NodeType.End || ((newtype & NodeType.Multiheaded) != 0))
             {
                 visibilityState1 = Visibility.Hidden;
@@ -699,25 +668,25 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
             if ((newtype & NodeType.Multiheaded) != 0)
             {
                 // show all ids
-                toGoToIdsProp.style.visibility = Visibility.Visible;
-                toGoToIdsProp.style.display = DisplayStyle.Flex;
-                toGoToIdxsProp.style.visibility = Visibility.Visible;
-                toGoToIdxsProp.style.display = DisplayStyle.Flex;
+                toGoToIdsProp.style.visibility   = Visibility.Visible;
+                toGoToIdsProp.style.display      = DisplayStyle.Flex;
+                toGoToIdxsProp.style.visibility  = Visibility.Visible;
+                toGoToIdxsProp.style.display     = DisplayStyle.Flex;
                 toCheckToGoProp.style.visibility = Visibility.Visible;
-                toCheckToGoProp.style.display = DisplayStyle.Flex;
-                finalize.style.visibility = Visibility.Visible;
-                finalize.style.display = DisplayStyle.Flex;
+                toCheckToGoProp.style.display    = DisplayStyle.Flex;
+                finalize.style.visibility        = Visibility.Visible;
+                finalize.style.display           = DisplayStyle.Flex;
             } else
             {
                 // hide list of ids
-                toGoToIdsProp.style.visibility = Visibility.Hidden;
-                toGoToIdsProp.style.display = DisplayStyle.None;
-                toGoToIdxsProp.style.visibility = Visibility.Hidden;
-                toGoToIdxsProp.style.display = DisplayStyle.None;
+                toGoToIdsProp.style.visibility   = Visibility.Hidden;
+                toGoToIdsProp.style.display      = DisplayStyle.None;
+                toGoToIdxsProp.style.visibility  = Visibility.Hidden;
+                toGoToIdxsProp.style.display     = DisplayStyle.None;
                 toCheckToGoProp.style.visibility = Visibility.Hidden;
-                toCheckToGoProp.style.display = DisplayStyle.None;
-                finalize.style.visibility = Visibility.Hidden;
-                finalize.style.display = DisplayStyle.None;
+                toCheckToGoProp.style.display    = DisplayStyle.None;
+                finalize.style.visibility        = Visibility.Hidden;
+                finalize.style.display           = DisplayStyle.None;
                 
             }
 
@@ -727,14 +696,14 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
                 checkProp.style.display = DisplayStyle.None;
                 vincTalkProp.style.visibility = Visibility.Hidden;
                 vincTalkProp.style.display = DisplayStyle.None;
-                check.boolValue = false;
+                check.boolValue    = false;
                 vincTalk.boolValue = false;
             } else
             {
-                checkProp.style.visibility = Visibility.Visible;
-                checkProp.style.display = DisplayStyle.Flex;
+                checkProp.style.visibility    = Visibility.Visible;
+                checkProp.style.display       = DisplayStyle.Flex;
                 vincTalkProp.style.visibility = Visibility.Visible;
-                vincTalkProp.style.display = DisplayStyle.Flex;
+                vincTalkProp.style.display    = DisplayStyle.Flex;
                 
             }
 
@@ -742,10 +711,6 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
             EditorUtility.SetDirty(property.serializedObject.targetObject);
             property.serializedObject.ApplyModifiedProperties();
         });
-
-
-
-
 
         return element;
         

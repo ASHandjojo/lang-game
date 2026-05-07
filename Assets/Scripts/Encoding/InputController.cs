@@ -254,8 +254,8 @@ public sealed class InputController : MonoBehaviour
 
         InputActionMap keyboardSpecialActionMap = InputSystem.actions.FindActionMap("KeyboardSpecial");
         backspaceAction = keyboardSpecialActionMap.FindAction("Backspace");
-        enterAction = keyboardSpecialActionMap.FindAction("Enter");
-        spaceAction = keyboardSpecialActionMap.FindAction("Space");
+        enterAction     = keyboardSpecialActionMap.FindAction("Enter");
+        spaceAction     = keyboardSpecialActionMap.FindAction("Space");
     }
 
     void Start()
@@ -284,6 +284,7 @@ public sealed class InputController : MonoBehaviour
 
     public void CloseKeyboard()
     {
+        keyboardUI.ClearStrings();
         keyboardUI.style.visibility = Visibility.Hidden;
         keyboardUI.style.display    = DisplayStyle.None;
 

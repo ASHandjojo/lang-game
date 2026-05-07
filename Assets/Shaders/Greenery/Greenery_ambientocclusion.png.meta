@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Greenery_ambientocclusion_0: 4882112907389205370
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -756,6 +756,7 @@ MonoBehaviour:
     obj: {fileID: 0}
     isInitialized: 0
   internalDict: {fileID: 11400000, guid: 599cf157494825b4ea3ff390363cf038, type: 2}
+  TopDown: 0
   playerJournalSize: 50
 --- !u!1 &1074906769
 GameObject:
@@ -1047,31 +1048,6 @@ MonoBehaviour:
   npcName: Gate
   npcImage: {fileID: 0}
   vincentImage: {fileID: 0}
-  entries:
-  - line:
-      phoneticsStr: h
-      line: h
-      literal: 
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 0
-    responseData:
-      phoneticsStr: m
-      line: m
-      literal: 
-  - line:
-      phoneticsStr: h
-      line: h
-      literal: 
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 1
-    responseData:
-      phoneticsStr: m
-      line: m
-      literal: 
   npcTree:
     NpcOptions: []
   sceneLoader: {fileID: 1367662897}
@@ -3235,33 +3211,6 @@ MonoBehaviour:
   npcName: Florence
   npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   vincentImage: {fileID: 2800000, guid: 4d72ad6efe8d642448375a619630dc4a, type: 3}
-  entries:
-  - line:
-      phoneticsStr: '|What''s |that |shimmery |thing?'
-      line: <font="Harmony SDF">What's</font> <font="Harmony SDF">that</font> <font="Harmony
-        SDF">shimmery</font> <font="Harmony SDF">thing?</font>
-      literal: 
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 0
-    responseData:
-      phoneticsStr: ngogu melaia melai
-      line: "\u0117\xC8 \u0101\u010A\xA9 \u0101\u010Ai"
-      literal: 
-  - line:
-      phoneticsStr: '|Oh, |that''s |a hgaimei'
-      line: "<font=\"Harmony SDF\">Oh,</font> <font=\"Harmony SDF\">that's</font>
-        <font=\"Harmony SDF\">a</font> \xDDi\u0101i"
-      literal: 
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 1
-    responseData:
-      phoneticsStr: melaia wabi bele chie
-      line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
-      literal: 
   npcTree:
     NpcOptions:
     - ConditionalValue: 0
@@ -3289,14 +3238,14 @@ MonoBehaviour:
         SuccIdx: 0
         FailIdx: 0
         VincentTalking: 0
-        CheckPointNode: 1
+        CheckPointNode: 0
         Entry:
           line:
-            phoneticsStr: '|Guess |What |I |am |about |to |say?'
-            line: '|Guess |What |I |am |about |to |say?'
+            phoneticsStr: '|Guess |What |I |am |about |to |say'
+            line: '|Guess |What |I |am |about |to |say'
             literal: <font="Harmony SDF">Guess</font> <font="Harmony SDF">What</font>
               <font="Harmony SDF">I</font> <font="Harmony SDF">am</font> <font="Harmony
-              SDF">about</font> <font="Harmony SDF">to</font> <font="Harmony SDF">say?</font>
+              SDF">about</font> <font="Harmony SDF">to</font> <font="Harmony SDF">say</font>
           sound:
             obj: {fileID: 0}
             isInitialized: 0
