@@ -2067,11 +2067,11 @@ MonoBehaviour:
     Path: event:/dialogue_forward
   <dictionaryOpenSFX>k__BackingField:
     Guid:
-      Data1: -381128460
-      Data2: 1116920720
-      Data3: -628816195
-      Data4: 1682158369
-    Path: event:/dict_open
+      Data1: -2138590639
+      Data2: 1228160483
+      Data3: 1825260203
+      Data4: 485584993
+    Path: event:/dictionary_page
   <dictionaryCloseSFX>k__BackingField:
     Guid:
       Data1: 261729441
