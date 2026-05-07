@@ -175,10 +175,10 @@ public sealed class KeyboardUI : VisualElement
     public void Submit()
     {
 #if UNITY_EDITOR
-                if (!Application.isPlaying)
-                {
-                    return;
-                }
+        if (!Application.isPlaying)
+        {
+            return;
+        }
 #endif
         Interactable NPC = null;
         Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out NPC));

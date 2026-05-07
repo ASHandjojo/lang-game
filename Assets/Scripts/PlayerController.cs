@@ -15,6 +15,12 @@ public enum PlayerContext : int
     InDictionary = 16
 }
 
+public enum MovementType : int
+{
+    SideScroll = 0,
+    TopDown    = 1
+}
+
 [RequireComponent(typeof(SpriteRenderer), typeof(Collider), typeof(Rigidbody)),
     RequireComponent(typeof(Animator))]
 public sealed class PlayerController : MonoBehaviour
@@ -25,18 +31,23 @@ public sealed class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Collider playerCollider;
 
-    private InputAction moveAction;
+    private InputAction moveSideScrollAction, moveTopDownAction;
     private InputAction interactAction;
 
     private Vector2 movementDirection;
     private bool facingRight = true, canMove = true;
 
+    private MovementType movementType = MovementType.SideScroll;
+    public MovementType MovementType
+    {
+        get => movementType;
+        set => movementType = value;
+    }
+
     [HideInInspector] public PlayerContext context = PlayerContext.Default;
     [HideInInspector] public OptionalComponent<Interactable> currentInteraction;
 
     [SerializeField] private InternalDictionary internalDict;
-
-    public bool TopDown = false;
 
     public static InternalDictionary InternalDict => Instance.internalDict;
 
@@ -95,20 +106,9 @@ public sealed class PlayerController : MonoBehaviour
             GameState.InitializeEmptyDictionary(internalDict);
         }
 
-        if (TopDown)
-        {
-            moveAction = InputSystem.actions.FindActionMap("TopDown").FindAction("Move");
-        }
-        else
-        {
-            moveAction = InputSystem.actions.FindAction("Move");
-        }
+        moveSideScrollAction = InputSystem.actions.FindActionMap("SideScrolling").FindAction("Move");
+        moveTopDownAction    = InputSystem.actions.FindActionMap("TopDown").FindAction("Move");
         interactAction = InputSystem.actions.FindAction("Interact");
-    }
-
-    private void Start()
-    {
-
     }
 
     void Update()
@@ -149,12 +149,13 @@ public sealed class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        Vector2 moveValue = moveAction.ReadValue<Vector2>();
+        InputAction moveAction = MovementType == MovementType.SideScroll ? moveSideScrollAction : moveTopDownAction;
+        Vector2 moveValue      = moveAction.ReadValue<Vector2>();
         if (moveValue.x > 0) // Right movement
         {
             movementDirection = new Vector2(1.0f, 0.0f);
             anim.SetFloat("horizontal", Mathf.Abs(movementDirection.x));
-            if (!facingRight && movementDirection.x > 0)
+            if (MovementType == MovementType.SideScroll && !facingRight && movementDirection.x > 0)
             {
                 Flip();
             }
@@ -163,7 +164,7 @@ public sealed class PlayerController : MonoBehaviour
         {
             movementDirection = new Vector2(-1.0f, 0.0f);
             anim.SetFloat("horizontal", Mathf.Abs(movementDirection.x));
-            if (facingRight && movementDirection.x < 0)
+            if (MovementType == MovementType.SideScroll && facingRight && movementDirection.x < 0)
             {
                 Flip();
             }
@@ -177,10 +178,12 @@ public sealed class PlayerController : MonoBehaviour
         if (moveValue.y > 0) // Up movement
         {
             movementDirection = movementDirection + new Vector2(0.0f, 1.0f);
+            anim.SetFloat("vertical", Mathf.Abs(movementDirection.y));
         }
         else if (moveValue.y < 0) // Down movement
         {
             movementDirection = movementDirection + new Vector2(0.0f, -1.0f);
+            anim.SetFloat("vertical", Mathf.Abs(movementDirection.y));
         }
     }
 
