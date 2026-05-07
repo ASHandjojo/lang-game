@@ -37,6 +37,8 @@ public sealed class PlayerController : MonoBehaviour
     private Vector2 movementDirection;
     private bool facingRight = true, canMove = true;
 
+    private Vector3 buildingSpawnPoint;
+
     private MovementType movementType = MovementType.SideScroll;
     public MovementType MovementType
     {
@@ -65,6 +67,12 @@ public sealed class PlayerController : MonoBehaviour
             }
             canMove = value;
         }
+    }
+
+    public Vector3 BuildingSpawnPoint
+    {
+        get => buildingSpawnPoint;
+        set => buildingSpawnPoint = value;
     }
 
     // Dictionary
