@@ -141,6 +141,22 @@ MonoBehaviour:
   scale:
     m_OverrideState: 1
     m_Value: 1
+--- !u!114 &-5657519063180085988
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc0919dccbcbd44c83ccef496a01c72, type: 3}
+  m_Name: LineartVolumeComponent
+  m_EditorClassIdentifier: 
+  active: 1
+  threshold:
+    m_OverrideState: 1
+    m_Value: 0.12
 --- !u!114 &-4114969054779324625
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -491,6 +507,7 @@ MonoBehaviour:
   - {fileID: -8356447629210161400}
   - {fileID: -321274798940209563}
   - {fileID: -7968723455679547462}
+  - {fileID: -5657519063180085988}
 --- !u!114 &1711478689103139494
 MonoBehaviour:
   m_ObjectHideFlags: 3

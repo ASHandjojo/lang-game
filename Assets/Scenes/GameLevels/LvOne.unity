@@ -756,6 +756,7 @@ MonoBehaviour:
     obj: {fileID: 0}
     isInitialized: 0
   internalDict: {fileID: 11400000, guid: 599cf157494825b4ea3ff390363cf038, type: 2}
+  TopDown: 0
   playerJournalSize: 50
 --- !u!1 &1074906769
 GameObject:
@@ -998,31 +999,11 @@ MonoBehaviour:
     name: 
     image: {fileID: 0}
   dialogueTreeAsset: {fileID: 9197481963319205126, guid: 54f61cebcc8fa1e47bde4d95bac737ef, type: 3}
-  entries:
-  - line:
-      phoneticsStr: g
-      line: g
-      literal: g
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 0
-    responseData:
-      phoneticsStr: m
-      line: m
-      literal: 
-  - line:
-      phoneticsStr: h
-      line: h
-      literal: h
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 1
-    responseData:
-      phoneticsStr: m
-      line: m
-      literal: m
+  npcName: Gate
+  npcImage: {fileID: 0}
+  vincentImage: {fileID: 0}
+  npcTree:
+    NpcOptions: []
   sceneLoader: {fileID: 1367662897}
   nextScene:
     name: TestNextLv
@@ -3181,33 +3162,152 @@ MonoBehaviour:
     name: Florence
     image: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
   dialogueTreeAsset: {fileID: 9197481963319205126, guid: 54f61cebcc8fa1e47bde4d95bac737ef, type: 3}
-  entries:
-  - line:
-      phoneticsStr: '|What''s |that |shimmery |thing?'
-      line: '|What''s |that |shimmery |thing?'
-      literal: <font="Harmony SDF">What's</font> <font="Harmony SDF">that</font>
-        <font="Harmony SDF">shimmery</font> <font="Harmony SDF">thing?</font>
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 0
-    responseData:
-      phoneticsStr: ngogu melaia melai
-      line: "\u0117\xC8 \u0101\u010A\xA9 \u0101\u010Ai"
-      literal: 
-  - line:
-      phoneticsStr: '|Oh, |that''s |a hgaimei'
-      line: "|Oh, |that's |a \xDDi\u0101i"
-      literal: "<font=\"Harmony SDF\">Oh,</font> <font=\"Harmony SDF\">that's</font>
-        <font=\"Harmony SDF\">a</font> \xDDi\u0101i"
-    sound:
-      obj: {fileID: 0}
-      isInitialized: 0
-    hasResponse: 0
-    responseData:
-      phoneticsStr: melaia wabi bele chie
-      line: "\u0101\u010A\xA9 wa\xBC \xBB\u010B c\xDAe"
-      literal: 
+  npcName: Florence
+  npcImage: {fileID: 2800000, guid: fe5296ddfb73dbb4baf80d62c00602ec, type: 3}
+  vincentImage: {fileID: 2800000, guid: 4d72ad6efe8d642448375a619630dc4a, type: 3}
+  npcTree:
+    NpcOptions:
+    - ConditionalValue: 0
+      startingId: 0
+      startIdx: 0
+      Nodes:
+      - NodeId: 0
+        Type: 38
+        SuccId: 0
+        FailId: 0
+        parentIds: 00000000f5f32a6d96f51968
+        parentIdxs: 000000000100000002000000
+        toGoToIds: 0000000096f51968f5f32a6d
+        toGoToIdxs: 000000000200000001000000
+        toCheckToGo:
+        - phoneticsStr: ++++
+          line: ++++
+          literal: ++++
+        - phoneticsStr: aaaa
+          line: aaaa
+          literal: aaaa
+        - phoneticsStr: eeee
+          line: eeee
+          literal: eeee
+        SuccIdx: 0
+        FailIdx: 0
+        VincentTalking: 0
+        CheckPointNode: 0
+        Entry:
+          line:
+            phoneticsStr: '|Guess |What |I |am |about |to |say'
+            line: '|Guess |What |I |am |about |to |say'
+            literal: <font="Harmony SDF">Guess</font> <font="Harmony SDF">What</font>
+              <font="Harmony SDF">I</font> <font="Harmony SDF">am</font> <font="Harmony
+              SDF">about</font> <font="Harmony SDF">to</font> <font="Harmony SDF">say</font>
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 0
+          responseData:
+            phoneticsStr: 
+            line: 
+            literal: 
+      - NodeId: 1831531509
+        Type: 9
+        SuccId: 0
+        FailId: 0
+        parentIds: 00000000f5f32a6d96f51968
+        parentIdxs: 000000000100000002000000
+        toGoToIds: 
+        toGoToIdxs: 
+        toCheckToGo: []
+        SuccIdx: 0
+        FailIdx: 0
+        VincentTalking: 0
+        CheckPointNode: 0
+        Entry:
+          line:
+            phoneticsStr: '|Good |Job!'
+            line: '|Good |Job!'
+            literal: <font="Harmony SDF">Good</font> <font="Harmony SDF">Job!</font>
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 0
+          responseData:
+            phoneticsStr: 
+            line: 
+            literal: 
+      - NodeId: 1746531734
+        Type: 9
+        SuccId: 0
+        FailId: 0
+        parentIds: 00000000f5f32a6d96f51968
+        parentIdxs: 000000000100000002000000
+        toGoToIds: 
+        toGoToIdxs: 
+        toCheckToGo: []
+        SuccIdx: 0
+        FailIdx: 0
+        VincentTalking: 0
+        CheckPointNode: 0
+        Entry:
+          line:
+            phoneticsStr: aaaa
+            line: aaaa
+            literal: aaaa
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 0
+          responseData:
+            phoneticsStr: 
+            line: 
+            literal: 
+      NumNodes: 3
+      CurrNode: 0
+--- !u!61 &1988571624
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988571619}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.06832516, y: -0.10123396}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.83, y: 8.7}
+    newSize: {x: 2.83, y: 8.7}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 4.583271, y: 8.250646}
+  m_EdgeRadius: 0
 --- !u!212 &1988571625
 SpriteRenderer:
   m_ObjectHideFlags: 0
