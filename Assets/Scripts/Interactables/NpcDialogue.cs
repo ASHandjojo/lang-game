@@ -24,15 +24,11 @@ public class NpcDialogue : Interactable
     protected DialogueBox dialogueBox;
 
     protected int index = 0;
-    [SerializeField] private string npcName;
+    [SerializeField] private string    npcName;
     [SerializeField] private Texture2D npcImage;
     [SerializeField] private Texture2D vincentImage;
 
-    //private int index = 0; 
-
-    [Tooltip("Single lines shouldn't exceed 150 characters/20 words.")]
-    [SerializeField] private DialogueEntry[] entries;
-    [SerializeField] private DialogueTree npcTree = new DialogueTree();
+    [SerializeField] private DialogueTree npcTree;
 
     private VisualElement notebookContents;
     private Button notebookButton;
@@ -55,8 +51,6 @@ public class NpcDialogue : Interactable
     private bool journalOrDict = true; // true: dictionary, false: journal, will open by default
 
     public override PlayerContext TargetContext { get => PlayerContext.Interacting | PlayerContext.Dialogue; }
-
-    
 
     public bool TryCheckInput(string content)
     {
@@ -206,9 +200,6 @@ public class NpcDialogue : Interactable
             {
                 EchoDialogueError(errstat);
             }
-
-            
-
             //UpdateForVincentTalking();
 
             yield return NextLine();
@@ -262,50 +253,33 @@ public class NpcDialogue : Interactable
         yield return OnLast(); // NOTE: This WILL have to be moved/replaced w/ Dialogue Tree. Same with OnLast
     }
 
-   
-
     private IEnumerator NextLine()
     {
-        //Debug.Log("Next Line Called");
         if (!npcTree.InDialogue()) // If we are currently not in dialogue, end it!
         {
             yield return EndDialogue();
         }
         else
         {
-            // if (!alreadyIncrDiag) // If we haven't already incremented the dialogue, ensure to increment it
-            // {
-            //     TraverseStatus errstat = npcTree.DialogueForward(); // This will increment the dialogue accordingly
-            //     if ((errstat & TraverseStatus.Error) == TraverseStatus.Error) 
-            //     {
-            //         EchoDialogueError(errstat);
-            //     }
-
-            // }
-            // else
-            // {
-            //     alreadyIncrDiag = false;
-            // }
             bool ret = npcTree.TryGetCurrentEntry(out var currEntry);
-            //Debug.Log("Here is ret: " + ret);
-            
-            
-
             if (npcTree.NeedsPlayerInput())
             {
                 PlayerController.Instance.context |= PlayerContext.PlayerInput;
                 InputController.Instance.OpenKeyboard();
                 keyboardBox.style.display = DisplayStyle.Flex;
 
-                
-                yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0); 
-            } else
+                yield return dialogueBox.Display(currEntry);
+
+                yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0);
+                dialogueBox.ClearDisplay();
+            }
+            else
             {
                 InputController.Instance.CloseKeyboard();
                 keyboardBox.style.display = DisplayStyle.None;
                 PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
                 
-                dialogueBox.ClearDisplay(); 
+                dialogueBox.ClearDisplay();
                 yield return dialogueBox.Display(currEntry);
 
                 TraverseStatus errstat = npcTree.DialogueForward(); // This will increment the dialogue accordingly
@@ -316,11 +290,6 @@ public class NpcDialogue : Interactable
             }          
         }
     }
-
-    
-
-
-
 
     private void EchoDialogueError(TraverseStatus errstat)
     {
@@ -350,11 +319,6 @@ public class NpcDialogue : Interactable
                     
         };
     }
-        
- 
-
-
-
 
     private void ToggleNotebook()
     {

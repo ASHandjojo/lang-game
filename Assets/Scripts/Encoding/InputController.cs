@@ -6,6 +6,7 @@ using UnityEngine;
 
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using UnityEngine.EventSystems;
 
 using Impl;
 
@@ -42,7 +43,7 @@ public struct KeyboardRow
         this.buttons   = buttons;
     }
 
-    public readonly void InitAlphaNumeric(InnerInput input, PhoneticProcessor processor, Action<string> assignCallback)
+    public readonly void InitAlphaNumeric(KeyboardUI keyboardUI)
     {
         for (int i = 0; i < buttons.Length; i++)
         {
@@ -51,8 +52,7 @@ public struct KeyboardRow
             buttons[i].RegisterCallback(
                 (ClickEvent e) =>
                 {
-                    input.phoneticsStr += text.ToLower();
-                    assignCallback?.Invoke(input.phoneticsStr);
+                    keyboardUI.AddChar(text.ToLower());
                 }
             ); // WATCH
         }
@@ -61,7 +61,7 @@ public struct KeyboardRow
     /// <summary>
     /// For the last row (a row that has submission
     /// </summary>
-    public readonly void InitSpecial(InnerInput input, PhoneticProcessor processor, Action<string> assignCallback)
+    public readonly void InitSpecial(KeyboardUI keyboardUI)
     {
         Button spacebar  = buttons.Where(x => x.name == "Spacebar").First();
         Button backspace = buttons.Where(x => x.name == "Backspace").First();
@@ -72,39 +72,19 @@ public struct KeyboardRow
         spacebar.RegisterCallback(
             (ClickEvent e) =>
             {
-                input.phoneticsStr += ' ';
-                assignCallback?.Invoke(input.phoneticsStr);
+                keyboardUI.AddChar(" ");
             }
         );
         backspace.RegisterCallback(
             (ClickEvent e) =>
             {
-                if (input.phoneticsStr.Length > 0)
-                {
-                    input.phoneticsStr = input.phoneticsStr[..^1];
-                    assignCallback?.Invoke(input.phoneticsStr);
-                }
+                keyboardUI.RemoveChar();
             }
         );
         enter.RegisterCallback(
             (ClickEvent e) =>
             {
-#if UNITY_EDITOR
-                if (!Application.isPlaying)
-                {
-                    return;
-                }
-#endif
-                Interactable NPC = null;
-                Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out NPC));
-                if (NPC is NpcDialogue)
-                {
-                    string unicodeStr = processor.TranslateManaged(input.phoneticsStr);
-                    (NPC as NpcDialogue).TryCheckInput(unicodeStr);
-                }
-
-                InputController.Instance.CloseKeyboard();
-                PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
+                keyboardUI.Submit();
             }
         );
     }
@@ -120,6 +100,7 @@ public sealed class KeyboardUI : VisualElement
         set
         {
             inner.phoneticsStr = value;
+            assignCallback?.Invoke(inner.phoneticsStr);
         }
     }
 
@@ -127,6 +108,9 @@ public sealed class KeyboardUI : VisualElement
     public KeyboardRow[] rows;
 
     public Action<string> assignCallback;
+
+    private bool inTypingMode = false;
+    public bool InTypingMode { get { return inTypingMode; } }
 
     public KeyboardUI(VisualTreeAsset layout, in PhoneticProcessor processor, Action<string> assignCallback) : this(layout, processor, assignCallback, string.Empty) { }
 
@@ -152,15 +136,76 @@ public sealed class KeyboardUI : VisualElement
 
         for (int i = 0; i < rows.Length - 1; i++)
         {
-            rows[i].InitAlphaNumeric(inner, processor, assignCallback);
+            rows[i].InitAlphaNumeric(this);
         }
-        rows[^1].InitSpecial(inner, processor, assignCallback);
+        rows[^1].InitSpecial(this);
+
+        this.focusable = true;
+
+        this.RegisterCallback<FocusInEvent>(evt => {
+            EnterTypingMode();
+        });
+
+
+        this.RegisterCallback<FocusOutEvent>(evt => {
+            LeaveTypingMode();
+        });
     }
 
     public void ClearStrings()
     {
         inner.phoneticsStr = string.Empty;
+    }
+
+    public void AddChar(string ch)
+    {
+        inner.phoneticsStr += ch.ToLower();
         assignCallback?.Invoke(inner.phoneticsStr);
+    }
+
+    public void RemoveChar()
+    {
+        if (inner.phoneticsStr.Length > 0)
+        {
+            inner.phoneticsStr = inner.phoneticsStr[..^1];
+            assignCallback?.Invoke(inner.phoneticsStr);
+        }
+    }
+
+    public void Submit()
+    {
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    return;
+                }
+#endif
+        Interactable NPC = null;
+        Debug.Assert(PlayerController.Instance.currentInteraction.TryGet(out NPC));
+        if (NPC is NpcDialogue)
+        {
+            string unicodeStr = processor.TranslateManaged(inner.phoneticsStr);
+            (NPC as NpcDialogue).TryCheckInput(unicodeStr);
+        }
+
+        InputController.Instance.CloseKeyboard();
+        PlayerController.Instance.context &= ~PlayerContext.PlayerInput;
+    }
+
+    public void EnterTypingMode()
+    {
+        inTypingMode = true;
+
+        InputSystem.actions.FindActionMap("MenuToggles").Disable();
+        InputSystem.actions.FindActionMap("Keyboard").Enable();
+    }
+
+    public void LeaveTypingMode()
+    {
+        inTypingMode = false;
+
+        InputSystem.actions.FindActionMap("MenuToggles").Enable();
+        InputSystem.actions.FindActionMap("Keyboard").Disable();
     }
 }
 
@@ -178,6 +223,12 @@ public sealed class InputController : MonoBehaviour
     public Label InputField => inputField;
 
     public static InputController Instance { get; private set; }
+
+    private InputActionMap keyboardActionMap;
+
+    private InputAction backspaceAction;
+    private InputAction enterAction;
+    private InputAction spaceAction;
 
     // Just shorter to get references lol
     private static ref readonly PhoneticProcessor PhoneticProcessor => ref LanguageTable.PhoneticProcessor;
@@ -198,6 +249,13 @@ public sealed class InputController : MonoBehaviour
         document.rootVisualElement.style.top   = new StyleLength(new Length(topPadding, LengthUnit.Percent));
         document.rootVisualElement.style.left  = new StyleLength(new Length(50.0f, LengthUnit.Percent));
         document.rootVisualElement.style.right = new StyleLength(new Length(50.0f, LengthUnit.Percent));
+
+        keyboardActionMap = InputSystem.actions.FindActionMap("Keyboard");
+
+        InputActionMap keyboardSpecialActionMap = InputSystem.actions.FindActionMap("KeyboardSpecial");
+        backspaceAction = keyboardSpecialActionMap.FindAction("Backspace");
+        enterAction     = keyboardSpecialActionMap.FindAction("Enter");
+        spaceAction     = keyboardSpecialActionMap.FindAction("Space");
     }
 
     void Start()
@@ -226,9 +284,41 @@ public sealed class InputController : MonoBehaviour
 
     public void CloseKeyboard()
     {
+        keyboardUI.ClearStrings();
         keyboardUI.style.visibility = Visibility.Hidden;
         keyboardUI.style.display    = DisplayStyle.None;
+
+        keyboardUI.LeaveTypingMode();
     }
 
     public void InsertCharacter(string character) => InputField.text += character;
+
+    void Update()
+    {
+        if (keyboardUI.InTypingMode)
+        {
+            foreach (InputAction action in keyboardActionMap)
+            {
+                if (action.WasPerformedThisFrame())
+                {
+                    keyboardUI.AddChar(action.name);
+                }
+            }
+
+            if (backspaceAction.WasPerformedThisFrame())
+            {
+                keyboardUI.RemoveChar();
+            }
+
+            if (enterAction.WasPerformedThisFrame())
+            {
+                keyboardUI.Submit();
+            }
+
+            if (spaceAction.WasPerformedThisFrame())
+            {
+                keyboardUI.AddChar(" ");
+            }
+        }
+    }
 }

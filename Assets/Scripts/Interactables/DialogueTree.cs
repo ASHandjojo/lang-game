@@ -44,7 +44,7 @@ public struct DialogueTreeList
     // it is -1 if no node exists
     [SerializeField] public int ConditionalValue;
     // The value of the starting id!
-    [SerializeField] public int startingId; // for editor only basically
+    [SerializeField, HideInInspector] public int startingId; // for editor only basically
 
     // The value of the starting Index
     [SerializeField] public int startIdx;
@@ -84,23 +84,23 @@ public struct DialogueTreeNode
     [SerializeField] public NodeType Type;
 
     // This will hold the id of the next dialogue if successful
-    [SerializeField] public int SuccId; // for editor only basically
+    [SerializeField, HideInInspector] public int SuccId; // for editor only basically
 
     // This will hold the id of the next dialogue if the user fials
-    [SerializeField] public int FailId; // for editor only basically
+    [SerializeField, HideInInspector] public int FailId; // for editor only basically
 
     [SerializeField] public List<int> parentIds; // for editor only basically
 
-    [SerializeField] public List<int> parentIdxs; // for editor only basically
+    [SerializeField, HideInInspector] public List<int> parentIdxs; // for editor only basically
 
 
 // added to try to make multiheaded nodes
 // toGoToIds should be of size 1 less than toCheckToGo!
-    [SerializeField] public List<int> toGoToIds; // for editor only basically
+    [SerializeField, HideInInspector] public List<int> toGoToIds; // for editor only basically
 
     [SerializeField] public List<int> toGoToIdxs; 
 
-    [SerializeField] public List<EncodingEntry> toCheckToGo; // for editor only basically
+    [SerializeField, HideInInspector] public List<EncodingEntry> toCheckToGo; // for editor only basically
 
 
 
