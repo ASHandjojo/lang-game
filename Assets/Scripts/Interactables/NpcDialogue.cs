@@ -20,6 +20,8 @@ public class NpcDialogue : Interactable
 
     [SerializeField] protected CharacterData characterData;
 
+    [SerializeField] protected CharacterData vincentData;
+
     [SerializeField] protected VisualTreeAsset dialogueTreeAsset;
     protected DialogueBox dialogueBox;
 
@@ -262,12 +264,22 @@ public class NpcDialogue : Interactable
         else
         {
             bool ret = npcTree.TryGetCurrentEntry(out var currEntry);
+            if (npcTree.IsVincentTalking())
+            {
+                dialogueBox.ChangeCharacterData(vincentData, true);
+            } else
+            {
+                dialogueBox.ChangeCharacterData(characterData, false);
+                
+            }
             if (npcTree.NeedsPlayerInput())
             {
                 PlayerController.Instance.context |= PlayerContext.PlayerInput;
                 InputController.Instance.OpenKeyboard();
                 keyboardBox.style.display = DisplayStyle.Flex;
 
+                
+                dialogueBox.ClearDisplay();
                 yield return dialogueBox.Display(currEntry);
 
                 yield return new WaitUntil(() => (PlayerController.Instance.context & PlayerContext.PlayerInput) == 0);
