@@ -30,7 +30,8 @@ public sealed class DialogueBox : VisualElement
     private Label         npcName;
     private VisualElement npcImage;
 
-    private VisualElement textContainer, wordTooltip, nextLinePrompt;
+
+    private VisualElement textContainer, wordTooltip, nextLinePrompt, dialogueHeader;
 
     private StyleColor originalColor;
 
@@ -55,6 +56,7 @@ public sealed class DialogueBox : VisualElement
         wordTooltip    = this.Q("WordTooltip");
         textContainer  = this.Q("TextContainer");
         nextLinePrompt = this.Q("NextLinePrompt");
+        dialogueHeader = this.Q("DialogueHeader");
         Debug.Assert(wordTooltip    != null);
         Debug.Assert(textContainer  != null);
         Debug.Assert(nextLinePrompt != null);
@@ -65,6 +67,32 @@ public sealed class DialogueBox : VisualElement
     public void SetDictionaryData(in DictionaryData data) => dictData = data;
 
     public void ClearDisplay() => textContainer.Clear();
+
+    public void ChangeCharacterData(in CharacterData charData, in bool isVincent)
+    {
+        Debug.Assert(npcName  != null);
+        Debug.Assert(npcImage != null);
+
+        npcName.text                   = charData.name;
+        npcImage.style.backgroundImage = charData.image;
+
+        if (isVincent)
+        {
+            dialogueHeader.style.alignSelf = Align.FlexStart;
+            dialogueHeader.style.flexDirection = FlexDirection.RowReverse;
+            npcName.style.right = -267;
+            
+
+            
+        } else
+        {
+            dialogueHeader.style.alignSelf = Align.FlexEnd;
+            dialogueHeader.style.flexDirection = FlexDirection.Row;
+            npcName.style.right = 267;
+            
+        }
+        
+    }
 
     // Iteration Methods
     public IEnumerator Display(DialogueEntry entry)

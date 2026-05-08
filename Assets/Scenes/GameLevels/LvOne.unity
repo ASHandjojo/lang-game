@@ -3218,11 +3218,11 @@ MonoBehaviour:
       startIdx: 0
       Nodes:
       - NodeId: 0
-        Type: 38
-        SuccId: 0
+        Type: 18
+        SuccId: 1831531509
         FailId: 0
-        parentIds: 00000000f5f32a6d96f51968
-        parentIdxs: 000000000100000002000000
+        parentIds: 00000000f5f32a6d96f51968689e8906
+        parentIdxs: 00000000010000000200000003000000
         toGoToIds: 0000000096f51968f5f32a6d
         toGoToIdxs: 000000000200000001000000
         toCheckToGo:
@@ -3235,7 +3235,7 @@ MonoBehaviour:
         - phoneticsStr: eeee
           line: eeee
           literal: eeee
-        SuccIdx: 0
+        SuccIdx: 1
         FailIdx: 0
         VincentTalking: 0
         CheckPointNode: 0
@@ -3249,17 +3249,17 @@ MonoBehaviour:
           sound:
             obj: {fileID: 0}
             isInitialized: 0
-          hasResponse: 0
+          hasResponse: 1
           responseData:
-            phoneticsStr: 
-            line: 
-            literal: 
+            phoneticsStr: qqq
+            line: qqq
+            literal: qqq
       - NodeId: 1831531509
         Type: 9
         SuccId: 0
         FailId: 0
-        parentIds: 00000000f5f32a6d96f51968
-        parentIdxs: 000000000100000002000000
+        parentIds: 00000000f5f32a6d96f51968689e8906
+        parentIdxs: 00000000010000000200000003000000
         toGoToIds: 
         toGoToIdxs: 
         toCheckToGo: []
@@ -3284,8 +3284,8 @@ MonoBehaviour:
         Type: 9
         SuccId: 0
         FailId: 0
-        parentIds: 00000000f5f32a6d96f51968
-        parentIdxs: 000000000100000002000000
+        parentIds: 00000000f5f32a6d96f51968689e8906
+        parentIdxs: 00000000010000000200000003000000
         toGoToIds: 
         toGoToIdxs: 
         toCheckToGo: []
@@ -3306,7 +3306,39 @@ MonoBehaviour:
             phoneticsStr: 
             line: 
             literal: 
-      NumNodes: 3
+      - NodeId: 109682280
+        Type: 38
+        SuccId: 0
+        FailId: 0
+        parentIds: 00000000f5f32a6d96f51968689e8906
+        parentIdxs: 00000000010000000200000003000000
+        toGoToIds: 0000000000000000
+        toGoToIdxs: 0000000000000000
+        toCheckToGo:
+        - phoneticsStr: 
+          line: 
+          literal: 
+        - phoneticsStr: 
+          line: 
+          literal: 
+        SuccIdx: 0
+        FailIdx: 0
+        VincentTalking: 0
+        CheckPointNode: 0
+        Entry:
+          line:
+            phoneticsStr: aaaa
+            line: aaaa
+            literal: aaaa
+          sound:
+            obj: {fileID: 0}
+            isInitialized: 0
+          hasResponse: 0
+          responseData:
+            phoneticsStr: 
+            line: 
+            literal: 
+      NumNodes: 4
       CurrNode: 0
 --- !u!61 &1988571624
 BoxCollider2D:

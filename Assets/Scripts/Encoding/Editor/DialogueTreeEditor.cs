@@ -304,54 +304,52 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
         nodesProp.BindProperty(nodes);
         element.Add(nodesProp);
 
-        // This callback will detect a change in the nodes order (either insert, deletion, or rearrange of a new node)
-        nodesProp.RegisterCallback((ChangeEvent<UnityEngine.Object> e) =>
-        {
+        // // This callback will detect a change in the nodes order (either insert, deletion, or rearrange of a new node)
+        // nodesProp.RegisterCallback((ChangeEvent<UnityEngine.Object> e) =>
+        // {
             
-            if (counts.Count != nodes.arraySize)
-            {
-                if (verbose)
-                {
-                    Debug.Log("1Nodes Callback ; Arr Size: " + nodes.arraySize);  
-                }
+        //     if (counts.Count != nodes.arraySize)
+        //     {
+        //         if (verbose)
+        //         {
+        //             Debug.Log("1Nodes Callback ; Arr Size: " + nodes.arraySize);  
+        //         }
                 
-                numNodes.intValue = nodes.arraySize;
-                EditorUtility.SetDirty(property.serializedObject.targetObject);
-                property.serializedObject.ApplyModifiedProperties();
-            } else
-            {
-                // This runs a lot but does not update new information!
-                // May want to implement a timer to not update if it calls this again within 2 seconds or something
-                // Couldn't figure out how to make that timer!
-                UpdateWholeArray(nodes);
-                EditorUtility.SetDirty(property.serializedObject.targetObject);
-                property.serializedObject.ApplyModifiedProperties();
-                if (verbose)
-                {
-                    Debug.Log("2Nodes Callback ; Arr Size: " + nodes.arraySize);
-                }
-            }
-        });
+        //         numNodes.intValue = nodes.arraySize;
+        //         EditorUtility.SetDirty(property.serializedObject.targetObject);
+        //         property.serializedObject.ApplyModifiedProperties();
+        //     } else
+        //     {
+        //         // This runs a lot but does not update new information!
+        //         // May want to implement a timer to not update if it calls this again within 2 seconds or something
+        //         // Couldn't figure out how to make that timer!
+        //         UpdateWholeArray(nodes);
+        //         EditorUtility.SetDirty(property.serializedObject.targetObject);
+        //         property.serializedObject.ApplyModifiedProperties();
+        //         if (verbose)
+        //         {
+        //             Debug.Log("2Nodes Callback ; Arr Size: " + nodes.arraySize);
+        //         }
+        //     }
+        // });
 
-        // This callback detects a change in the set num Nodes property
-        // This will execute a change in either adding a node, or removing a node (ensuring all ids and idxs are 
-        // updated appropriately)
-        numNodesProp.RegisterCallback((ChangeEvent<int> e) =>
-        {
-            //Debug.Log("New E Value num Nodes: " + e.newValue);
-            if (counts.Count != e.newValue)
-            {
-                UpdateWholeArray(nodes);
-                EditorUtility.SetDirty(property.serializedObject.targetObject);
-                property.serializedObject.ApplyModifiedProperties();
+        // // This callback detects a change in the set num Nodes property
+        // // This will execute a change in either adding a node, or removing a node (ensuring all ids and idxs are 
+        // // updated appropriately)
+        // numNodesProp.RegisterCallback((ChangeEvent<int> e) =>
+        // {
+        //     //Debug.Log("New E Value num Nodes: " + e.newValue);
+        //     if (counts.Count != e.newValue)
+        //     {
                 
-            } 
-        });
+                
+        //     } 
+        // });
 
-        // This ensures to set the value of the current array size 
-        numNodes.intValue = nodes.arraySize;
-        EditorUtility.SetDirty(property.serializedObject.targetObject);
-        property.serializedObject.ApplyModifiedProperties();
+        // // This ensures to set the value of the current array size 
+        // numNodes.intValue = nodes.arraySize;
+        // EditorUtility.SetDirty(property.serializedObject.targetObject);
+        // property.serializedObject.ApplyModifiedProperties();
 
         
         // This detects a change in the start Id property and will update its underlying index appropriately
@@ -368,6 +366,21 @@ internal sealed class DialogueTreeListDrawer : PropertyDrawer
             EditorUtility.SetDirty(property.serializedObject.targetObject);
             property.serializedObject.ApplyModifiedProperties();
         });
+
+        Button finalize = new()
+        {
+            name = "Finalize Button",
+            text = "Finalize"
+        };
+        finalize.clicked += () =>
+        {
+            UpdateWholeArray(nodes);
+            EditorUtility.SetDirty(property.serializedObject.targetObject);
+            property.serializedObject.ApplyModifiedProperties();
+            
+            
+        };
+        element.Add(finalize);
 
         return element;
         
@@ -408,7 +421,7 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         SerializedProperty toGoToIds = property.FindPropertyRelative(nameof(DialogueTreeNode.toGoToIds));
         PropertyField toGoToIdsProp  = new();
         toGoToIdsProp.BindProperty(toGoToIds);
-        //element.Add(toGoToIdsProp);
+        element.Add(toGoToIdsProp);
 
         SerializedProperty toGoToIdxs = property.FindPropertyRelative(nameof(DialogueTreeNode.toGoToIdxs));
         PropertyField toGoToIdxsProp = new();
@@ -418,6 +431,7 @@ internal sealed class DialogueTreeNodeDrawer : PropertyDrawer
         SerializedProperty toCheckToGo = property.FindPropertyRelative(nameof(DialogueTreeNode.toCheckToGo));
         PropertyField toCheckToGoProp = new();
         toCheckToGoProp.BindProperty(toCheckToGo);
+        element.Add(toCheckToGoProp);
 
         SerializedProperty parIds = property.FindPropertyRelative(nameof(DialogueTreeNode.parentIds));
         PropertyField parIdsProp = new(parIds);
