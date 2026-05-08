@@ -16,7 +16,7 @@ public sealed class CameraTopDown : MonoBehaviour
     {
         playerTrans = PlayerController.Instance.transform;
         playerTrans.rotation   = Quaternion.Euler(45.0f, -5.0f, 0.0f);
-        playerTrans.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        playerTrans.localScale = new Vector3(0.325f, 0.325f, 0.325f);
 
         playerTrans.gameObject.GetComponent<Rigidbody>().useGravity = true;
 
