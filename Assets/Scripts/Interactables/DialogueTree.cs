@@ -84,10 +84,10 @@ public struct DialogueTreeNode
     [SerializeField] public NodeType Type;
 
     // This will hold the id of the next dialogue if successful
-    [SerializeField, HideInInspector] public int SuccId; // for editor only basically
+    [SerializeField] public int SuccId; // for editor only basically
 
     // This will hold the id of the next dialogue if the user fials
-    [SerializeField, HideInInspector] public int FailId; // for editor only basically
+    [SerializeField] public int FailId; // for editor only basically
 
     [SerializeField] public List<int> parentIds; // for editor only basically
 
@@ -96,11 +96,11 @@ public struct DialogueTreeNode
 
 // added to try to make multiheaded nodes
 // toGoToIds should be of size 1 less than toCheckToGo!
-    [SerializeField, HideInInspector] public List<int> toGoToIds; // for editor only basically
+    [SerializeField] public List<int> toGoToIds; // for editor only basically
 
     [SerializeField] public List<int> toGoToIdxs; 
 
-    [SerializeField, HideInInspector] public List<EncodingEntry> toCheckToGo; // for editor only basically
+    [SerializeField] public List<EncodingEntry> toCheckToGo; // for editor only basically
 
 
 
