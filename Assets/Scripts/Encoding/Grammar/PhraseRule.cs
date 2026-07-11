@@ -9,6 +9,9 @@ using Unity.Collections.LowLevel.Unsafe;
 
 using UnityEngine;
 
+/// <summary>
+/// Contains a list of base rules, a head index-and a precomputed hash.
+/// </summary>
 [BurstCompile]
 public struct PhraseRule : IEquatable<PhraseRule>, IDisposable
 {
@@ -21,7 +24,7 @@ public struct PhraseRule : IEquatable<PhraseRule>, IDisposable
 
     public PhraseRule(in ReadOnlySpan<RuleEntry> entriesIn, int headIndex, Allocator allocator)
     {
-        Debug.Assert(entriesIn.Length > 0);
+        Debug.Assert(entriesIn.Length > 0, "Rules input must not be empty!");
         entries = new NativeArray<RuleEntry>(entriesIn.Length, allocator);
         hash = entries[0].GetHashCode();
         for (int i = 1; i < entriesIn.Length; i++)
@@ -33,21 +36,32 @@ public struct PhraseRule : IEquatable<PhraseRule>, IDisposable
         this.headIndex = headIndex;
     }
 
+    public readonly ReadOnlySpan<RuleEntry> Rules => entries;
+
     public readonly RuleEntry Head => entries[headIndex];
+    public readonly RuleEntry Last => entries[^1];
+
+    public readonly RuleEntry this[int index]
+    {
+        get => entries[index];
+    }
 
     [BurstDiscard]
     public override readonly bool Equals(object rhs) => rhs is PhraseRule entry && Equals(entry);
-    public readonly bool Equals(PhraseRule rhs) => hash == rhs.hash;
+    public readonly bool Equals(PhraseRule rhs)      => hash == rhs.hash;
 
     public override readonly int GetHashCode() => hash;
 
     public void Dispose()
     {
-        entries.Dispose();
-        entries = default;
+        if (entries.IsCreated)
+        {
+            entries.Dispose();
+            entries = default;
+        }
 
         headIndex = -1;
-        hash = ~0;
+        hash      = ~0;
     }
 }
 
@@ -57,16 +71,62 @@ public struct MemoValue
     public int position;
     public int matchNum;
 
-    public MemoValue(int position)
+    public MemoValue(int position) : this(position, 0) { }
+    public MemoValue(int position, int matchNum)
     {
         this.position = position;
-        matchNum = 0;
+        this.matchNum = matchNum;
+    }
+
+    public static MemoValue Failed(int position) => new(position, -1);
+
+    public readonly bool HasFailed => matchNum == -1;
+}
+
+public enum MemoizeStatus : byte
+{
+    /// <summary>
+    /// Flag for successful, properly formed parse; whether cache hit or evaluation.
+    /// </summary>
+    Successful = 1,
+
+    CacheHit = 2,
+    Evaluate = 4,
+    /// <summary>
+    /// Valid parse but not correct.
+    /// </summary>
+    FailParse = 8,
+    /// <summary>
+    /// Actual malformed parsing.
+    /// </summary>
+    InvalidParse = 16
+}
+
+[BurstCompile]
+public static class MemoizeStatusExtMethods
+{
+    public static FixedString64Bytes ToFixedString(this MemoizeStatus status)
+    {
+        if (status == MemoizeStatus.InvalidParse)
+        {
+           return "Invalid Parse";
+        }
+        if ((status & MemoizeStatus.Successful) != 0)
+        {
+            return $"Successful, {(status == MemoizeStatus.CacheHit ? "Cache Hit" : "Evaluate")}";
+        }
+        if ((status & MemoizeStatus.InvalidParse) != 0)
+        {
+            return $"Invalid Parse, {(status == MemoizeStatus.CacheHit ? "Cache Hit" : "Evaluate")}";
+        }
+        throw new NotImplementedException();
     }
 }
 
 [BurstCompile]
 public struct Memoizer : IDisposable
 {
+    // NOTE: Maybe have to change to RuleEntry
     private NativeParallelMultiHashMap<PhraseRule, MemoValue> rules;
 
     public Memoizer(Allocator allocator)
@@ -96,13 +156,80 @@ public struct Memoizer : IDisposable
         return false;
     }
 
-    public readonly bool Evaluate(in PhraseRule rule, in ReadOnlySpan<WordNode> nodes, int position)
+    public void AddOrModify(in PhraseRule rule, int position, int elementNum)
     {
+        if (rules.TryGetFirstValue(rule, out MemoValue keyFirst, out var iterator))
+        {
+            if (keyFirst.position == position)
+            {
+                rules.SetValue(new MemoValue(position, elementNum), iterator);
+            }
+            while (rules.TryGetNextValue(out MemoValue key, ref iterator))
+            {
+                if (key.position == position)
+                {
+                    rules.SetValue(new MemoValue(position, elementNum), iterator);
+                }
+            }
+        }
+        // Otherwise, add rule
+        rules.Add(rule, new MemoValue(position, elementNum));
+    }
+
+    public MemoizeStatus Process(in PhraseRule phraseRule, in ReadOnlySpan<UnionPhraseNode> nodes, int position, out MemoValue value)
+    {
+        bool isCached = TryGetCached(phraseRule, position, out int elementNum);
+        if (isCached)
+        {
+            value      = new MemoValue(position, elementNum);
+            var status = value.HasFailed ? MemoizeStatus.FailParse : MemoizeStatus.Successful;
+            return status | MemoizeStatus.CacheHit;
+        }
+        value.position   = position;
+        bool parseStatus = Evaluate(phraseRule, nodes, position, out value.matchNum);
+        if (!parseStatus) // For failed parse
+        {
+            return MemoizeStatus.InvalidParse;
+        }
+        else
+        {
+            var status = value.HasFailed ? MemoizeStatus.FailParse : MemoizeStatus.Successful;
+            return status | MemoizeStatus.Evaluate;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>Whether the parse was valid or not. Failed but properly formed parsing still returns true.</returns>
+    public bool Evaluate(in PhraseRule phraseRule, in ReadOnlySpan<UnionPhraseNode> nodes, int position, out int elementNum)
+    {
+        // Early exit attempt, allows for evaluation to change
         if (Hint.Unlikely(nodes.Length == 0 || position < 0 || position >= nodes.Length)) // NOTE: Watch
         {
+            elementNum = -1; // Invalid parse
             return false;
         }
-
+        // Probably do not use terminals at all, everything is categorized.
+        // May break things but just a thought on principle.
+        foreach (RuleEntry rule in phraseRule.Rules) // Iterate through every rule
+        {
+            for (int i = position; i < nodes.Length; i++) // Start from leftmost position specified
+            {
+                // Required Case
+                if ((rule.properties & GrammarProperties.Required) != 0)
+                {
+                    // Non-terminal rule logic
+                    var status = Process(phraseRule, nodes, position: i, out MemoValue memoValue);
+                    elementNum = memoValue.matchNum;
+                    if (status == MemoizeStatus.InvalidParse)
+                    {
+                        return false;
+                    }
+                    AddOrModify()
+                }
+            }
+        }
 
         return true;
     }

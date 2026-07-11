@@ -202,7 +202,8 @@ public struct UnionPhraseNode : IDisposable
     public unsafe readonly bool IsValid => IsSingle ? wordNode.IsValid : nodesRaw != null && length > 0;
 
     public readonly bool IsSingle => length == 1;
-    // Multi means multiple nodes; whether phrase or single
+    public readonly bool IsWord   => IsSingle && nodeType == NodeType.Word;
+    // Multi means multiple nodes; whether phrase or single (word)
     public readonly bool IsMulti  => length > 1;
 
     public UnionPhraseNode(in WordNode node) : this()

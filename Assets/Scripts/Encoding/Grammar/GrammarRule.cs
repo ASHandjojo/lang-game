@@ -127,7 +127,7 @@ public struct PhraseRulesUnmanaged : IDisposable
         PhraseRulesUnmanaged output = new()
         {
             phraseType      = phraseType,
-            length          = (byte)   rules.Length,
+            length          = (byte) rules.Length,
 
             prefixSumOffset = (ushort) prefixSumBytes,
             headIndexOffset = (ushort) (prefixSumBytes + headIndexBytes),

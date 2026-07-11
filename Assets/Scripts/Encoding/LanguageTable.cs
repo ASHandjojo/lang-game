@@ -41,7 +41,8 @@ public sealed class LanguageTable : MonoBehaviour
 
         for (int i = 0; i < phraseRules.Length; i++)
         {
-            phraseRules[i] = PhraseRulesUnmanaged.Create(grammarRules.Rules[i].phraseType, grammarRules.Rules[i].rules, Allocator.Persistent);
+            ref readonly var grammarRule = ref grammarRules.Rules[i];
+            phraseRules[i] = PhraseRulesUnmanaged.Create(grammarRule.phraseType, grammarRule.rules, Allocator.Persistent);
         }
     }
 
