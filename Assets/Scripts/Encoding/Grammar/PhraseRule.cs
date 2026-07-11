@@ -7,27 +7,35 @@ using Unity.Burst.CompilerServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
+using static Unity.Collections.LowLevel.Unsafe.NativeSliceUnsafeUtility;
+
 using UnityEngine;
 
 /// <summary>
 /// Contains a list of base rules, a head index-and a precomputed hash.
 /// </summary>
 [BurstCompile]
-public struct PhraseRule : IEquatable<PhraseRule>, IDisposable
+public struct PhraseRule : IEquatable<PhraseRule>
 {
     // S => N  * VP
     // S => NP * VP
     [NativeDisableContainerSafetyRestriction]
-    private NativeArray<RuleEntry> entries;
+    private NativeSlice<RuleEntry> entries;
     private int headIndex;
     private int hash; // Precomputes hash, as it is immutable
 
-    public PhraseRule(in ReadOnlySpan<RuleEntry> entriesIn, int headIndex, Allocator allocator)
+    public unsafe PhraseRule(in ReadOnlySpan<RuleEntry> entriesIn, int headIndex)
     {
         Debug.Assert(entriesIn.Length > 0, "Rules input must not be empty!");
-        entries = new NativeArray<RuleEntry>(entriesIn.Length, allocator);
+        fixed (RuleEntry* ptr = entriesIn)
+        {
+            entries = ConvertExistingDataToNativeSlice<RuleEntry>(ptr, sizeof(RuleEntry), entriesIn.Length);
+#if ENABLE_UNITY_COLLECTIONS_CHECKS
+            SetAtomicSafetyHandle(ref entries, AtomicSafetyHandle.Create());
+#endif
+        }
         hash = entries[0].GetHashCode();
-        for (int i = 1; i < entriesIn.Length; i++)
+        for (int i = 1; i < entries.Length; i++)
         {
             hash = HashCode.Combine(hash, entriesIn[i].GetHashCode());
         }
@@ -36,7 +44,7 @@ public struct PhraseRule : IEquatable<PhraseRule>, IDisposable
         this.headIndex = headIndex;
     }
 
-    public readonly ReadOnlySpan<RuleEntry> Rules => entries;
+    public unsafe readonly ReadOnlySpan<RuleEntry> Rules => new(entries.GetUnsafeReadOnlyPtr(), entries.Length);
 
     public readonly RuleEntry Head => entries[headIndex];
     public readonly RuleEntry Last => entries[^1];
@@ -51,18 +59,6 @@ public struct PhraseRule : IEquatable<PhraseRule>, IDisposable
     public readonly bool Equals(PhraseRule rhs)      => hash == rhs.hash;
 
     public override readonly int GetHashCode() => hash;
-
-    public void Dispose()
-    {
-        if (entries.IsCreated)
-        {
-            entries.Dispose();
-            entries = default;
-        }
-
-        headIndex = -1;
-        hash      = ~0;
-    }
 }
 
 [BurstCompile]
@@ -176,7 +172,7 @@ public struct Memoizer : IDisposable
         rules.Add(rule, new MemoValue(position, elementNum));
     }
 
-    public MemoizeStatus Process(in PhraseRule phraseRule, in ReadOnlySpan<UnionPhraseNode> nodes, int position, out MemoValue value)
+    public MemoizeStatus Process(in PhraseRule phraseRule, in ReadOnlySpan<WordNode> nodes, int position, out MemoValue value)
     {
         bool isCached = TryGetCached(phraseRule, position, out int elementNum);
         if (isCached)
@@ -202,7 +198,7 @@ public struct Memoizer : IDisposable
     /// 
     /// </summary>
     /// <returns>Whether the parse was valid or not. Failed but properly formed parsing still returns true.</returns>
-    public bool Evaluate(in PhraseRule phraseRule, in ReadOnlySpan<UnionPhraseNode> nodes, int position, out int elementNum)
+    public bool Evaluate(in PhraseRule phraseRule, in ReadOnlySpan<WordNode> nodes, int position, out int elementNum)
     {
         // Early exit attempt, allows for evaluation to change
         if (Hint.Unlikely(nodes.Length == 0 || position < 0 || position >= nodes.Length)) // NOTE: Watch
@@ -210,27 +206,55 @@ public struct Memoizer : IDisposable
             elementNum = -1; // Invalid parse
             return false;
         }
-        // Probably do not use terminals at all, everything is categorized.
-        // May break things but just a thought on principle.
-        foreach (RuleEntry rule in phraseRule.Rules) // Iterate through every rule
+        foreach (RuleEntry choice in phraseRule.Rules) // Iterate through every choice per rule
         {
-            for (int i = position; i < nodes.Length; i++) // Start from leftmost position specified
+            for (int i = position; i < nodes.Length;) // Start from leftmost position specified
             {
                 // Required Case
-                if ((rule.properties & GrammarProperties.Required) != 0)
+                if ((choice.properties & GrammarProperties.Required) != 0)
                 {
-                    // Non-terminal rule logic
-                    var status = Process(phraseRule, nodes, position: i, out MemoValue memoValue);
-                    elementNum = memoValue.matchNum;
-                    if (status == MemoizeStatus.InvalidParse)
+                    // Terminal
+                    if (choice.constituent == ConstituentType.Word) // NOTE: Check
                     {
-                        return false;
+                        // Checks valid part of speech (PoS)
+                        if (nodes[i].WordType == choice.wordType) // NOTE: Check
+                        {
+                            i++;
+                        }
+                        else
+                        {
+                            elementNum = -1; // Valid parse but exit
+                            return true;
+                        }
                     }
-                    AddOrModify()
+                    // Non-terminal
+                    else
+                    {
+                        // Non-terminal rule logic
+                        var status = Process(phraseRule, nodes, position: i, out MemoValue memoValue);
+                        elementNum = memoValue.matchNum;
+                        if (status == MemoizeStatus.InvalidParse)
+                        {
+                            return false; // Is fine, as this should be set to -1
+                        }
+                        AddOrModify(phraseRule, position, elementNum);
+                        if ((status & MemoizeStatus.FailParse) != 0)
+                        {
+                            return true; // Is fine, as this should be set to -1
+                        }
+                        i += memoValue.matchNum;
+                    }
+                    // Checking if matching symbol is last
+                    if (i == nodes.Length - 1)
+                    {
+                        elementNum = i;
+                        return true;
+                    }
                 }
             }
         }
-
+        // Ran out, did not find match at all
+        elementNum = -1;
         return true;
     }
 

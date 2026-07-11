@@ -114,7 +114,7 @@ public struct PhraseRulesUnmanaged : IDisposable
         return RulesMut[prefix[index]..prefix[index + 1]];
     }
 
-    public unsafe readonly ReadOnlySpan<RuleEntry> GetRules(int index) => GetRulesMut(index);
+    public unsafe readonly PhraseRule GetRules(int index) => new(GetRulesMut(index), HeadIndicesMut[index]);
 
     [BurstDiscard]
     public static unsafe PhraseRulesUnmanaged Create(WordType phraseType, in ReadOnlySpan<PhraseRuleManaged> rules, Allocator allocator)
